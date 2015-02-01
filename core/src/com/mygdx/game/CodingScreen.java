@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -13,14 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane.SplitPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.textarea.TextArea;
-import com.mygdx.game.textarea.TextAreaModel;
+import com.mygdx.game.code.Code;
+import com.mygdx.game.textarea.TextAreaExt;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
@@ -31,19 +35,33 @@ public class CodingScreen extends ScreenAdapter {
 		super();
 		this.stage = new Stage(viewport);
 
-		createFont();
+		font = new BitmapFont(Gdx.files.internal("fonts/white-rabbit.fnt"));
 		createStyles();
 		
-		TextArea textArea = new TextArea(new TextAreaModel());
 //		ImageArea imageArea = new ImageArea();
 //		
 //		SplitPaneStyle spStyle = new SplitPane.SplitPaneStyle();
 //		spStyle.handle = new TextureRegionDrawable(new TextureRegion(
 //				new Texture(Gdx.files.internal("images/divider.png"))));
 //		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
+
+		TextField.TextFieldStyle tfs = new TextField.TextFieldStyle();
+		tfs.font = font;
+		font.setMarkupEnabled(true);
+		tfs.fontColor = Color.WHITE;
+
+		Texture tfSelection = new Texture(Gdx.files.internal("images/tfSelection.png"));
+        Texture tfCursor = new Texture(Gdx.files.internal("images/cursor.png"));
+        tfs.selection = new TextureRegionDrawable(new TextureRegion(tfSelection));
+        tfs.cursor = new TextureRegionDrawable(new TextureRegion(tfCursor)).tint(Color.GREEN);
+
+		TextArea textArea = new TextAreaExt(Code.groovyTemplate(), tfs);
+		textArea.setWidth(viewport.getWorldWidth());
+		textArea.setHeight(viewport.getWorldHeight());
+		textArea.setCursorPosition(textArea.getText().length());
 		stage.addActor(textArea);
-		
-		Gdx.input.setInputProcessor(textArea.getController());
+		stage.setKeyboardFocus(textArea);
+		Gdx.input.setInputProcessor(stage);
 	}
 	
 	private void createStyles() {
@@ -55,13 +73,6 @@ public class CodingScreen extends ScreenAdapter {
 		tbStyle.up = new TextureRegionDrawable(new TextureRegion(buttonUp));
 		tbStyle.over = new TextureRegionDrawable(new TextureRegion(buttonOver));
 		tbStyle.down = new TextureRegionDrawable(new TextureRegion(buttonDown));
-	}
-
-	private void createFont() {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationMono.ttf"));
-	    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-	    parameter.size = 28;
-	    font = generator.generateFont(parameter);
 	}
 
     @Override
