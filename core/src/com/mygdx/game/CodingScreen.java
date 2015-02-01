@@ -43,7 +43,7 @@ public class CodingScreen extends ScreenAdapter {
 //		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
 		stage.addActor(textArea);
 		
-		Gdx.input.setInputProcessor(stage);
+		Gdx.input.setInputProcessor(textArea.getController());
 	}
 	
 	private void createStyles() {
