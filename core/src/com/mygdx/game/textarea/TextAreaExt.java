@@ -34,6 +34,14 @@ public class TextAreaExt extends com.badlogic.gdx.scenes.scene2d.ui.TextArea {
 	public class TextAreaExtListener extends TextAreaListener {
 
 		@Override
+		public boolean touchDown(InputEvent event, float x, float y,
+				int pointer, int button) {
+			// Stop scroll pane interfering with text area select
+			event.stop();
+			return super.touchDown(event, x, y, pointer, button);
+		}
+
+		@Override
 		public boolean keyTyped(InputEvent event, char character) {
 			boolean commandPressed = Gdx.input.isKeyPressed(Keys.SYM);
 			if (commandPressed) {
