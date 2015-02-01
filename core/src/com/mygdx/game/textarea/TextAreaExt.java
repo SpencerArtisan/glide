@@ -8,14 +8,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea.TextAreaListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class TextAreaExt extends com.badlogic.gdx.scenes.scene2d.ui.TextArea {
+	public TextAreaExt(String text, Skin skin, String styleName) {
+		super(text, skin, styleName);
+	}
+
+	public TextAreaExt(String text, Skin skin) {
+		super(text, skin);
+	}
+
 	public TextAreaExt(String text, TextFieldStyle style) {
 		super(text, style);
-		
 	}
 
 	@Override
