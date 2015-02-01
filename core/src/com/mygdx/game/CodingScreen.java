@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.textarea.TextArea;
+import com.mygdx.game.textarea.TextAreaModel;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;

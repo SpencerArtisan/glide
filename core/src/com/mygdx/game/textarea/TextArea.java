@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;

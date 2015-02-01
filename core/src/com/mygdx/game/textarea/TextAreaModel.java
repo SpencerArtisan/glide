@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.textarea;
 
 public class TextAreaModel {
 	private String text;
