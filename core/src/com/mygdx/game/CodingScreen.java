@@ -5,13 +5,11 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.code.Code;
-import com.mygdx.game.textarea.TextAreaExt;
+import com.mygdx.game.textarea.TextArea;
+import com.mygdx.game.textarea.TextAreaModel;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
@@ -37,14 +35,11 @@ public class CodingScreen extends ScreenAdapter {
 		stage.addActor(scrollPane);
 		stage.setKeyboardFocus(textArea);
 
-		Gdx.input.setInputProcessor(stage);
+		Gdx.input.setInputProcessor(textArea.getController());
 	}
 
 	private TextArea createTextArea(Viewport viewport, Skin skin) {
-		TextArea textArea = new TextAreaExt(Code.groovyTemplate(), skin);
-		textArea.setPrefRows(44);
-		textArea.setCursorPosition(textArea.getText().length());
-//		textArea.getStyle().font.setMarkupEnabled(true);
+		TextArea textArea = new TextArea(new TextAreaModel(), skin);
 		return textArea;
 	}
 	
