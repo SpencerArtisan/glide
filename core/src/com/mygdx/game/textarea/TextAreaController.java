@@ -1,5 +1,7 @@
 package com.mygdx.game.textarea;
 
+import java.awt.event.KeyEvent;
+
 import com.badlogic.gdx.InputAdapter;
 
 public class TextAreaController extends InputAdapter {
@@ -15,10 +17,18 @@ public class TextAreaController extends InputAdapter {
 		if (character == '\b') {
 			model.deleteCharacter();
 			model.caret().moveLeft();
-		} else {
+		} else if (isPrintableChar(character)) {
 			model.append(character);
 			model.caret().moveRight();
 		}
 		return true;
+	}
+	
+	public boolean isPrintableChar( char c ) {
+	    Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
+	    return (!Character.isISOControl(c)) &&
+	            c != KeyEvent.CHAR_UNDEFINED &&
+	            block != null &&
+	            block != Character.UnicodeBlock.SPECIALS;
 	}
 }

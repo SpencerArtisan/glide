@@ -53,9 +53,16 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
-	public void keyPressMovesCaretRight() {
+	public void visibleKeyPressMovesCaretRight() {
 		subject.keyTyped('a');
 		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void invisibleKeyPressDoesNotMoveCaret() {
+		subject.keyTyped('\u007F');
+		assertThat(model.caret().getX(), is(0));
 		assertThat(model.caret().getY(), is(0));
 	}
 	
