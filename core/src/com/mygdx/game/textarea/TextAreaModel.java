@@ -5,11 +5,12 @@ public class TextAreaModel {
 	private Caret caret;
 	
 	public TextAreaModel() {
-		text = "////////////////////////////////// \n"
-			 + "// Welcome to Groovy Planet! \n"
-			 + "// Start writing your game below. \n"
-			 + "// Click here if you need help \n"
-			 + "////////////////////////////////// \n\n";
+		text = "";
+//		"////////////////////////////////// \n"
+//			 + "// Welcome to Groovy Planet! \n"
+//			 + "// Start writing your game below. \n"
+//			 + "// Click here if you need help \n"
+//			 + "////////////////////////////////// \n\n";
 		caret = new Caret();
 	}
 
