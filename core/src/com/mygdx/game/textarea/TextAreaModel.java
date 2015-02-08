@@ -97,6 +97,11 @@ public class TextAreaModel {
 			return location;
 		}
 		
+		public void setLocation(XY<Integer> caretLocation) {
+			setX(caretLocation.x);
+			setY(caretLocation.y);
+		}
+
 		public int getX() {
 			return location.x;
 		}

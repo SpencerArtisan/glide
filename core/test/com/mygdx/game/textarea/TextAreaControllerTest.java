@@ -7,38 +7,61 @@ import java.awt.event.KeyEvent;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.MockitoAnnotations.*;
+import static org.mockito.Mockito.*;
 
 import com.badlogic.gdx.math.Vector;
 import com.mygdx.game.ResourceManager;
 
+
+
 public class TextAreaControllerTest {
 	private TextAreaController subject;
 	private TextAreaModel model;
+	@Mock private TextArea view; 
 	
 	@Before
 	public void before() {
+		MockitoAnnotations.initMocks(this);
 		model = new TextAreaModel();
 		model.clear();
-		subject = new TextAreaController(model);
+		subject = new TextAreaController(model, view);
 	}
 	
 	@Test
 	public void clickingInsideTextAreaSetsCaret() throws Exception {
-//		model.setText("Hello\nWorld");
-//		XY<Integer> clickPosition = new TextArea(model, new ResourceManager().getSkin()).caretToPosition(new XY(3, 1));
-//		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
-//		assertThat(model.caret().getX(), is(3));
-//		assertThat(model.caret().getY(), is(1));		
+		model.setText("Hello\nWorld");
+		XY<Integer> caretLocation = new XY<Integer>(3, 1);
+		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
+		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		assertThat(model.caret().getX(), is(3));
+		assertThat(model.caret().getY(), is(1));		
 	}
 	
 	@Test
 	public void clickingBeyondLineSetsCaretAtLineEnd() throws Exception {
-		
-		
+		model.setText("Hello\nWorld");
+		XY<Integer> caretLocation = new XY<Integer>(99, 1);
+		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
+		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		assertThat(model.caret().getX(), is(5));
+		assertThat(model.caret().getY(), is(1));		
 	}
 	
 	@Test
 	public void clickingBeyondRowsInsertsRowsAndSetsCaret() throws Exception {
+		XY<Integer> caretLocation = new XY<Integer>(10, 3);
+		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
+		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		assertThat(model.getText(), is("\n\n\n"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(3));		
 		
 	}
 	

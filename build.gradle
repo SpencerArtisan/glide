@@ -73,6 +73,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         testCompile "junit:junit:4.12"
+        testCompile 'org.mockito:mockito-all:2.0.2-beta'
     }
 }
 

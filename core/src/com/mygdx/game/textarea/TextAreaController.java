@@ -5,19 +5,21 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector3;
 
 public class TextAreaController extends InputAdapter {
 
 	private TextAreaModel model;
+	private TextArea view;
 
-	public TextAreaController(TextAreaModel model) {
+	public TextAreaController(TextAreaModel model, TextArea view) {
 		this.model = model;
+		this.view = view;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
 		KeyStroke ks = KeyStroke.getKeyStroke(character, 0);
-		System.out.println(ks.getKeyCode());
 		
 		TextAreaModel.Caret caret = model.caret();
 		if (Key.Delete.is(character)) {
@@ -45,8 +47,9 @@ public class TextAreaController extends InputAdapter {
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return super.touchUp(screenX, screenY, pointer, button);
+		XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+		model.caret().setLocation(caretLocation);
+		return true;
 	}
 
 	public boolean isPrintableChar(char character) {
