@@ -3,6 +3,8 @@ package com.mygdx.game.textarea;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.awt.event.KeyEvent;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +44,7 @@ public class TextAreaControllerTest {
 	@Test
 	public void deleteRemovesText() {
 		subject.keyTyped('a');
-		subject.keyTyped('\b');
+		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is(""));
 	}
 	
@@ -61,7 +63,7 @@ public class TextAreaControllerTest {
 	
 	@Test
 	public void invisibleKeyPressDoesNotMoveCaret() {
-		subject.keyTyped('\u007F');
+		subject.keyTyped(Key.Shift.asChar());
 		assertThat(model.caret().getX(), is(0));
 		assertThat(model.caret().getY(), is(0));
 	}
@@ -69,8 +71,38 @@ public class TextAreaControllerTest {
 	@Test
 	public void deleteMovesCaretLeft() {
 		subject.keyTyped('a');
-		subject.keyTyped('\b');
+		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.caret().getX(), is(0));
 		assertThat(model.caret().getY(), is(0));
 	}	
+	
+	@Test
+	public void downArrowMovesDown() throws Exception {
+		subject.keyTyped(Key.Down.asChar());
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
+	public void upArrowMovesUp() throws Exception {
+		model.caret().setY(1);
+		subject.keyTyped(Key.Up.asChar());
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void leftArrowMovesLeft() throws Exception {
+		model.caret().setX(1);
+		subject.keyTyped(Key.Left.asChar());
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void rightArrowMovesRight() throws Exception {
+		subject.keyTyped(Key.Right.asChar());
+		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
 }

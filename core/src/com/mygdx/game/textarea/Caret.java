@@ -26,4 +26,13 @@ public class Caret {
 	public void moveRight() {
 		x++;
 	}
+
+	public void moveUp() {
+		y--;
+	}
+	
+	public void moveDown() {
+		y++;
+	}
+	
 }
