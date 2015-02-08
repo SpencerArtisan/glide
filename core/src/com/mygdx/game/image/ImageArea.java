@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.image;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 

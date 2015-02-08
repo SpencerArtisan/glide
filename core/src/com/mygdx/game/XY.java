@@ -1,4 +1,4 @@
-package com.mygdx.game.textarea;
+package com.mygdx.game;
 
 public class XY<T> {
 	public T x, y;

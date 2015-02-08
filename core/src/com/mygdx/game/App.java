@@ -19,8 +19,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.code.Program;
+import com.mygdx.game.screens.CodingScreen;
+import com.mygdx.game.screens.WelcomeScreen;
 
-public class Planet extends Game {
+public class App extends Game {
 	private Viewport viewport;
 	private ResourceManager resourceManager;
 	

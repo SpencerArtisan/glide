@@ -5,6 +5,8 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import com.mygdx.game.XY;
+
 public class AtXY extends TypeSafeMatcher<TextAreaModel.Caret> {
 	private XY<Integer> location;
 

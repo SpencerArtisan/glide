@@ -6,6 +6,7 @@ import javax.swing.KeyStroke;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.XY;
 
 public class TextAreaController extends InputAdapter {
 

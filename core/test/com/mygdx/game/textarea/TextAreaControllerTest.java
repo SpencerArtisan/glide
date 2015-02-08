@@ -16,6 +16,7 @@ import static com.mygdx.game.textarea.AtXY.*;
 
 import com.badlogic.gdx.math.Vector;
 import com.mygdx.game.ResourceManager;
+import com.mygdx.game.XY;
 
 
 

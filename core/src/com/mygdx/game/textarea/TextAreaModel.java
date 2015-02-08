@@ -2,6 +2,8 @@ package com.mygdx.game.textarea;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.mygdx.game.XY;
+
 
 public class TextAreaModel {
 	private String text;
