@@ -19,20 +19,21 @@ public class TextAreaController extends InputAdapter {
 		KeyStroke ks = KeyStroke.getKeyStroke(character, 0);
 		System.out.println(ks.getKeyCode());
 		
+		Caret caret = model.caret();
 		if (Key.Delete.is(character)) {
 			model.deleteCharacter();
-			model.caret().moveLeft();
-		} else if (Key.Up.is(character)) {
-			model.caret().moveUp();
+			caret.moveLeft();
+		} else if (Key.Up.is(character) && caret.getY() > 0) {
+			caret.moveUp();
 		} else if (Key.Down.is(character)) {
-			model.caret().moveDown();
+			caret.moveDown();
 		} else if (Key.Right.is(character)) {
-			model.caret().moveRight();
-		} else if (Key.Left.is(character)) {
-			model.caret().moveLeft();
+			caret.moveRight();
+		} else if (Key.Left.is(character) && caret.getX() > 0) {
+			caret.moveLeft();
 		} else if (isPrintableChar(character)) {
 			model.append(character);
-			model.caret().moveRight();
+			caret.moveRight();
 		}
 		return true;
 	}
@@ -42,6 +43,10 @@ public class TextAreaController extends InputAdapter {
 	    return (!Character.isISOControl(character)) &&
 	            character != KeyEvent.CHAR_UNDEFINED &&
 	            block != null &&
-	            block != Character.UnicodeBlock.SPECIALS;
+	            block != Character.UnicodeBlock.SPECIALS &&
+	            !Key.Down.is(character) &&
+	            !Key.Up.is(character) &&
+	            !Key.Left.is(character) &&
+	            !Key.Right.is(character);
 	}
 }

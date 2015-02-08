@@ -92,8 +92,22 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
+	public void upArrowStopsAtTop() throws Exception {
+		subject.keyTyped(Key.Up.asChar());
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
 	public void leftArrowMovesLeft() throws Exception {
 		model.caret().setX(1);
+		subject.keyTyped(Key.Left.asChar());
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void leftArrowStopsAtLeft() throws Exception {
 		subject.keyTyped(Key.Left.asChar());
 		assertThat(model.caret().getX(), is(0));
 		assertThat(model.caret().getY(), is(0));
