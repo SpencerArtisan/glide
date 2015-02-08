@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.math.Vector;
+import com.mygdx.game.ResourceManager;
 
 public class TextAreaControllerTest {
 	private TextAreaController subject;
@@ -23,7 +24,11 @@ public class TextAreaControllerTest {
 	
 	@Test
 	public void clickingInsideTextAreaSetsCaret() throws Exception {
-//		subject.touchUp(screenX, screenY, pointer, button)
+//		model.setText("Hello\nWorld");
+//		XY<Integer> clickPosition = new TextArea(model, new ResourceManager().getSkin()).caretToPosition(new XY(3, 1));
+//		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+//		assertThat(model.caret().getX(), is(3));
+//		assertThat(model.caret().getY(), is(1));		
 	}
 	
 	@Test

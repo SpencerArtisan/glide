@@ -18,7 +18,6 @@ public class TextAreaModel {
 		return text;
 	}
 
-
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -84,61 +83,63 @@ public class TextAreaModel {
 	}
 
 	public class Caret {
-		private int x, y;
+		private XY<Integer> location;
+		
+		public Caret() {
+			this(0, 0);
+		}
+		
+		public Caret(int x, int y) {
+			this.location = new XY<Integer>(x, y);
+		}
 
+		public XY<Integer> location() {
+			return location;
+		}
+		
 		public int getX() {
-			return x;
+			return location.x;
 		}
 
 		public void setX(int x) {
-			this.x = x;
+			location.x = x;
 		}
 
 		public int getY() {
-			return y;
+			return location.y;
 		}
 
 		public void setY(int y) {
-			this.y = y;
+			location.y = y;
 			changeXIfBeyondEndOfLine();
 		}
 
 		public void moveLeft() {
-			if (x != 0) {
-				setX(x - 1);
-			}
-		}
-		
-		public void moveLeftAndWrap() {
-			if (x != 0) {
-				setX(x - 1);
-			} else if (y > 0){
-				moveUp();
-				x = 999;
-				changeXIfBeyondEndOfLine();
+			if (getX() != 0) {
+				setX(getX() - 1);
 			}
 		}
 		
 		public void moveRight() {
-			if (x < currentLineLength()) {
-				setX(x + 1);
+			if (getX() < currentLineLength()) {
+				setX(getX() + 1);
 			}
 		}
 
 		public void moveUp() {
-			if (y != 0) {
-				setY(y - 1);
+			if (getY() != 0) {
+				setY(getY() - 1);
 			}
 		}
 		
 		public void moveDown() {
-			setY(y + 1);
+			setY(getY() + 1);
 		}
 		
 		private void changeXIfBeyondEndOfLine() {
 			int lineLength = currentLineLength();
-			if (x > lineLength) {
-				x = lineLength;
+			if (getX() > lineLength) {
+				setX(lineLength);
 			}
 		}
 	}

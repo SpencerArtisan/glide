@@ -2,7 +2,7 @@ package com.mygdx.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.game.PlaygroundGame;
+import com.mygdx.game.Planet;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -10,6 +10,6 @@ public class DesktopLauncher {
         config.title = "Groovy Planet";
         config.width = 1150;
         config.height = 750;
-		new LwjglApplication(new PlaygroundGame(), config);
+		new LwjglApplication(new Planet(), config);
 	}
 }

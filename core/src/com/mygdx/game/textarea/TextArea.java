@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.mygdx.game.textarea.TextAreaModel.Caret;
 
 public class TextArea extends Actor {
 	private TextAreaModel model;
@@ -22,18 +23,12 @@ public class TextArea extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		style.font.drawMultiLine(batch, model.getText(), 10, 740);
 		Drawable caretImage = style.cursor;
-		XY caretPosition = getCaretPosition();
+		XY<Integer> caretPosition = caretToPosition(model.caret().location());
 		caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());	
 	}
 
-	private XY getCaretPosition() {
-		TextAreaModel.Caret caret = model.caret();
-		return new XY(8 + caret.getX() * getColumnWidth(), this.getHeight() - 30 - caret.getY() * getRowHeight());	
-	}
-
 	private float getRowHeight() {
-		float lineHeight = style.font.getLineHeight();
-		return lineHeight;
+		return style.font.getLineHeight();
 	}
 	
 	private float getColumnWidth() {
@@ -42,5 +37,11 @@ public class TextArea extends Actor {
 
 	public InputProcessor getController() {
 		return controller;
+	}
+
+	public XY<Integer> caretToPosition(XY<Integer> caret) {
+		float x = 8 + caret.x * getColumnWidth();
+		float y = this.getHeight() - 30 - caret.y * getRowHeight();
+		return new XY<Integer>((int) x, (int) y);	
 	}
 }

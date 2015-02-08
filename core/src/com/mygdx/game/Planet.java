@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class PlaygroundGame extends Game {
+public class Planet extends Game {
 	private Viewport viewport;
 	private ResourceManager resourceManager;
 	
