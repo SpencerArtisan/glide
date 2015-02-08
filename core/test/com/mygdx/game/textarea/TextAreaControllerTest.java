@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.MockitoAnnotations.*;
 import static org.mockito.Mockito.*;
+import static com.mygdx.game.textarea.AtXY.*;
 
 import com.badlogic.gdx.math.Vector;
 import com.mygdx.game.ResourceManager;
@@ -38,8 +39,7 @@ public class TextAreaControllerTest {
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
-		assertThat(model.caret().getX(), is(3));
-		assertThat(model.caret().getY(), is(1));		
+		assertThat(model.caret(), at(3, 1));
 	}
 	
 	@Test
@@ -49,8 +49,7 @@ public class TextAreaControllerTest {
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
-		assertThat(model.caret().getX(), is(5));
-		assertThat(model.caret().getY(), is(1));		
+		assertThat(model.caret(), at(5, 1));		
 	}
 	
 	@Test
@@ -60,17 +59,14 @@ public class TextAreaControllerTest {
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
 		assertThat(model.getText(), is("\n\n\n"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(3));		
-		
+		assertThat(model.caret(), at(0, 3));		
 	}
 	
 	@Test
 	public void returnMovesToStartOfNextLine() throws Exception {
 		subject.keyTyped(Key.Return.asChar());
 		assertThat(model.getText(), is("\n"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(0, 1));
 	}
 	
 	@Test
@@ -78,18 +74,16 @@ public class TextAreaControllerTest {
 		model.setText("Hello");
 		subject.keyTyped(Key.Return.asChar());
 		assertThat(model.getText(), is("\nHello"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(0, 1));
 	}
 	
 	@Test
 	public void returnInMiddleOfLineSplitsIt() throws Exception {
 		model.setText("Hello");
-		model.caret().setX(2);
+		model.caret().setLocation(2, 0);
 		subject.keyTyped(Key.Return.asChar());
 		assertThat(model.getText(), is("He\nllo"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(0, 1));
 	}
 	
 	@Test
@@ -117,59 +111,52 @@ public class TextAreaControllerTest {
 		subject.keyTyped('a');
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is(""));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void deleteInMiddleLineSquashesText() {
 		model.setText("Hello\nThere");
-		model.caret().setX(2);
+		model.caret().setLocation(2, 0);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("Hllo\nThere"));
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(1, 0));
 	}
 	
 	@Test
 	public void deleteInMiddleSecondLineSquashesText() {
 		model.setText("Hello\nThere");
-		model.caret().setX(2);
-		model.caret().setY(1);
+		model.caret().setLocation(2, 1);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("Hello\nTere"));
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(1, 1));
 	}
 	
 	@Test
 	public void deleteBeyondStartOfLineMovesUp() {
 		model.setText("a\n");
-		model.caret().setY(1);
+		model.caret().setLocation(0, 1);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("a"));
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(1, 0));
 	}
 	
 	@Test
 	public void deleteBeyondStartOfLineWithEmptyLinesMovesUp() {
 		model.setText("a\n\n\nb");
-		model.caret().setY(3);
+		model.caret().setLocation(0, 3);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("a\n\nb"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(2));
+		assertThat(model.caret(), at(0, 2));
 	}
 	
 	@Test
 	public void deleteBeyondStartOfBringsExistingLineUp() {
 		model.setText("a\nb");
-		model.caret().setY(1);
+		model.caret().setLocation(0, 1);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("ab"));
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(1, 0));
 	}
 	
 	@Test
@@ -177,121 +164,105 @@ public class TextAreaControllerTest {
 		model.setText("a");
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is("a"));
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void caretStartsAtOrigin() {
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void visibleKeyPressMovesCaretRight() {
 		subject.keyTyped('a');
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(1, 0));
 	}
 	
 	@Test
 	public void invisibleKeyPressDoesNotMoveCaret() {
 		subject.keyTyped(Key.Shift.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void deleteMovesCaretLeft() {
 		subject.keyTyped('a');
 		subject.keyTyped(Key.Delete.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}	
 	
 	@Test
 	public void downArrowMovesDown() throws Exception {
 		subject.keyTyped(Key.Down.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(0, 1));
 	}
 	
 	@Test
 	public void downArrowWhenLowerLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hello\nYou");
-		model.caret().setX(5);
+		model.caret().setLocation(5, 0);
 		subject.keyTyped(Key.Down.asChar());
-		assertThat(model.caret().getX(), is(3));
-		assertThat(model.caret().getY(), is(1));
+		assertThat(model.caret(), at(3, 1));
 	}
 	
 	@Test
 	public void upArrowWhenHigherLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hi\nThere");
-		model.caret().setX(5);
-		model.caret().setY(1);
+		model.caret().setLocation(5, 1);
 		subject.keyTyped(Key.Up.asChar());
-		assertThat(model.caret().getX(), is(2));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(2, 0));
 	}
 	
 	@Test
 	public void upArrowMovesUp() throws Exception {
-		model.caret().setY(1);
+		model.caret().setLocation(0, 1);
 		subject.keyTyped(Key.Up.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void upArrowStopsAtTop() throws Exception {
 		subject.keyTyped(Key.Up.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void leftArrowMovesLeft() throws Exception {
-		model.caret().setX(1);
+		model.caret().setLocation(1, 0);
 		subject.keyTyped(Key.Left.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void leftArrowStopsAtLeft() throws Exception {
 		subject.keyTyped(Key.Left.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void rightArrowMovesRight() throws Exception {
 		model.setText("a");
 		subject.keyTyped(Key.Right.asChar());
-		assertThat(model.caret().getX(), is(1));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(1, 0));
 	}
 	
 	@Test
 	public void rightArrowStopsAtEndOfLine() throws Exception {
 		subject.keyTyped(Key.Right.asChar());
-		assertThat(model.caret().getX(), is(0));
-		assertThat(model.caret().getY(), is(0));
+		assertThat(model.caret(), at(0, 0));
 	}
 	
 	@Test
 	public void textEnteredAtCaretXPosition() throws Exception {
 		model.setText("Hello\nWorld");
-		model.caret().setX(2);
+		model.caret().setLocation(2, 0);
 		subject.keyTyped('a');
 		assertThat(model.getText(), is("Heallo\nWorld"));
 	}
 	
 	@Test
 	public void textEnteredAtCaretYPositionWhenYGreaterThanNumberOfLines() throws Exception {
-		model.caret().setX(0);
-		model.caret().setY(2);
+		model.caret().setLocation(0, 2);
 		subject.keyTyped('a');
 		assertThat(model.getText(), is("\n\na"));
 	}
@@ -299,8 +270,7 @@ public class TextAreaControllerTest {
 	@Test
 	public void textEnteredAtCaretYPositionWhenYLessThanNumberOfLines() throws Exception {
 		model.setText("Hello\nThere\nWorld");
-		model.caret().setX(0);
-		model.caret().setY(2);
+		model.caret().setLocation(0, 2);
 		subject.keyTyped('a');
 		assertThat(model.getText(), is("Hello\nThere\naWorld"));
 	}

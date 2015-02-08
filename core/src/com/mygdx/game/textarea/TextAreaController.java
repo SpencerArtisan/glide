@@ -35,7 +35,7 @@ public class TextAreaController extends InputAdapter {
 		} else if (Key.Return.is(character)) {
 			model.insert('\n');
 			caret.moveDown();
-			caret.setX(0);
+			caret.moveToFarLeft();
 		} else if (isPrintableChar(character)) {
 			model.insert(character);
 			caret.moveRight();

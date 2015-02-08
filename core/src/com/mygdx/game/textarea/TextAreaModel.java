@@ -102,19 +102,23 @@ public class TextAreaModel {
 			setY(caretLocation.y);
 		}
 
-		public int getX() {
+		public void setLocation(int x, int y) {
+			setLocation(new XY<Integer>(x, y));
+		}
+
+		private int getX() {
 			return location.x;
 		}
 
-		public void setX(int x) {
+		private void setX(int x) {
 			location.x = x;
 		}
 
-		public int getY() {
+		private int getY() {
 			return location.y;
 		}
 
-		public void setY(int y) {
+		private void setY(int y) {
 			location.y = y;
 			changeXIfBeyondEndOfLine();
 		}
@@ -123,6 +127,10 @@ public class TextAreaModel {
 			if (getX() != 0) {
 				setX(getX() - 1);
 			}
+		}
+
+		public void moveToFarLeft() {
+			setX(0);
 		}
 		
 		public void moveRight() {
@@ -146,6 +154,11 @@ public class TextAreaModel {
 			if (getX() > lineLength) {
 				setX(lineLength);
 			}
+		}
+
+		@Override
+		public String toString() {
+			return "Caret " + location;
 		}
 	}
 }
