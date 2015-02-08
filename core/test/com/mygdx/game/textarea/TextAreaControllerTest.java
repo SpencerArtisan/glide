@@ -223,8 +223,16 @@ public class TextAreaControllerTest {
 	
 	@Test
 	public void rightArrowMovesRight() throws Exception {
+		model.setText("a");
 		subject.keyTyped(Key.Right.asChar());
 		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void rightArrowStopsAtEndOfLine() throws Exception {
+		subject.keyTyped(Key.Right.asChar());
+		assertThat(model.caret().getX(), is(0));
 		assertThat(model.caret().getY(), is(0));
 	}
 	

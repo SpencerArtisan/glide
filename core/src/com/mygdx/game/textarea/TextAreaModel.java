@@ -74,6 +74,15 @@ public class TextAreaModel {
 		return index;
 	}
 
+	private int currentLineLength() {
+		int startRowIndex = getIndexForRow(caret.getY());
+		int endOfRowIndex = text.indexOf('\n', startRowIndex);
+		if (endOfRowIndex == -1) {
+			endOfRowIndex = text.length();
+		}
+		return endOfRowIndex - startRowIndex;
+	}
+
 	public class Caret {
 		private int x, y;
 
@@ -111,7 +120,9 @@ public class TextAreaModel {
 		}
 		
 		public void moveRight() {
-			setX(x + 1);
+			if (x < currentLineLength()) {
+				setX(x + 1);
+			}
 		}
 
 		public void moveUp() {
@@ -125,14 +136,9 @@ public class TextAreaModel {
 		}
 		
 		private void changeXIfBeyondEndOfLine() {
-			int startRowIndex = getIndexForRow(y);
-			int endOfRowIndex = text.indexOf('\n', startRowIndex);
-			if (endOfRowIndex == -1) {
-				endOfRowIndex = text.length();
-			}
-			int rowLength = endOfRowIndex - startRowIndex;
-			if (x > rowLength) {
-				x = rowLength;
+			int lineLength = currentLineLength();
+			if (x > lineLength) {
+				x = lineLength;
 			}
 		}
 	}
