@@ -1,24 +1,16 @@
 package com.mygdx.game.textarea;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import java.awt.event.KeyEvent;
+import static com.mygdx.game.textarea.AtXY.at;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.MockitoAnnotations.*;
-import static org.mockito.Mockito.*;
-import static com.mygdx.game.textarea.AtXY.*;
-
-import com.badlogic.gdx.math.Vector;
-import com.mygdx.game.ResourceManager;
 import com.mygdx.game.XY;
-
-
 
 public class TextAreaControllerTest {
 	private TextAreaController subject;
@@ -28,7 +20,7 @@ public class TextAreaControllerTest {
 	@Before
 	public void before() {
 		MockitoAnnotations.initMocks(this);
-		model = new TextAreaModel();
+		model = new TextAreaModel(null);
 		model.clear();
 		subject = new TextAreaController(model, view);
 	}

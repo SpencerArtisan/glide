@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.code.Program;
+import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.textarea.TextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 
@@ -28,7 +29,7 @@ public class CodingScreen extends ScreenAdapter {
 //		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
 
 		Skin skin = resourceManager.getSkin();
-		TextAreaModel model = new TextAreaModel(program.code());
+		TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
 		model.caret().moveToBottom();
 		TextArea textArea = new TextArea(model, skin);
 

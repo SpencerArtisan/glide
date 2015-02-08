@@ -8,14 +8,16 @@ import com.mygdx.game.XY;
 public class TextAreaModel {
 	private String text;
 	private Caret caret;
+	private ColorCoder colorCoder;
 	
-	public TextAreaModel(String text) {
+	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
+		this.colorCoder = colorCoder;
 		caret = new Caret();
 	}
 
-	public TextAreaModel() {
-		this("");
+	public TextAreaModel(ColorCoder colorCoder) {
+		this("", colorCoder);
 	}
 	
 	public Caret caret() {
@@ -24,6 +26,10 @@ public class TextAreaModel {
 
 	public String getText() {
 		return text;
+	}
+	
+	public String getColoredText() {
+		return colorCoder.encode(text);
 	}
 
 	public void setText(String text) {
