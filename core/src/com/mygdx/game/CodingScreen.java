@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.code.Program;
 import com.mygdx.game.textarea.TextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 
@@ -16,7 +17,7 @@ public class CodingScreen extends ScreenAdapter {
 	private BitmapFont font;
 	private ScrollPane scrollPane;
 	
-	public CodingScreen(Viewport viewport, ResourceManager resourceManager) {
+	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
 
 //		ImageArea imageArea = new ImageArea();
@@ -26,7 +27,9 @@ public class CodingScreen extends ScreenAdapter {
 //		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
 
 		Skin skin = resourceManager.getSkin();
-		TextArea textArea = createTextArea(viewport, skin);
+		TextAreaModel model = new TextAreaModel(program.code());
+		model.caret().moveToBottom();
+		TextArea textArea = new TextArea(model, skin);
 
 	    scrollPane = new ScrollPane(textArea, skin);
 		scrollPane.setWidth(viewport.getWorldWidth());
@@ -38,11 +41,6 @@ public class CodingScreen extends ScreenAdapter {
 		Gdx.input.setInputProcessor(textArea.getController());
 	}
 
-	private TextArea createTextArea(Viewport viewport, Skin skin) {
-		TextArea textArea = new TextArea(new TextAreaModel(), skin);
-		return textArea;
-	}
-	
     @Override
     public void render(float delta) { 
         Gdx.gl.glClearColor(0, 0, 0, 1);

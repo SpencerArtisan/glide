@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.code.Program;
 
 public class Planet extends Game {
 	private Viewport viewport;
@@ -27,12 +28,13 @@ public class Planet extends Game {
 	public void create () {
 		viewport = new ScreenViewport();
 		resourceManager = new ResourceManager();
+		final Program program = new Program();
 		
 		WelcomeScreen welcomeScreen = new WelcomeScreen(viewport);
 		welcomeScreen.getNewGameButton().addListener(new ClickListener() {			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				setScreen(new CodingScreen(viewport, resourceManager));
+				setScreen(new CodingScreen(program, viewport, resourceManager));
 			}
 		});
 		

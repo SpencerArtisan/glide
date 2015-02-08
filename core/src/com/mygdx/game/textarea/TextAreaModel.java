@@ -1,15 +1,21 @@
 package com.mygdx.game.textarea;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 public class TextAreaModel {
 	private String text;
 	private Caret caret;
 	
-	public TextAreaModel() {
-		text = "";
+	public TextAreaModel(String text) {
+		this.text = text;
 		caret = new Caret();
 	}
 
+	public TextAreaModel() {
+		this("");
+	}
+	
 	public Caret caret() {
 		return caret;
 	}
@@ -81,6 +87,10 @@ public class TextAreaModel {
 		}
 		return endOfRowIndex - startRowIndex;
 	}
+	
+	private int numberOfRows() {
+		return StringUtils.countMatches(text, "\n");
+	}
 
 	public class Caret {
 		private XY<Integer> location;
@@ -149,6 +159,11 @@ public class TextAreaModel {
 			setY(getY() + 1);
 		}
 		
+
+		public void moveToBottom() {
+			setY(numberOfRows());
+		}
+
 		private void changeXIfBeyondEndOfLine() {
 			int lineLength = currentLineLength();
 			if (getX() > lineLength) {
