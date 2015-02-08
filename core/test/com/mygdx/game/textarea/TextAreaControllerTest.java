@@ -22,6 +22,22 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
+	public void clickingInsideTextAreaSetsCaret() throws Exception {
+//		subject.touchUp(screenX, screenY, pointer, button)
+	}
+	
+	@Test
+	public void clickingBeyondLineSetsCaretAtLineEnd() throws Exception {
+		
+		
+	}
+	
+	@Test
+	public void clickingBeyondRowsInsertsRowsAndSetsCaret() throws Exception {
+		
+	}
+	
+	@Test
 	public void returnMovesToStartOfNextLine() throws Exception {
 		subject.keyTyped(Key.Return.asChar());
 		assertThat(model.getText(), is("\n"));

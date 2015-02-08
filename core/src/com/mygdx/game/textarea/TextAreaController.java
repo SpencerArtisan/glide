@@ -41,6 +41,14 @@ public class TextAreaController extends InputAdapter {
 		return true;
 	}
 	
+	
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return super.touchUp(screenX, screenY, pointer, button);
+	}
+
 	public boolean isPrintableChar(char character) {
 	    Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
 	    return (!Character.isISOControl(character)) &&

@@ -22,9 +22,22 @@ public class TextArea extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		style.font.drawMultiLine(batch, model.getText(), 10, 740);
 		Drawable caretImage = style.cursor;
+		XY caretPosition = getCaretPosition();
+		caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());	
+	}
+
+	private XY getCaretPosition() {
 		TextAreaModel.Caret caret = model.caret();
+		return new XY(8 + caret.getX() * getColumnWidth(), this.getHeight() - 30 - caret.getY() * getRowHeight());	
+	}
+
+	private float getRowHeight() {
 		float lineHeight = style.font.getLineHeight();
-		caretImage.draw(batch, 8 + caret.getX() * 14, this.getHeight() - 30 - caret.getY() * lineHeight, caretImage.getMinWidth(), lineHeight);	
+		return lineHeight;
+	}
+	
+	private float getColumnWidth() {
+		return 14;
 	}
 
 	public InputProcessor getController() {
