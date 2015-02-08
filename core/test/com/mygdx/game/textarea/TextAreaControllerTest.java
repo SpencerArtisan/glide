@@ -69,10 +69,72 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
-	public void deleteRemovesText() {
+	public void deleteAtEndOfLineRemovesText() {
 		subject.keyTyped('a');
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText(), is(""));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void deleteInMiddleLineSquashesText() {
+		model.setText("Hello\nThere");
+		model.caret().setX(2);
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("Hllo\nThere"));
+		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void deleteInMiddleSecondLineSquashesText() {
+		model.setText("Hello\nThere");
+		model.caret().setX(2);
+		model.caret().setY(1);
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("Hello\nTere"));
+		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
+	public void deleteBeyondStartOfLineMovesUp() {
+		model.setText("a\n");
+		model.caret().setY(1);
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("a"));
+		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void deleteBeyondStartOfLineWithEmptyLinesMovesUp() {
+		model.setText("a\n\n\nb");
+		model.caret().setY(3);
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("a\n\nb"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(2));
+	}
+	
+	@Test
+	public void deleteBeyondStartOfBringsExistingLineUp() {
+		model.setText("a\nb");
+		model.caret().setY(1);
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("ab"));
+		assertThat(model.caret().getX(), is(1));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void deleteBeyondStartOfFirstLineDoesNothing() {
+		model.setText("a");
+		subject.keyTyped(Key.Delete.asChar());
+		assertThat(model.getText(), is("a"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(0));
 	}
 	
 	@Test

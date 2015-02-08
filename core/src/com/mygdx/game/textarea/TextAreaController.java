@@ -22,14 +22,13 @@ public class TextAreaController extends InputAdapter {
 		TextAreaModel.Caret caret = model.caret();
 		if (Key.Delete.is(character)) {
 			model.deleteCharacter();
-			caret.moveLeft();
-		} else if (Key.Up.is(character) && caret.getY() > 0) {
+		} else if (Key.Up.is(character)) {
 			caret.moveUp();
 		} else if (Key.Down.is(character)) {
 			caret.moveDown();
 		} else if (Key.Right.is(character)) {
 			caret.moveRight();
-		} else if (Key.Left.is(character) && caret.getX() > 0) {
+		} else if (Key.Left.is(character)) {
 			caret.moveLeft();
 		} else if (Key.Return.is(character)) {
 			model.insert('\n');
