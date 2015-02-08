@@ -22,6 +22,33 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
+	public void returnMovesToStartOfNextLine() throws Exception {
+		subject.keyTyped(Key.Return.asChar());
+		assertThat(model.getText(), is("\n"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
+	public void returnPushesNextLineDown() throws Exception {
+		model.setText("Hello");
+		subject.keyTyped(Key.Return.asChar());
+		assertThat(model.getText(), is("\nHello"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
+	public void returnInMiddleOfLineSplitsIt() throws Exception {
+		model.setText("Hello");
+		model.caret().setX(2);
+		subject.keyTyped(Key.Return.asChar());
+		assertThat(model.getText(), is("He\nllo"));
+		assertThat(model.caret().getX(), is(0));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
 	public void clearRemovesText() {
 		model.clear();
 		assertThat(model.getText(), is(""));

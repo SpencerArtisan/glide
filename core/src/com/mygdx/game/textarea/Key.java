@@ -6,7 +6,8 @@ public enum Key {
 	Left(63234), 
 	Right(63235), 
 	Delete('\b'), 
-	Shift('\u007F');
+	Shift('\u007F'),
+	Return('\r');
 	
 	private final char value;
 	
