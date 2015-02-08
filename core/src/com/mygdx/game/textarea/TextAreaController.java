@@ -19,7 +19,7 @@ public class TextAreaController extends InputAdapter {
 		KeyStroke ks = KeyStroke.getKeyStroke(character, 0);
 		System.out.println(ks.getKeyCode());
 		
-		Caret caret = model.caret();
+		TextAreaModel.Caret caret = model.caret();
 		if (Key.Delete.is(character)) {
 			model.deleteCharacter();
 			caret.moveLeft();
@@ -32,7 +32,7 @@ public class TextAreaController extends InputAdapter {
 		} else if (Key.Left.is(character) && caret.getX() > 0) {
 			caret.moveLeft();
 		} else if (isPrintableChar(character)) {
-			model.append(character);
+			model.insert(character);
 			caret.moveRight();
 		}
 		return true;

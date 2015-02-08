@@ -84,6 +84,25 @@ public class TextAreaControllerTest {
 	}
 	
 	@Test
+	public void downArrowWhenLowerLineShorterGoesToEndOfLine() throws Exception {
+		model.setText("Hello\nYou");
+		model.caret().setX(5);
+		subject.keyTyped(Key.Down.asChar());
+		assertThat(model.caret().getX(), is(3));
+		assertThat(model.caret().getY(), is(1));
+	}
+	
+	@Test
+	public void upArrowWhenHigherLineShorterGoesToEndOfLine() throws Exception {
+		model.setText("Hi\nThere");
+		model.caret().setX(5);
+		model.caret().setY(1);
+		subject.keyTyped(Key.Up.asChar());
+		assertThat(model.caret().getX(), is(2));
+		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
 	public void upArrowMovesUp() throws Exception {
 		model.caret().setY(1);
 		subject.keyTyped(Key.Up.asChar());
@@ -118,5 +137,30 @@ public class TextAreaControllerTest {
 		subject.keyTyped(Key.Right.asChar());
 		assertThat(model.caret().getX(), is(1));
 		assertThat(model.caret().getY(), is(0));
+	}
+	
+	@Test
+	public void textEnteredAtCaretXPosition() throws Exception {
+		model.setText("Hello\nWorld");
+		model.caret().setX(2);
+		subject.keyTyped('a');
+		assertThat(model.getText(), is("Heallo\nWorld"));
+	}
+	
+	@Test
+	public void textEnteredAtCaretYPositionWhenYGreaterThanNumberOfLines() throws Exception {
+		model.caret().setX(0);
+		model.caret().setY(2);
+		subject.keyTyped('a');
+		assertThat(model.getText(), is("\n\na"));
+	}
+	
+	@Test
+	public void textEnteredAtCaretYPositionWhenYLessThanNumberOfLines() throws Exception {
+		model.setText("Hello\nThere\nWorld");
+		model.caret().setX(0);
+		model.caret().setY(2);
+		subject.keyTyped('a');
+		assertThat(model.getText(), is("Hello\nThere\naWorld"));
 	}
 }

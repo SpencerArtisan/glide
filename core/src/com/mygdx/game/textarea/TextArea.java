@@ -22,7 +22,7 @@ public class TextArea extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		style.font.drawMultiLine(batch, model.getText(), 10, 740);
 		Drawable caretImage = style.cursor;
-		Caret caret = model.caret();
+		TextAreaModel.Caret caret = model.caret();
 		float lineHeight = style.font.getLineHeight();
 		caretImage.draw(batch, 8 + caret.getX() * 14, this.getHeight() - 30 - caret.getY() * lineHeight, caretImage.getMinWidth(), lineHeight);	
 	}
