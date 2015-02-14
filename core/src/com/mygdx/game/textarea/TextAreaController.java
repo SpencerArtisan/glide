@@ -16,6 +16,7 @@ public class TextAreaController extends InputAdapter {
 	private TextAreaModel model;
 	private TextArea view;
     private LinkedList<Command> executedCommands = new LinkedList<Command>();
+    private int lastCommandIndex = -1;
 
 	public TextAreaController(TextAreaModel model, TextArea view) {
 		this.model = model;
@@ -24,7 +25,11 @@ public class TextAreaController extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        getKeyDownCommand(keycode).execute();
+        Command command = getKeyDownCommand(keycode);
+        if (command != null) {
+            command.execute();
+            return true;
+        }
         return false;
     }
 
@@ -32,18 +37,39 @@ public class TextAreaController extends InputAdapter {
 	public boolean keyTyped(char character) {
         Command command = getKeyTypedCommand(character);
         if (command != null) {
+            clearRedoChain();
             executedCommands.add(command);
             command.execute();
+            lastCommandIndex = executedCommands.size() - 1;
         }
         return true;
 	}
 
+    private void clearRedoChain() {
+        for (int i = lastCommandIndex + 1; i < executedCommands.size(); i++) {
+            executedCommands.removeLast();
+        }
+    }
+
     private Command getKeyDownCommand(int keycode) {
-        if (isControlDown() && keycode == Input.Keys.Z) {
-            Command lastCommand = executedCommands.removeLast();
+        if (isRedo(keycode)) {
+            lastCommandIndex++;
+            return executedCommands.get(lastCommandIndex);
+        }
+        if (isUndo(keycode)) {
+            Command lastCommand = executedCommands.get(lastCommandIndex);
+            lastCommandIndex--;
             return new UndoCommand(lastCommand);
         }
         return null;
+    }
+
+    private boolean isUndo(int keycode) {
+        return isControlDown() && keycode == Input.Keys.Z && !isShiftDown() && lastCommandIndex >= 0;
+    }
+
+    private boolean isRedo(int keycode) {
+        return isControlDown() && isShiftDown() && keycode == Input.Keys.Z && lastCommandIndex < executedCommands.size() - 1;
     }
 
     private Command getKeyTypedCommand(char character) {
@@ -88,5 +114,10 @@ public class TextAreaController extends InputAdapter {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT) ||
                Gdx.input.isKeyPressed(Input.Keys.SYM);
+    }
+
+    public boolean isShiftDown() {
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ||
+               Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 }

@@ -95,10 +95,68 @@ public class TextAreaControllerIntegrationTest {
 	}
 	
 	@Test
+	public void undoBeyondBeginningDoesNothing() {
+        doReturn(true).when(subject).isControlDown();
+        doReturn(false).when(subject).isShiftDown();
+        subject.keyDown(Input.Keys.Z);
+
+        assertThat(model.getText()).isEqualTo("");
+	}
+
+	@Test
 	public void undoKeyPressRemovesText() {
         doReturn(true).when(subject).isControlDown();
+        doReturn(false).when(subject).isShiftDown();
 		subject.keyTyped('a');
 		subject.keyTyped('b');
+        subject.keyDown(Input.Keys.Z);
+
+        assertThat(model.getText()).isEqualTo("a");
+	}
+
+	@Test
+	public void redoKeyPressRestoresText() {
+        doReturn(true).when(subject).isControlDown();
+        doReturn(false).when(subject).isShiftDown();
+		subject.keyTyped('a');
+		subject.keyTyped('b');
+        subject.keyDown(Input.Keys.Z);
+        doReturn(true).when(subject).isShiftDown();
+        subject.keyDown(Input.Keys.Z);
+
+        assertThat(model.getText()).isEqualTo("ab");
+	}
+
+	@Test
+	public void redoBeyondDoesNothing() {
+        doReturn(true).when(subject).isControlDown();
+        doReturn(true).when(subject).isShiftDown();
+        subject.keyDown(Input.Keys.Z);
+
+        assertThat(model.getText()).isEqualTo("");
+	}
+
+	@Test
+	public void undoTypeThenRedoDoesNothing() {
+        subject.keyTyped('a');
+        doReturn(true).when(subject).isControlDown();
+        doReturn(false).when(subject).isShiftDown();
+        subject.keyDown(Input.Keys.Z);
+        subject.keyTyped('b');
+        doReturn(true).when(subject).isShiftDown();
+        subject.keyDown(Input.Keys.Z);
+
+        assertThat(model.getText()).isEqualTo("b");
+	}
+
+	@Test
+	public void multipleUndoKeyPressesRemoveText() {
+        doReturn(true).when(subject).isControlDown();
+        doReturn(false).when(subject).isShiftDown();
+		subject.keyTyped('a');
+		subject.keyTyped('b');
+		subject.keyTyped('c');
+        subject.keyDown(Input.Keys.Z);
         subject.keyDown(Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("a");
