@@ -55,7 +55,7 @@ public class SyntaxPart {
     }
 
     public static enum Type {
-		Keyword, Comment, Bracket, Unclassified, Text, Quoted, UnclosedQuote
+		Keyword, Method, Comment, Bracket, Unclassified, Text, Quoted, UnclosedQuote
 	}
 }
 

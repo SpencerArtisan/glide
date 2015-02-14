@@ -24,7 +24,10 @@ public class TextArea extends Actor {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		style.font.drawMultiLine(batch, model.getText(), 10, 740);
+        style.background.draw(batch, 0, 0, getWidth(), getHeight());
+
+        style.font.setMarkupEnabled(true);
+		style.font.drawMultiLine(batch, model.getColoredText(), 10, 740);
 		Drawable caretImage = style.cursor;
 		XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
 		caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());	
