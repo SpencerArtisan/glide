@@ -14,4 +14,9 @@ public class TypeCommand extends AbstractCommand {
     public void execute() {
         model.insert(character);
         model.caret().moveRight();    }
+
+    @Override
+    public void undo() {
+        new DeleteCommand(model).execute();
+    }
 }

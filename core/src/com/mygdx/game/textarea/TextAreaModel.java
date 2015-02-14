@@ -45,12 +45,15 @@ public class TextAreaModel {
 		text = text.substring(0, index) + character + text.substring(index, text.length());
 	}
 
-	public void deleteCharacter() {
+	public Character deleteCharacter() {
 		int index = getCaretIndex();
 		if (index > 0) {
-			text = text.substring(0, index - 1) + text.substring(index, text.length());
+            char deleted = text.charAt(text.length() - 1);
+            text = text.substring(0, index - 1) + text.substring(index, text.length());
 			positionCaret(index - 1);
+            return deleted;
 		}
+        return null;
 	}
 
 	private void positionCaret(int textIndex) {

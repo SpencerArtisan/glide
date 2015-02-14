@@ -13,4 +13,9 @@ public class ReturnCommand extends AbstractCommand {
         model.caret().moveDown();
         model.caret().moveToFarLeft();
     }
+
+    @Override
+    public void undo() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

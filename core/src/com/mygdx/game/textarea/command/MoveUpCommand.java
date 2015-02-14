@@ -11,4 +11,9 @@ public class MoveUpCommand extends AbstractCommand {
     public void execute() {
         model.caret().moveUp();
     }
+
+    @Override
+    public void undo() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
