@@ -14,7 +14,8 @@ public class GroovyColorCoder implements ColorCoder {
 
     private static final Map<SyntaxPart.Type, String> DEFAULT_COLORS = ImmutableMap.<SyntaxPart.Type, String>builder().
             put(SyntaxPart.Type.Unclassified, "#839496").
-            put(SyntaxPart.Type.Bracket, "WHITE").
+            put(SyntaxPart.Type.Bracket, "#eee8d5").
+            put(SyntaxPart.Type.Brace, "WHITE").
             put(SyntaxPart.Type.Keyword, "#b58900").
             put(SyntaxPart.Type.Method, "#268bd2").
             put(SyntaxPart.Type.Quoted, "#2aa198").

@@ -20,7 +20,7 @@ public class GroovySyntax {
 
     @SuppressWarnings("unchecked")
     private List<SyntaxPart> categoriseWordsIntoTypes(String program) {
-        List wordsAndSpaces = Collections.list(new StringTokenizer(program, " \t\n\r\f()\"", true));
+        List wordsAndSpaces = Collections.list(new StringTokenizer(program, " \t\n\r\f(){}\"", true));
         return Lists.transform(wordsAndSpaces, new Function<String, SyntaxPart>() {
             public SyntaxPart apply(String word) {
                 return new SyntaxPart(word, getType(word));
@@ -61,7 +61,9 @@ public class GroovySyntax {
             return Keyword;
         } else if (word.equals("(") || word.equals(")")) {
             return Bracket;
-        } else if (word.equals("//")) {
+        } else if (word.equals("{") || word.equals("}")) {
+            return Brace;
+        } else if (word.startsWith("//")) {
             return Comment;
         } else if (word.equals("\"")) {
             return UnclosedQuote;

@@ -47,10 +47,24 @@ public class GroovySyntaxTest {
 	}
 
 	@Test
+	public void brace() throws Exception {
+        assertThat(syntax.parse("{blah}")).containsExactly(
+				new SyntaxPart("{", Brace),
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart("}", Brace));
+	}
+
+	@Test
 	public void comment() throws Exception {
         assertThat(syntax.parse("// Comment\nNon comment")).containsExactly(
 				new SyntaxPart("// Comment", Comment),
 				new SyntaxPart("\nNon comment", Unclassified));
+	}
+
+	@Test
+	public void longComment() throws Exception {
+        assertThat(syntax.parse("////")).containsExactly(
+				new SyntaxPart("////", Comment));
 	}
 
 	@Test

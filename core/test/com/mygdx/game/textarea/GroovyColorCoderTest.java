@@ -22,47 +22,28 @@ public class GroovyColorCoderTest {
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new GroovyColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Bracket, "WHITE", Comment, "GRAY", Quoted, "RED"));
+		coder = new GroovyColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "RED"));
 	}
 
 	@Test
-	public void unclassified() throws Exception {
-		when(syntax.parse("wibble")).thenReturn(Arrays.asList(
-				new SyntaxPart("wibble", Unclassified)));
-		assertThat(coder.encode("wibble")).isEqualTo("wibble");
+	public void unspecifiedColor() throws Exception {
+		when(syntax.parse("word")).thenReturn(Arrays.asList(
+				new SyntaxPart("word", Unclassified)));
+		assertThat(coder.encode("word")).isEqualTo("word");
 	}
-	
-	@Test
-	public void keyword() throws Exception {
-		when(syntax.parse("public wibble")).thenReturn(Arrays.asList(
-				new SyntaxPart("public", Keyword), 
-				new SyntaxPart(" wibble", Unclassified)));
-		assertThat(coder.encode("public wibble")).isEqualTo("[BLUE]public[] wibble");
+
+    @Test
+    public void singleElement() throws Exception {
+        when(syntax.parse("word")).thenReturn(Arrays.asList(
+                new SyntaxPart("word", Keyword)));
+        assertThat(coder.encode("word")).isEqualTo("[BLUE]word[]");
+    }
+
+    @Test
+	public void multipleElements() throws Exception {
+		when(syntax.parse("word1 word2")).thenReturn(Arrays.asList(
+				new SyntaxPart("word1", Keyword),
+				new SyntaxPart(" word2", Method)));
+		assertThat(coder.encode("word1 word2")).isEqualTo("[BLUE]word1[][RED] word2[]");
 	}
-	
-	@Test
-	public void bracket() throws Exception {
-		when(syntax.parse("(blah)")).thenReturn(Arrays.asList(
-				new SyntaxPart("(", Bracket), 
-				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart(")", Bracket))); 
-		assertThat(coder.encode("(blah)")).isEqualTo("[WHITE]([]blah[WHITE])[]");
-	}
-	
-	@Test
-	public void comment() throws Exception {
-		when(syntax.parse("// Comment\nNon comment")).thenReturn(Arrays.asList(
-				new SyntaxPart("// Comment", Comment), 
-				new SyntaxPart("\nNon comment", Unclassified))); 
-		assertThat(coder.encode("// Comment\nNon comment")).isEqualTo("[GRAY]// Comment[]\nNon comment");
-	}
-	
-	@Test
-	public void string() throws Exception {
-		when(syntax.parse("prefix \"quoted\" suffix")).thenReturn(Arrays.asList(
-				new SyntaxPart("prefix ", Unclassified), 
-				new SyntaxPart("\"quoted\"", Quoted), 
-				new SyntaxPart(" suffix", Unclassified))); 
-		assertThat(coder.encode("prefix \"quoted\" suffix")).isEqualTo("prefix [RED]\"quoted\"[] suffix");
-	}	
 }
