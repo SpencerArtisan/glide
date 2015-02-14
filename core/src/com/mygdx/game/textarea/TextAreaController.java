@@ -2,10 +2,9 @@ package com.mygdx.game.textarea;
 
 import java.awt.event.KeyEvent;
 
-import javax.swing.KeyStroke;
-
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.XY;
+import com.mygdx.game.textarea.command.*;
 
 public class TextAreaController extends InputAdapter {
 
@@ -19,33 +18,31 @@ public class TextAreaController extends InputAdapter {
 
 	@Override
 	public boolean keyTyped(char character) {
-		KeyStroke ks = KeyStroke.getKeyStroke(character, 0);
-		
-		TextAreaModel.Caret caret = model.caret();
-		if (Key.Delete.is(character)) {
-			model.deleteCharacter();
-		} else if (Key.Up.is(character)) {
-			caret.moveUp();
-		} else if (Key.Down.is(character)) {
-			caret.moveDown();
-		} else if (Key.Right.is(character)) {
-			caret.moveRight();
-		} else if (Key.Left.is(character)) {
-			caret.moveLeft();
-		} else if (Key.Return.is(character)) {
-			model.insert('\n');
-			caret.moveDown();
-			caret.moveToFarLeft();
-		} else if (isPrintableChar(character)) {
-			model.insert(character);
-			caret.moveRight();
-		}
-		return true;
+        getCommand(character).execute();
+        return true;
 	}
-	
-	
-	
-	@Override
+
+    private Command getCommand(char character) {
+        if (Key.Delete.is(character)) {
+            return new DeleteCommand(model);
+        } else if (Key.Up.is(character)) {
+            return new MoveUpCommand(model);
+        } else if (Key.Down.is(character)) {
+            return new MoveDownCommand(model);
+        } else if (Key.Right.is(character)) {
+            return new MoveRightCommand(model);
+        } else if (Key.Left.is(character)) {
+            return new MoveLeftCommand(model);
+        } else if (Key.Return.is(character)) {
+            return new ReturnCommand(model);
+        } else if (isPrintableChar(character)) {
+            return new TypeCommand(model, character);
+        }
+        return new NullCommand();
+    }
+
+
+    @Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
 		model.caret().setLocation(caretLocation);

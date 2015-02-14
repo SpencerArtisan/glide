@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.mygdx.game.XY;
 
-public class TextAreaControllerTest {
+public class TextAreaControllerIntegrationTest {
 	private TextAreaController subject;
 	private TextAreaModel model;
 	@Mock private TextArea view; 
