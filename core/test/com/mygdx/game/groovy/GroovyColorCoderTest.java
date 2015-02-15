@@ -1,4 +1,4 @@
-package com.mygdx.game.textarea;
+package com.mygdx.game.groovy;
 
 import static org.assertj.core.api.Assertions.*;
 import com.google.common.collect.ImmutableMap;

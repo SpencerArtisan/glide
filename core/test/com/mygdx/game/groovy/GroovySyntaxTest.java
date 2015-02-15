@@ -1,4 +1,4 @@
-package com.mygdx.game.textarea;
+package com.mygdx.game.groovy;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
@@ -57,21 +57,21 @@ public class GroovySyntaxTest {
 	@Test
 	public void comment() throws Exception {
         assertThat(syntax.parse("// Comment\nNon comment")).containsExactly(
-				new SyntaxPart("// Comment", Comment),
-				new SyntaxPart("\nNon comment", Unclassified));
+                new SyntaxPart("// Comment", Comment),
+                new SyntaxPart("\nNon comment", Unclassified));
 	}
 
 	@Test
 	public void longComment() throws Exception {
         assertThat(syntax.parse("////")).containsExactly(
-				new SyntaxPart("////", Comment));
+                new SyntaxPart("////", Comment));
 	}
 
 	@Test
 	public void string() throws Exception {
         assertThat(syntax.parse("prefix \"quoted\" suffix")).containsExactly(
-				new SyntaxPart("prefix ", Unclassified),
-				new SyntaxPart("\"quoted\"", Quoted),
-				new SyntaxPart(" suffix", Unclassified));
+                new SyntaxPart("prefix ", Unclassified),
+                new SyntaxPart("\"quoted\"", Quoted),
+                new SyntaxPart(" suffix", Unclassified));
 	}
 }

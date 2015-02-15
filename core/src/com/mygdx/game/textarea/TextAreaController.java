@@ -17,6 +17,7 @@ public class TextAreaController extends InputAdapter {
 	private TextArea view;
     private LinkedList<Command> executedCommands = new LinkedList<Command>();
     private int lastCommandIndex = -1;
+    private boolean suppressNextKeyPress;
 
 	public TextAreaController(TextAreaModel model, TextArea view) {
 		this.model = model;
@@ -25,22 +26,41 @@ public class TextAreaController extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        Command command = getKeyDownCommand(keycode);
-        if (command != null) {
-            command.execute();
+        System.out.println("Keydown code =" + keycode + ", control is " + isControlDown());
+        handleCmdDefect();
+
+        if (isRedo(keycode)) {
+            Command nextCommand = executedCommands.get(lastCommandIndex + 1);
+            lastCommandIndex++;
+            nextCommand.execute();
             return true;
         }
-        return false;
+        if (isUndo(keycode)) {
+            Command lastCommand = executedCommands.get(lastCommandIndex);
+            lastCommandIndex--;
+            lastCommand.undo();
+            System.out.println("undo");
+            return true;
+        }
+        System.out.println("do nothing");
+        return true;
     }
 
 	@Override
 	public boolean keyTyped(char character) {
+        System.out.println("keytyped char = " + character + " suppressed=" + suppressNextKeyPress+ ", control=" + isControlDown());
+        if (suppressNextKeyPress || isControlDown()) {
+            suppressNextKeyPress = false;
+            return true;
+        }
+
         Command command = getKeyTypedCommand(character);
         if (command != null) {
             clearRedoChain();
             executedCommands.add(command);
+            lastCommandIndex++;
             command.execute();
-            lastCommandIndex = executedCommands.size() - 1;
+            return true;
         }
         return true;
 	}
@@ -49,19 +69,6 @@ public class TextAreaController extends InputAdapter {
         for (int i = lastCommandIndex + 1; i < executedCommands.size(); i++) {
             executedCommands.removeLast();
         }
-    }
-
-    private Command getKeyDownCommand(int keycode) {
-        if (isRedo(keycode)) {
-            lastCommandIndex++;
-            return executedCommands.get(lastCommandIndex);
-        }
-        if (isUndo(keycode)) {
-            Command lastCommand = executedCommands.get(lastCommandIndex);
-            lastCommandIndex--;
-            return new UndoCommand(lastCommand);
-        }
-        return null;
     }
 
     private boolean isUndo(int keycode) {
@@ -109,6 +116,10 @@ public class TextAreaController extends InputAdapter {
 	            !Key.Left.is(character) &&
 	            !Key.Right.is(character);
 	}
+
+    public void handleCmdDefect() {
+        suppressNextKeyPress = isControlDown();
+    }
 
     public boolean isControlDown() {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
