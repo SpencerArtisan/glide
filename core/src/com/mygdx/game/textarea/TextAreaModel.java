@@ -134,8 +134,16 @@ public class TextAreaModel {
 			setLocation(new XY<Integer>(x, y));
 		}
 
+        public void clearSelection() {
+            selection = null;
+        }
+
         public void setSelection(XY<Integer> touchDownLocation, XY<Integer> dragLocation) {
-            selection = Pair.of(touchDownLocation, dragLocation);
+            if (touchDownLocation.y < dragLocation.y || (touchDownLocation.y == dragLocation.y && touchDownLocation.x < dragLocation.x)) {
+                selection = Pair.of(touchDownLocation, dragLocation);
+            } else {
+                selection = Pair.of(dragLocation, touchDownLocation);
+            }
         }
 
 		private int getX() {

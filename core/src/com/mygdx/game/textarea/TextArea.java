@@ -37,16 +37,24 @@ public class TextArea extends Actor {
     }
 
     private void drawCurrentLineBackground(Batch batch) {
-        XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
-        style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
+        if (model.caret().selection() == null) {
+            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
+            style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
+        }
     }
 
     private void drawSelectionBackground(Batch batch) {
         Pair<XY<Integer>, XY<Integer>> selection = model.caret().selection();
         if (selection != null) {
-            XY<Integer> topLeftSelection = caretLocationToPosition(new XY<Integer>(0, selection.getLeft().y));
-            XY<Integer> bottomRightSelection = caretLocationToPosition(new XY<Integer>(0, selection.getRight().y));
-            style.selection.draw(batch, 0, topLeftSelection.y, getWidth(), bottomRightSelection.y - topLeftSelection.y);
+            XY<Integer> topLeftSelection = caretLocationToPosition(selection.getLeft());
+            XY<Integer> bottomRightSelection = caretLocationToPosition(selection.getRight());
+            if (selection.getLeft().y != selection.getRight().y) {
+                style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, getWidth() - topLeftSelection.x, getRowHeight());
+                style.selection.draw(batch, 0, bottomRightSelection.y + getRowHeight(), getWidth(), topLeftSelection.y - bottomRightSelection.y - getRowHeight());
+                style.selection.draw(batch, 0, bottomRightSelection.y, bottomRightSelection.x, getRowHeight());
+            } else {
+                style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, bottomRightSelection.x - topLeftSelection.x, getRowHeight());
+            }
         }
     }
 

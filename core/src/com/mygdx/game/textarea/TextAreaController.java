@@ -16,6 +16,7 @@ public class TextAreaController extends InputAdapter {
     private LinkedList<Command> executedCommands = new LinkedList<Command>();
     private int lastCommandIndex = -1;
     private XY<Integer> touchDownLocation;
+    private boolean dragging;
 
     public TextAreaController(TextAreaModel model, TextArea view) {
 		this.model = model;
@@ -46,6 +47,7 @@ public class TextAreaController extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        dragging = false;
         XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
         executeAndRemember(new MoveToCommand(model, caretLocation));
         return true;
@@ -53,12 +55,14 @@ public class TextAreaController extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        model.caret().clearSelection();
         this.touchDownLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        dragging = true;
         XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
         model.caret().setSelection(touchDownLocation, dragLocation);
         return true;
