@@ -16,6 +16,6 @@ public class DeleteCommand extends AbstractCommand {
 
     @Override
     public void undo() {
-        new TypeCommand(model, deleted);
+        new TypeCommand(model, deleted).execute();
     }
 }

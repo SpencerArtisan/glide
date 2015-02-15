@@ -67,8 +67,7 @@ public class TextAreaModel {
 			row++;
 			index = newlineIndex + 1;
 		}
-		caret.setX(textIndex - index);
-		caret.setY(row);
+		caret.setLocation(textIndex - index, row);
 	}
 
 	private int getCaretIndex() {
@@ -119,8 +118,8 @@ public class TextAreaModel {
 		}
 		
 		public void setLocation(XY<Integer> caretLocation) {
-			setX(caretLocation.x);
-			setY(caretLocation.y);
+			this.location = caretLocation;
+            changeXIfBeyondEndOfLine();
 		}
 
 		public void setLocation(int x, int y) {
@@ -132,7 +131,7 @@ public class TextAreaModel {
 		}
 
 		private void setX(int x) {
-			location.x = x;
+			setLocation(x, location.y);
 		}
 
 		private int getY() {
@@ -140,7 +139,7 @@ public class TextAreaModel {
 		}
 
 		private void setY(int y) {
-			location.y = y;
+            setLocation(location.x, y);
 			changeXIfBeyondEndOfLine();
 		}
 

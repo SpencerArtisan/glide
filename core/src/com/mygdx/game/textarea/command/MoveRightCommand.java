@@ -14,6 +14,6 @@ public class MoveRightCommand extends AbstractCommand {
 
     @Override
     public void undo() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        new MoveLeftCommand(model).execute();
     }
 }

@@ -1,7 +1,7 @@
 package com.mygdx.game;
 
 public class XY<T> {
-	public T x, y;
+	public final T x, y;
 
 	public XY(T x, T y) {
 		this.x = x;
