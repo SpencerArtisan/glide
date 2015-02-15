@@ -11,7 +11,8 @@ com.badlogic.gdx.graphics.Color: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
-    solarizedBackground: { name: white, color: { r: 0, g: 0.16862, b: 0.21176, a: 1 } }
+    solarizedBackground: { name: white, color: { r: 0, g: 0.16862, b: 0.21176, a: 1 } },
+    solarizedLine: { name: white, color: { r: 0.02745, g: 0.21176, b: 0.25882, a: 1 } }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: { down: default-round-down, up: default-round },
@@ -40,7 +41,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: { font: default-font, fontColor: white }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-	default: { selection: selection, font: default-font, fontColor: white, cursor: cursor, background: solarizedBackground }
+	default: { selection: selection, font: default-font, fontColor: white, cursor: cursor, background: solarizedBackground, focusedBackground: solarizedLine }
 },
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: { checkboxOn: check-on, checkboxOff: check-off, font: default-font, fontColor: white }

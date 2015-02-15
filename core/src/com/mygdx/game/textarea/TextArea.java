@@ -1,6 +1,7 @@
 package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +26,8 @@ public class TextArea extends Actor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
         style.background.draw(batch, 0, 0, getWidth(), getHeight());
+        XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
+        style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
 
         style.font.setMarkupEnabled(true);
 		style.font.drawMultiLine(batch, model.getColoredText(), 10, 740);
