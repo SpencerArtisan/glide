@@ -3,6 +3,9 @@ package com.mygdx.game.textarea;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mygdx.game.XY;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.regex.MatchResult;
 
 
 public class TextAreaModel {
@@ -104,6 +107,7 @@ public class TextAreaModel {
 
 	public class Caret {
 		private XY<Integer> location;
+        private Pair<XY<Integer>, XY<Integer>> selection;
 		
 		public Caret() {
 			this(0, 0);
@@ -116,8 +120,12 @@ public class TextAreaModel {
 		public XY<Integer> location() {
 			return location;
 		}
-		
-		public void setLocation(XY<Integer> caretLocation) {
+
+        public Pair<XY<Integer>, XY<Integer>> selection() {
+            return selection;
+        }
+
+        public void setLocation(XY<Integer> caretLocation) {
 			this.location = caretLocation;
             changeXIfBeyondEndOfLine();
 		}
@@ -125,6 +133,10 @@ public class TextAreaModel {
 		public void setLocation(int x, int y) {
 			setLocation(new XY<Integer>(x, y));
 		}
+
+        public void setSelection(XY<Integer> touchDownLocation, XY<Integer> dragLocation) {
+            selection = Pair.of(touchDownLocation, dragLocation);
+        }
 
 		private int getX() {
 			return location.x;
@@ -185,5 +197,5 @@ public class TextAreaModel {
 		public String toString() {
 			return "Caret " + location;
 		}
-	}
+    }
 }

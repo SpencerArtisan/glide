@@ -15,8 +15,9 @@ public class TextAreaController extends InputAdapter {
 	private TextArea view;
     private LinkedList<Command> executedCommands = new LinkedList<Command>();
     private int lastCommandIndex = -1;
+    private XY<Integer> touchDownLocation;
 
-	public TextAreaController(TextAreaModel model, TextArea view) {
+    public TextAreaController(TextAreaModel model, TextArea view) {
 		this.model = model;
 		this.view = view;
 	}
@@ -27,13 +28,11 @@ public class TextAreaController extends InputAdapter {
             Command nextCommand = executedCommands.get(lastCommandIndex + 1);
             lastCommandIndex++;
             nextCommand.execute();
-            return true;
         }
         if (isUndo(keycode)) {
             Command lastCommand = executedCommands.get(lastCommandIndex);
             lastCommandIndex--;
             lastCommand.undo();
-            return true;
         }
         return true;
     }
@@ -49,6 +48,19 @@ public class TextAreaController extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
         executeAndRemember(new MoveToCommand(model, caretLocation));
+        return true;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.touchDownLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+        model.caret().setSelection(touchDownLocation, dragLocation);
         return true;
     }
 

@@ -57,7 +57,21 @@ public class TextAreaControllerIntegrationTest {
 		assertThat(model.getText()).isEqualTo(("\n\n\n"));
         XYAssert.assertThat(model.caret()).at(0, 3);
 	}
-	
+
+    @Test
+    public void selectArea() {
+        XY<Integer> areaStartScreen = new XY<Integer>(10, 300);
+        XY<Integer> areaStart = new XY<Integer>(0, 0);
+        XY<Integer> areaEndScreen = new XY<Integer>(10, 200);
+        XY<Integer> areaEnd = new XY<Integer>(0, 5);
+        when(view.screenPositionToCaretLocation(areaStartScreen)).thenReturn(areaStart);
+        when(view.screenPositionToCaretLocation(areaEndScreen)).thenReturn(areaEnd);
+        subject.touchDown(areaStartScreen.x, areaStartScreen.y, 0, 0);
+        subject.touchDragged(areaEndScreen.x, areaEndScreen.y, 0);
+        XYAssert.assertThat(model.caret().selection().getLeft()).at(0, 0);
+        XYAssert.assertThat(model.caret().selection().getRight()).at(0, 5);
+    }
+
 	@Test
 	public void returnMovesToStartOfNextLine() throws Exception {
 		subject.keyTyped(Key.Return.asChar());

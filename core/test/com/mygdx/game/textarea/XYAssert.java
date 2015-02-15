@@ -14,6 +14,10 @@ public class XYAssert extends AbstractAssert<XYAssert, XY<Integer>> {
         return new XYAssert(actual.location());
     }
 
+    public static XYAssert assertThat(XY<Integer> actual) {
+        return new XYAssert(actual);
+    }
+
 	@Factory
 	public XYAssert at(int x, int y) {
         if (!actual.equals(new XY<Integer>(x, y))) {
