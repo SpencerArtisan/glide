@@ -88,6 +88,8 @@ public class TextAreaController extends InputAdapter {
             return new MoveLeftCommand(model);
         } else if (Key.Return.is(character)) {
             return new ReturnCommand(model);
+        } else if (Key.Tab.is(character)) {
+            return new TabCommand(model);
         } else if (isPrintableChar(character)) {
             return new TypeCommand(model, character);
         }

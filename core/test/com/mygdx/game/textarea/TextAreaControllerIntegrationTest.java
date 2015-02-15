@@ -95,6 +95,12 @@ public class TextAreaControllerIntegrationTest {
 	}
 	
 	@Test
+	public void tabAddsSpaces() {
+		subject.keyTyped('\t');
+		assertThat(model.getText()).isEqualTo(("    "));
+	}
+
+	@Test
 	public void undoBeyondBeginningDoesNothing() {
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();

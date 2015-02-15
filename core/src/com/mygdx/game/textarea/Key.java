@@ -7,8 +7,9 @@ public enum Key {
 	Right(63235), 
 	Delete('\b'), 
 	Shift('\u007F'),
-	Return('\r');
-	
+	Return('\r'),
+	Tab('\t');
+
 	private final char value;
 	
 	private Key(char value) {
