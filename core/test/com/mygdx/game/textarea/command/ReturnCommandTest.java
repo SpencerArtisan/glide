@@ -15,11 +15,11 @@ public class ReturnCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("", null);
-        command = new ReturnCommand(model);
     }
 
     @Test
     public void execute() {
+        command = new ReturnCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("\n");
         XYAssert.assertThat(model.caret()).at(0, 1);
@@ -29,6 +29,7 @@ public class ReturnCommandTest {
     public void executeWhenAreaSelected() {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        command = new ReturnCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("hel\nere");
         assertThat(model.caret().isAreaSelected()).isFalse();
@@ -37,6 +38,7 @@ public class ReturnCommandTest {
 
     @Test
     public void undo() {
+        command = new ReturnCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("");
@@ -47,6 +49,7 @@ public class ReturnCommandTest {
     public void undoWhenAreaSelected() {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        command = new ReturnCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("hello\nthere");

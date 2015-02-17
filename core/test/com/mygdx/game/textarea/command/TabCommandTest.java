@@ -13,11 +13,11 @@ public class TabCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("", null);
-        command = new TabCommand(model);
     }
 
     @Test
     public void executeInColumnZeroOnEmptyLine() {
+        command = new TabCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("    ");
     }
@@ -25,6 +25,7 @@ public class TabCommandTest {
     @Test
     public void executeInColumnTwoOnEmptyLine() {
         model.insert("ab");
+        command = new TabCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("ab  ");
     }
@@ -32,6 +33,7 @@ public class TabCommandTest {
     @Test
     public void executeInColumnZeroOnNonEmptyLine() {
         model.setText("abcd");
+        command = new TabCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("    abcd");
     }
@@ -40,12 +42,14 @@ public class TabCommandTest {
     public void executeInColumnTwoOnNonEmptyLine() {
         model.setText("abcd");
         model.caret().moveRight(2);
+        command = new TabCommand(model);
         command.execute();
         assertThat(model.getText()).isEqualTo("ab  cd");
     }
 
     @Test
     public void undoInColumnZeroOnEmptyLine() {
+        command = new TabCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("");
@@ -54,6 +58,7 @@ public class TabCommandTest {
     @Test
     public void undoInColumnTwoOnEmptyLine() {
         model.insert("ab");
+        command = new TabCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("ab");
@@ -62,6 +67,7 @@ public class TabCommandTest {
     @Test
     public void undoInColumnZeroOnNonEmptyLine() {
         model.setText("abcd");
+        command = new TabCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("abcd");
@@ -71,6 +77,7 @@ public class TabCommandTest {
     public void undoInColumnTwoOnNonEmptyLine() {
         model.setText("abcd");
         model.caret().moveRight(2);
+        command = new TabCommand(model);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("abcd");

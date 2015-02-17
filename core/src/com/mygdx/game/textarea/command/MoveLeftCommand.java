@@ -11,9 +11,4 @@ public class MoveLeftCommand extends AbstractCommand {
     public void execute() {
         model.caret().moveLeft();
     }
-
-    @Override
-    public void undo() {
-        new MoveRightCommand(model).execute();
-    }
 }

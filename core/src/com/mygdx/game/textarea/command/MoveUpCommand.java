@@ -11,9 +11,4 @@ public class MoveUpCommand extends AbstractCommand {
     public void execute() {
         model.caret().moveUp();
     }
-
-    @Override
-    public void undo() {
-        new MoveDownCommand(model).execute();
-    }
 }
