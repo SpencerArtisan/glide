@@ -1,9 +1,12 @@
 package com.mygdx.game.textarea;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Set;
 
 
 public class TextAreaModel {
@@ -146,6 +149,10 @@ public class TextAreaModel {
 	private int numberOfRows() {
 		return StringUtils.countMatches(text, "\n");
 	}
+
+    public Set<Integer> getErrorLines() {
+        return ImmutableSet.of(0,3);
+    }
 
     public class Caret {
 		private XY<Integer> location;

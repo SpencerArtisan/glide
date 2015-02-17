@@ -5,28 +5,32 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Set;
 
 public class TextArea extends Actor {
     private static final int TOP_MARGIN = 30;
     private static final int LEFT_MARGIN = 8;
     private TextAreaModel model;
     private TextAreaController controller;
-    private TextFieldStyle style;
+    private TextAreaStyle style;
 
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
         controller = new TextAreaController(model, this);
-        style = skin.get(TextFieldStyle.class);
+        style = skin.get(TextAreaStyle.class);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         drawBackground(batch);
         drawCurrentLineBackground(batch);
+        drawErrorLineBackgrounds(batch);
         drawSelectionBackground(batch);
         drawText(batch);
         drawCaret(batch);
@@ -40,6 +44,14 @@ public class TextArea extends Actor {
         if (model.caret().selection() == null) {
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
             style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
+        }
+    }
+
+    private void drawErrorLineBackgrounds(Batch batch) {
+        Set<Integer> errorLines = model.getErrorLines();
+        for (Integer errorLine : errorLines) {
+            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, errorLine));
+            style.errorBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
 
@@ -94,5 +106,9 @@ public class TextArea extends Actor {
         float caretX = (worldPosition.x - LEFT_MARGIN) / getColumnWidth();
         float caretY = (this.getHeight() - TOP_MARGIN + 22 - worldPosition.y) / getRowHeight();
         return new XY<Integer>((int) caretX, (int) caretY);
+    }
+
+    static public class TextAreaStyle extends TextField.TextFieldStyle {
+        public Drawable errorBackground;
     }
 }
