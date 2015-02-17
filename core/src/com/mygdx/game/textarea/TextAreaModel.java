@@ -1,11 +1,14 @@
 package com.mygdx.game.textarea;
 
+import com.badlogic.gdx.graphics.Color;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Map;
 import java.util.Set;
 
 
@@ -150,8 +153,8 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
-    public Set<Integer> getErrorLines() {
-        return ImmutableSet.of(0,3);
+    public Map<Integer, Color> getColoredLines() {
+        return ImmutableMap.of(2, Color.CYAN);
     }
 
     public class Caret {

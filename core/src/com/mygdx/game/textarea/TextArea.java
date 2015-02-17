@@ -1,21 +1,25 @@
 package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Map;
 import java.util.Set;
 
 public class TextArea extends Actor {
     private static final int TOP_MARGIN = 30;
     private static final int LEFT_MARGIN = 8;
+    private final TextureRegionDrawable white;
     private TextAreaModel model;
     private TextAreaController controller;
     private TextAreaStyle style;
@@ -24,13 +28,14 @@ public class TextArea extends Actor {
         this.model = model;
         controller = new TextAreaController(model, this);
         style = skin.get(TextAreaStyle.class);
+        white = (TextureRegionDrawable) skin.getDrawable("white");
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         drawBackground(batch);
         drawCurrentLineBackground(batch);
-        drawErrorLineBackgrounds(batch);
+        drawOtherLineBackgrounds(batch);
         drawSelectionBackground(batch);
         drawText(batch);
         drawCaret(batch);
@@ -47,11 +52,12 @@ public class TextArea extends Actor {
         }
     }
 
-    private void drawErrorLineBackgrounds(Batch batch) {
-        Set<Integer> errorLines = model.getErrorLines();
-        for (Integer errorLine : errorLines) {
-            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, errorLine));
-            style.errorBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
+    private void drawOtherLineBackgrounds(Batch batch) {
+        Map<Integer, Color> coloredLines = model.getColoredLines();
+        for (Map.Entry<Integer, Color> colorLine : coloredLines.entrySet()) {
+            SpriteDrawable background = white.tint(colorLine.getValue());
+            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, colorLine.getKey()));
+            background.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
 
