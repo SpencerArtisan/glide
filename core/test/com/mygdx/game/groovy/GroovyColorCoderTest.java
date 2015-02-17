@@ -2,9 +2,12 @@ package com.mygdx.game.groovy;
 
 import static org.assertj.core.api.Assertions.*;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.mygdx.game.code.SyntaxPart;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.groovy.GroovySyntax;
+import javafx.scene.paint.Color;
+import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,7 +25,7 @@ public class GroovyColorCoderTest {
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new GroovyColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "RED"));
+		coder = new GroovyColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW"), "ff0000");
 	}
 
 	@Test
@@ -44,6 +47,12 @@ public class GroovyColorCoderTest {
 		when(syntax.parse("word1 word2")).thenReturn(Arrays.asList(
 				new SyntaxPart("word1", Keyword),
 				new SyntaxPart(" word2", Method)));
-		assertThat(coder.encode("word1 word2")).isEqualTo("[BLUE]word1[][RED] word2[]");
+		assertThat(coder.encode("word1 word2")).isEqualTo("[BLUE]word1[][YELLOW] word2[]");
 	}
+
+    @Test
+    public void colorErrorLine() {
+        when(syntax.errorLines("hello\nthere")).thenReturn(ImmutableSet.of(1));
+//        assertThat(coder.colorLines("hello\nthere")).containsExactly(MapEntry.<String, Color>entry(1, Color.valueOf("ff0000")));
+    }
 }

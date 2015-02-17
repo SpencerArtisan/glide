@@ -7,6 +7,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mygdx.game.code.SyntaxPart;
+import groovy.lang.GroovyClassLoader;
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+import org.codehaus.groovy.control.messages.Message;
+import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
+import org.codehaus.groovy.syntax.SyntaxException;
 
 import static com.mygdx.game.code.SyntaxPart.Type.*;
 
@@ -16,6 +21,28 @@ public class GroovySyntax {
     public List<SyntaxPart> parse(String program) {
         List<SyntaxPart> classifiedWordsAndSpaces = categoriseWordsIntoTypes(program);
         return collapseAdjacentPartsWithSameType(classifiedWordsAndSpaces);
+    }
+
+    public Set<Integer> errorLines(String program) {
+        Set<Integer> errorLines = new HashSet<Integer>();
+        try {
+            new GroovyClassLoader().parseClass(program);
+        } catch (MultipleCompilationErrorsException e) {
+            List<Message> errors = e.getErrorCollector().getErrors();
+            for (Message error : errors) {
+                if (error instanceof SyntaxErrorMessage) {
+                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
+                    int errorLine = cause.getLine();
+                //    System.out.println("Error: " + cause.getMessage());
+                    errorLines.add(errorLine - 1);
+                } else {
+                    throw e;
+                }
+            }
+        } catch (Exception e) {
+            // Something unexpected when awry
+        }
+        return errorLines;
     }
 
     @SuppressWarnings("unchecked")
@@ -70,5 +97,4 @@ public class GroovySyntax {
         }
         return Unclassified;
     }
-
 }

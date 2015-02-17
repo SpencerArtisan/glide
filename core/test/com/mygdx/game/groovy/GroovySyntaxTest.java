@@ -74,4 +74,14 @@ public class GroovySyntaxTest {
                 new SyntaxPart("\"quoted\"", Quoted),
                 new SyntaxPart(" suffix", Unclassified));
 	}
+
+    @Test
+    public void noErrorsInGoodGroovy() {
+        assertThat(syntax.errorLines("public void hello() {\n}")).isEmpty();
+    }
+
+    @Test
+    public void errorsInBadGroovy() {
+        assertThat(syntax.errorLines("public void hello() {\n\"unended string\n}")).containsExactly(1);
+    }
 }

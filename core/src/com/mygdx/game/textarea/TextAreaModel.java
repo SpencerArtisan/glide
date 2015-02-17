@@ -51,6 +51,10 @@ public class TextAreaModel {
 		return colorCoder.encode(text);
 	}
 
+    public Map<Integer, Color> getColoredLines() {
+        return colorCoder.colorLines(text);
+    }
+
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -153,9 +157,6 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
-    public Map<Integer, Color> getColoredLines() {
-        return ImmutableMap.of(2, Color.CYAN);
-    }
 
     public class Caret {
 		private XY<Integer> location;

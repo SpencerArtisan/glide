@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.badlogic.gdx.graphics.Color;
+import com.google.common.collect.ImmutableMap;
 import com.mygdx.game.XY;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,13 @@ public class TextAreaModelTest {
 		when(colorCoder.encode("text")).thenReturn("encoded text");
 		assertThat(model.getColoredText()).isEqualTo("encoded text");
 	}
+
+    @Test
+    public void textLinesColorCoded() {
+        model.setText("hello\nthere");
+        when(colorCoder.colorLines("hello\nthere")).thenReturn(ImmutableMap.of(1, Color.GRAY));
+        assertThat(model.getColoredLines()).isEqualTo(ImmutableMap.of(1, Color.GRAY));
+    }
 
     @Test
     public void selectionMoveCaretToEndLocation_ForwardSelection() {
