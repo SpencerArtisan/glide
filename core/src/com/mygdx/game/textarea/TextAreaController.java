@@ -47,9 +47,13 @@ public class TextAreaController extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        dragging = false;
         XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-        executeAndRemember(new MoveToCommand(model, caretLocation));
+        if (dragging) {
+            dragging = false;
+            executeAndRemember(new SelectCommand(model, touchDownLocation, caretLocation));
+        } else {
+            executeAndRemember(new MoveToCommand(model, caretLocation));
+        }
         return true;
     }
 
@@ -64,7 +68,7 @@ public class TextAreaController extends InputAdapter {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         dragging = true;
         XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-        model.caret().setSelection(touchDownLocation, dragLocation);
+        new SelectCommand(model, touchDownLocation, dragLocation).execute();
         return true;
     }
 

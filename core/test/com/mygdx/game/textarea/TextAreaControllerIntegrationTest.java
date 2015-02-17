@@ -58,6 +58,17 @@ public class TextAreaControllerIntegrationTest {
         XYAssert.assertThat(model.caret()).at(0, 3);
 	}
 
+	@Test
+	public void clickingBeyondRowsAndEnteringText() throws Exception {
+		XY<Integer> caretLocation = new XY<Integer>(10, 3);
+		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
+		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+        subject.keyTyped('h');
+		assertThat(model.getText()).isEqualTo(("\n\n\nh"));
+        XYAssert.assertThat(model.caret()).at(1, 3);
+	}
+
     @Test
     public void selectArea() {
         XY<Integer> areaStartScreen = new XY<Integer>(10, 300);
