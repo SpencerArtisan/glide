@@ -21,7 +21,7 @@ public class XYAssert extends AbstractAssert<XYAssert, XY<Integer>> {
 	@Factory
 	public XYAssert at(int x, int y) {
         if (!actual.equals(new XY<Integer>(x, y))) {
-            failWithMessage(actual + " is not at " + x + ", " + y);
+            failWithMessage(actual + " is not at (" + x + ", " + y + ")");
         }
 		return this;
 	}

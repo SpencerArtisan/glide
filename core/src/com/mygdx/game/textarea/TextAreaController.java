@@ -107,7 +107,7 @@ public class TextAreaController extends InputAdapter {
         } else if (Key.Tab.is(character)) {
             return new TabCommand(model);
         } else if (isPrintableChar(character)) {
-            return new TypeCommand(model, character);
+            return new TypeCommand(model, Character.toString(character));
         }
         return null;
     }

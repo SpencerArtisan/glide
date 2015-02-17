@@ -3,7 +3,7 @@ package com.mygdx.game.textarea.command;
 import com.mygdx.game.textarea.TextAreaModel;
 
 public class DeleteCommand extends AbstractCommand {
-    private Character deleted;
+    private TextAreaModel.State state;
 
     public DeleteCommand(TextAreaModel model) {
         super(model);
@@ -11,11 +11,12 @@ public class DeleteCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        deleted = model.deleteCharacter();
+        state = model.getState();
+        model.deleteCharacter();
     }
 
     @Override
     public void undo() {
-        new TypeCommand(model, deleted).execute();
+        model.setState(state);
     }
 }

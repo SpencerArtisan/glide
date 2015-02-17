@@ -5,8 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.regex.MatchResult;
-
 
 public class TextAreaModel {
 	private String text;
@@ -27,6 +25,18 @@ public class TextAreaModel {
 		return caret;
 	}
 
+    public State getState() {
+        return new State();
+    }
+
+    public void setState(State state) {
+        text = state.text;
+        caret().setLocation(state.caretLocation);
+        if (state.caretSelection != null) {
+            caret().setSelection(state.caretSelection.getLeft(), state.caretSelection.getRight());
+        }
+    }
+
 	public String getText() {
 		return text;
 	}
@@ -43,20 +53,36 @@ public class TextAreaModel {
 		text = "";
 	}
 
-	public void insert(char character) {
-		int index = getCaretIndex();
-		text = text.substring(0, index) + character + text.substring(index, text.length());
+	public String insert(String characters) {
+        int fromIndex, toIndex;
+        if (caret().isAreaSelected()) {
+            fromIndex = getIndex(caret().selection().getLeft());
+            toIndex = getIndex(caret().selection().getRight());
+            caret().clearSelection();
+        } else {
+            fromIndex = getIndex(caret.location());
+            toIndex = fromIndex;
+        }
+        String deleted = text.substring(fromIndex, toIndex);
+        text = text.substring(0, fromIndex) + characters + text.substring(toIndex, text.length());
+        positionCaret(fromIndex + characters.length());
+        return deleted;
 	}
 
-	public Character deleteCharacter() {
-		int index = getCaretIndex();
-		if (index > 0) {
-            char deleted = text.charAt(text.length() - 1);
-            text = text.substring(0, index - 1) + text.substring(index, text.length());
-			positionCaret(index - 1);
-            return deleted;
-		}
-        return null;
+	public String deleteCharacter() {
+        int fromIndex, toIndex;
+        if (caret().isAreaSelected()) {
+            fromIndex = getIndex(caret().selection().getLeft());
+            toIndex = getIndex(caret().selection().getRight());
+            positionCaret(fromIndex);
+        } else {
+            toIndex = getIndex(caret.location());
+            fromIndex = Math.max(0, toIndex - 1);
+            positionCaret(fromIndex);
+        }
+        String deleted = text.substring(fromIndex, toIndex);
+        text = text.substring(0, fromIndex) + text.substring(toIndex, text.length());
+        return deleted;
 	}
 
 	private void positionCaret(int textIndex) {
@@ -73,13 +99,13 @@ public class TextAreaModel {
 		caret.setLocation(textIndex - index, row);
 	}
 
-	private int getCaretIndex() {
-		int index = getIndexForRow(caret.getY());
-		index += caret.getX();
-		return index;
-	}
-	
-	private int getIndexForRow(int row) {
+    private int getIndex(XY<Integer> location) {
+        int index = getIndexForRow(location.y);
+        index += location.x;
+        return index;
+    }
+
+    private int getIndexForRow(int row) {
 		int index = 0;
 		for (int y = 0; y < row; y++) {
 			index = text.indexOf('\n', index);
@@ -128,6 +154,7 @@ public class TextAreaModel {
         public void setLocation(XY<Integer> caretLocation) {
 			this.location = caretLocation;
             changeXIfBeyondEndOfLine();
+            clearSelection();
 		}
 
 		public void setLocation(int x, int y) {
@@ -138,11 +165,12 @@ public class TextAreaModel {
             selection = null;
         }
 
-        public void setSelection(XY<Integer> touchDownLocation, XY<Integer> dragLocation) {
-            if (touchDownLocation.y < dragLocation.y || (touchDownLocation.y == dragLocation.y && touchDownLocation.x < dragLocation.x)) {
-                selection = Pair.of(touchDownLocation, dragLocation);
+        public void setSelection(XY<Integer> start, XY<Integer> end) {
+            setLocation(end);
+            if (start.y < end.y || (start.y == end.y && start.x < end.x)) {
+                selection = Pair.of(start, end);
             } else {
-                selection = Pair.of(dragLocation, touchDownLocation);
+                selection = Pair.of(end, start);
             }
         }
 
@@ -174,8 +202,13 @@ public class TextAreaModel {
 		}
 		
 		public void moveRight() {
-			if (getX() < currentLineLength()) {
-				setX(getX() + 1);
+            moveRight(1);
+		}
+
+		public void moveRight(int n) {
+            setX(getX() + n);
+			if (getX() > currentLineLength()) {
+                setX(currentLineLength());
 			}
 		}
 
@@ -205,5 +238,21 @@ public class TextAreaModel {
 		public String toString() {
 			return "Caret " + location;
 		}
+
+        public boolean isAreaSelected() {
+            return selection != null;
+        }
+    }
+
+    public class State {
+        private String text;
+        private XY<Integer> caretLocation;
+        private Pair<XY<Integer>, XY<Integer>> caretSelection;
+
+        private State() {
+            this.text = getText();
+            this.caretLocation = caret().location();
+            this.caretSelection = caret().selection();
+        }
     }
 }

@@ -3,20 +3,22 @@ package com.mygdx.game.textarea.command;
 import com.mygdx.game.textarea.TextAreaModel;
 
 public class TypeCommand extends AbstractCommand {
-    private Character character;
+    private String typed;
+    private TextAreaModel.State state;
 
-    public TypeCommand(TextAreaModel model, Character character) {
+    public TypeCommand(TextAreaModel model, String typed) {
         super(model);
-        this.character = character;
+        this.typed = typed;
     }
 
     @Override
     public void execute() {
-        model.insert(character);
-        model.caret().moveRight();    }
+        state = model.getState();
+        model.insert(typed);
+    }
 
     @Override
     public void undo() {
-        new DeleteCommand(model).execute();
+        model.setState(state);
     }
 }

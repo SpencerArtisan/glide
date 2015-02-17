@@ -72,6 +72,26 @@ public class TextAreaControllerIntegrationTest {
         XYAssert.assertThat(model.caret().selection().getRight()).at(0, 5);
     }
 
+    @Test
+    public void typeWhenAreaSelectedReplacesText() {
+        model.setText("hello\nthere");
+        XY<Integer> selectionStart = new XY<Integer>(3, 0);
+        XY<Integer> selectionEnd = new XY<Integer>(2, 1);
+        model.caret().setSelection(selectionStart, selectionEnd);
+        model.insert("Z");
+        assertThat(model.getText()).isEqualTo("helZere");
+    }
+
+    @Test
+    public void deletedWhenAreaSelectedDeletedSelectedText() {
+        model.setText("hello\nthere");
+        XY<Integer> selectionStart = new XY<Integer>(3, 0);
+        XY<Integer> selectionEnd = new XY<Integer>(2, 1);
+        model.caret().setSelection(selectionStart, selectionEnd);
+        model.deleteCharacter();
+        assertThat(model.getText()).isEqualTo("helere");
+    }
+
 	@Test
 	public void returnMovesToStartOfNextLine() throws Exception {
 		subject.keyTyped(Key.Return.asChar());
