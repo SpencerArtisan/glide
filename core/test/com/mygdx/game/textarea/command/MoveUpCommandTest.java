@@ -12,7 +12,7 @@ public class MoveUpCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("", null);
-        model.caret().setLocation(0, 1);
+        model.caret().moveDown();
         command = new MoveUpCommand(model);
     }
 

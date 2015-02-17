@@ -15,7 +15,6 @@ public class ReturnCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("", null);
-        model.caret().setLocation(0, 0);
         command = new ReturnCommand(model);
     }
 

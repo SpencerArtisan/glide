@@ -15,7 +15,7 @@ public class DeleteCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("text", null);
-        model.caret().setLocation(4, 0);
+        model.caret().moveRight(4);
         command = new DeleteCommand(model);
     }
 

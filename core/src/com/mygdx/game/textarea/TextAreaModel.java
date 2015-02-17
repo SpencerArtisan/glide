@@ -135,11 +135,11 @@ public class TextAreaModel {
 		private XY<Integer> location;
         private Pair<XY<Integer>, XY<Integer>> selection;
 		
-		public Caret() {
+		private Caret() {
 			this(0, 0);
 		}
-		
-		public Caret(int x, int y) {
+
+        private Caret(int x, int y) {
 			this.location = new XY<Integer>(x, y);
 		}
 
@@ -157,7 +157,7 @@ public class TextAreaModel {
             clearSelection();
 		}
 
-		public void setLocation(int x, int y) {
+        private void setLocation(int x, int y) {
 			setLocation(new XY<Integer>(x, y));
 		}
 
@@ -197,10 +197,6 @@ public class TextAreaModel {
 			}
 		}
 
-		public void moveToFarLeft() {
-			setX(0);
-		}
-		
 		public void moveRight() {
             moveRight(1);
 		}

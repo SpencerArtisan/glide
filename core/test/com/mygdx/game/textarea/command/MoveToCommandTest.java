@@ -13,7 +13,7 @@ public class MoveToCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("hello\nthere", null);
-        model.caret().setLocation(3, 0);
+        model.caret().moveRight(3);
         command = new MoveToCommand(model, new XY<Integer>(2, 1));
     }
 

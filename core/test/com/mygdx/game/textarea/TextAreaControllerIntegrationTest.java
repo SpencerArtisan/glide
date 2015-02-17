@@ -110,7 +110,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void returnInMiddleOfLineSplitsIt() throws Exception {
 		model.setText("Hello");
-		model.caret().setLocation(2, 0);
+		model.caret().moveRight(2);
 		subject.keyTyped(Key.Return.asChar());
 		assertThat(model.getText()).isEqualTo(("He\nllo"));
         XYAssert.assertThat(model.caret()).at(0, 1);
@@ -221,7 +221,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteInMiddleLineSquashesText() {
 		model.setText("Hello\nThere");
-		model.caret().setLocation(2, 0);
+		model.caret().moveRight(2);
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("Hllo\nThere"));
         XYAssert.assertThat(model.caret()).at(1, 0);
@@ -230,7 +230,8 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteInMiddleSecondLineSquashesText() {
 		model.setText("Hello\nThere");
-		model.caret().setLocation(2, 1);
+		model.caret().moveRight(2);
+		model.caret().moveDown();
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("Hello\nTere"));
         XYAssert.assertThat(model.caret()).at(1, 1);
@@ -239,7 +240,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteBeyondStartOfLineMovesUp() {
 		model.setText("a\n");
-		model.caret().setLocation(0, 1);
+		model.caret().moveDown();
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("a"));
         XYAssert.assertThat(model.caret()).at(1, 0);
@@ -248,7 +249,9 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteBeyondStartOfLineWithEmptyLinesMovesUp() {
 		model.setText("a\n\n\nb");
-		model.caret().setLocation(0, 3);
+        model.caret().moveDown();
+        model.caret().moveDown();
+        model.caret().moveDown();
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("a\n\nb"));
         XYAssert.assertThat(model.caret()).at(0, 2);
@@ -257,7 +260,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteBeyondStartOfBringsExistingLineUp() {
 		model.setText("a\nb");
-		model.caret().setLocation(0, 1);
+        model.caret().moveDown();
 		subject.keyTyped(Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("ab"));
         XYAssert.assertThat(model.caret()).at(1, 0);
@@ -304,7 +307,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void downArrowWhenLowerLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hello\nYou");
-		model.caret().setLocation(5, 0);
+		model.caret().moveRight(5);
 		subject.keyTyped(Key.Down.asChar());
         XYAssert.assertThat(model.caret()).at(3, 1);
 	}
@@ -312,14 +315,15 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void upArrowWhenHigherLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hi\nThere");
-		model.caret().setLocation(5, 1);
+        model.caret().moveDown();
+        model.caret().moveRight(5);
 		subject.keyTyped(Key.Up.asChar());
         XYAssert.assertThat(model.caret()).at(2, 0);
 	}
 	
 	@Test
 	public void upArrowMovesUp() throws Exception {
-		model.caret().setLocation(0, 1);
+		model.caret().moveDown();
 		subject.keyTyped(Key.Up.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
@@ -332,7 +336,7 @@ public class TextAreaControllerIntegrationTest {
 	
 	@Test
 	public void leftArrowMovesLeft() throws Exception {
-		model.caret().setLocation(1, 0);
+		model.caret().moveRight();
 		subject.keyTyped(Key.Left.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
@@ -359,14 +363,15 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void textEnteredAtCaretXPosition() throws Exception {
 		model.setText("Hello\nWorld");
-		model.caret().setLocation(2, 0);
+		model.caret().moveRight(2);
 		subject.keyTyped('a');
 		assertThat(model.getText()).isEqualTo(("Heallo\nWorld"));
 	}
 	
 	@Test
 	public void textEnteredAtCaretYPositionWhenYGreaterThanNumberOfLines() throws Exception {
-		model.caret().setLocation(0, 2);
+		model.caret().moveDown();
+		model.caret().moveDown();
 		subject.keyTyped('a');
 		assertThat(model.getText()).isEqualTo(("\n\na"));
 	}
@@ -374,7 +379,8 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void textEnteredAtCaretYPositionWhenYLessThanNumberOfLines() throws Exception {
 		model.setText("Hello\nThere\nWorld");
-		model.caret().setLocation(0, 2);
+        model.caret().moveDown();
+        model.caret().moveDown();
 		subject.keyTyped('a');
 		assertThat(model.getText()).isEqualTo(("Hello\nThere\naWorld"));
 	}

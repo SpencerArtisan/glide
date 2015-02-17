@@ -24,8 +24,7 @@ public class TabCommandTest {
 
     @Test
     public void executeInColumnTwoOnEmptyLine() {
-        model.setText("ab");
-        model.caret().setLocation(2, 0);
+        model.insert("ab");
         command.execute();
         assertThat(model.getText()).isEqualTo("ab  ");
     }
@@ -40,7 +39,7 @@ public class TabCommandTest {
     @Test
     public void executeInColumnTwoOnNonEmptyLine() {
         model.setText("abcd");
-        model.caret().setLocation(2, 0);
+        model.caret().moveRight(2);
         command.execute();
         assertThat(model.getText()).isEqualTo("ab  cd");
     }
@@ -54,8 +53,7 @@ public class TabCommandTest {
 
     @Test
     public void undoInColumnTwoOnEmptyLine() {
-        model.setText("ab");
-        model.caret().setLocation(2, 0);
+        model.insert("ab");
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("ab");
@@ -72,7 +70,7 @@ public class TabCommandTest {
     @Test
     public void undoInColumnTwoOnNonEmptyLine() {
         model.setText("abcd");
-        model.caret().setLocation(2, 0);
+        model.caret().moveRight(2);
         command.execute();
         command.undo();
         assertThat(model.getText()).isEqualTo("abcd");

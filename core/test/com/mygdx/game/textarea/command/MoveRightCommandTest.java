@@ -12,7 +12,6 @@ public class MoveRightCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("text", null);
-        model.caret().setLocation(0, 0);
         command = new MoveRightCommand(model);
     }
 
