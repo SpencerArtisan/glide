@@ -85,7 +85,23 @@ public class TextAreaModel {
         return deleted;
 	}
 
-	private void positionCaret(int textIndex) {
+    public String getSelection() {
+        if (caret().isAreaSelected()) {
+            int fromIndex = getIndex(caret().selection().getLeft());
+            int toIndex = getIndex(caret().selection().getRight());
+            return text.substring(fromIndex, toIndex);
+        }
+        return null;
+    }
+
+    public String getCurrentLine() {
+        XY<Integer> location = caret().location();
+        int fromIndex = getIndex(new XY<Integer>(0, location.y));
+        int toIndex = fromIndex + currentLineLength();
+        return text.substring(fromIndex, toIndex);
+    }
+
+    private void positionCaret(int textIndex) {
 		int row = 0;
 		int index = 0;
 		while (true) {
@@ -131,7 +147,7 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
-	public class Caret {
+    public class Caret {
 		private XY<Integer> location;
         private Pair<XY<Integer>, XY<Integer>> selection;
 		

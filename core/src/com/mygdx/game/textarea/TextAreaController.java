@@ -35,6 +35,12 @@ public class TextAreaController extends InputAdapter {
             lastCommandIndex--;
             lastCommand.undo();
         }
+        if (isCopy(keycode)) {
+            new CopyCommand(model).execute();
+        }
+        if (isPaste(keycode)) {
+            new PasteCommand(model).execute();
+        }
         return true;
     }
 
@@ -85,6 +91,14 @@ public class TextAreaController extends InputAdapter {
         for (int i = lastCommandIndex + 1; i < executedCommands.size(); i++) {
             executedCommands.removeLast();
         }
+    }
+
+    private boolean isCopy(int keycode) {
+        return isControlDown() && keycode == Input.Keys.C;
+    }
+
+    private boolean isPaste(int keycode) {
+        return isControlDown() && keycode == Input.Keys.V;
     }
 
     private boolean isUndo(int keycode) {

@@ -1,9 +1,9 @@
 package com.mygdx.game.textarea;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mygdx.game.XY;
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class TextAreaModelTest {
 	public void textColorCoded() throws Exception {
 		model.setText("text");
 		when(colorCoder.encode("text")).thenReturn("encoded text");
-		assertThat(model.getColoredText(), is("encoded text"));
+		assertThat(model.getColoredText()).isEqualTo("encoded text");
 	}
 
     @Test
@@ -40,5 +40,37 @@ public class TextAreaModelTest {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY<Integer>(2, 1), new XY<Integer>(3, 0));
         XYAssert.assertThat(model.caret().location()).at(3, 0);
+    }
+
+    @Test
+    public void getSelectionWhenThisIsOne() {
+        model.setText("hello\nthere");
+        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        assertThat(model.getSelection()).isEqualTo("lo\nth");
+    }
+
+    @Test
+    public void getSelectionWhenThisIsNotOne() {
+        model.setText("hello\nthere");
+        assertThat(model.getSelection()).isNull();
+    }
+
+    @Test
+    public void getCurrentLineOnEmpty() {
+        model.setText("");
+        assertThat(model.getCurrentLine()).isEqualTo("");
+    }
+
+    @Test
+    public void getCurrentLineOnLastLine() {
+        model.setText("hello\nthere");
+        model.caret().moveDown();
+        assertThat(model.getCurrentLine()).isEqualTo("there");
+    }
+
+    @Test
+    public void getCurrentLineNotOnLastLine() {
+        model.setText("hello\nthere");
+        assertThat(model.getCurrentLine()).isEqualTo("hello");
     }
 }
