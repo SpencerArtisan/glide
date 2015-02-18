@@ -26,7 +26,7 @@ public class TextArea extends Actor {
 
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
-        controller = new TextAreaController(model, this);
+//        controller = new TextAreaController(model, this);
         style = skin.get(TextAreaStyle.class);
         white = (TextureRegionDrawable) skin.getDrawable("white");
     }
@@ -78,7 +78,8 @@ public class TextArea extends Actor {
 
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
-        style.font.drawMultiLine(batch, model.getColoredText(), 10, 740);
+        XY<Integer> textStart = caretLocationToPosition(new XY<Integer>(0, 0));
+        style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y);
     }
 
     private void drawCaret(Batch batch) {
@@ -101,7 +102,7 @@ public class TextArea extends Actor {
 
     public XY<Integer> caretLocationToPosition(XY<Integer> caret) {
         float x = LEFT_MARGIN + caret.x * getColumnWidth();
-        float y = this.getHeight() - TOP_MARGIN - caret.y * getRowHeight();
+        float y = getHeight() + getY() - getRowHeight() - caret.y * getRowHeight();
         return new XY<Integer>((int) x, (int) y);
     }
 

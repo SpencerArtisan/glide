@@ -32,15 +32,16 @@ public class CodingScreen extends ScreenAdapter {
 		TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
 		model.caret().moveToBottom();
 		TextArea textArea = new TextArea(model, skin);
+        textArea.setWidth(viewport.getWorldWidth());
+        textArea.setHeight(viewport.getWorldHeight());
 
 	    scrollPane = new ScrollPane(textArea, skin);
-		scrollPane.setWidth(viewport.getWorldWidth());
-		scrollPane.setHeight(viewport.getWorldHeight());
+        scrollPane.pack();
 		scrollPane.setFadeScrollBars(false);
 		stage.addActor(scrollPane);
 		stage.setKeyboardFocus(textArea);
 
-		Gdx.input.setInputProcessor(textArea.getController());
+		Gdx.input.setInputProcessor(stage);
 	}
 
     @Override
