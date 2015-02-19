@@ -1,9 +1,8 @@
 package com.mygdx.game.textarea;
 
+import com.mygdx.game.XY;
 import org.assertj.core.api.AbstractAssert;
 import org.hamcrest.Factory;
-
-import com.mygdx.game.XY;
 
 public class XYAssert extends AbstractAssert<XYAssert, XY<Integer>> {
 	public XYAssert(XY<Integer> location) {

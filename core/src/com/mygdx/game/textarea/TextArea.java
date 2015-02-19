@@ -1,9 +1,7 @@
 package com.mygdx.game.textarea;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -14,7 +12,6 @@ import com.mygdx.game.XY;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
-import java.util.Set;
 
 public class TextArea extends Actor {
     private static final int TOP_MARGIN = 29;

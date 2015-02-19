@@ -1,10 +1,7 @@
 package com.mygdx.game.groovy;
 
-import java.util.*;
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mygdx.game.code.SyntaxPart;
 import groovy.lang.GroovyClassLoader;
@@ -12,6 +9,8 @@ import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
+
+import java.util.*;
 
 import static com.mygdx.game.code.SyntaxPart.Type.*;
 

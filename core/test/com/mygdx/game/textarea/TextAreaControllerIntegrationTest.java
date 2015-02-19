@@ -1,31 +1,26 @@
 package com.mygdx.game.textarea;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyFloat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.mygdx.game.XY;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.mygdx.game.XY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 public class TextAreaControllerIntegrationTest {
 	private TextAreaController subject;
 	private TextAreaModel model;
-	@Mock private TextArea view;
+    private InputEvent event;
+    @Mock private TextArea view;
     @Mock private Actor actor;
-	private InputEvent event;
 
 	@Before
 	public void before() {

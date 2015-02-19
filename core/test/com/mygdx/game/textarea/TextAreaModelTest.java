@@ -1,16 +1,15 @@
 package com.mygdx.game.textarea;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.badlogic.gdx.graphics.Color;
 import com.google.common.collect.ImmutableMap;
 import com.mygdx.game.XY;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class TextAreaModelTest {
 	private TextAreaModel model;

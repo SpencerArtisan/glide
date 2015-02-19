@@ -3,7 +3,6 @@ package com.mygdx.game.groovy;
 import com.badlogic.gdx.graphics.Color;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mygdx.game.code.SyntaxPart;
 import com.mygdx.game.textarea.ColorCoder;

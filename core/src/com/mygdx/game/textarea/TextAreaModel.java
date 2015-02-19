@@ -1,15 +1,11 @@
 package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.graphics.Color;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import org.apache.commons.lang3.StringUtils;
-
 import com.mygdx.game.XY;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
-import java.util.Set;
 
 
 public class TextAreaModel {

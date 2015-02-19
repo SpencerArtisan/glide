@@ -1,22 +1,11 @@
 package com.mygdx.game.groovy;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import com.mygdx.game.code.SyntaxPart;
-import com.mygdx.game.groovy.GroovyColorCoder;
-import com.mygdx.game.groovy.GroovySyntax;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.StringTokenizer;
 
 import static com.mygdx.game.code.SyntaxPart.Type.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 public class GroovySyntaxTest {
 	private GroovySyntax syntax;

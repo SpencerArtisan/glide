@@ -5,8 +5,6 @@ import com.mygdx.game.textarea.XYAssert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class MoveDownCommandTest {
     private TextAreaModel model;
     private MoveDownCommand command;

@@ -1,13 +1,8 @@
 package com.mygdx.game.groovy;
 
-import static org.assertj.core.api.Assertions.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mygdx.game.code.SyntaxPart;
-import com.mygdx.game.groovy.GroovyColorCoder;
-import com.mygdx.game.groovy.GroovySyntax;
-import javafx.scene.paint.Color;
-import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 
 import static com.mygdx.game.code.SyntaxPart.Type.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 public class GroovyColorCoderTest {

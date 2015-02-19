@@ -2,7 +2,6 @@ package com.mygdx.game.textarea.command;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
-import com.mygdx.game.XY;
 import com.mygdx.game.textarea.TextAreaModel;
 
 public class CopyCommand extends AbstractCommand {
