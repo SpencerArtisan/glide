@@ -17,17 +17,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class TextArea extends Actor {
-    private static final int TOP_MARGIN = 30;
+    private static final int TOP_MARGIN = 8;
     private static final int LEFT_MARGIN = 8;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
     private TextAreaController controller;
-    private TextAreaStyle style;
+    private TextField.TextFieldStyle style;
 
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
-//        controller = new TextAreaController(model, this);
-        style = skin.get(TextAreaStyle.class);
+        controller = new TextAreaController(model, this);
+        addListener(controller);
+        style = skin.get(TextField.TextFieldStyle.class);
         white = (TextureRegionDrawable) skin.getDrawable("white");
     }
 
@@ -42,13 +43,13 @@ public class TextArea extends Actor {
     }
 
     private void drawBackground(Batch batch) {
-        style.background.draw(batch, 0, 0, getWidth(), getHeight());
+        style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
     }
 
     private void drawCurrentLineBackground(Batch batch) {
         if (model.caret().selection() == null) {
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
-            style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
+            style.focusedBackground.draw(batch, 0, topLeftCurrent.y - 18, getWidth(), getRowHeight());
         }
     }
 
@@ -85,7 +86,7 @@ public class TextArea extends Actor {
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
         XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
-        caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
+        caretImage.draw(batch, caretPosition.x, caretPosition.y - 18, caretImage.getMinWidth(), getRowHeight());
     }
 
     private float getRowHeight() {
@@ -96,13 +97,9 @@ public class TextArea extends Actor {
         return 14;
     }
 
-    public InputProcessor getController() {
-        return controller;
-    }
-
     public XY<Integer> caretLocationToPosition(XY<Integer> caret) {
-        float x = LEFT_MARGIN + caret.x * getColumnWidth();
-        float y = getHeight() + getY() - getRowHeight() - caret.y * getRowHeight();
+        float x = LEFT_MARGIN + getX() + caret.x * getColumnWidth();
+        float y = -TOP_MARGIN + getHeight() + getY() - caret.y * getRowHeight();
         return new XY<Integer>((int) x, (int) y);
     }
 
@@ -110,12 +107,8 @@ public class TextArea extends Actor {
         Vector3 pos = new Vector3(screenPosition.x, screenPosition.y, 0);
         Vector3 worldPosition = this.getStage().getCamera().unproject(pos);
 
-        float caretX = (worldPosition.x - LEFT_MARGIN) / getColumnWidth();
-        float caretY = (this.getHeight() - TOP_MARGIN + 22 - worldPosition.y) / getRowHeight();
+        float caretX = (worldPosition.x - getX() - LEFT_MARGIN) / getColumnWidth();
+        float caretY = (this.getHeight() + getY() - TOP_MARGIN - worldPosition.y) / getRowHeight();
         return new XY<Integer>((int) caretX, (int) caretY);
-    }
-
-    static public class TextAreaStyle extends TextField.TextFieldStyle {
-        public Drawable errorBackground;
     }
 }

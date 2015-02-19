@@ -2,19 +2,18 @@ package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.XY;
 import com.mygdx.game.textarea.command.*;
 
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
 
-public class TextAreaController extends InputAdapter {
+public class TextAreaController extends ClickListener {
 
 	private TextAreaModel model;
 	private TextArea view;
-    private LinkedList<Command> executedCommands = new LinkedList<Command>();
-    private int lastCommandIndex = -1;
+    private CommandHistory commandHistory = new CommandHistory();
     private XY<Integer> touchDownLocation;
     private boolean dragging;
 
@@ -24,74 +23,70 @@ public class TextAreaController extends InputAdapter {
 	}
 
     @Override
-    public boolean keyDown(int keycode) {
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        return super.touchDown(event, x, y, pointer, button);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        super.touchDragged(event, x, y, pointer);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        super.touchUp(event, x, y, pointer, button);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean keyDown(InputEvent event, int keycode) {
         if (isRedo(keycode)) {
-            Command nextCommand = executedCommands.get(lastCommandIndex + 1);
-            lastCommandIndex++;
-            nextCommand.execute();
+            commandHistory.redo();
         }
         if (isUndo(keycode)) {
-            Command lastCommand = executedCommands.get(lastCommandIndex);
-            lastCommandIndex--;
-            lastCommand.undo();
+            commandHistory.undo();
         }
         if (isCopy(keycode)) {
-            new CopyCommand(model).execute();
+            commandHistory.execute(new CopyCommand(model));
         }
         if (isPaste(keycode)) {
-            new PasteCommand(model).execute();
+            commandHistory.execute(new PasteCommand(model));
         }
         return true;
     }
 
-	@Override
-	public boolean keyTyped(char character) {
-        Command command = getKeyTypedCommand(character);
-        executeAndRemember(command);
+    @Override
+    public boolean keyTyped(InputEvent event, char character) {
+        commandHistory.execute(getKeyTypedCommand(character));
         return true;
+
 	}
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-        if (dragging) {
-            dragging = false;
-            executeAndRemember(new SelectCommand(model, touchDownLocation, caretLocation));
-        } else {
-            executeAndRemember(new MoveToCommand(model, caretLocation));
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        model.caret().clearSelection();
-        this.touchDownLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        dragging = true;
-        XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-        new SelectCommand(model, touchDownLocation, dragLocation).execute();
-        return true;
-    }
-
-    private void executeAndRemember(Command command) {
-        if (command != null) {
-            clearRedoChain();
-            executedCommands.add(command);
-            lastCommandIndex++;
-            command.execute();
-        }
-    }
-
-    private void clearRedoChain() {
-        for (int i = lastCommandIndex + 1; i < executedCommands.size(); i++) {
-            executedCommands.removeLast();
-        }
-    }
+//
+//    @Override
+//    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+//        XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+//        if (dragging) {
+//            dragging = false;
+//            commandHistory.execute(new SelectCommand(model, touchDownLocation, caretLocation));
+//        } else {
+//            commandHistory.execute(new MoveToCommand(model, caretLocation));
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+//        model.caret().clearSelection();
+//        this.touchDownLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean touchDragged(int screenX, int screenY, int pointer) {
+//        dragging = true;
+//        XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
+//        new SelectCommand(model, touchDownLocation, dragLocation).execute();
+//        return true;
+//    }
 
     private boolean isCopy(int keycode) {
         return isControlDown() && keycode == Input.Keys.C;
@@ -102,11 +97,11 @@ public class TextAreaController extends InputAdapter {
     }
 
     private boolean isUndo(int keycode) {
-        return isControlDown() && keycode == Input.Keys.Z && !isShiftDown() && lastCommandIndex >= 0;
+        return isControlDown() && keycode == Input.Keys.Z && !isShiftDown();
     }
 
     private boolean isRedo(int keycode) {
-        return isControlDown() && isShiftDown() && keycode == Input.Keys.Z && lastCommandIndex < executedCommands.size() - 1;
+        return isControlDown() && keycode == Input.Keys.Z && isShiftDown();
     }
 
     private Command getKeyTypedCommand(char character) {

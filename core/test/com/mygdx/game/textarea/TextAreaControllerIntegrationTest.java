@@ -34,7 +34,7 @@ public class TextAreaControllerIntegrationTest {
 		XY<Integer> caretLocation = new XY<Integer>(3, 1);
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
-		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		subject.touchUp(null, clickPosition.x, clickPosition.y, 0, 0);
 		XYAssert.assertThat(model.caret()).at(3, 1);
 	}
 	
@@ -44,7 +44,7 @@ public class TextAreaControllerIntegrationTest {
 		XY<Integer> caretLocation = new XY<Integer>(99, 1);
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
-		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		subject.touchUp(null, clickPosition.x, clickPosition.y, 0, 0);
         XYAssert.assertThat(model.caret()).at(5, 1);
 	}
 	
@@ -53,7 +53,7 @@ public class TextAreaControllerIntegrationTest {
 		XY<Integer> caretLocation = new XY<Integer>(10, 3);
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
-		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
+		subject.touchUp(null, clickPosition.x, clickPosition.y, 0, 0);
 		assertThat(model.getText()).isEqualTo(("\n\n\n"));
         XYAssert.assertThat(model.caret()).at(0, 3);
 	}
@@ -63,8 +63,8 @@ public class TextAreaControllerIntegrationTest {
 		XY<Integer> caretLocation = new XY<Integer>(10, 3);
 		XY<Integer> clickPosition = new XY<Integer>(42, 84);
 		when(view.screenPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
-		subject.touchUp(clickPosition.x, clickPosition.y, 0, 0);
-        subject.keyTyped('h');
+		subject.touchUp(null, clickPosition.x, clickPosition.y, 0, 0);
+        subject.keyTyped(null, 'h');
 		assertThat(model.getText()).isEqualTo(("\n\n\nh"));
         XYAssert.assertThat(model.caret()).at(1, 3);
 	}
@@ -77,8 +77,8 @@ public class TextAreaControllerIntegrationTest {
         XY<Integer> areaEnd = new XY<Integer>(0, 5);
         when(view.screenPositionToCaretLocation(areaStartScreen)).thenReturn(areaStart);
         when(view.screenPositionToCaretLocation(areaEndScreen)).thenReturn(areaEnd);
-        subject.touchDown(areaStartScreen.x, areaStartScreen.y, 0, 0);
-        subject.touchDragged(areaEndScreen.x, areaEndScreen.y, 0);
+        subject.touchDown(null, areaStartScreen.x, areaStartScreen.y, 0, 0);
+        subject.touchDragged(null, areaEndScreen.x, areaEndScreen.y, 0);
         XYAssert.assertThat(model.caret().selection().getLeft()).at(0, 0);
         XYAssert.assertThat(model.caret().selection().getRight()).at(0, 5);
     }
@@ -105,7 +105,7 @@ public class TextAreaControllerIntegrationTest {
 
 	@Test
 	public void returnMovesToStartOfNextLine() throws Exception {
-		subject.keyTyped(Key.Return.asChar());
+		subject.keyTyped(null, Key.Return.asChar());
 		assertThat(model.getText()).isEqualTo(("\n"));
         XYAssert.assertThat(model.caret()).at(0, 1);
 	}
@@ -113,7 +113,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void returnPushesNextLineDown() throws Exception {
 		model.setText("Hello");
-		subject.keyTyped(Key.Return.asChar());
+		subject.keyTyped(null, Key.Return.asChar());
 		assertThat(model.getText()).isEqualTo(("\nHello"));
         XYAssert.assertThat(model.caret()).at(0, 1);
 	}
@@ -122,7 +122,7 @@ public class TextAreaControllerIntegrationTest {
 	public void returnInMiddleOfLineSplitsIt() throws Exception {
 		model.setText("Hello");
 		model.caret().moveRight(2);
-		subject.keyTyped(Key.Return.asChar());
+		subject.keyTyped(null, Key.Return.asChar());
 		assertThat(model.getText()).isEqualTo(("He\nllo"));
         XYAssert.assertThat(model.caret()).at(0, 1);
 	}
@@ -135,13 +135,13 @@ public class TextAreaControllerIntegrationTest {
 	
 	@Test
 	public void keyPressAddsText() {
-		subject.keyTyped('a');
+		subject.keyTyped(null, 'a');
 		assertThat(model.getText()).isEqualTo(("a"));
 	}
 	
 	@Test
 	public void tabAddsSpaces() {
-		subject.keyTyped('\t');
+		subject.keyTyped(null, '\t');
 		assertThat(model.getText()).isEqualTo(("    "));
 	}
 
@@ -149,7 +149,7 @@ public class TextAreaControllerIntegrationTest {
 	public void undoBeyondBeginningDoesNothing() {
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();
-        subject.keyDown(Input.Keys.Z);
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("");
 	}
@@ -158,9 +158,9 @@ public class TextAreaControllerIntegrationTest {
 	public void undoKeyPressRemovesText() {
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();
-		subject.keyTyped('a');
-		subject.keyTyped('b');
-        subject.keyDown(Input.Keys.Z);
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, 'b');
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("a");
 	}
@@ -169,11 +169,11 @@ public class TextAreaControllerIntegrationTest {
 	public void redoKeyPressRestoresText() {
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();
-		subject.keyTyped('a');
-		subject.keyTyped('b');
-        subject.keyDown(Input.Keys.Z);
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, 'b');
+        subject.keyDown(null, Input.Keys.Z);
         doReturn(true).when(subject).isShiftDown();
-        subject.keyDown(Input.Keys.Z);
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("ab");
 	}
@@ -182,20 +182,20 @@ public class TextAreaControllerIntegrationTest {
 	public void redoBeyondDoesNothing() {
         doReturn(true).when(subject).isControlDown();
         doReturn(true).when(subject).isShiftDown();
-        subject.keyDown(Input.Keys.Z);
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("");
 	}
 
 	@Test
 	public void undoTypeThenRedoDoesNothing() {
-        subject.keyTyped('a');
+        subject.keyTyped(null, 'a');
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();
-        subject.keyDown(Input.Keys.Z);
-        subject.keyTyped('b');
+        subject.keyDown(null, Input.Keys.Z);
+        subject.keyTyped(null, 'b');
         doReturn(true).when(subject).isShiftDown();
-        subject.keyDown(Input.Keys.Z);
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("b");
 	}
@@ -204,27 +204,27 @@ public class TextAreaControllerIntegrationTest {
 	public void multipleUndoKeyPressesRemoveText() {
         doReturn(true).when(subject).isControlDown();
         doReturn(false).when(subject).isShiftDown();
-		subject.keyTyped('a');
-		subject.keyTyped('b');
-		subject.keyTyped('c');
-        subject.keyDown(Input.Keys.Z);
-        subject.keyDown(Input.Keys.Z);
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, 'b');
+		subject.keyTyped(null, 'c');
+        subject.keyDown(null, Input.Keys.Z);
+        subject.keyDown(null, Input.Keys.Z);
 
         assertThat(model.getText()).isEqualTo("a");
 	}
 
 	@Test
 	public void multipleKeyPressesAddText() {
-		subject.keyTyped('a');
-		subject.keyTyped('b');
-		subject.keyTyped('c');
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, 'b');
+		subject.keyTyped(null, 'c');
 		assertThat(model.getText()).isEqualTo(("abc"));
 	}
 	
 	@Test
 	public void deleteAtEndOfLineRemovesText() {
-		subject.keyTyped('a');
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo((""));
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
@@ -233,7 +233,7 @@ public class TextAreaControllerIntegrationTest {
 	public void deleteInMiddleLineSquashesText() {
 		model.setText("Hello\nThere");
 		model.caret().moveRight(2);
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("Hllo\nThere"));
         XYAssert.assertThat(model.caret()).at(1, 0);
 	}
@@ -243,7 +243,7 @@ public class TextAreaControllerIntegrationTest {
 		model.setText("Hello\nThere");
 		model.caret().moveRight(2);
 		model.caret().moveDown();
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("Hello\nTere"));
         XYAssert.assertThat(model.caret()).at(1, 1);
 	}
@@ -252,7 +252,7 @@ public class TextAreaControllerIntegrationTest {
 	public void deleteBeyondStartOfLineMovesUp() {
 		model.setText("a\n");
 		model.caret().moveDown();
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("a"));
         XYAssert.assertThat(model.caret()).at(1, 0);
 	}
@@ -263,7 +263,7 @@ public class TextAreaControllerIntegrationTest {
         model.caret().moveDown();
         model.caret().moveDown();
         model.caret().moveDown();
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("a\n\nb"));
         XYAssert.assertThat(model.caret()).at(0, 2);
 	}
@@ -272,7 +272,7 @@ public class TextAreaControllerIntegrationTest {
 	public void deleteBeyondStartOfBringsExistingLineUp() {
 		model.setText("a\nb");
         model.caret().moveDown();
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("ab"));
         XYAssert.assertThat(model.caret()).at(1, 0);
 	}
@@ -280,7 +280,7 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void deleteBeyondStartOfFirstLineDoesNothing() {
 		model.setText("a");
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, Key.Delete.asChar());
 		assertThat(model.getText()).isEqualTo(("a"));
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
@@ -292,26 +292,26 @@ public class TextAreaControllerIntegrationTest {
 	
 	@Test
 	public void visibleKeyPressMovesCaretRight() {
-		subject.keyTyped('a');
+		subject.keyTyped(null, 'a');
         XYAssert.assertThat(model.caret()).at(1, 0);
 	}
 	
 	@Test
 	public void invisibleKeyPressDoesNotMoveCaret() {
-		subject.keyTyped(Key.Shift.asChar());
+		subject.keyTyped(null, Key.Shift.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void deleteMovesCaretLeft() {
-		subject.keyTyped('a');
-		subject.keyTyped(Key.Delete.asChar());
+		subject.keyTyped(null, 'a');
+		subject.keyTyped(null, Key.Delete.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}	
 	
 	@Test
 	public void downArrowMovesDown() throws Exception {
-		subject.keyTyped(Key.Down.asChar());
+		subject.keyTyped(null, Key.Down.asChar());
         XYAssert.assertThat(model.caret()).at(0, 1);
 	}
 	
@@ -319,7 +319,7 @@ public class TextAreaControllerIntegrationTest {
 	public void downArrowWhenLowerLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hello\nYou");
 		model.caret().moveRight(5);
-		subject.keyTyped(Key.Down.asChar());
+		subject.keyTyped(null, Key.Down.asChar());
         XYAssert.assertThat(model.caret()).at(3, 1);
 	}
 	
@@ -328,46 +328,46 @@ public class TextAreaControllerIntegrationTest {
 		model.setText("Hi\nThere");
         model.caret().moveDown();
         model.caret().moveRight(5);
-		subject.keyTyped(Key.Up.asChar());
+		subject.keyTyped(null, Key.Up.asChar());
         XYAssert.assertThat(model.caret()).at(2, 0);
 	}
 	
 	@Test
 	public void upArrowMovesUp() throws Exception {
 		model.caret().moveDown();
-		subject.keyTyped(Key.Up.asChar());
+		subject.keyTyped(null, Key.Up.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void upArrowStopsAtTop() throws Exception {
-		subject.keyTyped(Key.Up.asChar());
+		subject.keyTyped(null, Key.Up.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void leftArrowMovesLeft() throws Exception {
 		model.caret().moveRight();
-		subject.keyTyped(Key.Left.asChar());
+		subject.keyTyped(null, Key.Left.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void leftArrowStopsAtLeft() throws Exception {
-		subject.keyTyped(Key.Left.asChar());
+		subject.keyTyped(null, Key.Left.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void rightArrowMovesRight() throws Exception {
 		model.setText("a");
-		subject.keyTyped(Key.Right.asChar());
+		subject.keyTyped(null, Key.Right.asChar());
         XYAssert.assertThat(model.caret()).at(1, 0);
 	}
 	
 	@Test
 	public void rightArrowStopsAtEndOfLine() throws Exception {
-		subject.keyTyped(Key.Right.asChar());
+		subject.keyTyped(null, Key.Right.asChar());
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
@@ -375,7 +375,7 @@ public class TextAreaControllerIntegrationTest {
 	public void textEnteredAtCaretXPosition() throws Exception {
 		model.setText("Hello\nWorld");
 		model.caret().moveRight(2);
-		subject.keyTyped('a');
+		subject.keyTyped(null, 'a');
 		assertThat(model.getText()).isEqualTo(("Heallo\nWorld"));
 	}
 	
@@ -383,7 +383,7 @@ public class TextAreaControllerIntegrationTest {
 	public void textEnteredAtCaretYPositionWhenYGreaterThanNumberOfLines() throws Exception {
 		model.caret().moveDown();
 		model.caret().moveDown();
-		subject.keyTyped('a');
+		subject.keyTyped(null, 'a');
 		assertThat(model.getText()).isEqualTo(("\n\na"));
 	}
 	
@@ -392,7 +392,7 @@ public class TextAreaControllerIntegrationTest {
 		model.setText("Hello\nThere\nWorld");
         model.caret().moveDown();
         model.caret().moveDown();
-		subject.keyTyped('a');
+		subject.keyTyped(null, 'a');
 		assertThat(model.getText()).isEqualTo(("Hello\nThere\naWorld"));
 	}
 }
