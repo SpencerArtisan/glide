@@ -128,7 +128,7 @@ public class TextAreaModel {
     private int getIndex(XY<Integer> location) {
         int index = getIndexForRow(location.y);
         index += location.x;
-        return index;
+        return Math.min(index, text.length());
     }
 
     private int getIndexForRow(int row) {

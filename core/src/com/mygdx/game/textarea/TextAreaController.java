@@ -11,30 +11,15 @@ import java.awt.event.KeyEvent;
 
 public class TextAreaController extends ClickListener {
 
-	private TextAreaModel model;
-	private TextArea view;
+    private TextAreaModel model;
+    private TextArea view;
     private CommandHistory commandHistory = new CommandHistory();
     private XY<Integer> touchDownLocation;
     private boolean dragging;
 
     public TextAreaController(TextAreaModel model, TextArea view) {
-		this.model = model;
-		this.view = view;
-	}
-
-    @Override
-    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        return super.touchDown(event, x, y, pointer, button);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        super.touchDragged(event, x, y, pointer);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        super.touchUp(event, x, y, pointer, button);    //To change body of overridden methods use File | Settings | File Templates.
+        this.model = model;
+        this.view = view;
     }
 
     @Override
@@ -58,35 +43,42 @@ public class TextAreaController extends ClickListener {
     public boolean keyTyped(InputEvent event, char character) {
         commandHistory.execute(getKeyTypedCommand(character));
         return true;
+    }
 
-	}
-//
-//    @Override
-//    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-//        XY<Integer> caretLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-//        if (dragging) {
-//            dragging = false;
-//            commandHistory.execute(new SelectCommand(model, touchDownLocation, caretLocation));
-//        } else {
-//            commandHistory.execute(new MoveToCommand(model, caretLocation));
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//        model.caret().clearSelection();
-//        this.touchDownLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean touchDragged(int screenX, int screenY, int pointer) {
-//        dragging = true;
-//        XY<Integer> dragLocation = view.screenPositionToCaretLocation(new XY<Integer>(screenX, screenY));
-//        new SelectCommand(model, touchDownLocation, dragLocation).execute();
-//        return true;
-//    }
+    @Override
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//        super.touchUp(event, x, y, pointer, button);
+        if (isOver(event.getListenerActor(), x, y)) {
+            XY<Integer> caretLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
+            if (dragging) {
+                dragging = false;
+                commandHistory.execute(new SelectCommand(model, touchDownLocation, caretLocation));
+            } else {
+                commandHistory.execute(new MoveToCommand(model, caretLocation));
+            }
+        }
+    }
+
+    @Override
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//        super.touchDown(event, x, y, pointer, button);
+
+        if (isOver(event.getListenerActor(), x, y)) {
+            model.caret().clearSelection();
+            this.touchDownLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
+        }
+        return true;
+    }
+
+    @Override
+    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+//        super.touchDragged(event, x, y, pointer);
+        if (isOver(event.getListenerActor(), x, y)) {
+            dragging = true;
+            XY<Integer> dragLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
+            new SelectCommand(model, touchDownLocation, dragLocation).execute();
+        }
+    }
 
     private boolean isCopy(int keycode) {
         return isControlDown() && keycode == Input.Keys.C;
@@ -125,25 +117,25 @@ public class TextAreaController extends ClickListener {
         return null;
     }
 
-	private boolean isPrintableChar(char character) {
-	    Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
-	    return (!Character.isISOControl(character)) &&
-	            character != KeyEvent.CHAR_UNDEFINED &&
-	            block != null &&
-	            block != Character.UnicodeBlock.SPECIALS &&
-	            !Key.Down.is(character) &&
-	            !Key.Up.is(character) &&
-	            !Key.Left.is(character) &&
-	            !Key.Right.is(character);
-	}
+    private boolean isPrintableChar(char character) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
+        return (!Character.isISOControl(character)) &&
+                character != KeyEvent.CHAR_UNDEFINED &&
+                block != null &&
+                block != Character.UnicodeBlock.SPECIALS &&
+                !Key.Down.is(character) &&
+                !Key.Up.is(character) &&
+                !Key.Left.is(character) &&
+                !Key.Right.is(character);
+    }
 
     protected boolean isControlDown() {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
-               Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
     }
 
     protected boolean isShiftDown() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ||
-               Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+                Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TextArea extends Actor {
-    private static final int TOP_MARGIN = 8;
+    private static final int TOP_MARGIN = 29;
     private static final int LEFT_MARGIN = 8;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
@@ -49,7 +49,7 @@ public class TextArea extends Actor {
     private void drawCurrentLineBackground(Batch batch) {
         if (model.caret().selection() == null) {
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, model.caret().location().y));
-            style.focusedBackground.draw(batch, 0, topLeftCurrent.y - 18, getWidth(), getRowHeight());
+            style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
 
@@ -80,13 +80,13 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
         XY<Integer> textStart = caretLocationToPosition(new XY<Integer>(0, 0));
-        style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y);
+        style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + 21);
     }
 
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
         XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
-        caretImage.draw(batch, caretPosition.x, caretPosition.y - 18, caretImage.getMinWidth(), getRowHeight());
+        caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
     }
 
     private float getRowHeight() {
@@ -103,12 +103,9 @@ public class TextArea extends Actor {
         return new XY<Integer>((int) x, (int) y);
     }
 
-    public XY<Integer> screenPositionToCaretLocation(XY<Integer> screenPosition) {
-        Vector3 pos = new Vector3(screenPosition.x, screenPosition.y, 0);
-        Vector3 worldPosition = this.getStage().getCamera().unproject(pos);
-
-        float caretX = (worldPosition.x - getX() - LEFT_MARGIN) / getColumnWidth();
-        float caretY = (this.getHeight() + getY() - TOP_MARGIN - worldPosition.y) / getRowHeight();
+    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
+        float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth();
+        float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
         return new XY<Integer>((int) caretX, (int) caretY);
     }
 }

@@ -38,6 +38,7 @@ public class CodingScreen extends ScreenAdapter {
 	    scrollPane = new ScrollPane(textArea, skin);
         scrollPane.pack();
 		scrollPane.setFadeScrollBars(false);
+        scrollPane.setFlickScroll(false);
 		stage.addActor(scrollPane);
 		stage.setKeyboardFocus(textArea);
 
