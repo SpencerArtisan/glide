@@ -2,6 +2,8 @@ package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -55,6 +57,14 @@ public class TextArea extends Actor {
         for (Map.Entry<Integer, Color> colorLine : coloredLines.entrySet()) {
             SpriteDrawable background = white.tint(colorLine.getValue());
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, colorLine.getKey()));
+            Vector3 q = getStage().getCamera().project(new Vector3(topLeftCurrent.x, topLeftCurrent.y, 0));
+            Vector2 stg = localToStageCoordinates(new Vector2(topLeftCurrent.x, topLeftCurrent.y));
+//            System.out.println(getParent().getHeight() + "," + q.y + "," + topLeftCurrent.y + ", " + getY() + ", " + stg.y);
+            if (topLeftCurrent.y > getParent().getHeight()) {
+                System.out.println("ERROR OFF TOP");
+            } else if (topLeftCurrent.y < 0) {
+                System.out.println("ERROR OFF BOTTOM");
+            }
             background.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
