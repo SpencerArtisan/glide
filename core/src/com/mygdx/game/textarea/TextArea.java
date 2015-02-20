@@ -2,12 +2,15 @@ package com.mygdx.game.textarea;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.XY;
@@ -37,8 +40,8 @@ public class TextArea extends Actor {
         drawCurrentLineBackground(batch);
         drawOtherLineBackgrounds(batch);
         drawSelectionBackground(batch);
-        drawText(batch);
         drawCaret(batch);
+        drawText(batch);
     }
 
     private void drawBackground(Batch batch) {
@@ -59,7 +62,6 @@ public class TextArea extends Actor {
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, colorLine.getKey()));
             Vector3 q = getStage().getCamera().project(new Vector3(topLeftCurrent.x, topLeftCurrent.y, 0));
             Vector2 stg = localToStageCoordinates(new Vector2(topLeftCurrent.x, topLeftCurrent.y));
-//            System.out.println(getParent().getHeight() + "," + q.y + "," + topLeftCurrent.y + ", " + getY() + ", " + stg.y);
             if (topLeftCurrent.y > getParent().getHeight()) {
                 System.out.println("ERROR OFF TOP");
             } else if (topLeftCurrent.y < 0) {
@@ -87,7 +89,10 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
         XY<Integer> textStart = caretLocationToPosition(new XY<Integer>(0, 0));
-        style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + 21);
+        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + 21);
+        System.out.println("Changing text area height from " + getHeight() + " to " + textBounds.height);
+        setHeight(textBounds.height);
+        ((Layout) getParent()).invalidate();
     }
 
     private void drawCaret(Batch batch) {
