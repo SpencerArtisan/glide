@@ -1,21 +1,19 @@
 package com.mygdx.game.textarea;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.XY;
 
 public class ScrollableTextArea extends ScrollPane {
     public ScrollableTextArea(TextAreaModel model, Skin skin, Viewport viewport) {
         super(createTextArea(model, skin, viewport), skin);
+        TextAreaController controller = new TextAreaController(model, this);
+        addListener(controller);
         pack();
         setFadeScrollBars(false);
         setFlickScroll(false);
-        TextAreaController controller = new TextAreaController(model, this);
-        addListener(controller);
     }
 
     private static Actor createTextArea(TextAreaModel model, Skin skin, Viewport viewport) {

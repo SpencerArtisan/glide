@@ -51,14 +51,6 @@ public class WelcomeScreen extends ScreenAdapter {
 		return newGameButton;
 	}
 
-	public TextButton getContinueGameButton() {
-		return continueGameButton;
-	}
-
-	public TextButton getExploreGamesButton() {
-		return exploreGamesButton;
-	}
-
 	private void createStyles() {
 		Texture buttonUp = new Texture(Gdx.files.internal("images/myactor.png"));
 		Texture buttonOver = new Texture(Gdx.files.internal("images/myactorOver.png"));

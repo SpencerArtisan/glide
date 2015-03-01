@@ -3,9 +3,9 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.code.Program;
@@ -15,8 +15,9 @@ import com.mygdx.game.textarea.TextAreaModel;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
-	private BitmapFont font;
-	private ScrollableTextArea scrollPane;
+	private ScrollableTextArea textArea;
+    private Table table;
+    private Table buttonBar;
 	
 	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
@@ -29,14 +30,49 @@ public class CodingScreen extends ScreenAdapter {
 
 		Skin skin = resourceManager.getSkin();
 
-        TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
-        scrollPane = new ScrollableTextArea(model, skin, viewport);
+        createButtonBar(viewport, skin);
+        createTextArea(program, viewport, skin);
+        layoutScreen(viewport, skin);
 
-		stage.addActor(scrollPane);
-		stage.setKeyboardFocus(scrollPane.textArea());
+		stage.addActor(table);
+		stage.setKeyboardFocus(textArea.textArea());
 
 		Gdx.input.setInputProcessor(stage);
 	}
+
+    private void layoutScreen(Viewport viewport, Skin skin) {
+        table = new Table();
+        table.debug();
+        table.row();
+        table.add(buttonBar);
+        table.row();
+        table.add(textArea).expand().fill();
+        table.setFillParent(true);
+        table.pack();
+    }
+
+    private void createButtonBar(Viewport viewport, Skin skin) {
+//        TextureAtlas.AtlasRegion undoRegion = ResourceManager.shared().getAtlas("editor").findRegion("Tardis");
+//        Image undoImage = new Image(undoRegion);
+        ImageTextButton.ImageTextButtonStyle style = new ImageTextButton.ImageTextButtonStyle();
+//        style.imageUp = undoImage;
+        ImageTextButton undoButton = new ImageTextButton("Undo", style);
+
+
+
+
+//        TextButton button = new TextButton("Undo", skin);
+        buttonBar = new Table();
+        buttonBar.row();
+        buttonBar.add(undoButton);
+//        buttonBar.setFillParent(true);
+        buttonBar.pack();
+    }
+
+    private void createTextArea(Program program, Viewport viewport, Skin skin) {
+        TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
+        textArea = new ScrollableTextArea(model, skin, viewport);
+    }
 
     @Override
     public void render(float delta) { 
@@ -50,6 +86,6 @@ public class CodingScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		scrollPane.setSize(width, height);
+		textArea.setSize(width, height);
 	}  	  
 }
