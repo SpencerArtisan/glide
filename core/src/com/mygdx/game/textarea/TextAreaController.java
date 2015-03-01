@@ -12,12 +12,12 @@ import java.awt.event.KeyEvent;
 public class TextAreaController extends ClickListener {
 
     private TextAreaModel model;
-    private TextArea view;
+    private ScrollableTextArea view;
     private CommandHistory commandHistory = new CommandHistory();
     private XY<Integer> touchDownLocation;
     private boolean dragging;
 
-    public TextAreaController(TextAreaModel model, TextArea view) {
+    public TextAreaController(TextAreaModel model, ScrollableTextArea view) {
         this.model = model;
         this.view = view;
     }
@@ -42,7 +42,7 @@ public class TextAreaController extends ClickListener {
     @Override
     public boolean keyTyped(InputEvent event, char character) {
         commandHistory.execute(getKeyTypedCommand(character));
-        view.onModelChange();
+        view.onModelChange(model);
         return true;
     }
 

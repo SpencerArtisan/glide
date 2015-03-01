@@ -19,7 +19,7 @@ public class TextAreaControllerIntegrationTest {
 	private TextAreaController subject;
 	private TextAreaModel model;
     private InputEvent event;
-    @Mock private TextArea view;
+    @Mock private ScrollableTextArea view;
     @Mock private Actor actor;
 
 	@Before

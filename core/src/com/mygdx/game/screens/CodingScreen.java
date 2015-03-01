@@ -5,19 +5,18 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
-import com.mygdx.game.textarea.TextArea;
+import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
 	private BitmapFont font;
-	private ScrollPane scrollPane;
+	private ScrollableTextArea scrollPane;
 	
 	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
@@ -29,18 +28,12 @@ public class CodingScreen extends ScreenAdapter {
 //		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
 
 		Skin skin = resourceManager.getSkin();
-		TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
-		model.caret().moveToBottom();
-		TextArea textArea = new TextArea(model, skin);
-        textArea.setWidth(viewport.getWorldWidth());
-        textArea.setHeight(viewport.getWorldHeight());
 
-	    scrollPane = new ScrollPane(textArea, skin);
-        scrollPane.pack();
-		scrollPane.setFadeScrollBars(false);
-        scrollPane.setFlickScroll(false);
+        TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
+        scrollPane = new ScrollableTextArea(model, skin, viewport);
+
 		stage.addActor(scrollPane);
-		stage.setKeyboardFocus(textArea);
+		stage.setKeyboardFocus(scrollPane.textArea());
 
 		Gdx.input.setInputProcessor(stage);
 	}

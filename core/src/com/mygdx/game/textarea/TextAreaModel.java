@@ -17,7 +17,8 @@ public class TextAreaModel {
 		this.text = text;
 		this.colorCoder = colorCoder;
 		caret = new Caret();
-	}
+        caret.moveToBottom();
+    }
 
 	public TextAreaModel(ColorCoder colorCoder) {
 		this("", colorCoder);
