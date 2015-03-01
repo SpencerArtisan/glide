@@ -2,7 +2,9 @@ package com.mygdx.game.image;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.io.IOException;
@@ -16,9 +18,8 @@ public class ImageAreaController {
         this.grabber = grabber;
         this.view = view;
         this.model = model;
-        view.importTextButton().addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        view.importTextButton().addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
                 onImageUrlProvided(Gdx.app.getClipboard().getContents());
             }
         });
@@ -28,6 +29,7 @@ public class ImageAreaController {
         try {
             FileHandle imageFile = grabber.grab(url);
             model.add(imageFile, url);
+            view.refresh();
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

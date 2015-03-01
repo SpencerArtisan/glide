@@ -1,31 +1,45 @@
 package com.mygdx.game.image;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+
+import java.util.Collection;
 
 public class ImageArea extends Table {
-    private TextButton importTextField;
+    public static final int WIDTH = 260;
+    private TextButton importTextButton;
+    private ImageAreaModel model;
+    private Skin skin;
 
     public ImageArea(Skin skin) {
+        this.skin = skin;
+        importTextButton = new TextButton("Add from clipboard", skin, "small");
+        model = new ImageAreaModel();
         layout(skin);
-        new ImageAreaController(new ImageGrabber(), this, new ImageAreaModel());
+        new ImageAreaController(new ImageGrabber(), this, model);
     }
 
     private void layout(Skin skin) {
         top();
-        importTextField = new TextButton("Add from clipboard", skin, "small");
-//        importTextField.getLabel().setWrap(true);
-//        importTextField.getLabel().setHeight(60);
-//        importTextField.getLabel().setWidth(320);
-//        importTextField = new TextField("", skin) {{ setMessageText(" Paste image url here"); }};
         row();
         add(new Label("Game images", skin)).padTop(20).padBottom(20);
         row();
-        add(importTextField).width(260);
+        add(importTextButton).width(WIDTH);
+
+        Collection<FileHandle> imageFiles = model.getImages().values();
+        for (FileHandle imageFile : imageFiles) {
+            ImageFromFile image = new ImageFromFile(imageFile.path());
+            row();
+            add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth());
+        }
     }
 
     public TextButton importTextButton() {
-        return importTextField;
+        return importTextButton;
+    }
+
+    public void refresh() {
+        reset();
+        layout(skin);
     }
 }
