@@ -1,6 +1,8 @@
 package com.mygdx.game.image;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -17,9 +19,10 @@ public class ImageAreaController {
         this.grabber = grabber;
         this.view = view;
         this.model = model;
-        view.importTextField().setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped(TextField textField, char c) {
-                onImageUrlChanged(textField.getText());
+        view.importTextButton().addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                onImageUrlChanged(Gdx.app.getClipboard().getContents());
             }
         });
     }

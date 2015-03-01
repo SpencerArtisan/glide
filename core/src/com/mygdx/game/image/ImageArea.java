@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public class ImageArea extends Table {
-    private TextField importTextField;
+    private TextButton importTextField;
 
     public ImageArea(Skin skin) {
         layout(skin);
@@ -14,14 +14,18 @@ public class ImageArea extends Table {
 
     private void layout(Skin skin) {
         top();
-        importTextField = new TextField("", skin) {{ setMessageText(" Paste image url here"); }};
+        importTextField = new TextButton("Add from clipboard", skin, "small");
+//        importTextField.getLabel().setWrap(true);
+//        importTextField.getLabel().setHeight(60);
+//        importTextField.getLabel().setWidth(320);
+//        importTextField = new TextField("", skin) {{ setMessageText(" Paste image url here"); }};
         row();
         add(new Label("Game images", skin)).padTop(20).padBottom(20);
         row();
-        add(importTextField).width(308);
+        add(importTextField).width(260);
     }
 
-    public TextField importTextField() {
+    public TextButton importTextButton() {
         return importTextField;
     }
 }

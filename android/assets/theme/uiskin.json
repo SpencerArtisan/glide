@@ -1,6 +1,7 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: { 
     default-font: { file: title.fnt },
+    small-font: { file: small-rabbit.fnt },
     code-font: { file: white-rabbit.fnt }
 },
 com.badlogic.gdx.graphics.Color: {
@@ -24,6 +25,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
+    small: { down: default-round-down, up: default-round, font: small-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
     undo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
     redo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
 	toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }

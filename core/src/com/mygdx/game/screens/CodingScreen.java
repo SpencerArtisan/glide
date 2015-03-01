@@ -51,7 +51,7 @@ public class CodingScreen extends ScreenAdapter {
         table.background(skin.getDrawable("solarizedLine"));
         table.row();
         table.add(textArea).expand().fill();
-        table.add(imageArea).width(350).expandY().fillY();
+        table.add(imageArea).width(300).expandY().fillY();
         table.row();
         table.add(buttonBar).colspan(2).expandX().fillX();
         table.setFillParent(true);

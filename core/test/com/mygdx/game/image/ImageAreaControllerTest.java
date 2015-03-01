@@ -26,19 +26,19 @@ public class ImageAreaControllerTest {
     @Mock private ImageArea view;
     @Mock private ImageAreaModel model;
     private ImageAreaController subject;
-
-    @Before
-    public void before() {;
-        MockitoAnnotations.initMocks(this);
-        when(view.importTextField()).thenReturn(importTextField);
-        subject = new ImageAreaController(grabber, view, model);
-    }
-
-    @Test
-    public void it_DownloadsAndAddsImageWhenTextEntered() throws IOException {
-        FileHandle imageFile = new FileHandle("file");
-        when(grabber.grab("url")).thenReturn(imageFile);
-        subject.onImageUrlChanged("url");
-        verify(model).add(imageFile, "url");
-    }
+//
+//    @Before
+//    public void before() {;
+//        MockitoAnnotations.initMocks(this);
+//        when(view.importTextField()).thenReturn(importTextField);
+//        subject = new ImageAreaController(grabber, view, model);
+//    }
+//
+//    @Test
+//    public void it_DownloadsAndAddsImageWhenUrlProvided() throws IOException {
+//        FileHandle imageFile = new FileHandle("file");
+//        when(grabber.grab("url")).thenReturn(imageFile);
+//        subject.onImageUrlChanged("url");
+//        verify(model).add(imageFile, "url");
+//    }
 }
