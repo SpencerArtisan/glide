@@ -22,13 +22,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
+    undo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
+    redo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown },
 	toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     default: { down: default-round-down, up: default-round, font: default-font, fontColor: white },
     toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red },
-    undo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, imageUp: tardis, up: myactor, over: myactorOver, down: myactorDown },
-    redo-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, imageUp: tardis, up: myactor, over: myactorOver, down: myactorDown },
     run-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, imageUp: run2, up: myactor, over: myactorOver, down: myactorDown },
     save-button: { down: default-round-down, up: default-round, font: default-font, fontColor: white, imageUp: save2, up: myactor, over: myactorOver, down: myactorDown }
 },
