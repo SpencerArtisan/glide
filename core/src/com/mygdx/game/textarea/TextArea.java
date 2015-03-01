@@ -24,7 +24,7 @@ public class TextArea extends Actor {
 
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
-        style = skin.get(TextField.TextFieldStyle.class);
+        style = skin.get("code", TextField.TextFieldStyle.class);
         white = (TextureRegionDrawable) skin.getDrawable("white");
     }
 

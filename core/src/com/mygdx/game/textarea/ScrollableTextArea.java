@@ -8,20 +8,14 @@ import com.mygdx.game.XY;
 import com.mygdx.game.textarea.command.CommandHistory;
 
 public class ScrollableTextArea extends ScrollPane {
-    public ScrollableTextArea(TextAreaModel model, Skin skin, Viewport viewport, CommandHistory commandHistory) {
-        super(createTextArea(model, skin, viewport), skin);
+    public ScrollableTextArea(TextAreaModel model, Skin skin, CommandHistory commandHistory) {
+        super(new TextArea(model, skin), skin);
+
         TextAreaController controller = new TextAreaController(model, this, commandHistory);
         addListener(controller);
         pack();
         setFadeScrollBars(false);
         setFlickScroll(false);
-    }
-
-    private static Actor createTextArea(TextAreaModel model, Skin skin, Viewport viewport) {
-        TextArea textArea = new TextArea(model, skin);
-        textArea.setWidth(viewport.getWorldWidth());
-        textArea.setHeight(viewport.getWorldHeight());
-        return textArea;
     }
 
     public TextArea textArea() {

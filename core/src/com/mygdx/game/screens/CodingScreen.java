@@ -11,14 +11,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
+import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 import com.mygdx.game.textarea.command.CommandHistory;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
-	private ScrollableTextArea textArea;
     private Table table;
+    private ScrollableTextArea textArea;
+    private ImageArea imageArea;
     private HorizontalGroup buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
 	
@@ -33,9 +35,10 @@ public class CodingScreen extends ScreenAdapter {
 
 		Skin skin = resourceManager.getSkin();
 
-        createButtonBar(viewport, skin);
-        createTextArea(program, viewport, skin);
-        layoutScreen(viewport, skin);
+        createButtonBar(skin);
+        createImageArea(skin);
+        createTextArea(program, skin);
+        layoutScreen(skin);
 
 		stage.addActor(table);
 		stage.setKeyboardFocus(textArea.textArea());
@@ -43,18 +46,19 @@ public class CodingScreen extends ScreenAdapter {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-    private void layoutScreen(Viewport viewport, Skin skin) {
+    private void layoutScreen(Skin skin) {
         table = new Table();
-        table.background(skin.getDrawable("solarizedBackground"));
+        table.background(skin.getDrawable("solarizedLine"));
         table.row();
         table.add(textArea).expand().fill();
+        table.add(imageArea).width(350).expandY().fillY();
         table.row();
-        table.add(buttonBar).expandX().fillX();
+        table.add(buttonBar).colspan(2).expandX().fillX();
         table.setFillParent(true);
         table.pack();
     }
 
-    private void createButtonBar(Viewport viewport, Skin skin) {
+    private void createButtonBar(Skin skin) {
         TextButton undoButton = new TextButton("Past <", skin, "undo-button");
         TextButton redoButton = new TextButton("> Future", skin, "redo-button");
         ImageTextButton runButton = new ImageTextButton(" Run", skin, "run-button");
@@ -71,15 +75,16 @@ public class CodingScreen extends ScreenAdapter {
         });
 
         buttonBar = new HorizontalGroup();
-        buttonBar.pad(8);
+        buttonBar.pad(18);
         buttonBar.space(10);
 
-        runButton.padLeft(20);
         buttonBar.addActor(undoButton);
         buttonBar.addActor(new Image(skin, "tardis2"));
         buttonBar.addActor(redoButton);
         buttonBar.addActor(spacer(20));
         buttonBar.addActor(saveButton);
+        buttonBar.addActor(spacer(16));
+        buttonBar.addActor(runButton);
         buttonBar.addActor(runButton);
     }
 
@@ -91,9 +96,13 @@ public class CodingScreen extends ScreenAdapter {
         };
     }
 
-    private void createTextArea(Program program, Viewport viewport, Skin skin) {
+    private void createImageArea(Skin skin) {
+        imageArea = new ImageArea(skin);
+    }
+
+    private void createTextArea(Program program, Skin skin) {
         TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
-        textArea = new ScrollableTextArea(model, skin, viewport, commandHistory);
+        textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
 
     @Override
