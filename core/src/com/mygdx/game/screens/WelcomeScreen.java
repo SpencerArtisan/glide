@@ -13,30 +13,30 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.ResourceManager;
 
 public class WelcomeScreen extends ScreenAdapter {
 	private Table table;
 	private Stage stage;
-	private BitmapFont font;
-	private TextButton.TextButtonStyle tbStyle;
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
 	private TextButton exploreGamesButton;
 	
-	public WelcomeScreen(Viewport viewport) {
+	public WelcomeScreen(Viewport viewport, ResourceManager resourceManager) {
 		super();
 		this.stage = new Stage(viewport);
 
-		createFont();
-		createStyles();
-	    Label title = createTitle();
-	    createNewGameButton();
-	    createContinueGameButton();
-	    createExploreGamesButton();
+        Skin skin = resourceManager.getSkin();
+
+	    Label title = createTitle(skin);
+	    createNewGameButton(skin);
+	    createContinueGameButton(skin);
+	    createExploreGamesButton(skin);
 		TextureRegionDrawable backgroundRegion = createBackground();
 		layoutScreen(backgroundRegion);		
 		animate(title);
@@ -51,27 +51,16 @@ public class WelcomeScreen extends ScreenAdapter {
 		return newGameButton;
 	}
 
-	private void createStyles() {
-		Texture buttonUp = new Texture(Gdx.files.internal("images/myactor.png"));
-		Texture buttonOver = new Texture(Gdx.files.internal("images/myactorOver.png"));
-		Texture buttonDown = new Texture(Gdx.files.internal("images/myactorDown.png"));
-		tbStyle = new TextButton.TextButtonStyle();
-		tbStyle.font = font;
-		tbStyle.up = new TextureRegionDrawable(new TextureRegion(buttonUp));
-		tbStyle.over = new TextureRegionDrawable(new TextureRegion(buttonOver));
-		tbStyle.down = new TextureRegionDrawable(new TextureRegion(buttonDown));
+	private void createNewGameButton(Skin skin) {
+		newGameButton = new TextButton("    New Game    ", skin);
 	}
 
-	private void createNewGameButton() {
-		newGameButton = new TextButton("    New Game    ", tbStyle);
+	private void createContinueGameButton(Skin skin) {
+		continueGameButton = new TextButton("  Continue Game  ", skin);
 	}
 
-	private void createContinueGameButton() {
-		continueGameButton = new TextButton("  Continue Game  ", tbStyle);
-	}
-
-	private void createExploreGamesButton() {
-		exploreGamesButton = new TextButton("  Explore Games  ", tbStyle);
+	private void createExploreGamesButton(Skin skin) {
+		exploreGamesButton = new TextButton("  Explore Games  ", skin);
 	}
 
 	private void animate(Label title) {
@@ -101,17 +90,8 @@ public class WelcomeScreen extends ScreenAdapter {
 		return backgroundRegion;
 	}
 
-	private Label createTitle() {
-		LabelStyle style = new Label.LabelStyle();
-	    style.font = font;
-	    return new Label("Welcome to Groovy Planet", style);
-	}
-
-	private void createFont() {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationMono.ttf"));
-	    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-	    parameter.size = 28;
-	    font = generator.generateFont(parameter);
+	private Label createTitle(Skin skin) {
+	    return new Label("Welcome to Groovy Planet", skin);
 	}
 
     @Override

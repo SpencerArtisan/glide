@@ -19,7 +19,7 @@ public class App extends Game {
 		resourceManager = new ResourceManager();
 		final Program program = new Program();
 		
-		WelcomeScreen welcomeScreen = new WelcomeScreen(viewport);
+		WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
 		welcomeScreen.getNewGameButton().addListener(new ClickListener() {			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
