@@ -2,10 +2,7 @@ package com.mygdx.game.image;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.io.IOException;
@@ -22,12 +19,12 @@ public class ImageAreaController {
         view.importTextButton().addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                onImageUrlChanged(Gdx.app.getClipboard().getContents());
+                onImageUrlProvided(Gdx.app.getClipboard().getContents());
             }
         });
     }
 
-    void onImageUrlChanged(String url) {
+    void onImageUrlProvided(String url) {
         try {
             FileHandle imageFile = grabber.grab(url);
             model.add(imageFile, url);
