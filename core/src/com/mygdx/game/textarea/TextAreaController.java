@@ -42,6 +42,7 @@ public class TextAreaController extends ClickListener {
     @Override
     public boolean keyTyped(InputEvent event, char character) {
         commandHistory.execute(getKeyTypedCommand(character));
+        view.onModelChange();
         return true;
     }
 

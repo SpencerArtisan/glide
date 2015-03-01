@@ -3,8 +3,6 @@ package com.mygdx.game.textarea;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,12 +21,11 @@ public class TextArea extends Actor {
     private static final int LEFT_MARGIN = 8;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
-    private TextAreaController controller;
     private TextField.TextFieldStyle style;
 
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
-        controller = new TextAreaController(model, this);
+        TextAreaController controller = new TextAreaController(model, this);
         addListener(controller);
         style = skin.get(TextField.TextFieldStyle.class);
         white = (TextureRegionDrawable) skin.getDrawable("white");
@@ -60,13 +57,6 @@ public class TextArea extends Actor {
         for (Map.Entry<Integer, Color> colorLine : coloredLines.entrySet()) {
             SpriteDrawable background = white.tint(colorLine.getValue());
             XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<Integer>(0, colorLine.getKey()));
-            Vector3 q = getStage().getCamera().project(new Vector3(topLeftCurrent.x, topLeftCurrent.y, 0));
-            Vector2 stg = localToStageCoordinates(new Vector2(topLeftCurrent.x, topLeftCurrent.y));
-            if (topLeftCurrent.y > getParent().getHeight()) {
-                System.out.println("ERROR OFF TOP");
-            } else if (topLeftCurrent.y < 0) {
-                System.out.println("ERROR OFF BOTTOM");
-            }
             background.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
@@ -89,9 +79,8 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
         XY<Integer> textStart = caretLocationToPosition(new XY<Integer>(0, 0));
-        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + 21);
-        System.out.println("Changing text area height from " + getHeight() + " to " + textBounds.height);
-        setHeight(textBounds.height);
+        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
+        setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
         ((Layout) getParent()).invalidate();
     }
 
@@ -119,5 +108,36 @@ public class TextArea extends Actor {
         float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth();
         float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
         return new XY<Integer>((int) caretX, (int) caretY);
+    }
+
+    private boolean isOffBottom(XY<Integer> location) {
+        return location.y < getRowHeight();
+    }
+
+    private boolean isOffTop(XY<Integer> location) {
+        return location.y + getRowHeight() > getParent().getHeight();
+    }
+
+    public void onModelChange() {
+        scrollPaneToShowCurrentCaret();
+    }
+
+    // TODO - Break this logic out into a ScrollableTextArea class
+    private void scrollPaneToShowCurrentCaret() {
+        XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
+        System.out.println(String.format("ScrollY=%s\tcaretY=%s\tcaretRow=%s\tTextAreaHeight=%s\tRowHeight=%s",
+                containingScrollPane().getScrollY(), caretPosition.y, model.caret().location().y, containingScrollPane().getHeight(), getRowHeight()));
+        if (isOffBottom(caretPosition)) {
+            float newScrollY = TOP_MARGIN + (model.caret().location().y + 1) * getRowHeight() - containingScrollPane().getHeight() ;
+            containingScrollPane().setScrollY(newScrollY);
+        } else if (isOffTop(caretPosition)) {
+            System.out.println("OFF TOP");
+            float newScrollY = TOP_MARGIN + (model.caret().location().y - 2) * getRowHeight();
+            containingScrollPane().setScrollY(newScrollY);
+        }
+    }
+
+    private ScrollPane containingScrollPane() {
+        return (ScrollPane) getParent();
     }
 }
