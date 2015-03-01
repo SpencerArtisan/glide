@@ -10,11 +10,13 @@ public class ImageArea extends Table {
         top();
         TextField importTextField = new TextField("", skin);
         importTextField.setMessageText(" Paste image url here");
-        importTextField.setAlignment(Align.center);
         row();
         add(new Label("Game images", skin)).padTop(20).padBottom(20);
         row();
         add(importTextField).width(308);
-        setBackground(skin.getDrawable("solarizedLine"));
+    }
+
+    public TextField importTextField() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
     }
 }
