@@ -42,7 +42,7 @@ public class CodingScreen extends ScreenAdapter {
 
     private void layoutScreen(Viewport viewport, Skin skin) {
         table = new Table();
-        table.debug();
+//        table.debug();
         table.row();
         table.add(buttonBar);
         table.row();
@@ -56,7 +56,7 @@ public class CodingScreen extends ScreenAdapter {
 //        Image undoImage = new Image(undoRegion);
         ImageTextButton.ImageTextButtonStyle style = new ImageTextButton.ImageTextButtonStyle();
 //        style.imageUp = undoImage;
-        ImageTextButton undoButton = new ImageTextButton("Undo", style);
+        ImageTextButton undoButton = new ImageTextButton("Undo", skin);
 
 
 
@@ -64,7 +64,7 @@ public class CodingScreen extends ScreenAdapter {
 //        TextButton button = new TextButton("Undo", skin);
         buttonBar = new Table();
         buttonBar.row();
-        buttonBar.add(undoButton);
+        buttonBar.add(undoButton).left();
 //        buttonBar.setFillParent(true);
         buttonBar.pack();
     }

@@ -95,7 +95,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private TextureRegionDrawable createBackground() {
-		Texture backgroundTexture = new Texture(Gdx.files.internal("images/WelcomeBackground.jpg"));
+		Texture backgroundTexture = new Texture(Gdx.files.internal("images/WelcomeBackground.png"));
 		backgroundTexture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
 		TextureRegionDrawable backgroundRegion = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 		return backgroundRegion;
