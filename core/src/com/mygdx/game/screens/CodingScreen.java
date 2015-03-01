@@ -55,10 +55,10 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createButtonBar(Viewport viewport, Skin skin) {
-        ImageTextButton undoButton = new ImageTextButton("Undo", skin, "undo-button");
-        ImageTextButton redoButton = new ImageTextButton("Redo", skin, "redo-button");
-        ImageTextButton runButton = new ImageTextButton("Run", skin, "run-button");
-        ImageTextButton saveButton = new ImageTextButton("Save", skin, "save-button");
+        ImageTextButton undoButton = new ImageTextButton(" Undo", skin, "undo-button");
+        ImageTextButton redoButton = new ImageTextButton(" Redo", skin, "redo-button");
+        ImageTextButton runButton = new ImageTextButton(" Run", skin, "run-button");
+        ImageTextButton saveButton = new ImageTextButton(" Save", skin, "save-button");
         undoButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 commandHistory.undo();
@@ -72,7 +72,8 @@ public class CodingScreen extends ScreenAdapter {
 
         buttonBar = new HorizontalGroup();
         buttonBar.pad(4);
-        buttonBar.space(6);
+        buttonBar.space(10);
+
         buttonBar.addActor(undoButton);
         buttonBar.addActor(redoButton);
         buttonBar.addActor(saveButton);
