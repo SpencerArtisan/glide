@@ -5,11 +5,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public class ImageArea extends Table {
+    private TextField importTextField;
 
     public ImageArea(Skin skin) {
+        layout(skin);
+        new ImageAreaController(new ImageGrabber(), this, new ImageAreaModel());
+    }
+
+    private void layout(Skin skin) {
         top();
-        TextField importTextField = new TextField("", skin);
-        importTextField.setMessageText(" Paste image url here");
+        importTextField = new TextField("", skin) {{ setMessageText(" Paste image url here"); }};
         row();
         add(new Label("Game images", skin)).padTop(20).padBottom(20);
         row();
@@ -17,6 +22,6 @@ public class ImageArea extends Table {
     }
 
     public TextField importTextField() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return importTextField;
     }
 }

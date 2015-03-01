@@ -1,9 +1,12 @@
 package com.mygdx.game.image;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import java.io.IOException;
 
 public class ImageAreaController {
     private final ImageGrabber grabber;
@@ -22,7 +25,11 @@ public class ImageAreaController {
     }
 
     void onImageUrlChanged(String url) {
-        Image image = grabber.grab(url);
-        model.add(image, url);
+        try {
+            FileHandle imageFile = grabber.grab(url);
+            model.add(imageFile, url);
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyFloat;
@@ -32,12 +35,10 @@ public class ImageAreaControllerTest {
     }
 
     @Test
-    public void it_DownloadsAndSavesImageWhenTextEntered() {
-        Image image = new Image();
-        when(grabber.grab("url")).thenReturn(image);
+    public void it_DownloadsAndAddsImageWhenTextEntered() throws IOException {
+        FileHandle imageFile = new FileHandle("file");
+        when(grabber.grab("url")).thenReturn(imageFile);
         subject.onImageUrlChanged("url");
-        verify(model).add(image, "url");
+        verify(model).add(imageFile, "url");
     }
-
-
 }
