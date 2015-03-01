@@ -56,7 +56,7 @@ public class CodingScreen extends ScreenAdapter {
 //        Image undoImage = new Image(undoRegion);
         ImageTextButton.ImageTextButtonStyle style = new ImageTextButton.ImageTextButtonStyle();
 //        style.imageUp = undoImage;
-        ImageTextButton undoButton = new ImageTextButton("Undo", skin);
+        ImageTextButton undoButton = new ImageTextButton("Undo", skin, "undo-button");
 
 
 
