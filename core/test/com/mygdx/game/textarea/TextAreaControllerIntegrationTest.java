@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.game.XY;
+import com.mygdx.game.textarea.command.CommandHistory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,7 +28,7 @@ public class TextAreaControllerIntegrationTest {
 		MockitoAnnotations.initMocks(this);
 		model = new TextAreaModel(null);
 		model.clear();
-		subject = spy(new TextAreaController(model, view));
+		subject = spy(new TextAreaController(model, view, new CommandHistory()));
         event = new InputEvent();
         event.setListenerActor(actor);
         doReturn(true).when(subject).isOver((Actor)anyObject(), anyFloat(), anyFloat());

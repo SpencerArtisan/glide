@@ -2,25 +2,25 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
+import com.mygdx.game.textarea.command.CommandHistory;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
 	private ScrollableTextArea textArea;
     private Table table;
     private HorizontalGroup buttonBar;
+    private CommandHistory commandHistory = new CommandHistory();
 	
 	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
@@ -45,7 +45,6 @@ public class CodingScreen extends ScreenAdapter {
 
     private void layoutScreen(Viewport viewport, Skin skin) {
         table = new Table();
-//        table.debug();
         table.background(skin.getDrawable("solarizedBackground"));
         table.row();
         table.add(textArea).expand().fill();
@@ -56,42 +55,33 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createButtonBar(Viewport viewport, Skin skin) {
-        ImageTextButton.ImageTextButtonStyle style = new ImageTextButton.ImageTextButtonStyle();
         ImageTextButton undoButton = new ImageTextButton("Undo", skin, "undo-button");
         ImageTextButton redoButton = new ImageTextButton("Redo", skin, "redo-button");
         ImageTextButton runButton = new ImageTextButton("Run", skin, "run-button");
         ImageTextButton saveButton = new ImageTextButton("Save", skin, "save-button");
+        undoButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                commandHistory.undo();
+            }
+        });
+        redoButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                commandHistory.redo();
+            }
+        });
 
         buttonBar = new HorizontalGroup();
         buttonBar.pad(4);
         buttonBar.space(6);
-//        buttonBar.debug();
-//        com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-//            dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
-//            solarizedBackground: { name: white, color: { r: 0, g: 0.16862, b: 0.21176, a: 1 } },
-//            solarizedLine: { name: white, color: { r: 0.02745, g: 0.21176, b: 0.25882, a: 1 } },
-//            solarizedSelection: { name: white, color: { r: 0.34510, g: 0.43137, b: 0.45882, a: 0.5 } }
-//            solarizedError: { name: white, color: { r: 0.86275, g: 0.19608, b: 0.18431, a: 0.6 } }
-//        },
-//
-//        TextureRegionDrawable white = (TextureRegionDrawable) skin.getDrawable("white");
-//        SpriteDrawable background = white.tint(Color.GREEN);
-//        buttonBar.columnDefaults(0).left();
-//        buttonBar.background(skin.getDrawable("solarizedBackground"));
-//        buttonBar.row().expandX().left();
         buttonBar.addActor(undoButton);
         buttonBar.addActor(redoButton);
         buttonBar.addActor(saveButton);
         buttonBar.addActor(runButton);
-//        buttonBar.add(redoButton).left().pad(4);
-//        buttonBar.add(runButton).left().pad(4);
-//        buttonBar.add(saveButton).left().pad(4);
-//        buttonBar.pack();
     }
 
     private void createTextArea(Program program, Viewport viewport, Skin skin) {
         TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
-        textArea = new ScrollableTextArea(model, skin, viewport);
+        textArea = new ScrollableTextArea(model, skin, viewport, commandHistory);
     }
 
     @Override

@@ -13,13 +13,14 @@ public class TextAreaController extends ClickListener {
 
     private TextAreaModel model;
     private ScrollableTextArea view;
-    private CommandHistory commandHistory = new CommandHistory();
+    private CommandHistory commandHistory;
     private XY<Integer> touchDownLocation;
     private boolean dragging;
 
-    public TextAreaController(TextAreaModel model, ScrollableTextArea view) {
+    public TextAreaController(TextAreaModel model, ScrollableTextArea view, CommandHistory commandHistory) {
         this.model = model;
         this.view = view;
+        this.commandHistory = commandHistory;
     }
 
     @Override

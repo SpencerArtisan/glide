@@ -5,11 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.XY;
+import com.mygdx.game.textarea.command.CommandHistory;
 
 public class ScrollableTextArea extends ScrollPane {
-    public ScrollableTextArea(TextAreaModel model, Skin skin, Viewport viewport) {
+    public ScrollableTextArea(TextAreaModel model, Skin skin, Viewport viewport, CommandHistory commandHistory) {
         super(createTextArea(model, skin, viewport), skin);
-        TextAreaController controller = new TextAreaController(model, this);
+        TextAreaController controller = new TextAreaController(model, this, commandHistory);
         addListener(controller);
         pack();
         setFadeScrollBars(false);
