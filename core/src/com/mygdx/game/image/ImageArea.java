@@ -1,6 +1,7 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import java.util.*;
@@ -30,7 +31,9 @@ public class ImageArea extends Table {
         List<GameImage> imageFiles = model.getImages();
         for (GameImage image : imageFiles) {
             row();
-            add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth());
+            add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
+            row();
+            add(new TextField(image.name(), skin)).width(WIDTH);
         }
     }
 

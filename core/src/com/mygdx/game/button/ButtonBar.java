@@ -66,6 +66,5 @@ public class ButtonBar extends HorizontalGroup {
         }
     }
 
-    private static class ModelChange extends Event {
-    }
+    private static class ModelChange extends Event {}
 }

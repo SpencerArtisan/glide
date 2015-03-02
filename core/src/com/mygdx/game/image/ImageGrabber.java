@@ -11,10 +11,9 @@ import java.net.URL;
 
 public class ImageGrabber {
     public FileHandle grab(String url) throws IOException {
-        String folder = ".";
         String fileName = url.substring(url.lastIndexOf("/") + 1);
         InputStream is = new URL(url).openStream();
-        FileHandle mainImageFile = Gdx.files.local(folder + fileName);
+        FileHandle mainImageFile = Gdx.files.local(fileName);
         mainImageFile.write(is, false);
         is.close();
         return mainImageFile;
