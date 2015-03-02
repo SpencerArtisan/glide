@@ -1,14 +1,13 @@
 package com.mygdx.game.image;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import javafx.scene.text.TextAlignment;
 
-import java.util.*;
 import java.util.List;
 
 public class ImageArea extends Table {
-    public static final int WIDTH = 250;
+    public static final float WIDTH = 250;
     private TextButton importTextButton;
     private ImageAreaModel model;
     private Skin skin;
@@ -34,7 +33,23 @@ public class ImageArea extends Table {
             add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
             row();
             add(new TextField(image.name(), skin)).width(WIDTH);
+            row();
+            add(createSizeArea(image));
         }
+    }
+
+    private Table createSizeArea(GameImage image) {
+        Table table = new Table();
+        addNumberTextField(image.getWidth(), table);
+        table.add(new Label(" x ", skin)).width(WIDTH * 0.2f);
+        addNumberTextField(image.getHeight(), table);
+        return table;
+    }
+
+    private void addNumberTextField(float value, Table table) {
+        TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
+        textField.setAlignment(Align.center);
+        table.add(textField).width(WIDTH * 0.4f);
     }
 
     public TextButton importTextButton() {
