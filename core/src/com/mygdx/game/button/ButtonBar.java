@@ -1,13 +1,13 @@
 package com.mygdx.game.button;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.mygdx.game.textarea.command.Command;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 public class ButtonBar extends HorizontalGroup {
     private Skin skin;
@@ -30,36 +30,42 @@ public class ButtonBar extends HorizontalGroup {
         addActor(new Image(skin, imageName));
     }
 
-    public void addTextButton(String text, Supplier<Command> commandSupplier) {
-        Command command = commandSupplier.get();
-        TextButton button = new TextButton(text, skin);
-        button.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                command.execute();
-            }
-        });
-        boolean enable = command.canExecute();
-        button.setDisabled(!enable);
-        button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
-        addActor(button);
-    }
-
     public void addTextButton(String text, Runnable action, BooleanSupplier enabled) {
         TextButton button = new TextButton(text, skin);
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 action.run();
             }
+
+            public boolean handle(Event event) {
+                if (event instanceof ModelChange) {
+                    boolean enable = enabled.getAsBoolean();
+                    button.setDisabled(!enable);
+                    button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
+                }
+                return super.handle(event);
+            }
         });
-        boolean enable = enabled.getAsBoolean();
-        button.setDisabled(!enable);
-        button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
         addActor(button);
+        refreshEnabledStatuses();
     }
 
     public void addImageButton(String text, String styleName) {
         ImageTextButton button = new ImageTextButton(text, skin, styleName);
         addActor(button);
+        refreshEnabledStatuses();
     }
 
+    public void refreshEnabledStatuses() {
+        SnapshotArray<Actor> children = getChildren();
+        for (Actor child : children) {
+            if (child instanceof Button) {
+                Button button = (Button) child;
+                button.fire(new ModelChange());
+            }
+        }
+    }
+
+    private static class ModelChange extends Event {
+    }
 }

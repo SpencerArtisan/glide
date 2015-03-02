@@ -5,6 +5,8 @@ import com.mygdx.game.XY;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -12,6 +14,8 @@ public class TextAreaModel {
 	private String text;
 	private Caret caret;
 	private ColorCoder colorCoder;
+    private List<Runnable> listeners = new ArrayList<>();
+
 	
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
@@ -38,9 +42,10 @@ public class TextAreaModel {
         if (state.caretSelection != null) {
             caret().setSelection(state.caretSelection.getLeft(), state.caretSelection.getRight());
         }
+        informListeners();
     }
 
-	public String getText() {
+    public String getText() {
 		return text;
 	}
 	
@@ -54,10 +59,11 @@ public class TextAreaModel {
 
 	public void setText(String text) {
 		this.text = text;
+        informListeners();
 	}
 
 	public void clear() {
-		text = "";
+		setText("");
 	}
 
 	public String insert(String characters) {
@@ -71,7 +77,7 @@ public class TextAreaModel {
             toIndex = fromIndex;
         }
         String deleted = text.substring(fromIndex, toIndex);
-        text = text.substring(0, fromIndex) + characters + text.substring(toIndex, text.length());
+        setText(text.substring(0, fromIndex) + characters + text.substring(toIndex, text.length()));
         positionCaret(fromIndex + characters.length());
         return deleted;
 	}
@@ -88,7 +94,7 @@ public class TextAreaModel {
             positionCaret(fromIndex);
         }
         String deleted = text.substring(fromIndex, toIndex);
-        text = text.substring(0, fromIndex) + text.substring(toIndex, text.length());
+        setText(text.substring(0, fromIndex) + text.substring(toIndex, text.length()));
         return deleted;
 	}
 
@@ -103,7 +109,7 @@ public class TextAreaModel {
 
     public String getCurrentLine() {
         XY<Integer> location = caret().location();
-        int fromIndex = getIndex(new XY<Integer>(0, location.y));
+        int fromIndex = getIndex(new XY<>(0, location.y));
         int toIndex = fromIndex + currentLineLength();
         return text.substring(fromIndex, toIndex);
     }
@@ -154,6 +160,15 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
+    public void addListener(Runnable listener) {
+        listeners.add(listener);
+    }
+
+    private void informListeners() {
+        for (Runnable listener : listeners) {
+            listener.run();
+        }
+    }
 
     public class Caret {
 		private XY<Integer> location;
@@ -164,7 +179,7 @@ public class TextAreaModel {
 		}
 
         private Caret(int x, int y) {
-			this.location = new XY<Integer>(x, y);
+			this.location = new XY<>(x, y);
 		}
 
 		public XY<Integer> location() {
@@ -182,11 +197,12 @@ public class TextAreaModel {
 		}
 
         private void setLocation(int x, int y) {
-			setLocation(new XY<Integer>(x, y));
+			setLocation(new XY<>(x, y));
 		}
 
         public void clearSelection() {
             selection = null;
+            informListeners();
         }
 
         public void setSelection(XY<Integer> start, XY<Integer> end) {
@@ -196,6 +212,7 @@ public class TextAreaModel {
             } else {
                 selection = Pair.of(end, start);
             }
+            informListeners();
         }
 
 		private int getX() {

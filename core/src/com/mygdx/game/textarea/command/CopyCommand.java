@@ -10,6 +10,11 @@ public class CopyCommand extends AbstractCommand {
     }
 
     @Override
+    public boolean canExecute() {
+        return model.caret().isAreaSelected();
+    }
+
+    @Override
     public void execute() {
         if (model.caret().isAreaSelected()) {
             getClipboard().setContents(model.getSelection());

@@ -24,9 +24,21 @@ public class CopyCommandTest {
     }
 
     @Test
+    public void canExecuteWhenSelection() {
+        model.setText("hello\nthere");
+        model.caret().setSelection(new XY<>(3, 0), new XY<>(2, 1));
+        assertThat(command.canExecute()).isTrue();
+    }
+
+    @Test
+    public void cannotExecuteWhenNoSelection() {
+        assertThat(command.canExecute()).isFalse();
+    }
+
+    @Test
     public void executeWhenSelection() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY<>(3, 0), new XY<>(2, 1));
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("lo\nth");
         assertThat(model.getText()).isEqualTo("hello\nthere");

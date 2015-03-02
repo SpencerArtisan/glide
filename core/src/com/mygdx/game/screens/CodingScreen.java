@@ -62,13 +62,14 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("tardis2");
         buttonBar.addTextButton("> Future", commandHistory::redo, commandHistory::canRedo);
         buttonBar.addSpacer(14);
-        buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
+        buttonBar.addTextButton("Copy", () -> commandHistory.execute(new CopyCommand(model)), new CopyCommand(model)::canExecute);
         buttonBar.addImage("copy");
-        buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
+        buttonBar.addTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)), new PasteCommand(model)::canExecute);
         buttonBar.addSpacer(14);
         buttonBar.addImageButton(" Save", "save-button");
         buttonBar.addSpacer(8);
         buttonBar.addImageButton(" Run", "run-button");
+        model.addListener(buttonBar::refreshEnabledStatuses);
     }
 
     private void createImageArea() {
