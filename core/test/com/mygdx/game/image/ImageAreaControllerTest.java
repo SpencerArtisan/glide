@@ -31,6 +31,6 @@ public class ImageAreaControllerTest {
         FileHandle imageFile = new FileHandle("file");
         when(grabber.grab("url")).thenReturn(imageFile);
         subject.onImageUrlProvided("url");
-        verify(model).add(imageFile, "url");
+        verify(model).add(imageFile);
     }
 }

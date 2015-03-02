@@ -3,7 +3,8 @@ package com.mygdx.game.image;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.List;
 
 public class ImageArea extends Table {
     public static final int WIDTH = 250;
@@ -26,9 +27,8 @@ public class ImageArea extends Table {
         row();
         add(importTextButton).width(WIDTH);
 
-        Collection<FileHandle> imageFiles = model.getImages().values();
-        for (FileHandle imageFile : imageFiles) {
-            ImageFromFile image = new ImageFromFile(imageFile.path());
+        List<GameImage> imageFiles = model.getImages();
+        for (GameImage image : imageFiles) {
             row();
             add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth());
         }

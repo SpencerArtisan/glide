@@ -39,6 +39,9 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        testCompile "junit:junit:4.12"
+        testCompile 'org.mockito:mockito-all:2.0.2-beta'
+        testCompile 'org.assertj:assertj-core:1.7.1'
     }
 }
 

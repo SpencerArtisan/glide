@@ -28,7 +28,7 @@ public class ImageAreaController {
     void onImageUrlProvided(String url) {
         try {
             FileHandle imageFile = grabber.grab(url);
-            model.add(imageFile, url);
+            model.add(imageFile);
             view.refresh();
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
