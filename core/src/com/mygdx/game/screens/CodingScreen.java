@@ -14,12 +14,16 @@ import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
+import com.mygdx.game.textarea.command.Command;
 import com.mygdx.game.textarea.command.CommandHistory;
 import com.mygdx.game.textarea.command.CopyCommand;
 import com.mygdx.game.textarea.command.PasteCommand;
 
+import java.util.function.Consumer;
+
 public class CodingScreen extends ScreenAdapter {
-	private Stage stage;
+    private final Skin skin;
+    private Stage stage;
     private Table table;
     private TextAreaModel model;
     private ScrollableTextArea textArea;
@@ -30,12 +34,12 @@ public class CodingScreen extends ScreenAdapter {
     public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
 
-		Skin skin = resourceManager.getSkin();
+		skin = resourceManager.getSkin();
 
-        createButtonBar(skin);
-        createImageArea(skin);
-        createTextArea(program, skin);
-        layoutScreen(skin);
+        createTextArea(program);
+        createButtonBar();
+        createImageArea();
+        layoutScreen();
 
 		stage.addActor(table);
 		stage.setKeyboardFocus(textArea.textArea());
@@ -43,7 +47,7 @@ public class CodingScreen extends ScreenAdapter {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-    private void layoutScreen(Skin skin) {
+    private void layoutScreen() {
         table = new Table();
         table.background(skin.getDrawable("solarizedLine"));
         table.row();
@@ -55,33 +59,13 @@ public class CodingScreen extends ScreenAdapter {
         table.pack();
     }
 
-    private void createButtonBar(Skin skin) {
-        TextButton undoButton = new TextButton("Past <", skin);
-        TextButton redoButton = new TextButton("> Future", skin);
-        ImageTextButton runButton = new ImageTextButton(" Run", skin, "run-button");
-        ImageTextButton saveButton = new ImageTextButton(" Save", skin, "save-button");
-        TextButton copyButton = new TextButton("Copy", skin);
-        TextButton pasteButton = new TextButton("Paste", skin);
-        undoButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                commandHistory.undo();
-            }
-        });
-        redoButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                commandHistory.redo();
-            }
-        });
-        copyButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                commandHistory.execute(new CopyCommand(model));
-            }
-        });
-        pasteButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                commandHistory.execute(new PasteCommand(model));
-            }
-        });
+    private void createButtonBar() {
+        ImageTextButton runButton = createImageButton(" Run", "run-button");
+        ImageTextButton saveButton = createImageButton(" Save", "save-button");
+        TextButton undoButton = createTextButton("Past <", commandHistory::undo);
+        TextButton redoButton = createTextButton("> Future", commandHistory::redo);
+        TextButton copyButton = createTextButton("Copy", () -> commandHistory.execute(new CopyCommand(model)));
+        TextButton pasteButton = createTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)));
 
         buttonBar = new HorizontalGroup();
         buttonBar.pad(18);
@@ -100,6 +84,21 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addActor(runButton);
     }
 
+    private TextButton createTextButton(String text, Runnable action) {
+        TextButton button = new TextButton(text, skin);
+        button.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                action.run();
+            }
+        });
+        return button;
+    }
+
+    private ImageTextButton createImageButton(String text, String styleName) {
+        ImageTextButton button = new ImageTextButton(text, skin, styleName);
+        return button;
+    }
+
     private Actor spacer(final int width) {
         return new Actor() {
             public float getWidth() {
@@ -108,11 +107,11 @@ public class CodingScreen extends ScreenAdapter {
         };
     }
 
-    private void createImageArea(Skin skin) {
+    private void createImageArea() {
         imageArea = new ImageArea(skin);
     }
 
-    private void createTextArea(Program program, Skin skin) {
+    private void createTextArea(Program program) {
         model = new TextAreaModel(program.code(), new GroovyColorCoder());
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
@@ -129,6 +128,6 @@ public class CodingScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		textArea.setSize(width, height);
+//		textArea.setSize(width, height);
 	}  	  
 }
