@@ -6,16 +6,24 @@ public class CommandHistory {
     private LinkedList<Command> executedCommands = new LinkedList<Command>();
     private int lastCommandIndex = -1;
 
+    public boolean canRedo() {
+        return lastCommandIndex < executedCommands.size() - 1;
+    }
+
     public void redo() {
-        if (lastCommandIndex < executedCommands.size() - 1) {
+        if (canRedo()) {
             Command nextCommand = executedCommands.get(lastCommandIndex + 1);
             lastCommandIndex++;
             nextCommand.execute();
         }
     }
 
+    public boolean canUndo() {
+        return lastCommandIndex >= 0;
+    }
+
     public void undo() {
-        if (lastCommandIndex >= 0) {
+        if (canUndo()) {
             Command lastCommand = executedCommands.get(lastCommandIndex);
             lastCommandIndex--;
             lastCommand.undo();

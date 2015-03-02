@@ -25,6 +25,24 @@ public class PasteCommandTest {
     }
 
     @Test
+    public void canExecuteWhenClipboardPopulated() {
+        clipboard.setContents("clipboard");
+        assertThat(command.canExecute()).isTrue();
+    }
+
+    @Test
+    public void cannotExecuteWhenClipboardNull() {
+        clipboard.setContents(null);
+        assertThat(command.canExecute()).isFalse();
+    }
+
+    @Test
+    public void cannotExecuteWhenClipboardEmpty() {
+        clipboard.setContents("");
+        assertThat(command.canExecute()).isFalse();
+    }
+
+    @Test
     public void executeWhenSelection() {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));

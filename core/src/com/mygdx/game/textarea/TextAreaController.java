@@ -10,7 +10,6 @@ import com.mygdx.game.textarea.command.*;
 import java.awt.event.KeyEvent;
 
 public class TextAreaController extends ClickListener {
-
     private TextAreaModel model;
     private ScrollableTextArea view;
     private CommandHistory commandHistory;
@@ -49,7 +48,6 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//        super.touchUp(event, x, y, pointer, button);
         if (isOver(event.getListenerActor(), x, y)) {
             XY<Integer> caretLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
             if (dragging) {
@@ -63,8 +61,6 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//        super.touchDown(event, x, y, pointer, button);
-
         if (isOver(event.getListenerActor(), x, y)) {
             model.caret().clearSelection();
             this.touchDownLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
@@ -74,7 +70,6 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
-//        super.touchDragged(event, x, y, pointer);
         if (isOver(event.getListenerActor(), x, y)) {
             dragging = true;
             XY<Integer> dragLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));

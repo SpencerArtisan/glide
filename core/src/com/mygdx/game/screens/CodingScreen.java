@@ -3,23 +3,20 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
+import com.mygdx.game.button.ButtonBar;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
-import com.mygdx.game.textarea.command.Command;
 import com.mygdx.game.textarea.command.CommandHistory;
 import com.mygdx.game.textarea.command.CopyCommand;
 import com.mygdx.game.textarea.command.PasteCommand;
-
-import java.util.function.Consumer;
 
 public class CodingScreen extends ScreenAdapter {
     private final Skin skin;
@@ -28,7 +25,7 @@ public class CodingScreen extends ScreenAdapter {
     private TextAreaModel model;
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
-    private HorizontalGroup buttonBar;
+    private ButtonBar buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
 
     public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
@@ -60,51 +57,18 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createButtonBar() {
-        ImageTextButton runButton = createImageButton(" Run", "run-button");
-        ImageTextButton saveButton = createImageButton(" Save", "save-button");
-        TextButton undoButton = createTextButton("Past <", commandHistory::undo);
-        TextButton redoButton = createTextButton("> Future", commandHistory::redo);
-        TextButton copyButton = createTextButton("Copy", () -> commandHistory.execute(new CopyCommand(model)));
-        TextButton pasteButton = createTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)));
-
-        buttonBar = new HorizontalGroup();
-        buttonBar.pad(18);
-        buttonBar.space(7);
-
-        buttonBar.addActor(undoButton);
-        buttonBar.addActor(new Image(skin, "tardis2"));
-        buttonBar.addActor(redoButton);
-        buttonBar.addActor(spacer(14));
-        buttonBar.addActor(copyButton);
-        buttonBar.addActor(new Image(skin, "copy"));
-        buttonBar.addActor(pasteButton);
-        buttonBar.addActor(spacer(14));
-        buttonBar.addActor(saveButton);
-        buttonBar.addActor(spacer(8));
-        buttonBar.addActor(runButton);
-    }
-
-    private TextButton createTextButton(String text, Runnable action) {
-        TextButton button = new TextButton(text, skin);
-        button.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                action.run();
-            }
-        });
-        return button;
-    }
-
-    private ImageTextButton createImageButton(String text, String styleName) {
-        ImageTextButton button = new ImageTextButton(text, skin, styleName);
-        return button;
-    }
-
-    private Actor spacer(final int width) {
-        return new Actor() {
-            public float getWidth() {
-                return width;
-            }
-        };
+        buttonBar = new ButtonBar(skin);
+        buttonBar.addTextButton("Past <", commandHistory::undo, commandHistory::canUndo);
+        buttonBar.addImage("tardis2");
+        buttonBar.addTextButton("> Future", commandHistory::redo, commandHistory::canRedo);
+        buttonBar.addSpacer(14);
+        buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
+        buttonBar.addImage("copy");
+        buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
+        buttonBar.addSpacer(14);
+        buttonBar.addImageButton(" Save", "save-button");
+        buttonBar.addSpacer(8);
+        buttonBar.addImageButton(" Run", "run-button");
     }
 
     private void createImageArea() {

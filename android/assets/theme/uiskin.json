@@ -20,7 +20,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
     solarizedError: { name: white, color: { r: 0.86275, g: 0.19608, b: 0.18431, a: 0.6 } }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-    default: { font: default-font, fontColor: white, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown },
+    default: { font: default-font, fontColor: white, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
 	big: { font: big-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {

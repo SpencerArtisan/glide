@@ -2,6 +2,7 @@ package com.mygdx.game.textarea.command;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
+import com.google.common.base.Strings;
 import com.mygdx.game.textarea.TextAreaModel;
 
 public class PasteCommand extends AbstractCommand {
@@ -10,8 +11,15 @@ public class PasteCommand extends AbstractCommand {
     }
 
     @Override
+    public boolean canExecute() {
+        return !Strings.isNullOrEmpty(getClipboard().getContents());
+    }
+
+    @Override
     public void execute() {
-        model.insert(getClipboard().getContents());
+        if (canExecute()) {
+            model.insert(getClipboard().getContents());
+        }
     }
 
     public Clipboard getClipboard() {

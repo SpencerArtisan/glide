@@ -15,4 +15,9 @@ public abstract class AbstractCommand implements Command {
     public void undo() {
         model.setState(state);
     }
+
+    @Override
+    public boolean canExecute() {
+        return true;
+    }
 }
