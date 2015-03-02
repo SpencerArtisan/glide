@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.util.Collection;
 
 public class ImageArea extends Table {
-    public static final int WIDTH = 260;
+    public static final int WIDTH = 250;
     private TextButton importTextButton;
     private ImageAreaModel model;
     private Skin skin;

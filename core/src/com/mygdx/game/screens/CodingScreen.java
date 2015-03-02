@@ -27,12 +27,6 @@ public class CodingScreen extends ScreenAdapter {
 	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
 
-//		ImageArea imageArea = new ImageArea();
-//		SplitPaneStyle spStyle = new SplitPane.SplitPaneStyle();
-//		spStyle.handle = new TextureRegionDrawable(new TextureRegion(
-//				new Texture(Gdx.files.internal("images/divider.png"))));
-//		SplitPane sp = new SplitPane(textArea, imageArea, false, spStyle);
-
 		Skin skin = resourceManager.getSkin();
 
         createButtonBar(skin);
@@ -51,7 +45,7 @@ public class CodingScreen extends ScreenAdapter {
         table.background(skin.getDrawable("solarizedLine"));
         table.row();
         table.add(textArea).expand().fill();
-        table.add(imageArea).width(300).expandY().fillY();
+        table.add(imageArea).width(280).expandY().fillY();
         table.row();
         table.add(buttonBar).colspan(2).expandX().fillX();
         table.setFillParent(true);
@@ -62,7 +56,7 @@ public class CodingScreen extends ScreenAdapter {
         TextButton undoButton = new TextButton("Past <", skin);
         TextButton redoButton = new TextButton("> Future", skin);
         ImageTextButton runButton = new ImageTextButton(" Run", skin, "run-button");
-        ImageTextButton saveButton = new ImageTextButton("Save", skin, "save-button");
+        ImageTextButton saveButton = new ImageTextButton(" Save", skin, "save-button");
         TextButton copyButton = new TextButton("Copy", skin);
         TextButton pasteButton = new TextButton("Paste", skin);
         undoButton.addListener(new ChangeListener() {
