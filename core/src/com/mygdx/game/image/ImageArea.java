@@ -13,7 +13,7 @@ public class ImageArea extends Table {
 
     public ImageArea(Skin skin) {
         this.skin = skin;
-        importTextButton = new TextButton("Add from clipboard", skin, "small");
+        importTextButton = new TextButton("Add from clipboard", skin);
         model = new ImageAreaModel();
         layout(skin);
         new ImageAreaController(new ImageGrabber(), this, model);

@@ -52,15 +52,15 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void createNewGameButton(Skin skin) {
-		newGameButton = new TextButton("    New Game    ", skin);
+		newGameButton = new TextButton("    New Game    ", skin, "big");
 	}
 
 	private void createContinueGameButton(Skin skin) {
-		continueGameButton = new TextButton("  Continue Game  ", skin);
+		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
 	}
 
 	private void createExploreGamesButton(Skin skin) {
-		exploreGamesButton = new TextButton("  Explore Games  ", skin);
+		exploreGamesButton = new TextButton("  Explore Games  ", skin, "big");
 	}
 
 	private void animate(Label title) {
