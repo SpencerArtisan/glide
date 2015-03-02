@@ -15,16 +15,19 @@ import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 import com.mygdx.game.textarea.command.CommandHistory;
+import com.mygdx.game.textarea.command.CopyCommand;
+import com.mygdx.game.textarea.command.PasteCommand;
 
 public class CodingScreen extends ScreenAdapter {
 	private Stage stage;
     private Table table;
+    private TextAreaModel model;
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
     private HorizontalGroup buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
-	
-	public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
+
+    public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
 		this.stage = new Stage(viewport);
 
 		Skin skin = resourceManager.getSkin();
@@ -69,6 +72,16 @@ public class CodingScreen extends ScreenAdapter {
                 commandHistory.redo();
             }
         });
+        copyButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                commandHistory.execute(new CopyCommand(model));
+            }
+        });
+        pasteButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                commandHistory.execute(new PasteCommand(model));
+            }
+        });
 
         buttonBar = new HorizontalGroup();
         buttonBar.pad(18);
@@ -100,7 +113,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createTextArea(Program program, Skin skin) {
-        TextAreaModel model = new TextAreaModel(program.code(), new GroovyColorCoder());
+        model = new TextAreaModel(program.code(), new GroovyColorCoder());
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
 
