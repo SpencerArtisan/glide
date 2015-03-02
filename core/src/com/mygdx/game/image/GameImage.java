@@ -10,12 +10,15 @@ public class GameImage extends Image {
     private FileHandle file;
 
     public GameImage(FileHandle file) {
+        super(getTextureRegion(file));
         this.file = file;
+    }
+
+    private static TextureRegion getTextureRegion(FileHandle file) {
         Texture texture = new Texture(file);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        textureRegion = new TextureRegion(texture);
-        setSize(texture.getWidth(), texture.getHeight());
-
+        return new TextureRegion(texture);
+//        setSize(texture.getWidth(), texture.getHeight());
     }
 
     public String name() {
