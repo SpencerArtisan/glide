@@ -2,17 +2,18 @@ package com.mygdx.game.image;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
-public class ImageArea extends Table {
+public class ImageArea extends ScrollPane {
     public static final float WIDTH = 250;
     private TextButton importTextButton;
     private ImageAreaModel model;
     private Skin skin;
 
     public ImageArea(Skin skin) {
+        super(new Table(), skin);
+
         this.skin = skin;
         importTextButton = new TextButton("Add from clipboard", skin);
         model = new ImageAreaModel();
@@ -21,20 +22,21 @@ public class ImageArea extends Table {
     }
 
     private void layout(Skin skin) {
-        top();
-        row();
-        add(new Label("Game images", skin)).padTop(20).padBottom(20);
-        row();
-        add(importTextButton).width(WIDTH);
+        Table table = (Table) getWidget();
+        table.top();
+        table.row();
+        table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
+        table.row();
+        table.add(importTextButton).width(WIDTH);
 
         List<GameImage> imageFiles = model.getImages();
         for (GameImage image : imageFiles) {
-            row();
-            add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
-            row();
-            add(new TextField(image.name(), skin)).width(WIDTH);
-            row();
-            add(createSizeArea(image));
+            table.row();
+            table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
+            table.row();
+            table.add(new TextField(image.name(), skin)).width(WIDTH);
+            table.row();
+            table.add(createSizeArea(image));
         }
     }
 
@@ -57,7 +59,7 @@ public class ImageArea extends Table {
     }
 
     public void refresh() {
-        reset();
+        ((Table) getWidget()).reset();
         layout(skin);
     }
 }
