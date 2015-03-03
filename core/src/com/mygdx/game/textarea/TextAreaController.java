@@ -3,6 +3,7 @@ package com.mygdx.game.textarea;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.XY;
 import com.mygdx.game.textarea.command.*;
@@ -64,6 +65,8 @@ public class TextAreaController extends ClickListener {
         if (isOver(event.getListenerActor(), x, y)) {
             model.caret().clearSelection();
             this.touchDownLocation = view.worldPositionToCaretLocation(new XY<Integer>((int) x, (int) y));
+            Stage stage = view.getStage();
+            if (stage != null) stage.setKeyboardFocus(view);
         }
         return true;
     }
