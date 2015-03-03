@@ -43,6 +43,25 @@ public class ImageAreaModelTest extends Game {
         assertThat(image.getHeight()).isEqualTo(286);
     }
 
+    @Test
+    public void it_AddsMultipleImages() {
+        URL imageUrl = this.getClass().getResource("planet.jpg");
+        FileHandle imageFile = new FileHandle(imageUrl.getPath());
+        subject.add(imageFile);
+        subject.add(imageFile);
+        assertThat(subject.getImages().size()).isEqualTo(2);
+
+        GameImage image = subject.getImages().get(0);
+        assertThat(image.name()).isEqualTo("planet.jpg");
+        assertThat(image.getWidth()).isEqualTo(400);
+        assertThat(image.getHeight()).isEqualTo(286);
+
+        image = subject.getImages().get(0);
+        assertThat(image.name()).isEqualTo("planet.jpg");
+        assertThat(image.getWidth()).isEqualTo(400);
+        assertThat(image.getHeight()).isEqualTo(286);
+    }
+
     @Override
     public void create() {
         JUnitCore core = new JUnitCore();
