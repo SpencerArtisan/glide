@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.App;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.button.ButtonBar;
 import com.mygdx.game.code.Program;
@@ -85,7 +86,8 @@ public class CodingScreen extends ScreenAdapter {
     public void render(float delta) { 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                                                                                
+
+        App.tweenManager.update(delta);
         stage.act(Math.min(delta, 1 / 60f));
         stage.draw();
     }

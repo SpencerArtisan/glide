@@ -1,24 +1,28 @@
 package com.mygdx.game;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.code.Program;
-import com.mygdx.game.image.GameImage;
 import com.mygdx.game.screens.CodingScreen;
 import com.mygdx.game.screens.WelcomeScreen;
-
-import java.net.URL;
 
 public class App extends Game {
 	private Viewport viewport;
 	private ResourceManager resourceManager;
-	
-	@Override
+    public static TweenManager tweenManager;
+
+    @Override
 	public void create () {
+        tweenManager = new TweenManager();
+        Tween.registerAccessor(Cell.class, new CellAccessor());
+
         viewport = new ScreenViewport();
 		resourceManager = new ResourceManager();
 		final Program program = new Program();

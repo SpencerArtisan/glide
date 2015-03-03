@@ -20,6 +20,7 @@ public class ImageAreaController {
         this.model = model;
         view.importTextButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+
                 onImageUrlProvided(Gdx.app.getClipboard().getContents());
             }
         });
@@ -31,7 +32,7 @@ public class ImageAreaController {
             model.add(imageFile);
             view.refresh();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            view.showFailure();
         }
     }
 }

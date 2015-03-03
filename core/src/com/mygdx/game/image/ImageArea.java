@@ -1,7 +1,16 @@
 package com.mygdx.game.image;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.equations.Quad;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.mygdx.game.App;
+import com.mygdx.game.CellAccessor;
 
 import java.util.List;
 
@@ -10,6 +19,7 @@ public class ImageArea extends ScrollPane {
     private TextButton importTextButton;
     private ImageAreaModel model;
     private Skin skin;
+    private Cell<TextButton> cell;
 
     public ImageArea(Skin skin) {
         super(new Table(), skin);
@@ -27,7 +37,7 @@ public class ImageArea extends ScrollPane {
         table.row();
         table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
         table.row();
-        table.add(importTextButton).width(WIDTH);
+        cell = table.add(importTextButton).width(WIDTH);
 
         List<GameImage> imageFiles = model.getImages();
         for (GameImage image : imageFiles) {
@@ -61,5 +71,19 @@ public class ImageArea extends ScrollPane {
     public void refresh() {
         ((Table) getWidget()).reset();
         layout(skin);
+    }
+
+    public void showFailure() {
+        importTextButton.setText("Dodgy image!");
+
+        importTextButton.addAction(
+                Actions.sequence(
+                Actions.repeat(10,
+                    Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
+                                     Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
+                                     Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
+                    Actions.run(() -> {
+                        importTextButton.setText("Add from clipboard");
+                    })));
     }
 }
