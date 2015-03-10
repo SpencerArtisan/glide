@@ -33,6 +33,10 @@ public class GameImage {
         return name;
     }
 
+    public int maxNameLength() {
+        return MAX_NAME_LENGTH;
+    }
+
     public Image asImage() {
         return image;
     }

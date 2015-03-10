@@ -46,6 +46,7 @@ public class ImageArea extends ScrollPane {
     private TextField createNameArea(GameImage image) {
         TextField textField = new TextField(image.name(), skin);
         textField.setAlignment(Align.center);
+        textField.setMaxLength(image.maxNameLength());
         return textField;
     }
 
