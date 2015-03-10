@@ -32,13 +32,14 @@ public class ImageArea extends ScrollPane {
         table.add(importTextButton).width(WIDTH);
 
         List<GameImage> imageFiles = model.getImages();
-        for (GameImage image : imageFiles) {
+        for (GameImage gameImage : imageFiles) {
+            Image image = gameImage.asImage();
             table.row();
             table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
             table.row();
-            table.add(createNameArea(image)).width(WIDTH);
+            table.add(createNameArea(gameImage)).width(WIDTH);
             table.row();
-            table.add(createSizeArea(image));
+            table.add(createSizeArea(gameImage));
         }
     }
 
@@ -80,8 +81,6 @@ public class ImageArea extends ScrollPane {
                     Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
                                      Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                      Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
-                    Actions.run(() -> {
-                        importTextButton.setText("Add from clipboard");
-                    })));
+                    Actions.run(() -> importTextButton.setText("Add from clipboard"))));
     }
 }

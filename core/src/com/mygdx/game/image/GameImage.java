@@ -5,23 +5,50 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class GameImage extends Image {
-    private TextureRegion textureRegion;
+public class GameImage {
+    private static int MAX_NAME_LENGTH = 16;
+
+    private Image image;
     private FileHandle file;
+    private String name;
+    private int width;
+    private int height;
 
     public GameImage(FileHandle file) {
-        super(getTextureRegion(file));
+        createImage(file);
         this.file = file;
+        this.name = generateName();
     }
 
-    private static TextureRegion getTextureRegion(FileHandle file) {
+    private void createImage(FileHandle file) {
         Texture texture = new Texture(file);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        return new TextureRegion(texture);
-//        setSize(texture.getWidth(), texture.getHeight());
+        TextureRegion textureRegion = new TextureRegion(texture);
+        image = new Image(textureRegion);
+        width = texture.getWidth();
+        height = texture.getHeight();
     }
 
     public String name() {
-        return file.name();
+        return name;
+    }
+
+    public Image asImage() {
+        return image;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    private String generateName() {
+        String filename = file.name();
+        int dotIndex = filename.lastIndexOf('.');
+        int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
+        return filename.substring(0, nameLength);
     }
 }

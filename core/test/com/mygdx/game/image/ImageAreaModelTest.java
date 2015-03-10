@@ -38,9 +38,18 @@ public class ImageAreaModelTest extends Game {
         subject.add(imageFile);
         assertThat(subject.getImages().size()).isEqualTo(1);
         GameImage image = subject.getImages().get(0);
-        assertThat(image.name()).isEqualTo("planet.jpg");
-        assertThat(image.getWidth()).isEqualTo(400);
-        assertThat(image.getHeight()).isEqualTo(286);
+        assertThat(image.name()).isEqualTo("planet");
+        assertThat(image.asImage().getWidth()).isEqualTo(400);
+        assertThat(image.asImage().getHeight()).isEqualTo(286);
+    }
+
+    @Test
+    public void it_TruncateLongImageNames() {
+        URL imageUrl = this.getClass().getResource("a-very-long-image-name.jpg");
+        FileHandle imageFile = new FileHandle(imageUrl.getPath());
+        subject.add(imageFile);
+        GameImage image = subject.getImages().get(0);
+        assertThat(image.name()).isEqualTo("a-very-long-imag");
     }
 
     @Test
@@ -52,14 +61,14 @@ public class ImageAreaModelTest extends Game {
         assertThat(subject.getImages().size()).isEqualTo(2);
 
         GameImage image = subject.getImages().get(0);
-        assertThat(image.name()).isEqualTo("planet.jpg");
-        assertThat(image.getWidth()).isEqualTo(400);
-        assertThat(image.getHeight()).isEqualTo(286);
+        assertThat(image.name()).isEqualTo("planet");
+        assertThat(image.asImage().getWidth()).isEqualTo(400);
+        assertThat(image.asImage().getHeight()).isEqualTo(286);
 
         image = subject.getImages().get(0);
-        assertThat(image.name()).isEqualTo("planet.jpg");
-        assertThat(image.getWidth()).isEqualTo(400);
-        assertThat(image.getHeight()).isEqualTo(286);
+        assertThat(image.name()).isEqualTo("planet");
+        assertThat(image.asImage().getWidth()).isEqualTo(400);
+        assertThat(image.asImage().getHeight()).isEqualTo(286);
     }
 
     @Override
