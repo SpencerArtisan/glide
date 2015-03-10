@@ -53,6 +53,16 @@ public class GameImage {
         return height;
     }
 
+    public void setWidth(int newWidth) {
+        this.height = newWidth * this.height / this.width;
+        this.width = newWidth;
+    }
+
+    public void setHeight(int newHeight) {
+        this.width = newHeight * this.width / this.height;
+        this.height = newHeight;
+    }
+
     private String generateName() {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');

@@ -3,6 +3,7 @@ package com.mygdx.game.image;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.io.IOException;
@@ -30,12 +31,39 @@ public class ImageAreaController {
 
     private void addImageAdjustmentBehaviour() {
         for (ImageArea.ImageControls imageControls : view.getImageControlList()) {
-            imageControls.getNameField().addListener(new ChangeListener() {
-                public void changed(ChangeEvent event, Actor actor) {
-                    onImageUrlProvided(Gdx.app.getClipboard().getContents());
-                }
-            });
+            addRenameBehaviour(imageControls);
+            addWidthChangeBehaviour(imageControls);
+            addHeightChangeBehaviour(imageControls);
         }
+    }
+
+    private void addRenameBehaviour(ImageArea.ImageControls imageControls) {
+        imageControls.getNameField().setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                imageControls.getGameImage().setName(textField.getText());
+            }
+        });
+    }
+
+    private void addWidthChangeBehaviour(ImageArea.ImageControls imageControls) {
+        imageControls.getWidthField().setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                imageControls.getGameImage().setWidth(Integer.parseInt(textField.getText()));
+                view.refresh();
+            }
+        });
+    }
+
+    private void addHeightChangeBehaviour(ImageArea.ImageControls imageControls) {
+        imageControls.getHeightField().setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                imageControls.getGameImage().setHeight(Integer.parseInt(textField.getText()));
+                view.refresh();
+            }
+        });
     }
 
     void onImageUrlProvided(String url) {
@@ -43,6 +71,7 @@ public class ImageAreaController {
             FileHandle imageFile = grabber.grab(url);
             model.add(imageFile);
             view.refresh();
+            addImageAdjustmentBehaviour();
         } catch (IOException e) {
             view.showFailure();
         }

@@ -59,25 +59,20 @@ public class ImageArea extends ScrollPane {
     }
 
     private ImageControls createImageControls(GameImage gameImage) {
-        return new ImageControls(createNameField(gameImage),
-                                 createSizeField(gameImage, gameImage.getWidth()),
-                                 createSizeField(gameImage, gameImage.getHeight()));
+        return new ImageControls(gameImage,
+                                 createNameField(gameImage),
+                                 createSizeField(gameImage.getWidth()),
+                                 createSizeField(gameImage.getHeight()));
     }
 
     private TextField createNameField(GameImage image) {
         TextField textField = new TextField(image.name(), skin);
         textField.setAlignment(Align.center);
         textField.setMaxLength(image.maxNameLength());
-//        textField.setTextFieldListener(new TextField.TextFieldListener() {
-//            @Override
-//            public void keyTyped(TextField textField, char c) {
-//                image.setName(textField.getText());
-//            }
-//        });
         return textField;
     }
 
-    private TextField createSizeField(GameImage gameImage, float value) {
+    private TextField createSizeField(float value) {
         TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
         textField.setAlignment(Align.center);
         return textField;
@@ -118,14 +113,20 @@ public class ImageArea extends ScrollPane {
 
 
     class ImageControls {
+        private final GameImage gameImage;
         private final TextField nameField;
         private final TextField widthField;
         private final TextField heightField;
 
-        private ImageControls(TextField nameField, TextField widthField, TextField heightField) {
+        private ImageControls(GameImage gameImage, TextField nameField, TextField widthField, TextField heightField) {
+            this.gameImage = gameImage;
             this.nameField = nameField;
             this.widthField = widthField;
             this.heightField = heightField;
+        }
+
+        GameImage getGameImage() {
+            return gameImage;
         }
 
         TextField getNameField() {
