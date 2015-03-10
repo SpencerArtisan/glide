@@ -3,9 +3,7 @@ package com.mygdx.game.image;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.io.IOException;
 
@@ -18,9 +16,8 @@ public class ImageAreaController {
         this.grabber = grabber;
         this.view = view;
         this.model = model;
-        view.importTextButton().addListener(new ChangeListener() {
+        view.importButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-
                 onImageUrlProvided(Gdx.app.getClipboard().getContents());
             }
         });

@@ -1,16 +1,9 @@
 package com.mygdx.game.image;
 
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.equations.Quad;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.mygdx.game.App;
-import com.mygdx.game.CellAccessor;
 
 import java.util.List;
 
@@ -19,7 +12,6 @@ public class ImageArea extends ScrollPane {
     private TextButton importTextButton;
     private ImageAreaModel model;
     private Skin skin;
-    private Cell<TextButton> cell;
 
     public ImageArea(Skin skin) {
         super(new Table(), skin);
@@ -37,17 +29,23 @@ public class ImageArea extends ScrollPane {
         table.row();
         table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
         table.row();
-        cell = table.add(importTextButton).width(WIDTH);
+        table.add(importTextButton).width(WIDTH);
 
         List<GameImage> imageFiles = model.getImages();
         for (GameImage image : imageFiles) {
             table.row();
             table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
             table.row();
-            table.add(new TextField(image.name(), skin)).width(WIDTH);
+            table.add(createNameArea(image)).width(WIDTH);
             table.row();
             table.add(createSizeArea(image));
         }
+    }
+
+    private TextField createNameArea(GameImage image) {
+        TextField textField = new TextField(image.name(), skin);
+        textField.setAlignment(Align.center);
+        return textField;
     }
 
     private Table createSizeArea(GameImage image) {
@@ -64,7 +62,7 @@ public class ImageArea extends ScrollPane {
         table.add(textField).width(WIDTH * 0.4f);
     }
 
-    public TextButton importTextButton() {
+    public TextButton importButton() {
         return importTextButton;
     }
 

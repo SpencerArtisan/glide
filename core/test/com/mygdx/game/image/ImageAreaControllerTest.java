@@ -22,7 +22,7 @@ public class ImageAreaControllerTest {
     @Before
     public void before() {;
         MockitoAnnotations.initMocks(this);
-        when(view.importTextButton()).thenReturn(importTextButton);
+        when(view.importButton()).thenReturn(importTextButton);
         subject = new ImageAreaController(grabber, view, model);
     }
 
