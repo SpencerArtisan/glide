@@ -16,11 +16,26 @@ public class ImageAreaController {
         this.grabber = grabber;
         this.view = view;
         this.model = model;
+        addImportBehaviour();
+        addImageAdjustmentBehaviour();
+    }
+
+    private void addImportBehaviour() {
         view.importButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 onImageUrlProvided(Gdx.app.getClipboard().getContents());
             }
         });
+    }
+
+    private void addImageAdjustmentBehaviour() {
+        for (ImageArea.ImageControls imageControls : view.getImageControlList()) {
+            imageControls.getNameField().addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    onImageUrlProvided(Gdx.app.getClipboard().getContents());
+                }
+            });
+        }
     }
 
     void onImageUrlProvided(String url) {

@@ -5,89 +5,139 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageArea extends ScrollPane {
     public static final float WIDTH = 250;
-    private TextButton importTextButton;
+    private TextButton importButton;
+    private List<ImageControls> imageControlList = new ArrayList<>();
     private ImageAreaModel model;
     private Skin skin;
 
     public ImageArea(Skin skin) {
         super(new Table(), skin);
-
         this.skin = skin;
-        importTextButton = new TextButton("Add from clipboard", skin);
         model = new ImageAreaModel();
-        layout(skin);
+        layoutControls();
         new ImageAreaController(new ImageGrabber(), this, model);
     }
 
-    private void layout(Skin skin) {
+    private void layoutControls() {
         Table table = (Table) getWidget();
-        table.top();
-        table.row();
-        table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
-        table.row();
-        table.add(importTextButton).width(WIDTH);
+        addHeader(table);
+        addImportButton(table);
 
-        List<GameImage> imageFiles = model.getImages();
-        for (GameImage gameImage : imageFiles) {
-            Image image = gameImage.asImage();
-            table.row();
-            table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
-            table.row();
-            table.add(createNameArea(gameImage)).width(WIDTH);
-            table.row();
-            table.add(createSizeArea(gameImage));
+        for (GameImage gameImage : model.getImages()) {
+            addImageControls(table, gameImage);
         }
     }
 
-    private TextField createNameArea(GameImage image) {
+    private void addHeader(Table table) {
+        table.top();
+        table.row();
+        table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
+    }
+
+    private void addImportButton(Table table) {
+        importButton = new TextButton("Add from clipboard", skin);
+        table.row();
+        table.add(importButton).width(WIDTH);
+    }
+
+    private void addImageControls(Table table, GameImage gameImage) {
+        ImageControls imageControls = createImageControls(gameImage);
+        imageControlList.add(imageControls);
+
+        table.row();
+        Image image = gameImage.asImage();
+        table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
+        table.row();
+        table.add(imageControls.nameField).width(WIDTH);
+        table.row();
+        table.add(createSizeArea(imageControls));
+    }
+
+    private ImageControls createImageControls(GameImage gameImage) {
+        return new ImageControls(createNameField(gameImage),
+                                 createSizeField(gameImage, gameImage.getWidth()),
+                                 createSizeField(gameImage, gameImage.getHeight()));
+    }
+
+    private TextField createNameField(GameImage image) {
         TextField textField = new TextField(image.name(), skin);
         textField.setAlignment(Align.center);
         textField.setMaxLength(image.maxNameLength());
-        textField.setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                image.setName(textField.getText());
-            }
-        });
+//        textField.setTextFieldListener(new TextField.TextFieldListener() {
+//            @Override
+//            public void keyTyped(TextField textField, char c) {
+//                image.setName(textField.getText());
+//            }
+//        });
         return textField;
     }
 
-    private Table createSizeArea(GameImage image) {
+    private TextField createSizeField(GameImage gameImage, float value) {
+        TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
+        textField.setAlignment(Align.center);
+        return textField;
+    }
+
+    private Table createSizeArea(ImageControls imageControls) {
         Table table = new Table();
-        addNumberTextField(image.getWidth(), table);
+        table.add(imageControls.widthField).width(WIDTH * 0.4f);
         table.add(new Label(" x ", skin)).width(WIDTH * 0.2f);
-        addNumberTextField(image.getHeight(), table);
+        table.add(imageControls.heightField).width(WIDTH * 0.4f);
         return table;
     }
 
-    private void addNumberTextField(float value, Table table) {
-        TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
-        textField.setAlignment(Align.center);
-        table.add(textField).width(WIDTH * 0.4f);
+    public TextButton importButton() {
+        return importButton;
     }
 
-    public TextButton importButton() {
-        return importTextButton;
+    public List<ImageControls> getImageControlList() {
+        return imageControlList;
     }
 
     public void refresh() {
         ((Table) getWidget()).reset();
-        layout(skin);
+        layoutControls();
     }
 
     public void showFailure() {
-        importTextButton.setText("Dodgy image!");
+        importButton.setText("Dodgy image!");
 
-        importTextButton.addAction(
+        importButton.addAction(
                 Actions.sequence(
-                Actions.repeat(10,
-                    Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
-                                     Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
-                                     Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
-                    Actions.run(() -> importTextButton.setText("Add from clipboard"))));
+                        Actions.repeat(10,
+                                Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
+                                        Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
+                                        Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
+                        Actions.run(() -> importButton.setText("Add from clipboard"))));
+    }
+
+
+    class ImageControls {
+        private final TextField nameField;
+        private final TextField widthField;
+        private final TextField heightField;
+
+        private ImageControls(TextField nameField, TextField widthField, TextField heightField) {
+            this.nameField = nameField;
+            this.widthField = widthField;
+            this.heightField = heightField;
+        }
+
+        TextField getNameField() {
+            return nameField;
+        }
+
+        TextField getWidthField() {
+            return widthField;
+        }
+
+        TextField getHeightField() {
+            return heightField;
+        }
     }
 }
