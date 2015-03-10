@@ -10,14 +10,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.App;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.button.ButtonBar;
+import com.mygdx.game.code.CodeRunner;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
-import com.mygdx.game.textarea.command.CommandHistory;
-import com.mygdx.game.textarea.command.CopyCommand;
-import com.mygdx.game.textarea.command.PasteCommand;
+import com.mygdx.game.textarea.command.*;
 
 public class CodingScreen extends ScreenAdapter {
     private final Skin skin;
@@ -67,9 +66,11 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)), new PasteCommand(model)::canExecute);
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Save", "save-button");
+        buttonBar.addImageButton(" Save", "save-button", () -> commandHistory.execute(new SaveCommand(model)), new SaveCommand(model)::canExecute);
         buttonBar.addSpacer(8);
-        buttonBar.addImageButton(" Run", "run-button");
+        buttonBar.addImageButton(" Run", "run-button", () -> commandHistory.execute(
+                new RunCommand(model, new CodeRunner())),
+                new RunCommand(model, new CodeRunner())::canExecute);
         model.addListener(buttonBar::refreshEnabledStatuses);
     }
 

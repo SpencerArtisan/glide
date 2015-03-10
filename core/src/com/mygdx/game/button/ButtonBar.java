@@ -32,6 +32,15 @@ public class ButtonBar extends HorizontalGroup {
 
     public void addTextButton(String text, Runnable action, BooleanSupplier enabled) {
         TextButton button = new TextButton(text, skin);
+        addButton(button, action, enabled);
+    }
+
+    public void addImageButton(String text, String styleName, Runnable action, BooleanSupplier enabled) {
+        ImageTextButton button = new ImageTextButton(text, skin, styleName);
+        addButton(button, action, enabled);
+    }
+
+    private void addButton(final Button button, final Runnable action, final BooleanSupplier enabled) {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 action.run();
@@ -46,12 +55,6 @@ public class ButtonBar extends HorizontalGroup {
                 return super.handle(event);
             }
         });
-        addActor(button);
-        refreshEnabledStatuses();
-    }
-
-    public void addImageButton(String text, String styleName) {
-        ImageTextButton button = new ImageTextButton(text, skin, styleName);
         addActor(button);
         refreshEnabledStatuses();
     }
