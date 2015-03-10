@@ -47,6 +47,12 @@ public class ImageArea extends ScrollPane {
         TextField textField = new TextField(image.name(), skin);
         textField.setAlignment(Align.center);
         textField.setMaxLength(image.maxNameLength());
+        textField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                image.setName(textField.getText());
+            }
+        });
         return textField;
     }
 

@@ -33,6 +33,10 @@ public class GameImage {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int maxNameLength() {
         return MAX_NAME_LENGTH;
     }
