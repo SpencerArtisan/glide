@@ -28,7 +28,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     save-button: { font: default-font, fontColor: white, imageUp: save3, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
-	default: { vScroll: default-scroll, hScrollKnob: default-round, hScroll: default-scroll, vScrollKnob: default-round }
+	default: { vScroll: default-scroll, vScrollKnob: default-round, hScrollKnob: default-round-horiz, hScroll: default-scroll }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: { titleFont: default-font, background: default-window, titleFontColor: white },
