@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Clipboard;
 
 import java.io.IOException;
 
@@ -17,6 +18,9 @@ public class ImageAreaController {
         this.grabber = grabber;
         this.view = view;
         this.model = model;
+    }
+
+    public void init() {
         addImportBehaviour();
         addImageAdjustmentBehaviour();
     }
@@ -24,7 +28,7 @@ public class ImageAreaController {
     private void addImportBehaviour() {
         view.importButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                onImageUrlProvided(Gdx.app.getClipboard().getContents());
+                onImageUrlProvided(getClipboard().getContents());
             }
         });
     }
@@ -66,7 +70,7 @@ public class ImageAreaController {
         });
     }
 
-    void onImageUrlProvided(String url) {
+    private void onImageUrlProvided(String url) {
         try {
             FileHandle imageFile = grabber.grab(url);
             model.add(imageFile);
@@ -75,5 +79,9 @@ public class ImageAreaController {
         } catch (IOException e) {
             view.showFailure();
         }
+    }
+
+    protected Clipboard getClipboard() {
+        return Gdx.app.getClipboard();
     }
 }
