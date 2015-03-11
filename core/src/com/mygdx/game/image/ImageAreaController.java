@@ -26,13 +26,6 @@ public class ImageAreaController {
         addImageAdjustmentBehaviour();
     }
 
-    public void onModelChange(GameImage image) {
-        ImageControls imageControls = view.getImageControls(image);
-        imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
-        imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
-        imageControls.getNameField().setText(image.name());
-    }
-
     private void addImportBehaviour() {
         view.importButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -42,11 +35,16 @@ public class ImageAreaController {
     }
 
     private void addImageAdjustmentBehaviour() {
-        for (ImageControls imageControls : view.getImageControlList()) {
-            addRenameBehaviour(imageControls);
-            addWidthChangeBehaviour(imageControls);
-            addHeightChangeBehaviour(imageControls);
+        for (GameImage gameImage : model.getImages()) {
+            addImageAdjustmentBehaviour(gameImage);
         }
+    }
+
+    private void addImageAdjustmentBehaviour(GameImage gameImage) {
+        ImageControls imageControls = view.getImageControls(gameImage);
+        addRenameBehaviour(imageControls);
+        addWidthChangeBehaviour(imageControls);
+        addHeightChangeBehaviour(imageControls);
     }
 
     private void addRenameBehaviour(ImageControls imageControls) {
@@ -82,11 +80,18 @@ public class ImageAreaController {
             FileHandle imageFile = grabber.grab(url);
             GameImage gameImage = model.add(imageFile);
             gameImage.addListener(() -> onModelChange(gameImage));
-            view.refresh();
-            addImageAdjustmentBehaviour();
+            view.onImageAdded(gameImage);
+            addImageAdjustmentBehaviour(gameImage);
         } catch (IOException e) {
             view.showFailure();
         }
+    }
+
+    void onModelChange(GameImage image) {
+        ImageControls imageControls = view.getImageControls(image);
+        imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
+        imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
+        imageControls.getNameField().setText(image.name());
     }
 
     private Integer parseInt(TextField textField) {

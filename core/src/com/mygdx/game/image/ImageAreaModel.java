@@ -1,24 +1,33 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ImageAreaModel {
-    private List<GameImage> images = new ArrayList<>();
+    private Map<String, GameImage> images = new LinkedHashMap<>();
 
     public GameImage add(FileHandle file) {
         GameImage gameImage = new GameImage(file);
-        images.add(gameImage);
+        ensureNameUnique(gameImage);
+        images.put(gameImage.name(), gameImage);
         return gameImage;
     }
 
+    private void ensureNameUnique(GameImage gameImage) {
+        int suffix = 2;
+        String candidateName = gameImage.name();
+        while (images.containsKey(candidateName)) {
+            candidateName = gameImage.name() + suffix;
+            if (candidateName.length() > gameImage.maxNameLength()) {
+                candidateName = candidateName.substring(0, gameImage.maxNameLength() - 1) + suffix;
+            }
+            suffix++;
+        }
+        gameImage.setName(candidateName);
+    }
+
     public List<GameImage> getImages() {
-        return images;
+        return new ArrayList<>(images.values());
     }
 }

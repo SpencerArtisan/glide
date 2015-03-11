@@ -33,9 +33,9 @@ public class ImageAreaControllerTest {
         importButton = TestTextButton.mocking(view.importButton());
         ImageControls imageControls =
                 new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock());
-        when(view.getImageControlList()).thenReturn(Arrays.asList(imageControls));
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
         when(model.add(any())).thenReturn(gameImage);
+        when(model.getImages()).thenReturn(Arrays.asList(gameImage));
         subject = spy(new ImageAreaController(grabber, view, model));
         doReturn(clipboard).when(subject).getClipboard();
         subject.init();
@@ -56,6 +56,19 @@ public class ImageAreaControllerTest {
         public void it_AddsTheImageFromTheClipboardUrl() {
             verify(model).add(imageFile);
         }
+
+        public class WhenTheImportButtonIsClickedAgain {
+            @Before
+            public void before() throws IOException {
+                importButton.fireChanged();
+            }
+
+            @Test
+            public void it_AddsTheImageAgain() {
+                verify(model, times(2)).add(imageFile);
+            }
+        }
+
     }
 
     public class WhenTypingInTheWidthTextBox {

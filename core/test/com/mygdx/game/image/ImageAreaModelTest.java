@@ -65,8 +65,8 @@ public class ImageAreaModelTest extends Game {
         assertThat(image.asImage().getWidth()).isEqualTo(400);
         assertThat(image.asImage().getHeight()).isEqualTo(286);
 
-        image = subject.getImages().get(0);
-        assertThat(image.name()).isEqualTo("planet");
+        image = subject.getImages().get(1);
+        assertThat(image.name()).isEqualTo("planet2");
         assertThat(image.asImage().getWidth()).isEqualTo(400);
         assertThat(image.asImage().getHeight()).isEqualTo(286);
     }
