@@ -12,9 +12,10 @@ import java.util.Map;
 public class ImageAreaModel {
     private List<GameImage> images = new ArrayList<>();
 
-    public void add(FileHandle file) {
+    public GameImage add(FileHandle file) {
         GameImage gameImage = new GameImage(file);
         images.add(gameImage);
+        return gameImage;
     }
 
     public List<GameImage> getImages() {

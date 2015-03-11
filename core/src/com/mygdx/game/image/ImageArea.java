@@ -21,7 +21,8 @@ public class ImageArea extends ScrollPane {
         this.skin = skin;
         model = new ImageAreaModel();
         layoutControls();
-        new ImageAreaController(new ImageGrabber(), this, model);
+        ImageAreaController controller = new ImageAreaController(new ImageGrabber(), this, model);
+        controller.init();
     }
 
     private void layoutControls() {

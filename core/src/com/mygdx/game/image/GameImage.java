@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameImage {
     private static int MAX_NAME_LENGTH = 16;
 
@@ -13,6 +16,7 @@ public class GameImage {
     private String name;
     private int width;
     private int height;
+    private List<Runnable> listeners = new ArrayList<>();
 
     public GameImage(FileHandle file) {
         createImage(file);
@@ -35,6 +39,7 @@ public class GameImage {
 
     public void setName(String name) {
         this.name = name;
+        fireChange();
     }
 
     public int maxNameLength() {
@@ -56,11 +61,19 @@ public class GameImage {
     public void setWidth(int newWidth) {
         this.height = newWidth * this.height / this.width;
         this.width = newWidth;
+        fireChange();
     }
 
     public void setHeight(int newHeight) {
         this.width = newHeight * this.width / this.height;
         this.height = newHeight;
+        fireChange();
+    }
+
+    private void fireChange() {
+        for (Runnable listener : listeners) {
+            listener.run();
+        }
     }
 
     private String generateName() {
@@ -68,5 +81,9 @@ public class GameImage {
         int dotIndex = filename.lastIndexOf('.');
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
         return filename.substring(0, nameLength);
+    }
+
+    public void addListener(Runnable listener) {
+        listeners.add(listener);
     }
 }

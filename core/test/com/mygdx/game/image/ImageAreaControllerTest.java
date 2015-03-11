@@ -35,6 +35,7 @@ public class ImageAreaControllerTest {
                 new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock());
         when(view.getImageControlList()).thenReturn(Arrays.asList(imageControls));
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
+        when(model.add(any())).thenReturn(gameImage);
         subject = spy(new ImageAreaController(grabber, view, model));
         doReturn(clipboard).when(subject).getClipboard();
         subject.init();

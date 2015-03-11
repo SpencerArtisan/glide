@@ -62,7 +62,6 @@ public class ImageAreaController {
             @Override
             public void keyTyped(TextField textField, char c) {
                 imageControls.getGameImage().setWidth(Integer.parseInt(textField.getText()));
-                view.refresh();
             }
         });
     }
@@ -72,7 +71,6 @@ public class ImageAreaController {
             @Override
             public void keyTyped(TextField textField, char c) {
                 imageControls.getGameImage().setHeight(Integer.parseInt(textField.getText()));
-                view.refresh();
             }
         });
     }
@@ -80,7 +78,8 @@ public class ImageAreaController {
     private void onImageUrlProvided(String url) {
         try {
             FileHandle imageFile = grabber.grab(url);
-            model.add(imageFile);
+            GameImage gameImage = model.add(imageFile);
+            gameImage.addListener(() -> onModelChange(gameImage));
             view.refresh();
             addImageAdjustmentBehaviour();
         } catch (IOException e) {
