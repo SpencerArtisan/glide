@@ -25,8 +25,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Stage stage;
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
-	private TextButton exploreGamesButton;
-	
+
 	public WelcomeScreen(Viewport viewport, ResourceManager resourceManager) {
 		super();
 		this.stage = new Stage(viewport);
@@ -36,7 +35,6 @@ public class WelcomeScreen extends ScreenAdapter {
 	    Label title = createTitle(skin);
 	    createNewGameButton(skin);
 	    createContinueGameButton(skin);
-	    createExploreGamesButton(skin);
 		TextureRegionDrawable backgroundRegion = createBackground();
 		layoutScreen(backgroundRegion);		
 		animate(title);
@@ -59,25 +57,19 @@ public class WelcomeScreen extends ScreenAdapter {
 		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
 	}
 
-	private void createExploreGamesButton(Skin skin) {
-		exploreGamesButton = new TextButton("  Explore Games  ", skin, "big");
-	}
-
 	private void animate(Label title) {
 		table.getColor().a = 0f;
 		table.addAction(Actions.fadeIn(2f));
-		title.setPosition(-400, 640);
-		title.addAction(Actions.moveTo(50, 640, 0.6f, Interpolation.pow2));
+		title.setPosition(-400, 660);
+		title.addAction(Actions.moveTo(50, 660, 0.6f, Interpolation.pow2));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
 		table = new Table();
 		table.row();
-		table.add(newGameButton).padTop(150f).colspan(2).fillX();
+		table.add(newGameButton).colspan(2).fillX();
 		table.row();
 		table.add(continueGameButton).padTop(20f).colspan(2);
-		table.row();
-		table.add(exploreGamesButton).padTop(20f).colspan(2);
 		table.background(backgroundRegion);
 		table.setFillParent(true);
 		table.pack();
@@ -91,7 +83,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private Label createTitle(Skin skin) {
-	    return new Label("Welcome to Groovy Planet", skin);
+	    return new Label("Welcome to Planet Burpl", skin);
 	}
 
     @Override
