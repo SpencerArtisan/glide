@@ -48,7 +48,7 @@ public class ImageArea extends ScrollPane {
     }
 
     private void addImageControls(Table table, GameImage gameImage) {
-        ImageControls imageControls = createImageControls(gameImage);
+        ImageControls imageControls = new ImageControls(gameImage, skin);
         imageControlMap.put(gameImage, imageControls);
 
         table.row();
@@ -58,26 +58,6 @@ public class ImageArea extends ScrollPane {
         table.add(imageControls.getNameField()).width(WIDTH);
         table.row();
         table.add(createSizeArea(imageControls));
-    }
-
-    private ImageControls createImageControls(GameImage gameImage) {
-        return new ImageControls(gameImage,
-                                 createNameField(gameImage),
-                                 createSizeField(gameImage.width()),
-                                 createSizeField(gameImage.height()));
-    }
-
-    private TextField createNameField(GameImage image) {
-        TextField textField = new TextField(image.name(), skin);
-        textField.setAlignment(Align.center);
-        textField.setMaxLength(image.maxNameLength());
-        return textField;
-    }
-
-    private TextField createSizeField(float value) {
-        TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
-        textField.setAlignment(Align.center);
-        return textField;
     }
 
     private Table createSizeArea(ImageControls imageControls) {
@@ -96,6 +76,10 @@ public class ImageArea extends ScrollPane {
         return imageControlMap.values();
     }
 
+    public ImageControls getImageControls(GameImage image) {
+        return imageControlMap.get(image);
+    }
+
     public void refresh() {
         ((Table) getWidget()).reset();
         layoutControls();
@@ -111,9 +95,5 @@ public class ImageArea extends ScrollPane {
                                         Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                         Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
                         Actions.run(() -> importButton.setText("Add from clipboard"))));
-    }
-
-    public ImageControls getImageControls(GameImage image) {
-        return imageControlMap.get(image);
     }
 }
