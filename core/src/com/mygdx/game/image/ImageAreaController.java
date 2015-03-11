@@ -34,14 +34,14 @@ public class ImageAreaController {
     }
 
     private void addImageAdjustmentBehaviour() {
-        for (ImageArea.ImageControls imageControls : view.getImageControlList()) {
+        for (ImageControls imageControls : view.getImageControlList()) {
             addRenameBehaviour(imageControls);
             addWidthChangeBehaviour(imageControls);
             addHeightChangeBehaviour(imageControls);
         }
     }
 
-    private void addRenameBehaviour(ImageArea.ImageControls imageControls) {
+    private void addRenameBehaviour(ImageControls imageControls) {
         imageControls.getNameField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
@@ -50,7 +50,7 @@ public class ImageAreaController {
         });
     }
 
-    private void addWidthChangeBehaviour(ImageArea.ImageControls imageControls) {
+    private void addWidthChangeBehaviour(ImageControls imageControls) {
         imageControls.getWidthField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
@@ -60,7 +60,7 @@ public class ImageAreaController {
         });
     }
 
-    private void addHeightChangeBehaviour(ImageArea.ImageControls imageControls) {
+    private void addHeightChangeBehaviour(ImageControls imageControls) {
         imageControls.getHeightField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {

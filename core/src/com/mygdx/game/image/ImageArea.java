@@ -53,7 +53,7 @@ public class ImageArea extends ScrollPane {
         Image image = gameImage.asImage();
         table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
         table.row();
-        table.add(imageControls.nameField).width(WIDTH);
+        table.add(imageControls.getNameField()).width(WIDTH);
         table.row();
         table.add(createSizeArea(imageControls));
     }
@@ -80,9 +80,9 @@ public class ImageArea extends ScrollPane {
 
     private Table createSizeArea(ImageControls imageControls) {
         Table table = new Table();
-        table.add(imageControls.widthField).width(WIDTH * 0.4f);
+        table.add(imageControls.getWidthField()).width(WIDTH * 0.4f);
         table.add(new Label(" x ", skin)).width(WIDTH * 0.2f);
-        table.add(imageControls.heightField).width(WIDTH * 0.4f);
+        table.add(imageControls.getHeightField()).width(WIDTH * 0.4f);
         return table;
     }
 
@@ -109,36 +109,5 @@ public class ImageArea extends ScrollPane {
                                         Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                         Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
                         Actions.run(() -> importButton.setText("Add from clipboard"))));
-    }
-
-
-    class ImageControls {
-        private final GameImage gameImage;
-        private final TextField nameField;
-        private final TextField widthField;
-        private final TextField heightField;
-
-        private ImageControls(GameImage gameImage, TextField nameField, TextField widthField, TextField heightField) {
-            this.gameImage = gameImage;
-            this.nameField = nameField;
-            this.widthField = widthField;
-            this.heightField = heightField;
-        }
-
-        GameImage getGameImage() {
-            return gameImage;
-        }
-
-        TextField getNameField() {
-            return nameField;
-        }
-
-        TextField getWidthField() {
-            return widthField;
-        }
-
-        TextField getHeightField() {
-            return heightField;
-        }
     }
 }
