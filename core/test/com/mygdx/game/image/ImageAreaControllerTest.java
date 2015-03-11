@@ -70,6 +70,30 @@ public class ImageAreaControllerTest {
         }
     }
 
+    public class WhenEmptyingTheWidthTextBox {
+        @Before
+        public void before() {
+            widthField.enter("");
+        }
+
+        @Test
+        public void it_DoesNotChangeTheImageHeight() {
+            verify(gameImage, never()).setWidth(anyInt());
+        }
+    }
+
+    public class WhenEmptyingTheHeightTextBox {
+        @Before
+        public void before() {
+            heightField.enter("");
+        }
+
+        @Test
+        public void it_DoesNotChangeTheImageHeight() {
+            verify(gameImage, never()).setHeight(anyInt());
+        }
+    }
+
     public class WhenTypingInTheHeightTextBox {
         @Before
         public void before() {

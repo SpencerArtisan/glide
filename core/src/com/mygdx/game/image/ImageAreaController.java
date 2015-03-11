@@ -61,8 +61,11 @@ public class ImageAreaController {
         imageControls.getWidthField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
-                imageControls.getGameImage().setWidth(Integer.parseInt(textField.getText()));
+                if (!textField.getText().isEmpty()) {
+                    imageControls.getGameImage().setWidth(Integer.parseInt(textField.getText()));
+                }
             }
+
         });
     }
 
@@ -70,7 +73,9 @@ public class ImageAreaController {
         imageControls.getHeightField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
-                imageControls.getGameImage().setHeight(Integer.parseInt(textField.getText()));
+                if (!textField.getText().isEmpty()) {
+                    imageControls.getGameImage().setHeight(Integer.parseInt(textField.getText()));
+                }
             }
         });
     }
