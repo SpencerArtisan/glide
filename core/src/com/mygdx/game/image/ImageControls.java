@@ -50,6 +50,7 @@ public class ImageControls {
     private static TextField createSizeField(float value, Skin skin) {
         TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
         textField.setAlignment(Align.center);
+        textField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         return textField;
     }
 }
