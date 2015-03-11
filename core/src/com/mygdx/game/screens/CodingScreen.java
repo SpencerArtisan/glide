@@ -14,6 +14,8 @@ import com.mygdx.game.code.CodeRunner;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
+import com.mygdx.game.image.ImageAreaModel;
+import com.mygdx.game.image.ImageGrabber;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 import com.mygdx.game.textarea.command.*;
@@ -27,9 +29,11 @@ public class CodingScreen extends ScreenAdapter {
     private ImageArea imageArea;
     private ButtonBar buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
+    private Program program;
 
     public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
-		this.stage = new Stage(viewport);
+        this.program = program;
+        this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
 
@@ -66,7 +70,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)), new PasteCommand(model)::canExecute);
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Save", "save-button", () -> commandHistory.execute(new SaveCommand(model)), new SaveCommand(model)::canExecute);
+        buttonBar.addImageButton(" Save", "save-button", () -> commandHistory.execute(new SaveCommand(model, program)), new SaveCommand(model, program)::canExecute);
         buttonBar.addSpacer(8);
         buttonBar.addImageButton(" Run", "run-button", () -> commandHistory.execute(
                 new RunCommand(model, new CodeRunner())),
@@ -75,7 +79,9 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        imageArea = new ImageArea(skin);
+        ImageAreaModel imageAreaModel = new ImageAreaModel(program);
+        ImageGrabber imageGrabber = new ImageGrabber(program);
+        imageArea = new ImageArea(imageAreaModel, imageGrabber, skin);
     }
 
     private void createTextArea(Program program) {

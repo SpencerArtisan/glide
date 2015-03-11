@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.google.common.collect.ImmutableMap;
+import com.mygdx.game.code.Program;
 import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -28,7 +29,7 @@ public class ImageAreaModelTest extends Game {
 
     @Before
     public void before() {
-        subject = new ImageAreaModel();
+        subject = new ImageAreaModel(new Program());
     }
 
     @Test

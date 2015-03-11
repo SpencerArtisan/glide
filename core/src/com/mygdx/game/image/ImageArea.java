@@ -3,9 +3,7 @@ package com.mygdx.game.image;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,12 +15,12 @@ public class ImageArea extends ScrollPane {
     private Skin skin;
     private Table table;
 
-    public ImageArea(Skin skin) {
+    public ImageArea(ImageAreaModel model, ImageGrabber grabber, Skin skin) {
         super(new Table(), skin);
         this.skin = skin;
-        model = new ImageAreaModel();
+        this.model = model;
         layoutControls();
-        ImageAreaController controller = new ImageAreaController(new ImageGrabber(), this, model);
+        ImageAreaController controller = new ImageAreaController(grabber, this, model);
         controller.init();
     }
 
