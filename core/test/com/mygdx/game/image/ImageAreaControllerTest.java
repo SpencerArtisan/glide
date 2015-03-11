@@ -77,8 +77,8 @@ public class ImageAreaControllerTest {
         }
 
         @Test
-        public void it_DoesNotChangeTheImageHeight() {
-            verify(gameImage, never()).setWidth(anyInt());
+        public void it_ChangesTheImageWidthToNull() {
+            verify(gameImage).setWidth(null);
         }
     }
 
@@ -89,8 +89,8 @@ public class ImageAreaControllerTest {
         }
 
         @Test
-        public void it_DoesNotChangeTheImageHeight() {
-            verify(gameImage, never()).setHeight(anyInt());
+        public void it_ChangesTheImageHeightToNull() {
+            verify(gameImage).setHeight(null);
         }
     }
 

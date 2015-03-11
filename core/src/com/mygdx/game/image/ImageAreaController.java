@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 
@@ -27,9 +28,9 @@ public class ImageAreaController {
 
     public void onModelChange(GameImage image) {
         ImageControls imageControls = view.getImageControls(image);
-        imageControls.getWidthField().setText("" + image.width());
-        imageControls.getHeightField().setText("" + image.height());
-        imageControls.getNameField().setText("" + image.name());
+        imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
+        imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
+        imageControls.getNameField().setText(image.name());
     }
 
     private void addImportBehaviour() {
@@ -61,9 +62,7 @@ public class ImageAreaController {
         imageControls.getWidthField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
-                if (!textField.getText().isEmpty()) {
-                    imageControls.getGameImage().setWidth(Integer.parseInt(textField.getText()));
-                }
+                imageControls.getGameImage().setWidth(parseInt(textField));
             }
 
         });
@@ -73,9 +72,7 @@ public class ImageAreaController {
         imageControls.getHeightField().setTextFieldListener(new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
-                if (!textField.getText().isEmpty()) {
-                    imageControls.getGameImage().setHeight(Integer.parseInt(textField.getText()));
-                }
+                imageControls.getGameImage().setHeight(parseInt(textField));
             }
         });
     }
@@ -90,6 +87,11 @@ public class ImageAreaController {
         } catch (IOException e) {
             view.showFailure();
         }
+    }
+
+    private Integer parseInt(TextField textField) {
+        String text = textField.getText();
+        return text.isEmpty() ? null : Integer.parseInt(text);
     }
 
     protected Clipboard getClipboard() {

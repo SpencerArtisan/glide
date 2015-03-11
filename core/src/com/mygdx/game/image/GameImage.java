@@ -14,8 +14,10 @@ public class GameImage {
     private Image image;
     private FileHandle file;
     private String name;
-    private int width;
-    private int height;
+    private int originalWidth;
+    private int originalHeight;
+    private Integer width;
+    private Integer height;
     private List<Runnable> listeners = new ArrayList<>();
 
     public GameImage(FileHandle file) {
@@ -31,6 +33,8 @@ public class GameImage {
         image = new Image(textureRegion);
         width = texture.getWidth();
         height = texture.getHeight();
+        originalWidth = width;
+        originalHeight = height;
     }
 
     public String name() {
@@ -50,23 +54,33 @@ public class GameImage {
         return image;
     }
 
-    public int width() {
+    public Integer width() {
         return width;
     }
 
-    public int height() {
+    public Integer height() {
         return height;
     }
 
-    public void setWidth(int newWidth) {
-        this.height = newWidth * this.height / this.width;
-        this.width = newWidth;
+    public void setWidth(Integer newWidth) {
+        if (newWidth != null) {
+            height = newWidth * originalHeight / originalWidth;
+            width = newWidth;
+        } else {
+            height = null;
+            width = null;
+        }
         fireChange();
     }
 
-    public void setHeight(int newHeight) {
-        this.width = newHeight * this.width / this.height;
-        this.height = newHeight;
+    public void setHeight(Integer newHeight) {
+        if (newHeight != null) {
+            width = newHeight * originalWidth / originalHeight;
+            height = newHeight;
+        } else {
+            height = null;
+            width = null;
+        }
         fireChange();
     }
 
