@@ -1,15 +1,11 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.textarea.command.TestClipboard;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.io.IOException;
@@ -38,6 +34,7 @@ public class ImageAreaControllerTest {
         ImageControls imageControls =
                 new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock());
         when(view.getImageControlList()).thenReturn(Arrays.asList(imageControls));
+        when(view.getImageControls(gameImage)).thenReturn(imageControls);
         subject = spy(new ImageAreaController(grabber, view, model));
         doReturn(clipboard).when(subject).getClipboard();
         subject.init();
@@ -84,49 +81,54 @@ public class ImageAreaControllerTest {
         }
     }
 
-
-    public static class TestTextButton {
-        @Mock private TextButton mockButton;
-        private ArgumentCaptor<ChangeListener> captor;
-
-        public static TestTextButton mocking(TextButton buttonToMock) {
-            TestTextButton button = new TestTextButton();
-            button.connectTo(buttonToMock);
-            return button;
+    public class WhenTheUnderlyingImageWidthChanges {
+        @Before
+        public void before() {
+            when(gameImage.width()).thenReturn(50);
+            subject.onModelChange(gameImage);
         }
 
-        public void fireChanged() {
-            verify(mockButton).addListener(captor.capture());
-            captor.getValue().changed(null, mockButton);
-        }
-
-        private TestTextButton() {
-            initMocks(this);
-            captor = ArgumentCaptor.forClass(ChangeListener.class);
-        }
-
-        private void connectTo(TextButton buttonToMock) {
-            when(buttonToMock).thenReturn(mockButton);
+        @Test
+        public void it_UpdatesTheWidthTextField() {
+            verify(widthField.mock()).setText("50");
         }
     }
 
-    public static class TestTextField {
-        @Mock private TextField textField;
-        private ArgumentCaptor<TextField.TextFieldListener> captor;
-
-        public TestTextField() {
-            initMocks(this);
-            captor = ArgumentCaptor.forClass(TextField.TextFieldListener.class);
+    public class WhenTheUnderlyingImageHeightChanges {
+        @Before
+        public void before() {
+            when(gameImage.height()).thenReturn(50);
+            subject.onModelChange(gameImage);
         }
 
-        public TextField mock() {
-            return textField;
+        @Test
+        public void it_UpdatesTheHeightTextField() {
+            verify(heightField.mock()).setText("50");
+        }
+    }
+
+    public class WhenTheUnderlyingImageNameChanges {
+        @Before
+        public void before() {
+            when(gameImage.name()).thenReturn("name");
+            subject.onModelChange(gameImage);
         }
 
-        public void enter(String text) {
-            when(textField.getText()).thenReturn(text);
-            verify(textField).setTextFieldListener(captor.capture());
-            captor.getValue().keyTyped(textField, 'x');
+        @Test
+        public void it_UpdatesTheHeightTextField() {
+            verify(nameField.mock()).setText("name");
+        }
+    }
+
+    public class WhenTypingInTheNameTextBox {
+        @Before
+        public void before() {
+            nameField.enter("name");
+        }
+
+        @Test
+        public void it_ChangesTheImageName() {
+            verify(gameImage).setName("name");
         }
     }
 }

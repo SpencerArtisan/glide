@@ -5,13 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageArea extends ScrollPane {
     public static final float WIDTH = 250;
     private TextButton importButton;
-    private List<ImageControls> imageControlList = new ArrayList<>();
+    private Map<GameImage, ImageControls> imageControlMap = new HashMap<>();
     private ImageAreaModel model;
     private Skin skin;
 
@@ -47,7 +48,7 @@ public class ImageArea extends ScrollPane {
 
     private void addImageControls(Table table, GameImage gameImage) {
         ImageControls imageControls = createImageControls(gameImage);
-        imageControlList.add(imageControls);
+        imageControlMap.put(gameImage, imageControls);
 
         table.row();
         Image image = gameImage.asImage();
@@ -61,8 +62,8 @@ public class ImageArea extends ScrollPane {
     private ImageControls createImageControls(GameImage gameImage) {
         return new ImageControls(gameImage,
                                  createNameField(gameImage),
-                                 createSizeField(gameImage.getWidth()),
-                                 createSizeField(gameImage.getHeight()));
+                                 createSizeField(gameImage.width()),
+                                 createSizeField(gameImage.height()));
     }
 
     private TextField createNameField(GameImage image) {
@@ -90,8 +91,8 @@ public class ImageArea extends ScrollPane {
         return importButton;
     }
 
-    public List<ImageControls> getImageControlList() {
-        return imageControlList;
+    public Collection<ImageControls> getImageControlList() {
+        return imageControlMap.values();
     }
 
     public void refresh() {
@@ -109,5 +110,9 @@ public class ImageArea extends ScrollPane {
                                         Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                         Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
                         Actions.run(() -> importButton.setText("Add from clipboard"))));
+    }
+
+    public ImageControls getImageControls(GameImage image) {
+        return imageControlMap.get(image);
     }
 }

@@ -25,6 +25,13 @@ public class ImageAreaController {
         addImageAdjustmentBehaviour();
     }
 
+    public void onModelChange(GameImage image) {
+        ImageControls imageControls = view.getImageControls(image);
+        imageControls.getWidthField().setText("" + image.width());
+        imageControls.getHeightField().setText("" + image.height());
+        imageControls.getNameField().setText("" + image.name());
+    }
+
     private void addImportBehaviour() {
         view.importButton().addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
