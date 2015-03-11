@@ -80,8 +80,10 @@ project(":core") {
         compile "org.codehaus.groovy:groovy-all:2.3.9"
         compile files("libs/tween-engine-api.jar")
         testCompile "junit:junit:4.12"
+        testCompile "junit:junit:4.12"
         testCompile 'org.mockito:mockito-all:2.0.2-beta'
         testCompile 'org.assertj:assertj-core:1.7.1'
+        testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
     }
 }
 

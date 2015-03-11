@@ -5,18 +5,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.textarea.command.TestClipboard;
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@RunWith(HierarchicalContextRunner.class)
 public class ImageAreaControllerTest {
     @Mock private ImageGrabber grabber;
     @Mock private ImageArea view;
@@ -41,26 +43,47 @@ public class ImageAreaControllerTest {
         subject.init();
     }
 
-    @Test
-    public void it_DownloadsAndAddsImageWhenUrlProvided() throws IOException {
-        clipboard.setContents("url");
-        FileHandle imageFile = new FileHandle("file");
-        when(grabber.grab("url")).thenReturn(imageFile);
-        importButton.fireChanged();
-        verify(model).add(imageFile);
+    public class WhenTheImportButtonIsClicked {
+        private FileHandle imageFile;
+
+        @Before
+        public void before() throws IOException {
+            imageFile = new FileHandle("file");
+            when(grabber.grab("url")).thenReturn(imageFile);
+            clipboard.setContents("url");
+            importButton.fireChanged();
+        }
+
+        @Test
+        public void it_AddsTheImageFromTheClipboardUrl() {
+            verify(model).add(imageFile);
+        }
     }
 
-    @Test
-    public void it_ChangesTheImageWidthWhenTypingInTheWidthTextBox() {
-        widthField.enter("100");
-        verify(gameImage).setWidth(100);
+    public class WhenTypingInTheWidthTextBox {
+        @Before
+        public void before() {
+            widthField.enter("100");
+        }
+
+        @Test
+        public void it_ChangesTheImageWidth() {
+            verify(gameImage).setWidth(100);
+        }
     }
 
-    @Test
-    public void it_ChangesTheImageHeightWhenTypingInTheHeightTextBox() {
-        heightField.enter("100");
-        verify(gameImage).setHeight(100);
+    public class WhenTypingInTheHeightTextBox {
+        @Before
+        public void before() {
+            heightField.enter("100");
+        }
+
+        @Test
+        public void it_ChangesTheImageHeight() {
+            verify(gameImage).setHeight(100);
+        }
     }
+
 
     public static class TestTextButton {
         @Mock private TextButton mockButton;
