@@ -62,19 +62,17 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createButtonBar() {
         buttonBar = new ButtonBar(skin);
-        buttonBar.addTextButton("Past <", commandHistory::undo, commandHistory::canUndo);
+        buttonBar.addTextButton("Past <", () -> new UndoCommand(commandHistory));
         buttonBar.addImage("tardis2");
-        buttonBar.addTextButton("> Future", commandHistory::redo, commandHistory::canRedo);
+        buttonBar.addTextButton("> Future", () -> new RedoCommand(commandHistory));
         buttonBar.addSpacer(14);
-        buttonBar.addTextButton("Copy", () -> commandHistory.execute(new CopyCommand(model)), new CopyCommand(model)::canExecute);
+        buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
         buttonBar.addImage("copy");
-        buttonBar.addTextButton("Paste", () -> commandHistory.execute(new PasteCommand(model)), new PasteCommand(model)::canExecute);
+        buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Save", "save-button", () -> commandHistory.execute(new SaveCommand(model, program)), new SaveCommand(model, program)::canExecute);
+        buttonBar.addImageButton(" Save", "save-button", () -> new SaveCommand(model, program));
         buttonBar.addSpacer(8);
-        buttonBar.addImageButton(" Run", "run-button", () -> commandHistory.execute(
-                new RunCommand(model, new CodeRunner())),
-                new RunCommand(model, new CodeRunner())::canExecute);
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, new CodeRunner()));
         model.addListener(buttonBar::refreshEnabledStatuses);
     }
 

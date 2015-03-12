@@ -6,8 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.mygdx.game.textarea.command.Command;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class ButtonBar extends HorizontalGroup {
     private Skin skin;
@@ -30,25 +31,25 @@ public class ButtonBar extends HorizontalGroup {
         addActor(new Image(skin, imageName));
     }
 
-    public void addTextButton(String text, Runnable action, BooleanSupplier enabled) {
+    public void addTextButton(String text, Supplier<Command> commandFactory) {
         TextButton button = new TextButton(text, skin);
-        addButton(button, action, enabled);
+        addButton(button, commandFactory);
     }
 
-    public void addImageButton(String text, String styleName, Runnable action, BooleanSupplier enabled) {
+    public void addImageButton(String text, String styleName, Supplier<Command> commandFactory) {
         ImageTextButton button = new ImageTextButton(text, skin, styleName);
-        addButton(button, action, enabled);
+        addButton(button, commandFactory);
     }
 
-    private void addButton(final Button button, final Runnable action, final BooleanSupplier enabled) {
+    private void addButton(final Button button, Supplier<Command> commandFactory) {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                action.run();
+                commandFactory.get().execute();
             }
 
             public boolean handle(Event event) {
                 if (event instanceof ModelChange) {
-                    boolean enable = enabled.getAsBoolean();
+                    boolean enable = commandFactory.get().canExecute();
                     button.setDisabled(!enable);
                     button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
                 }
