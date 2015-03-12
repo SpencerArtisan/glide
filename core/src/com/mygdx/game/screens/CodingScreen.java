@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.mygdx.game.App;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.button.ButtonBar;
@@ -70,7 +71,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Save", "save-button", () -> new SaveCommand(model, program));
+        buttonBar.addImageButton(" Save", "save-button", () -> new SaveCommand(model, program, this::getGameName));
         buttonBar.addSpacer(8);
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, new CodeRunner()));
         model.addListener(buttonBar::refreshEnabledStatuses);
@@ -101,5 +102,13 @@ public class CodingScreen extends ScreenAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 //		textArea.setSize(width, height);
-	}  	  
+	}
+
+    private ListenableFuture<String> getGameName() {
+        SaveGameDialog saveGameDialog = new SaveGameDialog(program, skin);
+        saveGameDialog.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        saveGameDialog.show(stage);
+        stage.setKeyboardFocus(saveGameDialog.getNameTextField());
+        return saveGameDialog.getFutureGameName();
+    }
 }
