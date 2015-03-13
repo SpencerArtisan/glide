@@ -26,6 +26,6 @@ public class ImageGrabber {
 
     private String generatePathname(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
-        return program.getFileFolder() + filename;
+        return program.getDirectoryName() + filename;
     }
 }

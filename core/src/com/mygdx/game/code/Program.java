@@ -31,15 +31,22 @@ public class Program {
     }
 
     public void setName(String name) {
+        FileHandle source = getDirectory();
         this.name = name;
+        FileHandle target = getDirectory();
+        source.moveTo(target);
     }
 
-    public String getFileFolder() {
+    public String getDirectoryName() {
         return String.format(FOLDER, name);
     }
 
+    public FileHandle getDirectory() {
+        return Gdx.files.local(getDirectoryName());
+    }
+
     public void save(TextAreaModel model) {
-        String pathname = getFileFolder() + CODE_FILE;
+        String pathname = getDirectoryName() + CODE_FILE;
         FileHandle game = Gdx.files.local(pathname);
         game.writeString(model.getText(), false);
     }
