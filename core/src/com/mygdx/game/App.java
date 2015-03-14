@@ -16,13 +16,9 @@ import com.mygdx.game.screens.WelcomeScreen;
 public class App extends Game {
 	private Viewport viewport;
 	private ResourceManager resourceManager;
-    public static TweenManager tweenManager;
 
     @Override
 	public void create () {
-        tweenManager = new TweenManager();
-        Tween.registerAccessor(Cell.class, new CellAccessor());
-
         viewport = new ScreenViewport();
 		resourceManager = new ResourceManager();
 
@@ -30,11 +26,18 @@ public class App extends Game {
 		welcomeScreen.getNewGameButton().addListener(new ClickListener() {			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-                final Program program = new Program();
+                final Program program = Program.create();
 				setScreen(new CodingScreen(program, viewport, resourceManager));
 			}
 		});
-		
+		welcomeScreen.getContinueGameButton().addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+                final Program program = Program.mostRecent();
+				setScreen(new CodingScreen(program, viewport, resourceManager));
+			}
+		});
+
 		setScreen(welcomeScreen);
 	}
 	

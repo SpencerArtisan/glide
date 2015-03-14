@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.mygdx.game.code.GameRenameException;
 import com.mygdx.game.code.Program;
 import com.mygdx.game.textarea.TextAreaModel;
 

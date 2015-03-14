@@ -29,7 +29,7 @@ public class ImageAreaModelTest extends Game {
 
     @Before
     public void before() {
-        subject = new ImageAreaModel(new Program());
+        subject = new ImageAreaModel(Program.create());
     }
 
     @Test

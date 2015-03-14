@@ -49,6 +49,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		return newGameButton;
 	}
 
+	public TextButton getContinueGameButton() {
+		return continueGameButton;
+	}
+
 	private void createNewGameButton(Skin skin) {
 		newGameButton = new TextButton("    New Game    ", skin, "big");
 	}
