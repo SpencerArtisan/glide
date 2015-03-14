@@ -72,7 +72,9 @@ public class Program {
             if (target.exists()) {
                 throw new GameRenameException("Cannot name game " + newName + " as that name is taken!");
             }
-            source.moveTo(target);
+            if (source.exists()) {
+                source.moveTo(target);
+            }
         }
         this.name = newName;
         preferences().putString(RECENT_GAME, name);
