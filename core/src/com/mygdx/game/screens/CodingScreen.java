@@ -29,9 +29,11 @@ public class CodingScreen extends ScreenAdapter {
     private ButtonBar buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
     private Game game;
+    private Runnable exitListener;
 
-    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager) {
+    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitListener) {
         this.game = game;
+        this.exitListener = exitListener;
         this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
@@ -71,7 +73,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(14);
         buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, game, this::getGameName));
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::getGameName));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::getGameName, exitListener));
         model.addListener(buttonBar::refreshEnabledStatuses);
     }
 
