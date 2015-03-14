@@ -1,35 +1,25 @@
 package com.mygdx.game.image;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.google.common.collect.ImmutableMap;
-import com.mygdx.game.code.Program;
-import org.assertj.core.data.MapEntry;
+import com.mygdx.game.code.Game;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.RealSystem;
 import org.junit.internal.TextListener;
-import org.junit.internal.runners.InitializationError;
 import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
-import org.junit.runner.notification.RunNotifier;
-import org.mockito.internal.runners.JUnit44RunnerImpl;
 
 import java.net.URL;
-import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 // TODO - To run this run ImageTests
-public class ImageAreaModelTest extends Game {
+public class ImageAreaModelTest extends com.badlogic.gdx.Game {
     private ImageAreaModel subject;
 
     @Before
     public void before() {
-        subject = new ImageAreaModel(Program.create());
+        subject = new ImageAreaModel(Game.create());
     }
 
     @Test

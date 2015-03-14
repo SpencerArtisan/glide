@@ -1,16 +1,16 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 
 import java.util.*;
 
 public class ImageAreaModel {
     private Map<String, GameImage> images = new LinkedHashMap<>();
-    private Program program;
+    private Game game;
 
-    public ImageAreaModel(Program program) {
-        this.program = program;
+    public ImageAreaModel(Game game) {
+        this.game = game;
     }
 
     public GameImage add(FileHandle file) {

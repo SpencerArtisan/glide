@@ -8,11 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.mygdx.game.App;
 import com.mygdx.game.ResourceManager;
 import com.mygdx.game.button.ButtonBar;
-import com.mygdx.game.code.CodeRunner;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.image.ImageAreaModel;
@@ -30,15 +28,15 @@ public class CodingScreen extends ScreenAdapter {
     private ImageArea imageArea;
     private ButtonBar buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
-    private Program program;
+    private Game game;
 
-    public CodingScreen(Program program, Viewport viewport, ResourceManager resourceManager) {
-        this.program = program;
+    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager) {
+        this.game = game;
         this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
 
-        createTextArea(program);
+        createTextArea(game);
         createButtonBar();
         createImageArea();
         layoutScreen();
@@ -71,20 +69,20 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, program, this::getGameName));
+        buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, game, this::getGameName));
         buttonBar.addSpacer(14);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, program, this::getGameName));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::getGameName));
         model.addListener(buttonBar::refreshEnabledStatuses);
     }
 
     private void createImageArea() {
-        ImageAreaModel imageAreaModel = new ImageAreaModel(program);
-        ImageGrabber imageGrabber = new ImageGrabber(program);
+        ImageAreaModel imageAreaModel = new ImageAreaModel(game);
+        ImageGrabber imageGrabber = new ImageGrabber(game);
         imageArea = new ImageArea(imageAreaModel, imageGrabber, skin);
     }
 
-    private void createTextArea(Program program) {
-        model = new TextAreaModel(program.code(), new GroovyColorCoder());
+    private void createTextArea(Game game) {
+        model = new TextAreaModel(game.code(), new GroovyColorCoder());
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
 
@@ -104,7 +102,7 @@ public class CodingScreen extends ScreenAdapter {
 	}
 
     private ListenableFuture<String> getGameName() {
-        SaveGameDialog saveGameDialog = new SaveGameDialog(program, skin);
+        SaveGameDialog saveGameDialog = new SaveGameDialog(game, skin);
         saveGameDialog.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         saveGameDialog.show(stage);
         stage.setKeyboardFocus(saveGameDialog.getNameTextField());

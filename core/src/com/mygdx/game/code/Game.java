@@ -7,7 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.common.annotations.VisibleForTesting;
 import com.mygdx.game.textarea.TextAreaModel;
 
-public class Program {
+public class Game {
     private static final String RECENT_GAME = "MostRecentGameName";
     public static final String DEFAULT_NAME = "Unnamed Game";
     private static String FOLDER = "games";
@@ -25,28 +25,28 @@ public class Program {
     private String name;
     private String code;
 
-    public static Program create() {
-        return new Program(findUniqueName(), TEMPLATE);
+    public static Game create() {
+        return new Game(findUniqueName(), TEMPLATE);
     }
 
-    public static Program mostRecent() {
+    public static Game mostRecent() {
         String name = preferences().getString(RECENT_GAME);
-        return new Program(name, getCodeFile(name).readString());
+        return new Game(name, getCodeFile(name).readString());
     }
 
-    private Program(String name, String code) {
+    private Game(String name, String code) {
         setName(name);
         this.code = code;
     }
 
     @VisibleForTesting
     static void setPreferences(Preferences preferences) {
-        Program.preferences = preferences;
+        Game.preferences = preferences;
     }
 
     @VisibleForTesting
     static void files(Files files) {
-        Program.files = files;
+        Game.files = files;
     }
 
     public static Preferences preferences() {

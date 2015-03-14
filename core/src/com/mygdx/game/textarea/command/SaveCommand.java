@@ -1,23 +1,20 @@
 package com.mygdx.game.textarea.command;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.mygdx.game.code.GameRenameException;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 import com.mygdx.game.textarea.TextAreaModel;
 
 import java.util.function.Supplier;
 
 public class SaveCommand extends AbstractCommand {
-    private Program program;
+    private Game game;
     private Supplier<ListenableFuture<String>> gameNameSupplier;
 
-    public SaveCommand(TextAreaModel model, Program program, Supplier<ListenableFuture<String>> gameNameSupplier) {
+    public SaveCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier) {
         super(model);
-        this.program = program;
+        this.game = game;
         this.gameNameSupplier = gameNameSupplier;
     }
 
@@ -27,8 +24,8 @@ public class SaveCommand extends AbstractCommand {
         Futures.addCallback(futureGameName, new FutureCallback<String>() {
             @Override
             public void onSuccess(String gameName) {
-                program.setName(gameName);
-                program.save(model);
+                game.setName(gameName);
+                game.save(model);
             }
 
             @Override

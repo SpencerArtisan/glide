@@ -2,17 +2,17 @@ package com.mygdx.game.image;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 public class ImageGrabber {
-    private Program program;
+    private Game game;
 
-    public ImageGrabber(Program program) {
-        this.program = program;
+    public ImageGrabber(Game game) {
+        this.game = game;
     }
 
     public FileHandle grab(String url) throws IOException {
@@ -26,6 +26,6 @@ public class ImageGrabber {
 
     private String generatePathname(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
-        return program.getGameFolder() + filename;
+        return game.getGameFolder() + filename;
     }
 }

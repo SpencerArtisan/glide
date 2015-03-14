@@ -2,7 +2,7 @@ package com.mygdx.game.textarea.command;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 import com.mygdx.game.textarea.TextAreaModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import static org.mockito.Mockito.verify;
 
 public class SaveCommandTest {
-    @Mock private Program program;
+    @Mock private Game game;
     @Mock private TextAreaModel model;
     private SaveCommand command;
     private SettableFuture<String> futureName;
@@ -24,14 +24,14 @@ public class SaveCommandTest {
         MockitoAnnotations.initMocks(this);
         futureName = SettableFuture.create();
         Supplier<ListenableFuture<String>> nameSupplier = () -> futureName;
-        command = new SaveCommand(model, program, nameSupplier);
+        command = new SaveCommand(model, game, nameSupplier);
     }
 
     @Test
     public void execute() {
         command.execute();
         futureName.set("name");
-        verify(program).setName("name");
-        verify(program).save(model);
+        verify(game).setName("name");
+        verify(game).save(model);
     }
 }

@@ -6,15 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.google.common.util.concurrent.SettableFuture;
-import com.mygdx.game.code.Program;
+import com.mygdx.game.code.Game;
 
 public class SaveGameDialog extends Dialog {
     private SettableFuture<String> futureGameName = SettableFuture.create();
     private TextField nameTextField;
 
-    public SaveGameDialog(Program program, Skin skin) {
+    public SaveGameDialog(Game game, Skin skin) {
         super("", skin);
-        createNameField(program, skin);
+        createNameField(game, skin);
         layoutControls();
     }
 
@@ -41,8 +41,8 @@ public class SaveGameDialog extends Dialog {
         futureGameName.set(nameTextField.getText());
     }
 
-    private TextField createNameField(Program program, Skin skin) {
-        nameTextField = new TextField(program.name(), skin);
+    private TextField createNameField(Game game, Skin skin) {
+        nameTextField = new TextField(game.name(), skin);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(16);
         nameTextField.setCursorPosition(nameTextField.getText().length());
