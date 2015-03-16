@@ -3,7 +3,10 @@ package com.mygdx.game.image;
 import com.badlogic.gdx.files.FileHandle;
 import com.mygdx.game.code.Game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ImageAreaModel {
     private Map<String, GameImage> images = new LinkedHashMap<>();

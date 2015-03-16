@@ -1,17 +1,14 @@
 package com.mygdx.game.textarea.command;
 
-import com.mygdx.game.XY;
 import com.mygdx.game.code.CodeRunner;
 import com.mygdx.game.textarea.TextAreaModel;
-import com.mygdx.game.textarea.XYAssert;
-import org.codehaus.groovy.ant.Groovy;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RunCommandTest {

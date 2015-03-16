@@ -2,7 +2,6 @@ package com.mygdx.game.textarea.command;
 
 import com.mygdx.game.code.CodeRunner;
 import com.mygdx.game.textarea.TextAreaModel;
-import org.apache.commons.lang3.StringUtils;
 
 public class RunCommand extends AbstractCommand {
     private CodeRunner codeRunner;

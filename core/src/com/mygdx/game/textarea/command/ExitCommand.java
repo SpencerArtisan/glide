@@ -1,7 +1,5 @@
 package com.mygdx.game.textarea.command;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.mygdx.game.code.Game;
 import com.mygdx.game.textarea.TextAreaModel;

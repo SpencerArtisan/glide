@@ -3,10 +3,8 @@ package com.mygdx.game.code;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.mygdx.game.image.GameImage;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito.*;
 
 import java.io.InputStream;
 
