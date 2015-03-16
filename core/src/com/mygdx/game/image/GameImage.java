@@ -21,20 +21,8 @@ public class GameImage {
     private List<Runnable> listeners = new ArrayList<>();
 
     public GameImage(FileHandle file) {
-        createImage(file);
         this.file = file;
         this.name = generateName();
-    }
-
-    private void createImage(FileHandle file) {
-        Texture texture = new Texture(file);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        TextureRegion textureRegion = new TextureRegion(texture);
-        image = new Image(textureRegion);
-        width = texture.getWidth();
-        height = texture.getHeight();
-        originalWidth = width;
-        originalHeight = height;
     }
 
     public String name() {
@@ -51,18 +39,22 @@ public class GameImage {
     }
 
     public Image asImage() {
+        init();
         return image;
     }
 
     public Integer width() {
+        init();
         return width;
     }
 
     public Integer height() {
+        init();
         return height;
     }
 
     public void setWidth(Integer newWidth) {
+        init();
         if (newWidth != null) {
             height = newWidth * originalHeight / originalWidth;
             width = newWidth;
@@ -74,6 +66,7 @@ public class GameImage {
     }
 
     public void setHeight(Integer newHeight) {
+        init();
         if (newHeight != null) {
             width = newHeight * originalWidth / originalHeight;
             height = newHeight;
@@ -82,6 +75,19 @@ public class GameImage {
             width = null;
         }
         fireChange();
+    }
+
+    private void init() {
+        if (image == null) {
+            Texture texture = new Texture(file);
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            TextureRegion textureRegion = new TextureRegion(texture);
+            image = new Image(textureRegion);
+            width = texture.getWidth();
+            height = texture.getHeight();
+            originalWidth = width;
+            originalHeight = height;
+        }
     }
 
     private void fireChange() {

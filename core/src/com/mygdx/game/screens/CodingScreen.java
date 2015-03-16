@@ -63,16 +63,17 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createButtonBar() {
         buttonBar = new ButtonBar(skin);
+        buttonBar.addSpacer(1);
         buttonBar.addTextButton("Past <", () -> new UndoCommand(commandHistory));
         buttonBar.addImage("tardis2");
         buttonBar.addTextButton("> Future", () -> new RedoCommand(commandHistory));
-        buttonBar.addSpacer(14);
+        buttonBar.addSpacer(16);
         buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
-        buttonBar.addSpacer(14);
+        buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, game, this::getGameName));
-        buttonBar.addSpacer(14);
+        buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::getGameName, exitListener));
         model.addListener(buttonBar::refreshEnabledStatuses);
     }

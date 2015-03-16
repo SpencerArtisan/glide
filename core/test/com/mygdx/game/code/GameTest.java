@@ -2,8 +2,13 @@ package com.mygdx.game.code;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
+import com.mygdx.game.image.GameImage;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito.*;
+
+import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -95,12 +100,30 @@ public class GameTest {
         verify(files.local("games/Unnamed Game")).moveTo(files.local("games/name"));
     }
 
-    @Test(expected = GameRenameException.class)
-    public void changingGameFailsIfTargetDirectoryExists() {
+    @Test
+    public void changingGameNameWhenNoSourceDirectoryDoesNotAtteptSourceRename() {
         when(files.local("games/Unnamed Game").exists()).thenReturn(false);
+        Game game = Game.create();
+        game.setName("name");
+        verify(files.local("games/Unnamed Game"), never()).moveTo(files.local("games/name"));
+    }
+
+    @Test(expected = GameRenameException.class)
+    public void changingGameNameFailsIfTargetDirectoryExists() {
         Game game = Game.create();
         when(files.local("games/name").exists()).thenReturn(true);
         game.setName("name");
         verify(files.local("games/Unnamed Game")).moveTo(files.local("games/name"));
+    }
+
+    @Test
+    public void addImageFromUrl() {
+        FileHandle mockFile = files.local("games/Unnamed Game/image.png");
+        when(mockFile.name()).thenReturn("image.png");
+        InputStream mockStream = mock(InputStream.class);
+        Game game = Game.create((url) -> mockStream);
+        game.addImage("file:///url/image.png");
+        verify(mockFile).write(mockStream, false);
+        assertThat(game.getImages()).extracting("name").containsExactly("image");
     }
 }
