@@ -25,7 +25,7 @@ public class SaveCommand extends AbstractCommand {
             @Override
             public void onSuccess(String gameName) {
                 game.setName(gameName);
-                game.save(model);
+                game.save();
             }
 
             @Override

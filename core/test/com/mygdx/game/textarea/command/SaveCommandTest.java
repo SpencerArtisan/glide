@@ -32,6 +32,6 @@ public class SaveCommandTest {
         command.execute();
         futureName.set("name");
         verify(game).setName("name");
-        verify(game).save(model);
+        verify(game).save();
     }
 }

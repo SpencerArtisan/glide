@@ -7,7 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.common.annotations.VisibleForTesting;
 import com.mygdx.game.image.GameImage;
 import com.mygdx.game.image.ImageAreaModel;
-import com.mygdx.game.textarea.TextAreaModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +21,7 @@ public class Game implements ImageAreaModel {
     private static String FOLDER = "games";
     private static String CODE_FILE = "code.groovy";
     static String TEMPLATE =
-            "////////////////////////////////// \n"
+                      "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
                     + "// Start writing your game below. \n"
                     + "// Click here if you need help \n"
@@ -81,6 +80,10 @@ public class Game implements ImageAreaModel {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String name() {
         return name;
     }
@@ -101,14 +104,9 @@ public class Game implements ImageAreaModel {
         preferences.flush();
     }
 
-    // todo
-    public void save(TextAreaModel model) {
-        save(model, Gdx.files);
-    }
-
-    public void save(TextAreaModel model, Files files) {
+    public void save() {
         FileHandle game = getCodeFile(name, files);
-        game.writeString(model.getText(), false);
+        game.writeString(code, false);
     }
 
     private static FileHandle getCodeFile(String name, Files files) {
