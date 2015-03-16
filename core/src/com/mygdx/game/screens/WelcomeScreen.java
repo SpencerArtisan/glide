@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.ResourceManager;
+import com.mygdx.game.code.Game;
 
 public class WelcomeScreen extends ScreenAdapter {
 	private Table table;
@@ -56,6 +58,8 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void createContinueGameButton(Skin skin) {
 		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
+        continueGameButton.setDisabled(!Game.hasMostRecent());
+        continueGameButton.setTouchable(Game.hasMostRecent() ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void animate(Label title) {

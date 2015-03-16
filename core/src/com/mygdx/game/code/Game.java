@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Game implements ImageAreaModel {
+    public static final String PREFERENCES_KEY = "Game";
     private static final String RECENT_GAME = "MostRecentGameName";
     private static String FOLDER = "games";
     public static final String DEFAULT_NAME = "Unnamed Game";
@@ -38,11 +39,11 @@ public class Game implements ImageAreaModel {
     private Function<String, InputStream> urlStreamProvider;
 
     public static Game create() {
-        return create(Game::defaultStreamProvider, Gdx.app.getPreferences("Planet"), Gdx.files);
+        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files);
     }
 
     public static Game mostRecent() {
-        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences("Planet"), Gdx.files);
+        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files);
     }
 
     @VisibleForTesting
@@ -144,7 +145,11 @@ public class Game implements ImageAreaModel {
         return files.local(FOLDER + "/" + gameName + "/" + imageFilename);
     }
 
-    public static boolean hasMostRecent(Preferences preferences, Files files) {
+    public static boolean hasMostRecent() {
+        return hasMostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.app.getFiles());
+    }
+
+    static boolean hasMostRecent(Preferences preferences, Files files) {
         String gameName = preferences.getString(RECENT_GAME);
         return gameExists(gameName, files);
     }

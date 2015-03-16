@@ -21,7 +21,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
     default: { font: default-font, fontColor: white, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
-	big: { font: big-font, fontColor: white, up: myactor, over: myactorOver, down: myactorDown }
+	big: { font: big-font, fontColor: white, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     run-button: { font: default-font, fontColor: white, imageUp: flag, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
