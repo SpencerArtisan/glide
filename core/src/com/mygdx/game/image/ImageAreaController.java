@@ -36,49 +36,15 @@ public class ImageAreaController {
     }
 
     private void addImageAdjustmentBehaviour(GameImage gameImage) {
+        addImageListener(gameImage);
         ImageControls imageControls = view.getImageControls(gameImage);
         addRenameBehaviour(imageControls);
         addWidthChangeBehaviour(imageControls);
         addHeightChangeBehaviour(imageControls);
     }
 
-    private void addRenameBehaviour(ImageControls imageControls) {
-        imageControls.getNameField().setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                imageControls.getGameImage().setName(textField.getText());
-            }
-        });
-    }
-
-    private void addWidthChangeBehaviour(ImageControls imageControls) {
-        imageControls.getWidthField().setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                imageControls.getGameImage().setWidth(parseInt(textField));
-            }
-
-        });
-    }
-
-    private void addHeightChangeBehaviour(ImageControls imageControls) {
-        imageControls.getHeightField().setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                imageControls.getGameImage().setHeight(parseInt(textField));
-            }
-        });
-    }
-
-    private void onImageUrlProvided(String url) {
-        try {
-            GameImage gameImage = model.addImage(url);
-            gameImage.addListener(() -> onModelChange(gameImage));
-            view.onImageAdded(gameImage);
-            addImageAdjustmentBehaviour(gameImage);
-        } catch (Exception e) {
-            view.showFailure();
-        }
+    private void addImageListener(GameImage gameImage) {
+        gameImage.addListener(() -> onModelChange(gameImage));
     }
 
     void onModelChange(GameImage image) {
@@ -86,6 +52,28 @@ public class ImageAreaController {
         imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
         imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
         imageControls.getNameField().setText(image.name());
+    }
+
+    private void addRenameBehaviour(ImageControls imageControls) {
+        imageControls.getNameField().setTextFieldListener((field, c) -> imageControls.getGameImage().setName(field.getText()));
+    }
+
+    private void addWidthChangeBehaviour(ImageControls imageControls) {
+        imageControls.getWidthField().setTextFieldListener((field, c) -> imageControls.getGameImage().setWidth(parseInt(field)));
+    }
+
+    private void addHeightChangeBehaviour(ImageControls imageControls) {
+        imageControls.getHeightField().setTextFieldListener((field, c) -> imageControls.getGameImage().setHeight(parseInt(field)));
+    }
+
+    private void onImageUrlProvided(String url) {
+        try {
+            GameImage gameImage = model.addImage(url);
+            view.onImageAdded(gameImage);
+            addImageAdjustmentBehaviour(gameImage);
+        } catch (Exception e) {
+            view.showFailure();
+        }
     }
 
     private Integer parseInt(TextField textField) {
