@@ -1,22 +1,17 @@
 package com.mygdx.game.image;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.io.IOException;
-
 public class ImageAreaController {
-    private final ImageGrabber grabber;
     private final ImageArea view;
     private ImageAreaModel model;
 
-    public ImageAreaController(final ImageGrabber grabber, ImageArea view, ImageAreaModel model) {
-        this.grabber = grabber;
+    public ImageAreaController(ImageArea view, ImageAreaModel model) {
         this.view = view;
         this.model = model;
     }
@@ -77,12 +72,11 @@ public class ImageAreaController {
 
     private void onImageUrlProvided(String url) {
         try {
-            FileHandle imageFile = grabber.grab(url);
-            GameImage gameImage = model.add(imageFile);
+            GameImage gameImage = model.addImage(url);
             gameImage.addListener(() -> onModelChange(gameImage));
             view.onImageAdded(gameImage);
             addImageAdjustmentBehaviour(gameImage);
-        } catch (IOException e) {
+        } catch (Exception e) {
             view.showFailure();
         }
     }

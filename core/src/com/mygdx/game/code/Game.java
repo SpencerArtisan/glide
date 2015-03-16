@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.common.annotations.VisibleForTesting;
 import com.mygdx.game.image.GameImage;
+import com.mygdx.game.image.ImageAreaModel;
 import com.mygdx.game.textarea.TextAreaModel;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class Game {
+public class Game implements ImageAreaModel {
     private static final String RECENT_GAME = "MostRecentGameName";
     public static final String DEFAULT_NAME = "Unnamed Game";
     private static String FOLDER = "games";
@@ -32,7 +33,6 @@ public class Game {
 
     private String name;
     private String code;
-    private List<GameImage> images = new ArrayList<>();
     private Function<String, InputStream> streamProvider;
 
     public static Game create() {
@@ -54,6 +54,22 @@ public class Game {
         setName(name);
         this.code = code;
     }
+
+    @Override
+    public GameImage addImage(String url) {
+        InputStream imageStream = streamProvider.apply(url);
+        try {
+            FileHandle mainImageFile = files().local(generateImagePath(url));
+            mainImageFile.write(imageStream, false);
+            GameImage gameImage = new GameImage(mainImageFile);
+            images.add(gameImage);
+            imageStream.close();
+            return gameImage;
+        } catch (IOException e) {
+            throw new InaccessibleUrlException(url, e);
+        }
+    }
+    private List<GameImage> images = new ArrayList<>();
 
     @VisibleForTesting
     static void setPreferences(Preferences preferences) {
@@ -107,10 +123,6 @@ public class Game {
         return files().local(FOLDER + "/" + name + "/" + CODE_FILE);
     }
 
-    public String getGameFolder() {
-        return FOLDER + "/" + name;
-    }
-
     public static boolean hasMostRecent() {
         String gameName = preferences().getString(RECENT_GAME);
         return gameExists(gameName);
@@ -136,18 +148,6 @@ public class Game {
 
     private boolean isChangingName(String name) {
         return this.name != null && !this.name.equals(name);
-    }
-
-    public void addImage(String url) {
-        InputStream imageStream = streamProvider.apply(url);
-        try {
-            FileHandle mainImageFile = files().local(generateImagePath(url));
-            mainImageFile.write(imageStream, false);
-            images.add(new GameImage(mainImageFile));
-            imageStream.close();
-        } catch (IOException e) {
-            throw new InaccessibleUrlException(url, e);
-        }
     }
 
     public List<GameImage> getImages() {

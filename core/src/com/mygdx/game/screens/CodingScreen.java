@@ -14,7 +14,6 @@ import com.mygdx.game.code.Game;
 import com.mygdx.game.groovy.GroovyColorCoder;
 import com.mygdx.game.image.ImageArea;
 import com.mygdx.game.image.ImageAreaModel;
-import com.mygdx.game.image.ImageGrabber;
 import com.mygdx.game.textarea.ScrollableTextArea;
 import com.mygdx.game.textarea.TextAreaModel;
 import com.mygdx.game.textarea.command.*;
@@ -79,9 +78,8 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        ImageAreaModel imageAreaModel = new ImageAreaModel(game);
-        ImageGrabber imageGrabber = new ImageGrabber(game);
-        imageArea = new ImageArea(imageAreaModel, imageGrabber, skin);
+        ImageAreaModel imageAreaModel = game;
+        imageArea = new ImageArea(imageAreaModel, skin);
     }
 
     private void createTextArea(Game game) {

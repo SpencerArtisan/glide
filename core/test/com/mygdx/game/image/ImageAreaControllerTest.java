@@ -16,7 +16,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(HierarchicalContextRunner.class)
 public class ImageAreaControllerTest {
-    @Mock private ImageGrabber grabber;
     @Mock private ImageArea view;
     @Mock private ImageAreaModel model;
     @Mock private GameImage gameImage;
@@ -34,9 +33,9 @@ public class ImageAreaControllerTest {
         ImageControls imageControls =
                 new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock());
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
-        when(model.add(any())).thenReturn(gameImage);
+        when(model.addImage(any())).thenReturn(gameImage);
         when(model.getImages()).thenReturn(Arrays.asList(gameImage));
-        subject = spy(new ImageAreaController(grabber, view, model));
+        subject = spy(new ImageAreaController(view, model));
         doReturn(clipboard).when(subject).getClipboard();
         subject.init();
     }
@@ -47,14 +46,13 @@ public class ImageAreaControllerTest {
         @Before
         public void before() throws IOException {
             imageFile = new FileHandle("file");
-            when(grabber.grab("url")).thenReturn(imageFile);
             clipboard.setContents("url");
             importButton.fireChanged();
         }
 
         @Test
         public void it_AddsTheImageFromTheClipboardUrl() {
-            verify(model).add(imageFile);
+            verify(model).addImage("url");
         }
 
         public class WhenTheImportButtonIsClickedAgain {
@@ -65,10 +63,9 @@ public class ImageAreaControllerTest {
 
             @Test
             public void it_AddsTheImageAgain() {
-                verify(model, times(2)).add(imageFile);
+                verify(model, times(2)).addImage("url");
             }
         }
-
     }
 
     public class WhenTypingInTheWidthTextBox {

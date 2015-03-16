@@ -15,12 +15,12 @@ public class ImageArea extends ScrollPane {
     private Skin skin;
     private Table table;
 
-    public ImageArea(ImageAreaModel model, ImageGrabber grabber, Skin skin) {
+    public ImageArea(ImageAreaModel model, Skin skin) {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
         layoutControls();
-        ImageAreaController controller = new ImageAreaController(grabber, this, model);
+        ImageAreaController controller = new ImageAreaController(this, model);
         controller.init();
     }
 
