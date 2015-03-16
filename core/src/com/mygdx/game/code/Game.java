@@ -17,8 +17,8 @@ import java.util.function.Function;
 
 public class Game implements ImageAreaModel {
     private static final String RECENT_GAME = "MostRecentGameName";
-    public static final String DEFAULT_NAME = "Unnamed Game";
     private static String FOLDER = "games";
+    public static final String DEFAULT_NAME = "Unnamed Game";
     private static String CODE_FILE = "code.groovy";
     static String TEMPLATE =
                       "////////////////////////////////// \n"
@@ -27,12 +27,13 @@ public class Game implements ImageAreaModel {
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
 
-    private Preferences preferences;
-    private Files files;
     private String name;
     private String code;
-    private Function<String, InputStream> streamProvider;
     private List<GameImage> images = new ArrayList<>();
+
+    private Preferences preferences;
+    private Files files;
+    private Function<String, InputStream> urlStreamProvider;
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences("Planet"), Gdx.files);
@@ -50,11 +51,12 @@ public class Game implements ImageAreaModel {
     @VisibleForTesting
     static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
         String name = preferences.getString(RECENT_GAME);
-        return new Game(name, getCodeFile(name, files).readString(), streamProvider, preferences, files);
+        String code = getCodeFile(name, files).readString();
+        return new Game(name, code, streamProvider, preferences, files);
     }
 
     private Game(String name, String code, Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
-        this.streamProvider = streamProvider;
+        this.urlStreamProvider = streamProvider;
         this.preferences = preferences;
         this.files = files;
         this.code = code;
@@ -63,9 +65,9 @@ public class Game implements ImageAreaModel {
 
     @Override
     public GameImage addImage(String url) {
-        InputStream imageStream = streamProvider.apply(url);
+        InputStream imageStream = urlStreamProvider.apply(url);
         try {
-            FileHandle mainImageFile = files.local(generateImagePath(url));
+            FileHandle mainImageFile = generateImageFileHandle(url);
             mainImageFile.write(imageStream, false);
             GameImage gameImage = new GameImage(mainImageFile);
             images.add(gameImage);
@@ -104,6 +106,10 @@ public class Game implements ImageAreaModel {
         preferences.flush();
     }
 
+    public List<GameImage> getImages() {
+        return images;
+    }
+
     public void save() {
         FileHandle game = getCodeFile(name, files);
         game.writeString(code, false);
@@ -140,20 +146,16 @@ public class Game implements ImageAreaModel {
         return this.name != null && !this.name.equals(name);
     }
 
-    public List<GameImage> getImages() {
-        return images;
-    }
-
-    private String generateImagePath(String url) {
-        String filename = url.substring(url.lastIndexOf("/") + 1);
-        return FOLDER + "/" + name + "/" + filename;
-    }
-
     private static InputStream defaultStreamProvider(String url) {
         try {
             return new URL(url).openStream();
         } catch (IOException e) {
             throw new InaccessibleUrlException(url, e);
         }
+    }
+
+    private FileHandle generateImageFileHandle(String url) {
+        String filename = url.substring(url.lastIndexOf("/") + 1);
+        return files.local(FOLDER + "/" + name + "/" + filename);
     }
 }
