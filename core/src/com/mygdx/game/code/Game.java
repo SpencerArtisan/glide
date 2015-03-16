@@ -21,7 +21,7 @@ public class Game implements ImageAreaModel {
     private static String FOLDER = "games";
     public static final String DEFAULT_NAME = "Unnamed Game";
     private static String CODE_FILE = "code.groovy";
-    private static String IMAGE_DETAIL_FILE = "images.json";
+    private static String GAME_DETAIL_FILE = "manifest.json";
     static String TEMPLATE =
                       "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
@@ -31,7 +31,7 @@ public class Game implements ImageAreaModel {
 
     private String name;
     private String code;
-    private List<GameImage> images = new ArrayList<>();
+    private List<GameImage> images;
 
     private Preferences preferences;
     private Files files;
@@ -47,17 +47,19 @@ public class Game implements ImageAreaModel {
 
     @VisibleForTesting
     static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
-        return new Game(findUniqueName(files), TEMPLATE, streamProvider, preferences, files);
+        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files);
     }
 
     @VisibleForTesting
     static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
         String name = preferences.getString(RECENT_GAME);
         String code = getCodeFile(name, files).readString();
-        return new Game(name, code, streamProvider, preferences, files);
+        List<GameImage> images = readImages(name, files);
+        return new Game(name, code, images, streamProvider, preferences, files);
     }
 
-    private Game(String name, String code, Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+    private Game(String name, String code, List<GameImage> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+        this.images = images;
         this.urlStreamProvider = streamProvider;
         this.preferences = preferences;
         this.files = files;
@@ -117,15 +119,29 @@ public class Game implements ImageAreaModel {
 
     public void save() {
         getCodeFile(name, files).writeString(code, false);
-        getImageDetailFile().writeString(new Json().toJson(new GameDetails()), false);
+        getManifestFile(name, files).writeString(new Json().toJson(GameDetails.fromGame(this)), false);
     }
 
-    private FileHandle getImageDetailFile() {
-        return files.local(FOLDER + "/" + name + "/" + IMAGE_DETAIL_FILE);
+    private static List<GameImage> readImages(String gameName, Files files) {
+        String manifest = getManifestFile(gameName, files).readString();
+        GameDetails gameDetails = new Json().fromJson(GameDetails.class, manifest);
+        ArrayList<GameImage> gameImages = new ArrayList<>();
+        for (GameImageDetails image : gameDetails.images) {
+            gameImages.add(image.toGameImage(gameName, files));
+        }
+        return gameImages;
     }
 
-    private static FileHandle getCodeFile(String name, Files files) {
-        return files.local(FOLDER + "/" + name + "/" + CODE_FILE);
+    private static FileHandle getManifestFile(String gameName, Files files) {
+        return files.local(FOLDER + "/" + gameName + "/" + GAME_DETAIL_FILE);
+    }
+
+    private static FileHandle getCodeFile(String gameName, Files files) {
+        return files.local(FOLDER + "/" + gameName + "/" + CODE_FILE);
+    }
+
+    private static FileHandle getImageFile(String gameName, String imageFilename, Files files) {
+        return files.local(FOLDER + "/" + gameName + "/" + imageFilename);
     }
 
     public static boolean hasMostRecent(Preferences preferences, Files files) {
@@ -165,27 +181,36 @@ public class Game implements ImageAreaModel {
     }
 
 
-    private class GameDetails {
+    private static class GameDetails {
         private List<GameImageDetails> images = new ArrayList<>();
 
-        private GameDetails() {
-            for (GameImage image : Game.this.images) {
-                images.add(new GameImageDetails(image));
+        public static GameDetails fromGame(Game game) {
+            GameDetails details = new GameDetails();
+            for (GameImage image : game.images) {
+                details.images.add(GameImageDetails.fromGameImage(image));
             }
+            return details;
         }
     }
 
-    private class GameImageDetails {
+    private static class GameImageDetails {
         private String filename;
         private String name;
         private int width;
         private int height;
 
-        public GameImageDetails(GameImage image) {
-            name = image.name();
-            filename = image.filename();
-            width = image.width();
-            height = image.height();
+        public static GameImageDetails fromGameImage(GameImage image) {
+            GameImageDetails details = new GameImageDetails();
+            details.name = image.name();
+            details.filename = image.filename();
+            details.width = image.width();
+            details.height = image.height();
+            return details;
+        }
+
+        public GameImage toGameImage(String gameName, Files files) {
+            FileHandle imageFile = getImageFile(gameName, filename, files);
+            return new GameImage(imageFile, name, width, height);
         }
     }
 }

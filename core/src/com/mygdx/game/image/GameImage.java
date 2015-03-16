@@ -25,6 +25,13 @@ public class GameImage {
         this.name = generateName();
     }
 
+    public GameImage(FileHandle file, String name, int width, int height) {
+        this.file = file;
+        this.name = name;
+        this.width = width;
+        this.height = height;
+    }
+
     public String name() {
         return name;
     }
@@ -87,10 +94,10 @@ public class GameImage {
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             TextureRegion textureRegion = new TextureRegion(texture);
             image = new Image(textureRegion);
-            width = texture.getWidth();
-            height = texture.getHeight();
-            originalWidth = width;
-            originalHeight = height;
+            originalWidth = texture.getWidth();
+            originalHeight = texture.getHeight();
+            if (width == null) width = originalWidth;
+            if (height == null) height = originalHeight;
         }
     }
 

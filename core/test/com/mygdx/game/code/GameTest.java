@@ -136,7 +136,7 @@ public class GameTest {
         when(mockImage.width()).thenReturn(100);
         when(mockImage.height()).thenReturn(50);
         game.save();
-        verify(files.local("games/Unnamed Game/images.json")).writeString("{images:[{filename:image.png,name:image,width:100,height:50}]}", false);
+        verify(files.local("games/Unnamed Game/manifest.json")).writeString("{images:[{filename:image.png,name:image,width:100,height:50}]}", false);
     }
 
     @Test
@@ -145,8 +145,18 @@ public class GameTest {
         when(files.local("games/game").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").readString()).thenReturn("code");
+        when(files.local("games/game/manifest.json").readString()).thenReturn("{}");
         assertThat(continueGame().name()).isEqualTo("game");
         assertThat(continueGame().code()).isEqualTo("code");
+    }
+
+    @Test
+    public void mostRecentLoadsImages() {
+        when(preferences.getString("MostRecentGameName")).thenReturn("game");
+        when(files.local("games/game").exists()).thenReturn(true);
+        when(files.local("games/game/code.groovy").exists()).thenReturn(true);
+        when(files.local("games/game/manifest.json").readString()).thenReturn("{images:[{filename:image.png,name:image,width:100,height:50}]}");
+        assertThat(continueGame().getImages()).extracting("name").containsExactly("image");
     }
 
     private Game newGame() {
