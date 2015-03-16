@@ -28,38 +28,45 @@ public class Game implements ImageAreaModel {
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
 
-    private static Preferences preferences;
-    private static Files files;
-
+    private Preferences preferences;
+    private Files files;
     private String name;
     private String code;
     private Function<String, InputStream> streamProvider;
+    private List<GameImage> images = new ArrayList<>();
 
     public static Game create() {
-        return create(Game::defaultStreamProvider);
-    }
-
-    @VisibleForTesting
-    static Game create(Function<String, InputStream> streamProvider) {
-        return new Game(findUniqueName(), TEMPLATE, streamProvider);
+        return create(Game::defaultStreamProvider, Gdx.app.getPreferences("Planet"), Gdx.files);
     }
 
     public static Game mostRecent() {
-        String name = preferences().getString(RECENT_GAME);
-        return new Game(name, getCodeFile(name).readString(), Game::defaultStreamProvider);
+        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences("Planet"), Gdx.files);
     }
 
-    private Game(String name, String code, Function<String, InputStream> streamProvider) {
+    @VisibleForTesting
+    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+        return new Game(findUniqueName(files), TEMPLATE, streamProvider, preferences, files);
+    }
+
+    @VisibleForTesting
+    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+        String name = preferences.getString(RECENT_GAME);
+        return new Game(name, getCodeFile(name, files).readString(), streamProvider, preferences, files);
+    }
+
+    private Game(String name, String code, Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
         this.streamProvider = streamProvider;
-        setName(name);
+        this.preferences = preferences;
+        this.files = files;
         this.code = code;
+        setName(name);
     }
 
     @Override
     public GameImage addImage(String url) {
         InputStream imageStream = streamProvider.apply(url);
         try {
-            FileHandle mainImageFile = files().local(generateImagePath(url));
+            FileHandle mainImageFile = files.local(generateImagePath(url));
             mainImageFile.write(imageStream, false);
             GameImage gameImage = new GameImage(mainImageFile);
             images.add(gameImage);
@@ -68,25 +75,6 @@ public class Game implements ImageAreaModel {
         } catch (IOException e) {
             throw new InaccessibleUrlException(url, e);
         }
-    }
-    private List<GameImage> images = new ArrayList<>();
-
-    @VisibleForTesting
-    static void setPreferences(Preferences preferences) {
-        Game.preferences = preferences;
-    }
-
-    @VisibleForTesting
-    static void files(Files files) {
-        Game.files = files;
-    }
-
-    public static Preferences preferences() {
-        return preferences == null ? Gdx.app.getPreferences(RECENT_GAME) : preferences;
-    }
-
-    public static Files files() {
-        return files == null ? Gdx.files : files;
     }
 
     public String code() {
@@ -99,8 +87,8 @@ public class Game implements ImageAreaModel {
 
     public void setName(String newName) throws GameRenameException {
         if (isChangingName(newName)) {
-            FileHandle source = files().local(FOLDER + "/" + name);
-            FileHandle target = files().local(FOLDER + "/" + newName);
+            FileHandle source = files.local(FOLDER + "/" + name);
+            FileHandle target = files.local(FOLDER + "/" + newName);
             if (target.exists()) {
                 throw new GameRenameException("Cannot name game " + newName + " as that name is taken!");
             }
@@ -109,38 +97,42 @@ public class Game implements ImageAreaModel {
             }
         }
         this.name = newName;
-        preferences().putString(RECENT_GAME, name);
-        preferences().flush();
+        preferences.putString(RECENT_GAME, name);
+        preferences.flush();
     }
 
     // todo
     public void save(TextAreaModel model) {
-        FileHandle game = getCodeFile(name);
+        save(model, Gdx.files);
+    }
+
+    public void save(TextAreaModel model, Files files) {
+        FileHandle game = getCodeFile(name, files);
         game.writeString(model.getText(), false);
     }
 
-    private static FileHandle getCodeFile(String name) {
-        return files().local(FOLDER + "/" + name + "/" + CODE_FILE);
+    private static FileHandle getCodeFile(String name, Files files) {
+        return files.local(FOLDER + "/" + name + "/" + CODE_FILE);
     }
 
-    public static boolean hasMostRecent() {
-        String gameName = preferences().getString(RECENT_GAME);
-        return gameExists(gameName);
+    public static boolean hasMostRecent(Preferences preferences, Files files) {
+        String gameName = preferences.getString(RECENT_GAME);
+        return gameExists(gameName, files);
     }
 
-    private static boolean gameExists(String gameName) {
+    private static boolean gameExists(String gameName, Files files) {
         String gameFolder = FOLDER + "/" + gameName;
-        if (files().local(gameFolder).exists()) {
+        if (files.local(gameFolder).exists()) {
             String codeFile = gameFolder + "/" + CODE_FILE;
-            return files().local(codeFile).exists();
+            return files.local(codeFile).exists();
         }
         return false;
     }
 
-    private static String findUniqueName() {
+    private static String findUniqueName(Files files) {
         String candidate = DEFAULT_NAME;
         int suffix = 2;
-        while (gameExists(candidate)) {
+        while (gameExists(candidate, files)) {
             candidate = DEFAULT_NAME + " " + suffix++;
         }
         return candidate;

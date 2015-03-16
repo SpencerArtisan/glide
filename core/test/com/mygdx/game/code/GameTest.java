@@ -14,19 +14,19 @@ import static org.mockito.Mockito.*;
 public class GameTest {
     private Preferences preferences;
     private Files files;
+    private InputStream mockImageStream;
 
     @Before
     public void before() {
         preferences = mock(Preferences.class, RETURNS_DEEP_STUBS);
         files = mock(Files.class, RETURNS_DEEP_STUBS);
-        Game.setPreferences(preferences);
-        Game.files(files);
+        mockImageStream = mock(InputStream.class);
     }
 
     @Test
     public void createNewWhenDefaultNameNotInUse() {
         when(files.local("games/Unnamed Game").exists()).thenReturn(false);
-        Game game = Game.create();
+        Game game = newGame();
         assertThat(game.name()).isEqualTo("Unnamed Game");
         assertThat(game.code()).isEqualTo(Game.TEMPLATE);
     }
@@ -35,7 +35,7 @@ public class GameTest {
     public void createNewWhenDefaultNameInUse() {
         when(files.local("games/Unnamed Game").exists()).thenReturn(true);
         when(files.local("games/Unnamed Game/code.groovy").exists()).thenReturn(true);
-        Game game = Game.create();
+        Game game = newGame();
         assertThat(game.name()).isEqualTo("Unnamed Game 2");
     }
 
@@ -47,21 +47,21 @@ public class GameTest {
         when(files.local("games/Unnamed Game 2/code.groovy").exists()).thenReturn(true);
         when(files.local("games/Unnamed Game 3").exists()).thenReturn(true);
         when(files.local("games/Unnamed Game 3/code.groovy").exists()).thenReturn(true);
-        Game game = Game.create();
+        Game game = newGame();
         assertThat(game.name()).isEqualTo("Unnamed Game 4");
     }
 
     @Test
     public void hasNoRecentWhenNotInPrefs() {
         when(preferences.getString("MostRecentGameName")).thenReturn(null);
-        assertThat(Game.hasMostRecent()).isFalse();
+        assertThat(Game.hasMostRecent(preferences, files)).isFalse();
     }
 
     @Test
     public void hasNoRecentWhenInPrefsButNoDirectory() {
         when(files.local("games/game").exists()).thenReturn(false);
         when(preferences.getString("MostRecentGameName")).thenReturn("game");
-        assertThat(Game.hasMostRecent()).isFalse();
+        assertThat(Game.hasMostRecent(preferences, files)).isFalse();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class GameTest {
         when(preferences.getString("MostRecentGameName")).thenReturn("game");
         when(files.local("games/game").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").exists()).thenReturn(false);
-        assertThat(Game.hasMostRecent()).isFalse();
+        assertThat(Game.hasMostRecent(preferences, files)).isFalse();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class GameTest {
         when(preferences.getString("MostRecentGameName")).thenReturn("game");
         when(files.local("games/game").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").exists()).thenReturn(true);
-        assertThat(Game.hasMostRecent()).isTrue();
+        assertThat(Game.hasMostRecent(preferences, files)).isTrue();
     }
 
     @Test
@@ -86,14 +86,14 @@ public class GameTest {
         when(files.local("games/game").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").exists()).thenReturn(true);
         when(files.local("games/game/code.groovy").readString()).thenReturn("code");
-        assertThat(Game.mostRecent().name()).isEqualTo("game");
-        assertThat(Game.mostRecent().code()).isEqualTo("code");
+        assertThat(continueGame().name()).isEqualTo("game");
+        assertThat(continueGame().code()).isEqualTo("code");
     }
 
     @Test
     public void changingGameNameRenamesDirectory() {
         when(files.local("games/Unnamed Game").exists()).thenReturn(true);
-        Game game = Game.create();
+        Game game = newGame();
         game.setName("name");
         verify(files.local("games/Unnamed Game")).moveTo(files.local("games/name"));
     }
@@ -101,14 +101,14 @@ public class GameTest {
     @Test
     public void changingGameNameWhenNoSourceDirectoryDoesNotAtteptSourceRename() {
         when(files.local("games/Unnamed Game").exists()).thenReturn(false);
-        Game game = Game.create();
+        Game game = newGame();
         game.setName("name");
         verify(files.local("games/Unnamed Game"), never()).moveTo(files.local("games/name"));
     }
 
     @Test(expected = GameRenameException.class)
     public void changingGameNameFailsIfTargetDirectoryExists() {
-        Game game = Game.create();
+        Game game = newGame();
         when(files.local("games/name").exists()).thenReturn(true);
         game.setName("name");
         verify(files.local("games/Unnamed Game")).moveTo(files.local("games/name"));
@@ -118,10 +118,17 @@ public class GameTest {
     public void addImageFromUrl() {
         FileHandle mockFile = files.local("games/Unnamed Game/image.png");
         when(mockFile.name()).thenReturn("image.png");
-        InputStream mockStream = mock(InputStream.class);
-        Game game = Game.create((url) -> mockStream);
+        Game game = newGame();
         game.addImage("file:///url/image.png");
-        verify(mockFile).write(mockStream, false);
+        verify(mockFile).write(mockImageStream, false);
         assertThat(game.getImages()).extracting("name").containsExactly("image");
+    }
+
+    private Game newGame() {
+        return Game.create((url) -> mockImageStream, preferences, files);
+    }
+
+    private Game continueGame() {
+        return Game.mostRecent((url) -> mockImageStream, preferences, files);
     }
 }
