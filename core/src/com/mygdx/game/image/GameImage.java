@@ -34,6 +34,10 @@ public class GameImage {
         fireChange();
     }
 
+    public String filename() {
+        return file.name();
+    }
+
     public int maxNameLength() {
         return MAX_NAME_LENGTH;
     }

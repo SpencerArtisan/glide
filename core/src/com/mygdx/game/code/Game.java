@@ -4,6 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
 import com.google.common.annotations.VisibleForTesting;
 import com.mygdx.game.image.GameImage;
 import com.mygdx.game.image.ImageAreaModel;
@@ -20,6 +21,7 @@ public class Game implements ImageAreaModel {
     private static String FOLDER = "games";
     public static final String DEFAULT_NAME = "Unnamed Game";
     private static String CODE_FILE = "code.groovy";
+    private static String IMAGE_DETAIL_FILE = "images.json";
     static String TEMPLATE =
                       "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
@@ -69,13 +71,16 @@ public class Game implements ImageAreaModel {
         try {
             FileHandle mainImageFile = generateImageFileHandle(url);
             mainImageFile.write(imageStream, false);
-            GameImage gameImage = new GameImage(mainImageFile);
-            images.add(gameImage);
             imageStream.close();
-            return gameImage;
+            return addImage(new GameImage(mainImageFile));
         } catch (IOException e) {
             throw new InaccessibleUrlException(url, e);
         }
+    }
+
+    public GameImage addImage(GameImage gameImage) {
+        images.add(gameImage);
+        return gameImage;
     }
 
     public String code() {
@@ -111,8 +116,12 @@ public class Game implements ImageAreaModel {
     }
 
     public void save() {
-        FileHandle game = getCodeFile(name, files);
-        game.writeString(code, false);
+        getCodeFile(name, files).writeString(code, false);
+        getImageDetailFile().writeString(new Json().toJson(new GameDetails()), false);
+    }
+
+    private FileHandle getImageDetailFile() {
+        return files.local(FOLDER + "/" + name + "/" + IMAGE_DETAIL_FILE);
     }
 
     private static FileHandle getCodeFile(String name, Files files) {
@@ -126,11 +135,7 @@ public class Game implements ImageAreaModel {
 
     private static boolean gameExists(String gameName, Files files) {
         String gameFolder = FOLDER + "/" + gameName;
-        if (files.local(gameFolder).exists()) {
-            String codeFile = gameFolder + "/" + CODE_FILE;
-            return files.local(codeFile).exists();
-        }
-        return false;
+        return files.local(gameFolder).exists() && getCodeFile(gameName, files).exists();
     }
 
     private static String findUniqueName(Files files) {
@@ -157,5 +162,30 @@ public class Game implements ImageAreaModel {
     private FileHandle generateImageFileHandle(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
         return files.local(FOLDER + "/" + name + "/" + filename);
+    }
+
+
+    private class GameDetails {
+        private List<GameImageDetails> images = new ArrayList<>();
+
+        private GameDetails() {
+            for (GameImage image : Game.this.images) {
+                images.add(new GameImageDetails(image));
+            }
+        }
+    }
+
+    private class GameImageDetails {
+        private String filename;
+        private String name;
+        private int width;
+        private int height;
+
+        public GameImageDetails(GameImage image) {
+            name = image.name();
+            filename = image.filename();
+            width = image.width();
+            height = image.height();
+        }
     }
 }
