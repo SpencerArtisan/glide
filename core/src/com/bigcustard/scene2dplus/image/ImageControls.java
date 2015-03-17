@@ -5,27 +5,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public class ImageControls {
-    private final ImagePlus gameImage;
+    private final ImagePlus image;
     private final TextField nameField;
     private final TextField widthField;
     private final TextField heightField;
 
-    public ImageControls(ImagePlus gameImage, Skin skin) {
-        this(gameImage,
-             createNameField(gameImage, skin),
-             createSizeField(gameImage.width(), skin),
-             createSizeField(gameImage.height(), skin));
+    public ImageControls(ImagePlus image, Skin skin) {
+        this(image,
+             createNameField(image, skin),
+             createSizeField(image.width(), skin),
+             createSizeField(image.height(), skin));
     }
 
-    public ImageControls(ImagePlus gameImage, TextField nameField, TextField widthField, TextField heightField) {
-        this.gameImage = gameImage;
+    public ImageControls(ImagePlus image, TextField nameField, TextField widthField, TextField heightField) {
+        this.image = image;
         this.nameField = nameField;
         this.widthField = widthField;
         this.heightField = heightField;
     }
 
-    ImagePlus getGameImage() {
-        return gameImage;
+    ImagePlus getImage() {
+        return image;
     }
 
     TextField getNameField() {

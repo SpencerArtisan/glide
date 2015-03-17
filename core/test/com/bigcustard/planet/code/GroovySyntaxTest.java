@@ -1,5 +1,6 @@
-package com.bigcustard.planet.groovy;
+package com.bigcustard.planet.code;
 
+import com.bigcustard.planet.code.GroovySyntax;
 import com.bigcustard.planet.code.SyntaxPart;
 import org.junit.Before;
 import org.junit.Test;

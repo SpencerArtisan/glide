@@ -88,6 +88,10 @@ public class ImagePlus {
         fireChange();
     }
 
+    public void addListener(Runnable listener) {
+        listeners.add(listener);
+    }
+
     private void init() {
         if (image == null) {
             Texture texture = new Texture(file);
@@ -112,9 +116,5 @@ public class ImagePlus {
         int dotIndex = filename.lastIndexOf('.');
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
         return filename.substring(0, nameLength);
-    }
-
-    public void addListener(Runnable listener) {
-        listeners.add(listener);
     }
 }

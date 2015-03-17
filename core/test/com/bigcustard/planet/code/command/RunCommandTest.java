@@ -1,6 +1,7 @@
-package com.bigcustard.scene2dplus.textarea.command;
+package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.CodeRunner;
+import com.bigcustard.planet.code.command.RunCommand;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import org.junit.Before;
 import org.junit.Test;

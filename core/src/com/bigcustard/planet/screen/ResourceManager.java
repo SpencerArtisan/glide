@@ -1,4 +1,4 @@
-package com.bigcustard.planet.screens;
+package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;

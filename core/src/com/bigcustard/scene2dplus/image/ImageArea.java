@@ -24,6 +24,29 @@ public class ImageArea extends ScrollPane {
         controller.init();
     }
 
+    public void onImageAdded(ImagePlus gameImage) {
+        addImageControls(table, gameImage);
+    }
+
+    public TextButton importButton() {
+        return importButton;
+    }
+
+    public ImageControls getImageControls(ImagePlus image) {
+        return imageControlMap.get(image);
+    }
+
+    public void showFailure() {
+        importButton.setText("Dodgy image!");
+        importButton.addAction(
+                Actions.sequence(
+                        Actions.repeat(10,
+                                Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
+                                        Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
+                                        Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
+                        Actions.run(() -> importButton.setText("Add from clipboard"))));
+    }
+
     private void layoutControls() {
         table = (Table) getWidget();
         addHeader(table);
@@ -32,10 +55,6 @@ public class ImageArea extends ScrollPane {
         for (ImagePlus gameImage : model.getImages()) {
             addImageControls(table, gameImage);
         }
-    }
-
-    public void onImageAdded(ImagePlus gameImage) {
-        addImageControls(table, gameImage);
     }
 
     private void addHeader(Table table) {
@@ -69,24 +88,5 @@ public class ImageArea extends ScrollPane {
         table.add(new Label(" x ", skin)).width(WIDTH * 0.2f);
         table.add(imageControls.getHeightField()).width(WIDTH * 0.4f);
         return table;
-    }
-
-    public TextButton importButton() {
-        return importButton;
-    }
-
-    public ImageControls getImageControls(ImagePlus image) {
-        return imageControlMap.get(image);
-    }
-
-    public void showFailure() {
-        importButton.setText("Dodgy image!");
-        importButton.addAction(
-                Actions.sequence(
-                        Actions.repeat(10,
-                                Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
-                                        Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
-                                        Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
-                        Actions.run(() -> importButton.setText("Add from clipboard"))));
     }
 }

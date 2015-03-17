@@ -55,15 +55,15 @@ public class ImageAreaController {
     }
 
     private void addRenameBehaviour(ImageControls imageControls) {
-        imageControls.getNameField().setTextFieldListener((field, c) -> imageControls.getGameImage().setName(field.getText()));
+        imageControls.getNameField().setTextFieldListener((field, c) -> imageControls.getImage().setName(field.getText()));
     }
 
     private void addWidthChangeBehaviour(ImageControls imageControls) {
-        imageControls.getWidthField().setTextFieldListener((field, c) -> imageControls.getGameImage().setWidth(parseInt(field)));
+        imageControls.getWidthField().setTextFieldListener((field, c) -> imageControls.getImage().setWidth(parseInt(field)));
     }
 
     private void addHeightChangeBehaviour(ImageControls imageControls) {
-        imageControls.getHeightField().setTextFieldListener((field, c) -> imageControls.getGameImage().setHeight(parseInt(field)));
+        imageControls.getHeightField().setTextFieldListener((field, c) -> imageControls.getImage().setHeight(parseInt(field)));
     }
 
     private void onImageUrlProvided(String url) {

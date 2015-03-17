@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.screens.CodingScreen;
-import com.bigcustard.planet.screens.ResourceManager;
-import com.bigcustard.planet.screens.WelcomeScreen;
+import com.bigcustard.planet.screen.CodingScreen;
+import com.bigcustard.planet.screen.ResourceManager;
+import com.bigcustard.planet.screen.WelcomeScreen;
 
 import java.util.function.Supplier;
 

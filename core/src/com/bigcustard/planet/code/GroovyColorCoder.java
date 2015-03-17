@@ -1,10 +1,9 @@
-package com.bigcustard.planet.groovy;
+package com.bigcustard.planet.code;
 
 import com.badlogic.gdx.graphics.Color;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import org.apache.commons.lang3.StringUtils;
 

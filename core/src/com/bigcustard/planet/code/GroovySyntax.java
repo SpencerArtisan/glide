@@ -1,4 +1,4 @@
-package com.bigcustard.planet.groovy;
+package com.bigcustard.planet.code;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;

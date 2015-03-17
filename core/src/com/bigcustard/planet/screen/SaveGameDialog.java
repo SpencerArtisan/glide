@@ -1,4 +1,4 @@
-package com.bigcustard.planet.screens;
+package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
