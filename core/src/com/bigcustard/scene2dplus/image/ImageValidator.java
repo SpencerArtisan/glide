@@ -1,26 +1,24 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ImageValidator {
 
     public List<Result> validate(ImageAreaModel model) {
         List<Result> results = new ArrayList<>();
+        List<String> imageNames = Lists.transform(model.getImages(), ImagePlus::name);
+
         for (ImagePlus imagePlus : model.getImages()) {
             Result result = new Result();
             result.image = imagePlus;
-            if (imagePlus.width() == null) {
-                result.widthValid = false;
-            }
-            if (imagePlus.height() == null) {
-                result.heightValid = false;
-            }
-            if (Strings.isNullOrEmpty(imagePlus.name())) {
-                result.nameValid = false;
-            }
+            result.widthValid = imagePlus.width() != null;
+            result.heightValid = imagePlus.height() != null;
+            result.nameValid = !Strings.isNullOrEmpty(imagePlus.name()) && Collections.frequency(imageNames, imagePlus.name()) == 1;
             results.add(result);
         }
         return results;
