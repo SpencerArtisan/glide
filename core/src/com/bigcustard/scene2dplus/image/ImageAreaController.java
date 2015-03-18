@@ -7,13 +7,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.List;
+
 public class ImageAreaController {
     private final ImageArea view;
     private final ImageAreaModel model;
+    private final ImageValidator validator;
 
     public ImageAreaController(ImageArea view, ImageAreaModel model) {
         this.view = view;
         this.model = model;
+        validator = new ImageValidator();
     }
 
     public void init() {
@@ -33,6 +37,7 @@ public class ImageAreaController {
         for (ImagePlus gameImage : model.getImages()) {
             addImageAdjustmentBehaviour(gameImage);
         }
+        validate();
     }
 
     private void addImageAdjustmentBehaviour(ImagePlus gameImage) {
@@ -52,6 +57,17 @@ public class ImageAreaController {
         imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
         imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
         imageControls.getNameField().setText(image.name());
+        validate();
+    }
+
+    private void validate() {
+        List<ImageValidator.Result> results = validator.validate(model);
+        for (ImageValidator.Result result : results) {
+            ImageControls imageControls = view.getImageControls(result.image());
+//            imageControls.getNameField().setValid(result.isNameValid());
+            imageControls.getWidthField().setValid(result.isWidthValid());
+            imageControls.getHeightField().setValid(result.isHeightValid());
+        }
     }
 
     private void addRenameBehaviour(ImageControls imageControls) {
@@ -71,6 +87,7 @@ public class ImageAreaController {
             ImagePlus gameImage = model.addImage(url);
             view.onImageAdded(gameImage);
             addImageAdjustmentBehaviour(gameImage);
+            validate();
         } catch (Exception e) {
             view.showFailure();
         }

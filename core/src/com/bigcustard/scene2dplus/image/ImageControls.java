@@ -3,12 +3,13 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 
 public class ImageControls {
     private final ImagePlus image;
     private final TextField nameField;
-    private final TextField widthField;
-    private final TextField heightField;
+    private final TextFieldPlus widthField;
+    private final TextFieldPlus heightField;
 
     public ImageControls(ImagePlus image, Skin skin) {
         this(image,
@@ -17,7 +18,7 @@ public class ImageControls {
              createSizeField(image.height(), skin));
     }
 
-    public ImageControls(ImagePlus image, TextField nameField, TextField widthField, TextField heightField) {
+    public ImageControls(ImagePlus image, TextField nameField, TextFieldPlus widthField, TextFieldPlus heightField) {
         this.image = image;
         this.nameField = nameField;
         this.widthField = widthField;
@@ -32,11 +33,11 @@ public class ImageControls {
         return nameField;
     }
 
-    TextField getWidthField() {
+    TextFieldPlus getWidthField() {
         return widthField;
     }
 
-    TextField getHeightField() {
+    TextFieldPlus getHeightField() {
         return heightField;
     }
 
@@ -47,8 +48,8 @@ public class ImageControls {
         return textField;
     }
 
-    private static TextField createSizeField(float value, Skin skin) {
-        TextField textField = new TextField(Integer.valueOf((int) value).toString(), skin);
+    private static TextFieldPlus createSizeField(float value, Skin skin) {
+        TextFieldPlus textField = new TextFieldPlus(Integer.valueOf((int) value).toString(), skin);
         textField.setAlignment(Align.center);
         textField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         return textField;

@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.verification.VerificationMode;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -116,7 +117,7 @@ public class ImageAreaControllerTest {
         }
     }
 
-    public class WhenTheUnderlyingImageWidthChanges {
+    public class WhenTheUnderlyingImageWidthChangesToAValidValue {
         @Before
         public void before() {
             when(gameImage.width()).thenReturn(50);
@@ -126,6 +127,29 @@ public class ImageAreaControllerTest {
         @Test
         public void it_UpdatesTheWidthTextField() {
             verify(widthField.mock()).setText("50");
+        }
+
+        @Test
+        public void it_MarksTheFieldAsValid() {
+            verify(widthField.mock(), times(2)).setValid(true);
+        }
+    }
+
+    public class WhenTheUnderlyingImageWidthChangesToAnInvalidValue {
+        @Before
+        public void before() {
+            when(gameImage.width()).thenReturn(null);
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_UpdatesTheWidthTextField() {
+            verify(widthField.mock()).setText("");
+        }
+
+        @Test
+        public void it_MarksTheFieldAsInvalid() {
+            verify(widthField.mock()).setValid(false);
         }
     }
 

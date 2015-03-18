@@ -38,6 +38,18 @@ public class TextArea extends Actor {
         drawText(batch);
     }
 
+    public XY<Integer> caretLocationToPosition(XY<Integer> caret) {
+        float x = LEFT_MARGIN + getX() + caret.x * getColumnWidth();
+        float y = -TOP_MARGIN + getHeight() + getY() - caret.y * getRowHeight();
+        return new XY<>((int) x, (int) y);
+    }
+
+    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
+        float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth();
+        float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
+        return new XY<>((int) caretX, (int) caretY);
+    }
+
     private void drawBackground(Batch batch) {
         style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
     }
@@ -94,17 +106,5 @@ public class TextArea extends Actor {
 
     private float getColumnWidth() {
         return 14;
-    }
-
-    public XY<Integer> caretLocationToPosition(XY<Integer> caret) {
-        float x = LEFT_MARGIN + getX() + caret.x * getColumnWidth();
-        float y = -TOP_MARGIN + getHeight() + getY() - caret.y * getRowHeight();
-        return new XY<>((int) x, (int) y);
-    }
-
-    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
-        float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth();
-        float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
-        return new XY<>((int) caretX, (int) caretY);
     }
 }

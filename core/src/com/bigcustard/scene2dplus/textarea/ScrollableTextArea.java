@@ -24,16 +24,16 @@ public class ScrollableTextArea extends ScrollPane {
         scrollPaneToShowCurrentCaret(model);
     }
 
+    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
+        return textArea().worldPositionToCaretLocation(worldXY);
+    }
+
     private boolean isOffBottom(XY<Integer> location) {
         return location.y < textArea().getRowHeight();
     }
 
     private boolean isOffTop(XY<Integer> location) {
         return location.y + textArea().getRowHeight() > getHeight();
-    }
-
-    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
-        return textArea().worldPositionToCaretLocation(worldXY);
     }
 
     private void scrollPaneToShowCurrentCaret(TextAreaModel model) {
