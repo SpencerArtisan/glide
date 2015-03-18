@@ -64,7 +64,7 @@ public class ImageAreaController {
         List<ImageValidator.Result> results = validator.validate(model);
         for (ImageValidator.Result result : results) {
             ImageControls imageControls = view.getImageControls(result.image());
-//            imageControls.getNameField().setValid(result.isNameValid());
+            imageControls.getNameField().setValid(result.isNameValid());
             imageControls.getWidthField().setValid(result.isWidthValid());
             imageControls.getHeightField().setValid(result.isHeightValid());
         }

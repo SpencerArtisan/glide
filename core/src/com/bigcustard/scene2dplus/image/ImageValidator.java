@@ -1,5 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
+import com.google.common.base.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,9 @@ public class ImageValidator {
             if (imagePlus.height() == null) {
                 result.heightValid = false;
             }
+            if (Strings.isNullOrEmpty(imagePlus.name())) {
+                result.nameValid = false;
+            }
             results.add(result);
         }
         return results;
@@ -25,6 +30,7 @@ public class ImageValidator {
         private ImagePlus image;
         private boolean widthValid = true;
         private boolean heightValid = true;
+        private boolean nameValid = true;
 
         public ImagePlus image() {
             return image;
@@ -36,6 +42,10 @@ public class ImageValidator {
 
         public boolean isHeightValid() {
             return heightValid;
+        }
+
+        public boolean isNameValid() {
+            return nameValid;
         }
     }
 }

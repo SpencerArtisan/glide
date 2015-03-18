@@ -7,7 +7,7 @@ import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 
 public class ImageControls {
     private final ImagePlus image;
-    private final TextField nameField;
+    private final TextFieldPlus nameField;
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
 
@@ -18,7 +18,7 @@ public class ImageControls {
              createSizeField(image.height(), skin));
     }
 
-    public ImageControls(ImagePlus image, TextField nameField, TextFieldPlus widthField, TextFieldPlus heightField) {
+    public ImageControls(ImagePlus image, TextFieldPlus nameField, TextFieldPlus widthField, TextFieldPlus heightField) {
         this.image = image;
         this.nameField = nameField;
         this.widthField = widthField;
@@ -29,7 +29,7 @@ public class ImageControls {
         return image;
     }
 
-    TextField getNameField() {
+    TextFieldPlus getNameField() {
         return nameField;
     }
 
@@ -41,8 +41,8 @@ public class ImageControls {
         return heightField;
     }
 
-    private static TextField createNameField(ImagePlus image, Skin skin) {
-        TextField textField = new TextField(image.name(), skin);
+    private static TextFieldPlus createNameField(ImagePlus image, Skin skin) {
+        TextFieldPlus textField = new TextFieldPlus(image.name(), skin);
         textField.setAlignment(Align.center);
         textField.setMaxLength(image.maxNameLength());
         return textField;

@@ -177,6 +177,29 @@ public class ImageAreaControllerTest {
         public void it_UpdatesTheHeightTextField() {
             verify(nameField.mock()).setText("name");
         }
+
+        @Test
+        public void it_MarksTheFieldAsValid() {
+            verify(nameField.mock()).setValid(true);
+        }
+    }
+
+    public class WhenTheUnderlyingImageNameChangesToAnEmptyValue {
+        @Before
+        public void before() {
+            when(gameImage.name()).thenReturn("");
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_UpdatesTheHeightTextField() {
+            verify(nameField.mock()).setText("");
+        }
+
+        @Test
+        public void it_MarksTheFieldAsInvalid() {
+            verify(nameField.mock(), times(2)).setValid(false);
+        }
     }
 
     public class WhenTypingInTheNameTextBox {
