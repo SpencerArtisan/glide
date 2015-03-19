@@ -6,4 +6,5 @@ public interface ImageAreaModel {
     ImagePlus addImage(String imageUrl);
     List<ImagePlus> getImages();
     List<ImageValidator.Result> validateImages();
+    void deleteImage(ImagePlus image);
 }

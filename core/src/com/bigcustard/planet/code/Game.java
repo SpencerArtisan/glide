@@ -147,6 +147,11 @@ public class Game implements ImageAreaModel {
         return imageValidator.validate(images);
     }
 
+    @Override
+    public void deleteImage(ImagePlus image) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public void save() {
         getCodeFile(name, files).writeString(code, false);
         getManifestFile(name, files).writeString(new Json().toJson(GameDetails.fromGame(this)), false);

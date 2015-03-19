@@ -6,12 +6,7 @@ import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.internal.stubbing.answers.Returns;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockito.verification.VerificationMode;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,13 +25,14 @@ public class ImageAreaControllerTest {
     private TestTextField nameField = new TestTextField();
     private TestTextField widthField = new TestTextField();
     private TestTextField heightField = new TestTextField();
+    private TestTextButton deleteButton = new TestTextButton();
 
     @Before
     public void before() {
         initMocks(this);
         importButton = TestTextButton.mocking(view.importButton());
         ImageControls imageControls =
-                new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock());
+                new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock(), deleteButton.mock());
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
         when(model.addImage(any())).thenReturn(gameImage);
         when(model.getImages()).thenReturn(Arrays.asList(gameImage));
@@ -70,6 +66,20 @@ public class ImageAreaControllerTest {
             public void it_AddsTheImageAgain() {
                 verify(model, times(2)).addImage("url");
             }
+        }
+    }
+
+    public class WhenTheDeleteButtonIsClicked {
+        private FileHandle imageFile;
+
+        @Before
+        public void before() {
+            deleteButton.fireChanged();
+        }
+
+        @Test
+        public void it_DeletesTheImage() {
+            verify(model).deleteImage(gameImage);
         }
     }
 

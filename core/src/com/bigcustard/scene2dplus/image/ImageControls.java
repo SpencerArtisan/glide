@@ -1,5 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -10,19 +12,22 @@ public class ImageControls {
     private final TextFieldPlus nameField;
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
+    private Button deleteButton;
 
     public ImageControls(ImagePlus image, Skin skin) {
         this(image,
              createNameField(image, skin),
              createSizeField(image.width(), skin),
-             createSizeField(image.height(), skin));
+             createSizeField(image.height(), skin),
+             createDeleteButton(skin));
     }
 
-    public ImageControls(ImagePlus image, TextFieldPlus nameField, TextFieldPlus widthField, TextFieldPlus heightField) {
+    public ImageControls(ImagePlus image, TextFieldPlus nameField, TextFieldPlus widthField, TextFieldPlus heightField, Button deleteButton) {
         this.image = image;
         this.nameField = nameField;
         this.widthField = widthField;
         this.heightField = heightField;
+        this.deleteButton = deleteButton;
     }
 
     ImagePlus getImage() {
@@ -41,6 +46,10 @@ public class ImageControls {
         return heightField;
     }
 
+    Button getDeleteButton() {
+        return deleteButton;
+    }
+
     private static TextFieldPlus createNameField(ImagePlus image, Skin skin) {
         TextFieldPlus textField = new TextFieldPlus(image.name(), skin);
         textField.setAlignment(Align.center);
@@ -53,5 +62,9 @@ public class ImageControls {
         textField.setAlignment(Align.center);
         textField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         return textField;
+    }
+
+    private static Button createDeleteButton(Skin skin) {
+        return new ImageButton(skin, "trash-button");
     }
 }

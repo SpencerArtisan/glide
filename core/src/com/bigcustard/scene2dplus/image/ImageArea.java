@@ -87,12 +87,15 @@ public class ImageArea extends ScrollPane {
         ImageControls imageControls = getImageControls(gameImage);
 
         table.row();
+//        table.add(imageControls.getDeleteButton());
+//        table.row();
         Image image = gameImage.asImage();
         table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
         table.row();
         table.add(imageControls.getNameField()).width(WIDTH);
         table.row();
         table.add(createSizeArea(imageControls));
+
     }
 
     private Table createSizeArea(ImageControls imageControls) {

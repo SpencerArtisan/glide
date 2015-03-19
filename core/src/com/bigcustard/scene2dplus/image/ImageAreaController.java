@@ -44,6 +44,7 @@ public class ImageAreaController {
         addRenameBehaviour(imageControls);
         addWidthChangeBehaviour(imageControls);
         addHeightChangeBehaviour(imageControls);
+        addDeleteBehaviour(imageControls);
     }
 
     private void addImageListener(ImagePlus gameImage) {
@@ -78,6 +79,15 @@ public class ImageAreaController {
 
     private void addHeightChangeBehaviour(ImageControls imageControls) {
         imageControls.getHeightField().setTextFieldListener((field, c) -> imageControls.getImage().setHeight(parseInt(field)));
+    }
+
+    private void addDeleteBehaviour(ImageControls imageControls) {
+        imageControls.getDeleteButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                model.deleteImage(imageControls.getImage());
+            }
+        });
     }
 
     private void onImageUrlProvided(String url) {
