@@ -18,8 +18,8 @@ public class SaveChoiceDialog extends Dialog {
 
     private void layoutControls() {
         Table contentTable = getContentTable();
-        contentTable.padTop(20).padLeft(60).padRight(60);
-        text("Do you want to save your game?");
+        contentTable.padTop(20).padLeft(40).padRight(40);
+        text("Shall I save your game?");
         contentTable.row();
         button("Save", true);
         getButtonTable().getCells().get(0).padRight(40);

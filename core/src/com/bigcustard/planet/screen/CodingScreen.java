@@ -106,7 +106,6 @@ public class CodingScreen extends ScreenAdapter {
 
     private ListenableFuture<String> getGameName() {
         NameGameDialog nameGameDialog = new NameGameDialog(game, skin);
-        nameGameDialog.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         nameGameDialog.show(stage);
         stage.setKeyboardFocus(nameGameDialog.getNameTextField());
         return nameGameDialog.getFutureGameName();
@@ -114,7 +113,6 @@ public class CodingScreen extends ScreenAdapter {
 
     private ListenableFuture<Boolean> saveGameChoice() {
         SaveChoiceDialog saveGameDialog = new SaveChoiceDialog(skin);
-        saveGameDialog.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         saveGameDialog.show(stage);
         return saveGameDialog.getFutureSaveChoice();
     }

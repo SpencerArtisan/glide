@@ -88,7 +88,7 @@ public class Game implements ImageAreaModel {
     }
 
     public ImagePlus addImage(ImagePlus gameImage) {
-        images.add(gameImage);
+        images.add(0, gameImage);
         gameImage.addListener(this::informListeners);
         informListeners();
         return gameImage;

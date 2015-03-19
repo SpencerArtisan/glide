@@ -19,13 +19,19 @@ public class ImageArea extends ScrollPane {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
+        createImportButton(skin);
         layoutControls();
         ImageAreaController controller = new ImageAreaController(this, model);
         controller.init();
     }
 
+    private void createImportButton(Skin skin) {
+        importButton = new TextButton("Add from clipboard", skin);
+    }
+
     public void onImageAdded(ImagePlus gameImage) {
-        addImageControls(table, gameImage);
+        createImageControls(gameImage);
+        layoutControls();
     }
 
     public TextButton importButton() {
@@ -33,7 +39,15 @@ public class ImageArea extends ScrollPane {
     }
 
     public ImageControls getImageControls(ImagePlus image) {
+        if (!imageControlMap.containsKey(image)) {
+            createImageControls(image);
+        }
         return imageControlMap.get(image);
+    }
+
+    private void createImageControls(ImagePlus image) {
+        ImageControls imageControls = new ImageControls(image, skin);
+        imageControlMap.put(image, imageControls);
     }
 
     public void showFailure() {
@@ -49,6 +63,7 @@ public class ImageArea extends ScrollPane {
 
     private void layoutControls() {
         table = (Table) getWidget();
+        table.clearChildren();
         addHeader(table);
         addImportButton(table);
 
@@ -64,14 +79,12 @@ public class ImageArea extends ScrollPane {
     }
 
     private void addImportButton(Table table) {
-        importButton = new TextButton("Add from clipboard", skin);
         table.row();
         table.add(importButton).width(WIDTH);
     }
 
     private void addImageControls(Table table, ImagePlus gameImage) {
-        ImageControls imageControls = new ImageControls(gameImage, skin);
-        imageControlMap.put(gameImage, imageControls);
+        ImageControls imageControls = getImageControls(gameImage);
 
         table.row();
         Image image = gameImage.asImage();
