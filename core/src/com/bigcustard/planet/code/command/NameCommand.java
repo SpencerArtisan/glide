@@ -9,11 +9,11 @@ import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
 import java.util.function.Supplier;
 
-public class SaveCommand extends AbstractCommand {
+public class NameCommand extends AbstractCommand {
     private Game game;
     private Supplier<ListenableFuture<String>> gameNameSupplier;
 
-    public SaveCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier) {
+    public NameCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier) {
         super(model);
         this.game = game;
         this.gameNameSupplier = gameNameSupplier;

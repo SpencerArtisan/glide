@@ -1,6 +1,5 @@
 package com.bigcustard.planet.code.command;
 
-import com.bigcustard.planet.code.command.SaveCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.bigcustard.planet.code.Game;
@@ -14,10 +13,10 @@ import java.util.function.Supplier;
 
 import static org.mockito.Mockito.verify;
 
-public class SaveCommandTest {
+public class NameCommandTest {
     @Mock private Game game;
     @Mock private TextAreaModel model;
-    private SaveCommand command;
+    private NameCommand command;
     private SettableFuture<String> futureName;
 
     @Before
@@ -25,7 +24,7 @@ public class SaveCommandTest {
         MockitoAnnotations.initMocks(this);
         futureName = SettableFuture.create();
         Supplier<ListenableFuture<String>> nameSupplier = () -> futureName;
-        command = new SaveCommand(model, game, nameSupplier);
+        command = new NameCommand(model, game, nameSupplier);
     }
 
     @Test

@@ -29,17 +29,17 @@ public class ExitCommand extends AbstractCommand {
             game.save();
             exitProcess.run();
         } else {
-            saveOrDeleteGame();
+            nameOrDeleteGame();
         }
     }
 
-    private void saveOrDeleteGame() {
+    private void nameOrDeleteGame() {
         ListenableFuture<Boolean> futureSaveChoice = saveChoiceSupplier.get();
         Futures.addCallback(futureSaveChoice, new FutureCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean save) {
                 if (save) {
-                    saveGame();
+                    nameGame();
                 } else {
                     game.delete();
                     exitProcess.run();
@@ -53,7 +53,7 @@ public class ExitCommand extends AbstractCommand {
         });
     }
 
-    private void saveGame() {
+    private void nameGame() {
         ListenableFuture<String> futureGameName = gameNameSupplier.get();
         Futures.addCallback(futureGameName, new FutureCallback<String>() {
             @Override
