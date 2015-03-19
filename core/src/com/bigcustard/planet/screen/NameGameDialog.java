@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.google.common.util.concurrent.SettableFuture;
 import com.bigcustard.planet.code.Game;
 
-public class SaveGameDialog extends Dialog {
+public class NameGameDialog extends Dialog {
     private SettableFuture<String> futureGameName = SettableFuture.create();
     private TextField nameTextField;
 
-    public SaveGameDialog(Game game, Skin skin) {
+    public NameGameDialog(Game game, Skin skin) {
         super("", skin);
         createNameField(game, skin);
         layoutControls();
@@ -42,7 +42,7 @@ public class SaveGameDialog extends Dialog {
     }
 
     private TextField createNameField(Game game, Skin skin) {
-        nameTextField = new TextField(game.name(), skin);
+        nameTextField = new TextField(game.isNamed() ? game.name() : "", skin);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(16);
         nameTextField.setCursorPosition(nameTextField.getText().length());

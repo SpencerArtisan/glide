@@ -1,7 +1,7 @@
 package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.CodeRunner;
-import com.bigcustard.planet.code.command.RunCommand;
+import com.bigcustard.planet.code.Game;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class RunCommandTest {
     private TextAreaModel model;
     private RunCommand command;
-    @Mock private CodeRunner codeRunner;
+    @Mock private Game game;
 
     @Before
     public void before() {
@@ -25,22 +25,26 @@ public class RunCommandTest {
 
     @Test
     public void execute() {
-        command = new RunCommand(model, codeRunner);
+        command = new RunCommand(model, game);
         command.execute();
-        verify(codeRunner).run("code");
+        verify(game).run();
     }
 
     @Test
-    public void canExecuteWhenCodeValid() {
-        when(codeRunner.isValid("code")).thenReturn(true);
-        command = new RunCommand(model, codeRunner);
+    public void cannotExecuteWhenGameInvalid() {
+        when(game.isValid()).thenReturn(false);
+        command = new RunCommand(model, game);
+        assertThat(command.canExecute()).isFalse();
+    }
+
+    @Test
+    public void canExecuteWhenGameValid() {
+        when(game.isValid()).thenReturn(true);
+        command = new RunCommand(model, game);
         assertThat(command.canExecute()).isTrue();
     }
 
     @Test
-    public void cannotExecuteWhenCodeInvalid() {
-        when(codeRunner.isValid("code")).thenReturn(false);
-        command = new RunCommand(model, codeRunner);
-        assertThat(command.canExecute()).isFalse();
+    public void forcesNamingUnnamedGames() {
     }
 }

@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.google.common.annotations.VisibleForTesting;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,13 +25,14 @@ public class Game implements ImageAreaModel {
     private static String GAME_DETAIL_FILE = "manifest.json";
     static String TEMPLATE =
                       "////////////////////////////////// \n"
-                    + "// Welcome to PlanetApplication Burpl! \n"
+                    + "// Welcome to Planet Burpl! \n"
                     + "// Start writing your planet below. \n"
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
 
     private String name;
     private String code;
+    private CodeRunner runner;
     private List<ImagePlus> images;
 
     private Preferences preferences;
@@ -39,32 +40,33 @@ public class Game implements ImageAreaModel {
     private Function<String, InputStream> urlStreamProvider;
 
     public static Game create() {
-        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files);
+        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner());
     }
 
     public static Game mostRecent() {
-        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files);
+        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner());
     }
 
     @VisibleForTesting
-    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
-        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files);
+    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
+        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files, runner);
     }
 
     @VisibleForTesting
-    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
         String name = preferences.getString(RECENT_GAME);
         String code = getCodeFile(name, files).readString();
         List<ImagePlus> images = readImages(name, files);
-        return new Game(name, code, images, streamProvider, preferences, files);
+        return new Game(name, code, images, streamProvider, preferences, files, runner);
     }
 
-    private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files) {
+    private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
         this.images = images;
         this.urlStreamProvider = streamProvider;
         this.preferences = preferences;
         this.files = files;
         this.code = code;
+        this.runner = runner;
         setName(name);
     }
 
@@ -121,6 +123,21 @@ public class Game implements ImageAreaModel {
     public void save() {
         getCodeFile(name, files).writeString(code, false);
         getManifestFile(name, files).writeString(new Json().toJson(GameDetails.fromGame(this)), false);
+    }
+
+    public boolean isNamed() {
+        return !name.startsWith(DEFAULT_NAME);
+    }
+
+    public void delete() {
+        files.local(FOLDER + "/" + name).deleteDirectory();
+    }
+
+    public boolean isValid() {
+        return runner.isValid(code);
+    }
+
+    public void run() {
     }
 
     private static List<ImagePlus> readImages(String gameName, Files files) {
@@ -183,14 +200,6 @@ public class Game implements ImageAreaModel {
     private FileHandle generateImageFileHandle(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
         return files.local(FOLDER + "/" + name + "/" + filename);
-    }
-
-    public boolean isNamed() {
-        return !name.startsWith(DEFAULT_NAME);
-    }
-
-    public void delete() {
-        files.local(FOLDER + "/" + name).deleteDirectory();
     }
 
     private static class GameDetails {
