@@ -21,9 +21,9 @@ public class GameLibraryDialog extends Dialog {
         row();
         for (FileHandle gameDirectory : Game.allGameFolders(Gdx.files)) {
             TextButton button = new TextButton("  " + gameDirectory.name() + "  ", skin, "big");
-            add(button).fillX().pad(10);
+            getButtonTable().add(button).fillX().pad(10);
             setObject(button, gameDirectory);
-            row();
+            getButtonTable().row();
         }
     }
 
