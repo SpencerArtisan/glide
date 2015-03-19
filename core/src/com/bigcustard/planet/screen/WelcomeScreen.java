@@ -23,6 +23,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Stage stage;
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
+	private TextButton gameLibraryButton;
 
 	public WelcomeScreen(Viewport viewport, ResourceManager resourceManager) {
 		super();
@@ -33,6 +34,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	    Label title = createTitle(skin);
 	    createNewGameButton(skin);
 	    createContinueGameButton(skin);
+	    createGameLibraryButton(skin);
 		TextureRegionDrawable backgroundRegion = createBackground();
 		layoutScreen(backgroundRegion);		
 		animate(title);
@@ -45,6 +47,10 @@ public class WelcomeScreen extends ScreenAdapter {
 	
 	public TextButton getNewGameButton() {
 		return newGameButton;
+	}
+
+	public TextButton getGameLibraryButton() {
+		return gameLibraryButton;
 	}
 
 	public TextButton getContinueGameButton() {
@@ -61,6 +67,10 @@ public class WelcomeScreen extends ScreenAdapter {
         continueGameButton.setTouchable(Game.hasMostRecent() ? Touchable.enabled : Touchable.disabled);
 	}
 
+	private void createGameLibraryButton(Skin skin) {
+		gameLibraryButton = new TextButton("   Game Library   ", skin, "big");
+	}
+
 	private void animate(Label title) {
 		table.getColor().a = 0f;
 		table.addAction(Actions.fadeIn(2f));
@@ -73,7 +83,9 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.row();
 		table.add(newGameButton).colspan(2).fillX();
 		table.row();
-		table.add(continueGameButton).padTop(20f).colspan(2);
+		table.add(continueGameButton).padTop(20f).colspan(2).fillX();
+		table.row();
+		table.add(gameLibraryButton).padTop(20f).colspan(2).fillX();
 		table.background(backgroundRegion);
 		table.setFillParent(true);
 		table.pack();
@@ -82,8 +94,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextureRegionDrawable createBackground() {
 		Texture backgroundTexture = new Texture(Gdx.files.internal("images/WelcomeBackground.png"));
 		backgroundTexture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
-		TextureRegionDrawable backgroundRegion = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-		return backgroundRegion;
+        return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 	}
 
 	private Label createTitle(Skin skin) {

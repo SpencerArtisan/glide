@@ -27,12 +27,21 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
         configureGameButton(welcomeScreen.getNewGameButton(), Game::create);
         configureGameButton(welcomeScreen.getContinueGameButton(), Game::mostRecent);
+        configureGameLibraryButton(welcomeScreen.getGameLibraryButton());
         setScreen(welcomeScreen);
     }
 
     private void showCodingScreen(Supplier<Game> programSupplier) {
         CodingScreen codingScreen = new CodingScreen(programSupplier.get(), viewport, resourceManager, this::showWelcomeScreen);
         setScreen(codingScreen);
+    }
+
+    private void configureGameLibraryButton(TextButton button) {
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
     }
 
     private void configureGameButton(TextButton button, Supplier<Game> programSupplier) {
