@@ -1,6 +1,8 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -24,6 +26,10 @@ public class ImageValidator {
         return results;
     }
 
+    public boolean isValid(List<ImagePlus> images) {
+        return Iterables.all(validate(images), Result::isValid);
+    }
+
     public static class Result {
         private ImagePlus image;
         private boolean widthValid = true;
@@ -44,6 +50,10 @@ public class ImageValidator {
 
         public boolean isNameValid() {
             return nameValid;
+        }
+
+        public boolean isValid() {
+            return isWidthValid() && isHeightValid() && isNameValid();
         }
     }
 }

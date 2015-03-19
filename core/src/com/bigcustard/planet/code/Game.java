@@ -40,6 +40,7 @@ public class Game implements ImageAreaModel {
     private Preferences preferences;
     private Files files;
     private Function<String, InputStream> urlStreamProvider;
+    private List<Runnable> listeners = new ArrayList<>();
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
@@ -88,6 +89,8 @@ public class Game implements ImageAreaModel {
 
     public ImagePlus addImage(ImagePlus gameImage) {
         images.add(gameImage);
+        gameImage.addListener(this::informListeners);
+        informListeners();
         return gameImage;
     }
 
@@ -97,6 +100,7 @@ public class Game implements ImageAreaModel {
 
     public void setCode(String code) {
         this.code = code;
+        informListeners();
     }
 
     public String name() {
@@ -142,10 +146,20 @@ public class Game implements ImageAreaModel {
     }
 
     public boolean isValid() {
-        return runner.isValid(code);
+        return runner.isValid(code) && imageValidator.isValid(images);
     }
 
     public void run() {
+    }
+
+    public void addListener(Runnable listener) {
+        listeners.add(listener);
+    }
+
+    private void informListeners() {
+        for (Runnable listener : listeners) {
+            listener.run();
+        }
     }
 
     private static List<ImagePlus> readImages(String gameName, Files files) {
@@ -208,6 +222,9 @@ public class Game implements ImageAreaModel {
     private FileHandle generateImageFileHandle(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
         return files.local(FOLDER + "/" + name + "/" + filename);
+    }
+
+    public void addListener(Object refreshEnabledStatuses) {
     }
 
     private static class GameDetails {

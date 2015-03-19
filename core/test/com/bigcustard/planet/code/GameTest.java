@@ -5,10 +5,12 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.ImageValidator;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -32,17 +34,31 @@ public class GameTest {
     }
 
     @Test
-    public void isValid() {
+    public void isValidIfCodeGood() {
         when(mockRunner.isValid("code")).thenReturn(true);
+        when(mockValidator.isValid(Lists.emptyList())).thenReturn(true);
         Game game = newGame();
         game.setCode("code");
         assertThat(game.isValid()).isTrue();
     }
 
     @Test
-    public void isInvalid() {
+    public void isInvalidIfCodeBad() {
         when(mockRunner.isValid("code")).thenReturn(false);
+        when(mockValidator.isValid(Lists.emptyList())).thenReturn(true);
         Game game = newGame();
+        game.setCode("code");
+        assertThat(game.isValid()).isFalse();
+    }
+
+    @Test
+    public void isInvalidIfImagesBad() {
+        FileHandle mockFile = mockFiles.local("games/Unnamed Game/image.png");
+        when(mockRunner.isValid("code")).thenReturn(true);
+        when(mockValidator.isValid(Arrays.asList(any(ImagePlus.class)))).thenReturn(false);
+        when(mockFile.name()).thenReturn("image.png");
+        Game game = newGame();
+        game.addImage("http://url/image.png");
         game.setCode("code");
         assertThat(game.isValid()).isFalse();
     }

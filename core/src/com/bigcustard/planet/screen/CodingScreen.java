@@ -76,7 +76,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitListener));
-        model.addListener(buttonBar::refreshEnabledStatuses);
+        game.addListener(buttonBar::refreshEnabledStatuses);
     }
 
     private void createImageArea() {

@@ -6,7 +6,11 @@ import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
 
 import java.io.IOException;
@@ -128,11 +132,6 @@ public class ImageAreaControllerTest {
         public void it_UpdatesTheWidthTextField() {
             verify(widthField.mock()).setText("50");
         }
-
-        @Test
-        public void it_MarksTheFieldAsValid() {
-            verify(widthField.mock(), times(2)).setValid(true);
-        }
     }
 
     public class WhenTheUnderlyingImageWidthChangesToAnInvalidValue {
@@ -145,11 +144,6 @@ public class ImageAreaControllerTest {
         @Test
         public void it_UpdatesTheWidthTextField() {
             verify(widthField.mock()).setText("");
-        }
-
-        @Test
-        public void it_MarksTheFieldAsInvalid() {
-            verify(widthField.mock()).setValid(false);
         }
     }
 
@@ -177,11 +171,6 @@ public class ImageAreaControllerTest {
         public void it_UpdatesTheHeightTextField() {
             verify(nameField.mock()).setText("name");
         }
-
-        @Test
-        public void it_MarksTheFieldAsValid() {
-            verify(nameField.mock()).setValid(true);
-        }
     }
 
     public class WhenTheUnderlyingImageNameChangesToAnEmptyValue {
@@ -195,12 +184,104 @@ public class ImageAreaControllerTest {
         public void it_UpdatesTheHeightTextField() {
             verify(nameField.mock()).setText("");
         }
+    }
+
+    public class WhenTheModelChangesToHaveAnInvalidImageName {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isNameValid()).thenReturn(false);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
 
         @Test
         public void it_MarksTheFieldAsInvalid() {
-            verify(nameField.mock(), times(2)).setValid(false);
+            verify(nameField.mock()).setValid(false);
         }
     }
+
+    public class WhenTheModelChangesToHaveAValidImageName {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isNameValid()).thenReturn(true);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_MarksTheFieldAsValid() {
+            verify(nameField.mock()).setValid(true);
+        }
+    }
+
+    public class WhenTheModelChangesToHaveAnInvalidImageWidth {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isWidthValid()).thenReturn(false);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_MarksTheFieldAsInvalid() {
+            verify(widthField.mock()).setValid(false);
+        }
+    }
+
+    public class WhenTheModelChangesToHaveAValidImageWidth {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isWidthValid()).thenReturn(true);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_MarksTheFieldAsValid() {
+            verify(widthField.mock()).setValid(true);
+        }
+    }
+
+    public class WhenTheModelChangesToHaveAnInvalidImageHeight {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isHeightValid()).thenReturn(false);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_MarksTheFieldAsInvalid() {
+            verify(heightField.mock()).setValid(false);
+        }
+    }
+
+    public class WhenTheModelChangesToHaveAValidImageHeight {
+        @Before
+        public void before() {
+            ImageValidator.Result result = mock(ImageValidator.Result.class);
+            when(result.image()).thenReturn(gameImage);
+            when(result.isHeightValid()).thenReturn(true);
+            when(model.validateImages()).thenReturn(Arrays.asList(result));
+            subject.onModelChange(gameImage);
+        }
+
+        @Test
+        public void it_MarksTheFieldAsValid() {
+            verify(heightField.mock()).setValid(true);
+        }
+    }
+
 
     public class WhenTypingInTheNameTextBox {
         @Before
