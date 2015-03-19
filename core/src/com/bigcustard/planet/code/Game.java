@@ -150,6 +150,7 @@ public class Game implements ImageAreaModel {
     }
 
     public void run() {
+        save();
     }
 
     public void addListener(Runnable listener) {
