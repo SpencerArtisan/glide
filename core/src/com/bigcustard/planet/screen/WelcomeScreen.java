@@ -40,7 +40,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		layoutScreen(backgroundRegion);		
 		animate(title);
 
-//		stage.addActor(table);
+		stage.addActor(outerTable);
 		stage.addActor(title);
 		
 		Gdx.input.setInputProcessor(stage);
@@ -72,12 +72,16 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void createContinueGameButton(Skin skin) {
 		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
-        continueGameButton.setDisabled(!Game.hasMostRecent());
-        continueGameButton.setTouchable(Game.hasMostRecent() ? Touchable.enabled : Touchable.disabled);
+        boolean enabled = Game.hasMostRecent();
+        continueGameButton.setDisabled(!enabled);
+        continueGameButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void createGameLibraryButton(Skin skin) {
 		gameLibraryButton = new TextButton("   Game Library   ", skin, "big");
+        boolean enabled = Game.allGameFolders(Gdx.files).length > 0;
+        gameLibraryButton.setDisabled(!enabled);
+        gameLibraryButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void animate(Label title) {
@@ -100,8 +104,6 @@ public class WelcomeScreen extends ScreenAdapter {
         outerTable.add(table);
         outerTable.setFillParent(true);
         outerTable.pack();
-
-        stage.addActor(outerTable);
 	}
 
 	private TextureRegionDrawable createBackground() {
