@@ -4,6 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.ImageValidator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +19,7 @@ public class GameTest {
     private InputStream mockImageStream;
     private ImagePlus mockImage;
     private CodeRunner mockRunner;
+    private ImageValidator mockValidator;
 
     @Before
     public void before() {
@@ -26,6 +28,7 @@ public class GameTest {
         mockImageStream = mock(InputStream.class);
         mockImage = mock(ImagePlus.class);
         mockRunner = mock(CodeRunner.class);
+        mockValidator = mock(ImageValidator.class);
     }
 
     @Test
@@ -197,10 +200,10 @@ public class GameTest {
     }
 
     private Game newGame() {
-        return Game.create((url) -> mockImageStream, mockPreferences, mockFiles, mockRunner);
+        return Game.create((url) -> mockImageStream, mockPreferences, mockFiles, mockRunner, mockValidator);
     }
 
     private Game continueGame() {
-        return Game.mostRecent((url) -> mockImageStream, mockPreferences, mockFiles, mockRunner);
+        return Game.mostRecent((url) -> mockImageStream, mockPreferences, mockFiles, mockRunner, mockValidator);
     }
 }

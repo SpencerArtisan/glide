@@ -7,6 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.ImageValidator;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class Game implements ImageAreaModel {
     private String name;
     private String code;
     private CodeRunner runner;
+    private ImageValidator imageValidator;
     private List<ImagePlus> images;
 
     private Preferences preferences;
@@ -40,33 +42,34 @@ public class Game implements ImageAreaModel {
     private Function<String, InputStream> urlStreamProvider;
 
     public static Game create() {
-        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner());
+        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
     }
 
     public static Game mostRecent() {
-        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner());
+        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
     }
 
     @VisibleForTesting
-    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
-        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files, runner);
+    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
+        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files, runner, validator);
     }
 
     @VisibleForTesting
-    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
+    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
         String name = preferences.getString(RECENT_GAME);
         String code = getCodeFile(name, files).readString();
         List<ImagePlus> images = readImages(name, files);
-        return new Game(name, code, images, streamProvider, preferences, files, runner);
+        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
     }
 
-    private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner) {
+    private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
         this.images = images;
         this.urlStreamProvider = streamProvider;
         this.preferences = preferences;
         this.files = files;
         this.code = code;
         this.runner = runner;
+        this.imageValidator = validator;
         setName(name);
     }
 
@@ -118,6 +121,11 @@ public class Game implements ImageAreaModel {
 
     public List<ImagePlus> getImages() {
         return images;
+    }
+
+    @Override
+    public List<ImageValidator.Result> validateImages() {
+        return imageValidator.validate(images);
     }
 
     public void save() {

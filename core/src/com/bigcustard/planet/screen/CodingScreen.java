@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.command.ExitCommand;
+import com.bigcustard.planet.code.command.RunCommand;
 import com.bigcustard.planet.code.command.SaveCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.bigcustard.scene2dplus.button.ButtonBar;
@@ -72,7 +73,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, game, this::getGameName));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitListener));
         model.addListener(buttonBar::refreshEnabledStatuses);

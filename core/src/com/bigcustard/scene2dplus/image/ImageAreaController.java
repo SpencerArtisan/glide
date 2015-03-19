@@ -12,12 +12,10 @@ import java.util.List;
 public class ImageAreaController {
     private final ImageArea view;
     private final ImageAreaModel model;
-    private final ImageValidator validator;
 
     public ImageAreaController(ImageArea view, ImageAreaModel model) {
         this.view = view;
         this.model = model;
-        validator = new ImageValidator();
     }
 
     public void init() {
@@ -61,7 +59,7 @@ public class ImageAreaController {
     }
 
     private void validate() {
-        List<ImageValidator.Result> results = validator.validate(model);
+        List<ImageValidator.Result> results = model.validateImages();
         for (ImageValidator.Result result : results) {
             ImageControls imageControls = view.getImageControls(result.image());
             imageControls.getNameField().setValid(result.isNameValid());

@@ -9,11 +9,11 @@ import java.util.List;
 
 public class ImageValidator {
 
-    public List<Result> validate(ImageAreaModel model) {
+    public List<Result> validate(List<ImagePlus> images) {
         List<Result> results = new ArrayList<>();
-        List<String> imageNames = Lists.transform(model.getImages(), ImagePlus::name);
+        List<String> imageNames = Lists.transform(images, ImagePlus::name);
 
-        for (ImagePlus imagePlus : model.getImages()) {
+        for (ImagePlus imagePlus : images) {
             Result result = new Result();
             result.image = imagePlus;
             result.widthValid = imagePlus.width() != null;
