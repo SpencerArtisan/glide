@@ -21,7 +21,7 @@ public class SaveGameDialog extends Dialog {
     private void layoutControls() {
         Table contentTable = getContentTable();
         contentTable.padTop(20).padLeft(60).padRight(60);
-        text("Save your planet");
+        text("Name your game");
         contentTable.row();
         contentTable.add(nameTextField).expandX().fillX().padTop(20).padBottom(25);
         contentTable.row();

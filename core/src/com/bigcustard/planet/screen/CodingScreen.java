@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.SaveCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.bigcustard.scene2dplus.button.ButtonBar;
@@ -73,7 +74,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Run", "run-button", () -> new SaveCommand(model, game, this::getGameName));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::getGameName, exitListener));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitListener));
         model.addListener(buttonBar::refreshEnabledStatuses);
     }
 
@@ -109,5 +110,12 @@ public class CodingScreen extends ScreenAdapter {
         saveGameDialog.show(stage);
         stage.setKeyboardFocus(saveGameDialog.getNameTextField());
         return saveGameDialog.getFutureGameName();
+    }
+
+    private ListenableFuture<Boolean> saveGameChoice() {
+        SaveChoiceDialog saveGameDialog = new SaveChoiceDialog(skin);
+        saveGameDialog.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        saveGameDialog.show(stage);
+        return saveGameDialog.getFutureSaveChoice();
     }
 }

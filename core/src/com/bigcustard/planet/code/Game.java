@@ -185,6 +185,13 @@ public class Game implements ImageAreaModel {
         return files.local(FOLDER + "/" + name + "/" + filename);
     }
 
+    public boolean isNamed() {
+        return !name.startsWith(DEFAULT_NAME);
+    }
+
+    public void delete() {
+        files.local(FOLDER + "/" + name).deleteDirectory();
+    }
 
     private static class GameDetails {
         private List<GameImageDetails> images = new ArrayList<>();

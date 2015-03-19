@@ -126,6 +126,25 @@ public class GameTest {
     }
 
     @Test
+    public void deleteRemovesFolder() {
+        Game game = newGame();
+        game.delete();
+        verify(files.local("games/Unnamed Game")).deleteDirectory();
+    }
+
+    @Test
+    public void isUnnamedWhenNew() {
+        assertThat(newGame().isNamed()).isFalse();
+    }
+
+    @Test
+    public void isNamedAfterNameChange() {
+        Game game = newGame();
+        game.setName("name");
+        assertThat(game.isNamed()).isTrue();
+    }
+
+    @Test
     public void saveStoresImageDetails() {
         FileHandle mockFile = files.local("games/Unnamed Game/image.png");
         when(mockFile.name()).thenReturn("image.png");
