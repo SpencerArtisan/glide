@@ -44,8 +44,12 @@ public class WelcomeScreen extends ScreenAdapter {
 		
 		Gdx.input.setInputProcessor(stage);
 	}
-	
-	public TextButton getNewGameButton() {
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public TextButton getNewGameButton() {
 		return newGameButton;
 	}
 

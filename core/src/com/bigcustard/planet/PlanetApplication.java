@@ -1,15 +1,19 @@
 package com.bigcustard.planet;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.screen.CodingScreen;
+import com.bigcustard.planet.screen.GameLibraryDialog;
 import com.bigcustard.planet.screen.ResourceManager;
 import com.bigcustard.planet.screen.WelcomeScreen;
-
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.badlogic.gdx.files.FileHandle;
 import java.util.function.Supplier;
 
 public class PlanetApplication extends com.badlogic.gdx.Game {
@@ -27,7 +31,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
         configureGameButton(welcomeScreen.getNewGameButton(), Game::create);
         configureGameButton(welcomeScreen.getContinueGameButton(), Game::mostRecent);
-        configureGameLibraryButton(welcomeScreen.getGameLibraryButton());
+        configureGameLibraryButton(welcomeScreen.getGameLibraryButton(), welcomeScreen.getStage());
         setScreen(welcomeScreen);
     }
 
@@ -36,10 +40,23 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         setScreen(codingScreen);
     }
 
-    private void configureGameLibraryButton(TextButton button) {
+    private void configureGameLibraryButton(TextButton button, Stage stage) {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameLibraryDialog dialog = new GameLibraryDialog(resourceManager.getSkin());
+                dialog.show(stage);
+                Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
+                    @Override
+                    public void onSuccess(FileHandle gameFolder) {
+                        showCodingScreen(() -> Game.from(gameFolder));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        System.out.println("Error saving game " + t);
+                    }
+                });
             }
         });
     }

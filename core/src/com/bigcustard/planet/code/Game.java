@@ -10,6 +10,8 @@ import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.ImageValidator;
 import com.google.common.annotations.VisibleForTesting;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -50,6 +52,10 @@ public class Game implements ImageAreaModel {
         return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
     }
 
+    public static Game from(FileHandle gameFolder) {
+        return from(gameFolder, Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
+    }
+
     @VisibleForTesting
     static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
         return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files, runner, validator);
@@ -58,6 +64,14 @@ public class Game implements ImageAreaModel {
     @VisibleForTesting
     static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
         String name = preferences.getString(RECENT_GAME);
+        String code = getCodeFile(name, files).readString();
+        List<ImagePlus> images = readImages(name, files);
+        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
+    }
+
+    @VisibleForTesting
+    static Game from(FileHandle gameFolder, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
+        String name = gameFolder.name();
         String code = getCodeFile(name, files).readString();
         List<ImagePlus> images = readImages(name, files);
         return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
@@ -101,6 +115,7 @@ public class Game implements ImageAreaModel {
     public void setCode(String code) {
         this.code = code;
         informListeners();
+        save();
     }
 
     public String name() {
@@ -225,7 +240,8 @@ public class Game implements ImageAreaModel {
         return files.local(FOLDER + "/" + name + "/" + filename);
     }
 
-    public void addListener(Object refreshEnabledStatuses) {
+    public static FileHandle[] allGameFolders(Files files) {
+        return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
     private static class GameDetails {
