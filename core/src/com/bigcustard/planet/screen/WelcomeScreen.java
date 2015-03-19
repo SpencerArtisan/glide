@@ -20,6 +20,7 @@ import com.bigcustard.planet.code.Game;
 
 public class WelcomeScreen extends ScreenAdapter {
 	private Table table;
+	private Table outerTable;
 	private Stage stage;
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
@@ -39,11 +40,15 @@ public class WelcomeScreen extends ScreenAdapter {
 		layoutScreen(backgroundRegion);		
 		animate(title);
 
-		stage.addActor(table);
+//		stage.addActor(table);
 		stage.addActor(title);
 		
 		Gdx.input.setInputProcessor(stage);
 	}
+
+    public Table getTable() {
+        return table;
+    }
 
     public Stage getStage() {
         return stage;
@@ -76,13 +81,14 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void animate(Label title) {
-		table.getColor().a = 0f;
-		table.addAction(Actions.fadeIn(2f));
+        outerTable.getColor().a = 0f;
+        outerTable.addAction(Actions.fadeIn(2f));
 		title.setPosition(-400, 660);
 		title.addAction(Actions.moveTo(50, 660, 0.6f, Interpolation.pow2));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
+        outerTable = new Table();
 		table = new Table();
 		table.row();
 		table.add(newGameButton).colspan(2).fillX();
@@ -90,9 +96,12 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.add(continueGameButton).padTop(20f).colspan(2).fillX();
 		table.row();
 		table.add(gameLibraryButton).padTop(20f).colspan(2).fillX();
-		table.background(backgroundRegion);
-		table.setFillParent(true);
-		table.pack();
+		outerTable.background(backgroundRegion);
+        outerTable.add(table);
+        outerTable.setFillParent(true);
+        outerTable.pack();
+
+        stage.addActor(outerTable);
 	}
 
 	private TextureRegionDrawable createBackground() {

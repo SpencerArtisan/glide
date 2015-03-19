@@ -2,10 +2,7 @@ package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.bigcustard.planet.code.Game;
 import com.google.common.util.concurrent.SettableFuture;
@@ -15,16 +12,18 @@ public class GameLibraryDialog extends Dialog {
 
     public GameLibraryDialog(Skin skin) {
         super("", skin);
-        layoutControls();
+        layoutControls(skin);
     }
 
-    private void layoutControls() {
-        Table contentTable = getContentTable();
-        contentTable.padTop(20).padLeft(60).padRight(60);
+    private void layoutControls(Skin skin) {
+        pad(20);
         text("Choose a game");
+        row();
         for (FileHandle gameDirectory : Game.allGameFolders(Gdx.files)) {
-            button(gameDirectory.name(), gameDirectory);
-            getButtonTable().row();
+            TextButton button = new TextButton("  " + gameDirectory.name() + "  ", skin, "big");
+            add(button).fillX().pad(10);
+            setObject(button, gameDirectory);
+            row();
         }
     }
 

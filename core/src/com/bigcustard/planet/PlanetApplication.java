@@ -31,7 +31,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
         configureGameButton(welcomeScreen.getNewGameButton(), Game::create);
         configureGameButton(welcomeScreen.getContinueGameButton(), Game::mostRecent);
-        configureGameLibraryButton(welcomeScreen.getGameLibraryButton(), welcomeScreen.getStage());
+        configureGameLibraryButton(welcomeScreen);
         setScreen(welcomeScreen);
     }
 
@@ -40,12 +40,13 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         setScreen(codingScreen);
     }
 
-    private void configureGameLibraryButton(TextButton button, Stage stage) {
-        button.addListener(new ClickListener() {
+    private void configureGameLibraryButton(WelcomeScreen welcomeScreen) {
+        welcomeScreen.getGameLibraryButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                welcomeScreen.getTable().setVisible(false);
                 GameLibraryDialog dialog = new GameLibraryDialog(resourceManager.getSkin());
-                dialog.show(stage);
+                dialog.show(welcomeScreen.getStage());
                 Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
                     @Override
                     public void onSuccess(FileHandle gameFolder) {

@@ -13,6 +13,8 @@ com.badlogic.gdx.graphics.Color: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
+	dialogDark: { name: white, color: { r: 0, g: 0, b: 0, a: 0.1 } },
+	dialogLight: { name: white, color: { r: 1, g: 1, b: 1, a: 0.25 } },
     solarizedTextFieldBackground: { name: white, color: { r: 0.9333, g: 0.9098, b: 0.8353, a: 1 } },
     solarizedBackground: { name: white, color: { r: 0, g: 0.16862, b: 0.21176, a: 1 } },
     solarizedLine: { name: white, color: { r: 0.02745, g: 0.21176, b: 0.25882, a: 1 } },
@@ -33,6 +35,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: dialogDim },
+    dark: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: dialogDark },
 	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: solarizedSelection }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
