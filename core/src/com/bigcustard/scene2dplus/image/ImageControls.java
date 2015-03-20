@@ -1,9 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 
@@ -13,6 +11,7 @@ public class ImageControls {
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
     private Button deleteButton;
+    private Table sizeArea;
 
     public ImageControls(ImagePlus image, Skin skin) {
         this(image,
@@ -22,7 +21,11 @@ public class ImageControls {
              createDeleteButton(skin));
     }
 
-    public ImageControls(ImagePlus image, TextFieldPlus nameField, TextFieldPlus widthField, TextFieldPlus heightField, Button deleteButton) {
+    public ImageControls(ImagePlus image,
+                         TextFieldPlus nameField,
+                         TextFieldPlus widthField,
+                         TextFieldPlus heightField,
+                         Button deleteButton) {
         this.image = image;
         this.nameField = nameField;
         this.widthField = widthField;
@@ -48,6 +51,32 @@ public class ImageControls {
 
     Button getDeleteButton() {
         return deleteButton;
+    }
+
+    Actor getImageControl(float width) {
+        WidgetGroup group = new WidgetGroup();
+        Image image1 = image.asImage();
+        image1.setFillParent(true);
+        group.addActor(image1);
+        group.setHeight(image1.getHeight() * width / image1.getWidth());
+        group.setWidth(width);
+
+        deleteButton.setPosition(width - 20, group.getHeight() - 15);
+        deleteButton.setSize(30, 30);
+        deleteButton.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+        group.addActor(deleteButton);
+
+//        group.pack();
+//        group.setFillParent(true);
+        return group;
+    }
+
+    Actor getSizeArea(float width, Skin skin) {
+        Table table = new Table();
+        table.add(getWidthField()).width(width * 0.4f);
+        table.add(new Label(" x ", skin)).width(width * 0.2f);
+        table.add(getHeightField()).width(width * 0.4f);
+        return table;
     }
 
     private static TextFieldPlus createNameField(ImagePlus image, Skin skin) {

@@ -1,6 +1,8 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
@@ -87,22 +89,11 @@ public class ImageArea extends ScrollPane {
         ImageControls imageControls = getImageControls(gameImage);
 
         table.row();
-//        table.add(imageControls.getDeleteButton());
-//        table.row();
-        Image image = gameImage.asImage();
-        table.add(image).width(WIDTH).height(image.getHeight() * WIDTH / image.getWidth()).padTop(20);
+        Actor image = imageControls.getImageControl(WIDTH);
+        table.add(image).width(image.getWidth()).height(image.getHeight()).padTop(20);
         table.row();
         table.add(imageControls.getNameField()).width(WIDTH);
         table.row();
-        table.add(createSizeArea(imageControls));
-
-    }
-
-    private Table createSizeArea(ImageControls imageControls) {
-        Table table = new Table();
-        table.add(imageControls.getWidthField()).width(WIDTH * 0.4f);
-        table.add(new Label(" x ", skin)).width(WIDTH * 0.2f);
-        table.add(imageControls.getHeightField()).width(WIDTH * 0.4f);
-        return table;
+        table.add(imageControls.getSizeArea(WIDTH, skin));
     }
 }

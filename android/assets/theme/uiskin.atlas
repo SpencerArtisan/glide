@@ -83,7 +83,7 @@ buttonSmallOver
   index: -1
 copy
   rotate: false
-  xy: 231, 228
+  xy: 231, 162
   size: 44, 61
   orig: 44, 61
   offset: 0, 0
@@ -105,7 +105,7 @@ cursor
   index: -1
 default-pane
   rotate: false
-  xy: 295, 330
+  xy: 991, 392
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -113,7 +113,7 @@ default-pane
   index: -1
 default-rect-pad
   rotate: false
-  xy: 295, 330
+  xy: 991, 392
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -121,7 +121,7 @@ default-rect-pad
   index: -1
 default-pane-noborder
   rotate: false
-  xy: 231, 225
+  xy: 231, 159
   size: 1, 1
   split: 0, 0, 0, 0
   orig: 1, 1
@@ -129,7 +129,7 @@ default-pane-noborder
   index: -1
 default-rect
   rotate: false
-  xy: 210, 198
+  xy: 290, 286
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -137,7 +137,7 @@ default-rect
   index: -1
 default-rect-down
   rotate: false
-  xy: 1013, 935
+  xy: 276, 264
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -145,7 +145,7 @@ default-rect-down
   index: -1
 default-round
   rotate: false
-  xy: 277, 269
+  xy: 295, 313
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -154,7 +154,7 @@ default-round
   index: -1
 default-round-down
   rotate: false
-  xy: 210, 203
+  xy: 276, 269
   size: 12, 20
   split: 5, 5, 5, 4
   orig: 12, 20
@@ -204,7 +204,7 @@ default-select
   index: -1
 default-select-selection
   rotate: false
-  xy: 224, 220
+  xy: 295, 308
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -227,7 +227,7 @@ default-slider-knob
   index: -1
 default-splitpane
   rotate: false
-  xy: 991, 392
+  xy: 1013, 935
   size: 5, 3
   split: 0, 5, 0, 0
   orig: 5, 3
@@ -342,7 +342,7 @@ tardis
   index: -1
 tardis2
   rotate: false
-  xy: 165, 159
+  xy: 231, 225
   size: 43, 64
   orig: 43, 64
   offset: 0, 0
@@ -372,6 +372,13 @@ tfbackground
 trash
   rotate: false
   xy: 165, 225
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+trash-highlight
+  rotate: false
+  xy: 165, 159
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
