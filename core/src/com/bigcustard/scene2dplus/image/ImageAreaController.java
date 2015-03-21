@@ -86,6 +86,8 @@ public class ImageAreaController {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 model.deleteImage(imageControls.getImage());
+                // todo via event
+                view.layoutControls();
             }
         });
     }

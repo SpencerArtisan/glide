@@ -11,7 +11,6 @@ public class ImageControls {
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
     private Button deleteButton;
-    private Table sizeArea;
 
     public ImageControls(ImagePlus image, Skin skin) {
         this(image,
@@ -55,19 +54,16 @@ public class ImageControls {
 
     Actor getImageControl(float width) {
         WidgetGroup group = new WidgetGroup();
-        Image image1 = image.asImage();
-        image1.setFillParent(true);
-        group.addActor(image1);
-        group.setHeight(image1.getHeight() * width / image1.getWidth());
+        Image uiImage = image.asImage();
+        uiImage.setFillParent(true);
+        group.addActor(uiImage);
+        group.setHeight(uiImage.getHeight() * width / uiImage.getWidth());
         group.setWidth(width);
 
         deleteButton.setPosition(width - 20, group.getHeight() - 15);
         deleteButton.setSize(30, 30);
         deleteButton.setColor(0.5f, 0.5f, 0.5f, 0.7f);
         group.addActor(deleteButton);
-
-//        group.pack();
-//        group.setFillParent(true);
         return group;
     }
 

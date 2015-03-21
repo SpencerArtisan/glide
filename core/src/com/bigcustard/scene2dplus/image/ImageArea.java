@@ -63,7 +63,7 @@ public class ImageArea extends ScrollPane {
                         Actions.run(() -> importButton.setText("Add from clipboard"))));
     }
 
-    private void layoutControls() {
+    public void layoutControls() {
         table = (Table) getWidget();
         table.clearChildren();
         addHeader(table);

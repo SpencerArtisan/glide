@@ -149,7 +149,10 @@ public class Game implements ImageAreaModel {
 
     @Override
     public void deleteImage(ImagePlus image) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        images.remove(image);
+        files.local(FOLDER + "/" + name + "/" + image.filename()).delete();
+        save();
+        informListeners();
     }
 
     public void save() {
