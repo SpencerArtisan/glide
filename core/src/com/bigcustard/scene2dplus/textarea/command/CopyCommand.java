@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
-public class CopyCommand extends AbstractCommand {
+public class CopyCommand extends AbstractTextAreaCommand {
     public CopyCommand(TextAreaModel model) {
         super(model);
     }

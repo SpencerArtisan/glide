@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.scene2dplus.textarea.command.CommandHistory;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

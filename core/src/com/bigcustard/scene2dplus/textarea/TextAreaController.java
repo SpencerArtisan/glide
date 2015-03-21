@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.scene2dplus.command.Command;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.textarea.command.*;
 
 import java.awt.event.KeyEvent;

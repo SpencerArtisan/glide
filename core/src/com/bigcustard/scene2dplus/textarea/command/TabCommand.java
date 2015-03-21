@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.textarea.command;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import org.apache.commons.lang3.StringUtils;
 
-public class TabCommand extends AbstractCommand {
+public class TabCommand extends AbstractTextAreaCommand {
     private String spaces;
 
     public TabCommand(TextAreaModel model) {

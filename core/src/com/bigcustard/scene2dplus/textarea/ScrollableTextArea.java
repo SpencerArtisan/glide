@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.textarea;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.scene2dplus.textarea.command.CommandHistory;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 
 public class ScrollableTextArea extends ScrollPane {
     public ScrollableTextArea(TextAreaModel model, Skin skin, CommandHistory commandHistory) {

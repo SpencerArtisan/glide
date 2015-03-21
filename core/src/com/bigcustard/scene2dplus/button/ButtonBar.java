@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.bigcustard.scene2dplus.textarea.command.Command;
+import com.bigcustard.scene2dplus.command.Command;
 
 import java.util.function.Supplier;
 

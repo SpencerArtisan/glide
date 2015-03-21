@@ -1,4 +1,4 @@
-package com.bigcustard.scene2dplus.textarea.command;
+package com.bigcustard.scene2dplus.command;
 
 import java.util.LinkedList;
 

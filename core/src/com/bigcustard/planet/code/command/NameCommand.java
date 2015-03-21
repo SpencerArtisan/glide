@@ -1,6 +1,6 @@
 package com.bigcustard.planet.code.command;
 
-import com.bigcustard.scene2dplus.textarea.command.AbstractCommand;
+import com.bigcustard.scene2dplus.textarea.command.AbstractTextAreaCommand;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -9,7 +9,7 @@ import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
 import java.util.function.Supplier;
 
-public class NameCommand extends AbstractCommand {
+public class NameCommand extends AbstractTextAreaCommand {
     private Game game;
     private Supplier<ListenableFuture<String>> gameNameSupplier;
 

@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.textarea.command;
 import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
-public class SelectCommand extends AbstractCommand {
+public class SelectCommand extends AbstractTextAreaCommand {
     private XY<Integer> startLocation;
     private XY<Integer> endLocation;
 
