@@ -245,8 +245,23 @@ public class Game implements ImageAreaModel {
 
     private FileHandle generateImageFileHandle(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
-        return files.local(FOLDER + "/" + name + "/" + filename);
+        return files.local(findUniqueImageName(FOLDER + "/" + name + "/" + filename));
     }
+
+    private String findUniqueImageName(String pathname) {
+        int dotIndex = pathname.lastIndexOf('.');
+        String pathnameExcludingExtension = pathname.substring(0, dotIndex);
+        String extension = pathname.substring(dotIndex);
+
+        String candidate = pathname;
+        int suffix = 2;
+        while (files.local(candidate).exists()) {
+            candidate = pathnameExcludingExtension + suffix++ + extension;
+            System.out.println("candidate = " + candidate);
+        }
+        return candidate;
+    }
+
 
     public static FileHandle[] allGameFolders(Files files) {
         return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));

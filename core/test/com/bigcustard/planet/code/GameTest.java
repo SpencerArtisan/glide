@@ -157,6 +157,20 @@ public class GameTest {
     }
 
     @Test
+    public void addImageFromUrlDuplicateName() {
+        FileHandle mockFile = mockFiles.local("games/Unnamed Game/image.png");
+        when(mockFile.exists()).thenReturn(true);
+        when(mockFile.name()).thenReturn("image.png");
+        FileHandle mockFile2 = mockFiles.local("games/Unnamed Game/image2.png");
+        when(mockFile2.exists()).thenReturn(false);
+        when(mockFile2.name()).thenReturn("image2.png");
+        Game game = newGame();
+        game.addImage("http://url/image.png");
+        verify(mockFile2).write(mockImageStream, false);
+        assertThat(game.getImages()).extracting("name").containsExactly("image2");
+    }
+
+    @Test
     public void changingTextStoresCode() {
         Game game = newGame();
         game.setCode("code");
