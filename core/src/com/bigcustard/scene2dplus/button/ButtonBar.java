@@ -10,6 +10,8 @@ import com.bigcustard.scene2dplus.command.Command;
 
 import java.util.function.Supplier;
 
+import static com.bigcustard.Util.tryTo;
+
 public class ButtonBar extends HorizontalGroup {
     private Skin skin;
 
@@ -49,7 +51,7 @@ public class ButtonBar extends HorizontalGroup {
 
             public boolean handle(Event event) {
                 if (event instanceof ModelChange) {
-                    boolean enable = commandFactory.get().canExecute();
+                    boolean enable = tryTo(() -> commandFactory.get().canExecute(), false);
                     button.setDisabled(!enable);
                     button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
                 }

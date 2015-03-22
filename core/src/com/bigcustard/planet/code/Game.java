@@ -10,13 +10,12 @@ import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.ImageValidator;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,7 +43,7 @@ public class Game implements ImageAreaModel {
     private Files files;
     private Function<String, InputStream> urlStreamProvider;
     private List<Runnable> listeners = new ArrayList<>();
-    private List<Consumer<ImagePlus>> imageAddedListeners = new ArrayList<>();
+    private List<BiConsumer<ImagePlus, Boolean>> imagesChangedListeners = new ArrayList<>();
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
@@ -110,7 +109,7 @@ public class Game implements ImageAreaModel {
         images.add(0, gameImage);
         gameImage.addListener(this::informListeners);
         informListeners();
-        informImageAddedListeners(gameImage);
+        informImagesChangeListeners(gameImage, true);
         return gameImage;
     }
 
@@ -156,9 +155,11 @@ public class Game implements ImageAreaModel {
     @Override
     public void deleteImage(ImagePlus image) {
         images.remove(image);
-        files.local(FOLDER + "/" + name + "/" + image.filename()).delete();
+        // Don't delete the image file as we may want to undo
         save();
+        //todo - 2 listeners?
         informListeners();
+        informImagesChangeListeners(image, true);
     }
 
     public void save() {
@@ -186,8 +187,8 @@ public class Game implements ImageAreaModel {
         listeners.add(listener);
     }
 
-    public void addImageAddedListener(Consumer<ImagePlus> listener) {
-        imageAddedListeners.add(listener);
+    public void addImagesChangeListener(BiConsumer<ImagePlus, Boolean> listener) {
+        imagesChangedListeners.add(listener);
     }
 
     private void informListeners() {
@@ -196,9 +197,9 @@ public class Game implements ImageAreaModel {
         }
     }
 
-    private void informImageAddedListeners(ImagePlus image) {
-        for (Consumer<ImagePlus> listener : imageAddedListeners) {
-            listener.accept(image);
+    private void informImagesChangeListeners(ImagePlus image, boolean added) {
+        for (BiConsumer<ImagePlus, Boolean> listener : imagesChangedListeners) {
+            listener.accept(image, added);
         }
     }
 
@@ -207,8 +208,11 @@ public class Game implements ImageAreaModel {
         GameDetails gameDetails = new Json().fromJson(GameDetails.class, manifest);
         ArrayList<ImagePlus> gameImages = new ArrayList<>();
         for (GameImageDetails image : gameDetails.images) {
-            ImagePlus gameImage = image.toGameImage(gameName, files);
-            gameImages.add(gameImage);
+            try {
+                gameImages.add(image.toGameImage(gameName, files));
+            } catch (Exception e) {
+                System.out.println("Failed to add game image: " + e);
+            }
         }
         return gameImages;
     }

@@ -37,7 +37,7 @@ public class ImageAreaControllerTest {
         ImageControls imageControls =
                 new ImageControls(gameImage, nameField.mock(), widthField.mock(), heightField.mock(), deleteButton.mock());
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
-        when(model.addImage(any())).thenReturn(gameImage);
+        when(model.addImage(anyString())).thenReturn(gameImage);
         when(model.getImages()).thenReturn(Arrays.asList(gameImage));
         subject = spy(new ImageAreaController(view, model, commandHistory));
         doReturn(clipboard).when(subject).getClipboard();
@@ -70,6 +70,18 @@ public class ImageAreaControllerTest {
                 verify(model, times(2)).addImage("url");
             }
         }
+
+        public class WhenTheUndoButtonIsClicked {
+            @Before
+            public void before() throws IOException {
+                commandHistory.undo();
+            }
+
+            @Test
+            public void it_DeletesTheImage() {
+                verify(model).deleteImage(any(ImagePlus.class));
+            }
+        }
     }
 
     public class WhenTheDeleteButtonIsClicked {
@@ -83,6 +95,22 @@ public class ImageAreaControllerTest {
         @Test
         public void it_DeletesTheImage() {
             verify(model).deleteImage(gameImage);
+        }
+
+        public class ThenTheUndoButtonIsClicked {
+            private FileHandle imageFile;
+
+            @Before
+            public void before() {
+                commandHistory.undo();
+            }
+
+            @Test
+            public void it_ReaddsTheImage() {
+                verify(model).addImage(gameImage);
+            }
+
+
         }
     }
 

@@ -21,11 +21,11 @@ public class ImagePlus {
     private List<Runnable> listeners = new ArrayList<>();
 
     public ImagePlus(FileHandle file) {
-        this.file = file;
-        this.name = generateName();
+        this(file, generateName(file), null, null);
     }
 
-    public ImagePlus(FileHandle file, String name, int width, int height) {
+    public ImagePlus(FileHandle file, String name, Integer width, Integer height) {
+        if (!file.exists()) throw new NoImageFileException(file);
         this.file = file;
         this.name = name;
         this.width = width;
@@ -111,7 +111,7 @@ public class ImagePlus {
         }
     }
 
-    private String generateName() {
+    private static String generateName(FileHandle file) {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);

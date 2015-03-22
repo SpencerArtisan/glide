@@ -7,10 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.image.command.AddImageCommand;
-import com.bigcustard.scene2dplus.image.command.ChangeHeightCommand;
-import com.bigcustard.scene2dplus.image.command.ChangeNameCommand;
-import com.bigcustard.scene2dplus.image.command.ChangeWidthCommand;
+import com.bigcustard.scene2dplus.image.command.*;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -26,7 +23,7 @@ public class ImageAreaController {
         this.view = view;
         this.model = model;
         this.commandHistory = commandHistory;
-        model.addImageAddedListener(this::onImageAdded);
+        model.addImagesChangeListener(this::onImagesChange);
     }
 
     public void init() {
@@ -70,6 +67,20 @@ public class ImageAreaController {
         validate();
     }
 
+    private void onImagesChange(ImagePlus image, Boolean added) {
+        view.layoutControls();
+        addImageAdjustmentBehaviour(image);
+        validate();
+    }
+
+    private void onImageUrlProvided(String url) {
+        try {
+            commandHistory.execute(new AddImageCommand(model, url));
+        } catch (Exception e) {
+            view.showFailure();
+        }
+    }
+
     private void validate() {
         List<ImageValidator.Result> results = model.validateImages();
         for (ImageValidator.Result result : results) {
@@ -100,28 +111,12 @@ public class ImageAreaController {
         imageControls.getDeleteButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                model.deleteImage(imageControls.getImage());
+                commandHistory.execute(new DeleteImageCommand(model, imageControls.getImage()));
                 // todo via event
                 view.layoutControls();
             }
         });
     }
-
-    private void onImageUrlProvided(String url) {
-        try {
-            commandHistory.execute(new AddImageCommand(model, url));
-        } catch (Exception e) {
-            view.showFailure();
-        }
-    }
-
-    private void onImageAdded(ImagePlus image) {
-        view.onImageAdded(image);
-        addImageAdjustmentBehaviour(image);
-        validate();
-    }
-
-
 
     private Integer parseInt(TextField textField) {
         String text = textField.getText();

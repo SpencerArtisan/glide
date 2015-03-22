@@ -32,11 +32,6 @@ public class ImageArea extends ScrollPane {
         importButton = new TextButton("Add from clipboard", skin);
     }
 
-    public void onImageAdded(ImagePlus gameImage) {
-        createImageControls(gameImage);
-        layoutControls();
-    }
-
     public TextButton importButton() {
         return importButton;
     }

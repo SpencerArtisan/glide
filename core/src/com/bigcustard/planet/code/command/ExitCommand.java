@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code.command;
 
+import com.bigcustard.planet.code.GameRenameException;
 import com.bigcustard.scene2dplus.textarea.command.AbstractTextAreaCommand;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -58,9 +59,13 @@ public class ExitCommand extends AbstractTextAreaCommand {
         Futures.addCallback(futureGameName, new FutureCallback<String>() {
             @Override
             public void onSuccess(String gameName) {
-                game.setName(gameName);
-                game.save();
-                exitProcess.run();
+                try {
+                    game.setName(gameName);
+                    game.save();
+                    exitProcess.run();
+                } catch (GameRenameException e) {
+                    System.out.println("Failed to save game: " + e);
+                }
             }
 
             @Override
