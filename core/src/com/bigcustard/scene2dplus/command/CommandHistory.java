@@ -1,9 +1,10 @@
 package com.bigcustard.scene2dplus.command;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class CommandHistory {
-    private LinkedList<Command> executedCommands = new LinkedList<Command>();
+    private List<Command> executedCommands = new LinkedList<Command>();
     private int lastCommandIndex = -1;
 
     public boolean canRedo() {
@@ -40,8 +41,6 @@ public class CommandHistory {
     }
 
     private void clearRedoChain() {
-        for (int i = lastCommandIndex + 1; i < executedCommands.size(); i++) {
-            executedCommands.removeLast();
-        }
+        executedCommands = lastCommandIndex == -1 ? new LinkedList<>() : executedCommands.subList(0, lastCommandIndex);
     }
 }

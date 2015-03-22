@@ -15,7 +15,6 @@ public class ImageArea extends ScrollPane {
     private Map<ImagePlus, ImageControls> imageControlMap = new HashMap<>();
     private ImageAreaModel model;
     private Skin skin;
-    private Table table;
 
     public ImageArea(ImageAreaModel model, Skin skin, CommandHistory commandHistory) {
         super(new Table(), skin);
@@ -59,13 +58,13 @@ public class ImageArea extends ScrollPane {
     }
 
     public void layoutControls() {
-        table = (Table) getWidget();
-        table.clearChildren();
-        addHeader(table);
-        addImportButton(table);
+        Table layoutTable = (Table) getWidget();
+        layoutTable.clearChildren();
+        addHeader(layoutTable);
+        addImportButton(layoutTable);
 
         for (ImagePlus gameImage : model.getImages()) {
-            addImageControls(table, gameImage);
+            addImageControls(layoutTable, gameImage);
         }
     }
 
