@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.bigcustard.scene2dplus.Spacer;
 import com.bigcustard.scene2dplus.command.Command;
 
 import java.util.function.Supplier;
@@ -22,11 +23,7 @@ public class ButtonBar extends HorizontalGroup {
     }
 
     public void addSpacer(int pixels) {
-        addActor(new Actor() {
-            public float getWidth() {
-                return pixels;
-            }
-        });
+        addActor(new Spacer(pixels));
     }
 
     public void addImage(String imageName) {
