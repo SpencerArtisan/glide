@@ -2,7 +2,6 @@ package com.bigcustard.scene2dplus.button;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -11,6 +10,8 @@ import com.bigcustard.scene2dplus.command.Command;
 
 import java.util.function.Supplier;
 
+import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
+import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 import static com.bigcustard.Util.tryTo;
 
 public class ButtonBar extends HorizontalGroup {
@@ -31,13 +32,11 @@ public class ButtonBar extends HorizontalGroup {
     }
 
     public void addTextButton(String text, Supplier<Command> commandFactory) {
-        TextButton button = new TextButton(text, skin);
-        addButton(button, commandFactory);
+        addButton(new TextButton(text, skin), commandFactory);
     }
 
     public void addImageButton(String text, String styleName, Supplier<Command> commandFactory) {
-        ImageTextButton button = new ImageTextButton(text, skin, styleName);
-        addButton(button, commandFactory);
+        addButton(new ImageTextButton(text, skin, styleName), commandFactory);
     }
 
     private void addButton(final Button button, Supplier<Command> commandFactory) {
@@ -47,10 +46,10 @@ public class ButtonBar extends HorizontalGroup {
             }
 
             public boolean handle(Event event) {
-                if (event instanceof ModelChange) {
+                if (event instanceof RefreshEnabledStatusEvent) {
                     boolean enable = tryTo(() -> commandFactory.get().canExecute(), false);
                     button.setDisabled(!enable);
-                    button.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
+                    button.setTouchable(enable ? enabled : disabled);
                 }
                 return super.handle(event);
             }
@@ -64,10 +63,10 @@ public class ButtonBar extends HorizontalGroup {
         for (Actor child : children) {
             if (child instanceof Button) {
                 Button button = (Button) child;
-                button.fire(new ModelChange());
+                button.fire(new RefreshEnabledStatusEvent());
             }
         }
     }
 
-    private static class ModelChange extends Event {}
+    private static class RefreshEnabledStatusEvent extends Event {}
 }
