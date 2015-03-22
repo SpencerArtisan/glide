@@ -1,7 +1,6 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 

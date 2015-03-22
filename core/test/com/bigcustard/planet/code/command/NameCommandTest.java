@@ -1,9 +1,9 @@
 package com.bigcustard.planet.code.command;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -1,8 +1,5 @@
 package com.bigcustard.scene2dplus.command;
 
-import com.bigcustard.scene2dplus.command.Command;
-import com.bigcustard.scene2dplus.command.CommandHistory;
-
 public class RedoCommand implements Command {
     private CommandHistory commandHistory;
 

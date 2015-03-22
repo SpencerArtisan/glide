@@ -1,10 +1,7 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.code.GroovyColorCoder;
-import com.bigcustard.planet.code.GroovySyntax;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.bigcustard.planet.code.SyntaxPart;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

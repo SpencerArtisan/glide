@@ -1,8 +1,8 @@
 package com.bigcustard.scene2dplus.textarea;
 
 import com.badlogic.gdx.graphics.Color;
-import com.google.common.collect.ImmutableMap;
 import com.bigcustard.scene2dplus.XY;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

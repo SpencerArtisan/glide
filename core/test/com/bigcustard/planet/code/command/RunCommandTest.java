@@ -1,6 +1,5 @@
 package com.bigcustard.planet.code.command;
 
-import com.bigcustard.planet.code.CodeRunner;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.google.common.util.concurrent.ListenableFuture;

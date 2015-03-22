@@ -2,8 +2,8 @@ package com.bigcustard.scene2dplus.textarea.command;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
-import com.google.common.base.Strings;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import com.google.common.base.Strings;
 
 public class PasteCommand extends AbstractTextAreaCommand {
     public PasteCommand(TextAreaModel model) {

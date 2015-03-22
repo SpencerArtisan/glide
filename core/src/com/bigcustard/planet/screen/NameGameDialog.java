@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.google.common.util.concurrent.SettableFuture;
 import com.bigcustard.planet.code.Game;
+import com.google.common.util.concurrent.SettableFuture;
 
 public class NameGameDialog extends Dialog {
     private SettableFuture<String> futureGameName = SettableFuture.create();

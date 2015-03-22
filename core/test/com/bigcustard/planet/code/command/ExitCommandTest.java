@@ -4,7 +4,6 @@ import com.bigcustard.planet.code.Game;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,7 +11,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.function.Supplier;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ExitCommandTest {

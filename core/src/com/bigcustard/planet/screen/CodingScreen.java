@@ -7,20 +7,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GroovyColorCoder;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
+import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.bigcustard.scene2dplus.button.ButtonBar;
-import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.GroovyColorCoder;
 import com.bigcustard.scene2dplus.image.ImageArea;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.textarea.ScrollableTextArea;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
-import com.bigcustard.scene2dplus.textarea.command.*;
+import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
+import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
+import com.google.common.util.concurrent.ListenableFuture;
 
 public class CodingScreen extends ScreenAdapter {
     private final Skin skin;

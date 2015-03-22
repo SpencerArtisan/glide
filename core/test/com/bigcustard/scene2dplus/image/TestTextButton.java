@@ -3,7 +3,6 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 

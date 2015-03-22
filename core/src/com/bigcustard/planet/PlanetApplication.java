@@ -1,7 +1,7 @@
 package com.bigcustard.planet;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -13,7 +13,7 @@ import com.bigcustard.planet.screen.ResourceManager;
 import com.bigcustard.planet.screen.WelcomeScreen;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import com.badlogic.gdx.files.FileHandle;
+
 import java.util.function.Supplier;
 
 public class PlanetApplication extends com.badlogic.gdx.Game {

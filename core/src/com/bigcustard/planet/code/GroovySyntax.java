@@ -3,7 +3,6 @@ package com.bigcustard.planet.code;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.bigcustard.planet.code.SyntaxPart;
 import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
