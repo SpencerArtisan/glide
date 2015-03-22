@@ -85,6 +85,9 @@ public class Game implements ImageAreaModel {
         this.code = code;
         this.runner = runner;
         this.imageValidator = validator;
+        for (ImagePlus image : images) {
+            image.addListener(this::informListeners);
+        }
         setName(name);
     }
 
@@ -191,7 +194,8 @@ public class Game implements ImageAreaModel {
         GameDetails gameDetails = new Json().fromJson(GameDetails.class, manifest);
         ArrayList<ImagePlus> gameImages = new ArrayList<>();
         for (GameImageDetails image : gameDetails.images) {
-            gameImages.add(image.toGameImage(gameName, files));
+            ImagePlus gameImage = image.toGameImage(gameName, files);
+            gameImages.add(gameImage);
         }
         return gameImages;
     }

@@ -5,17 +5,26 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
+import com.bigcustard.scene2dplus.command.Command;
+import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.image.command.ChangeHeightCommand;
+import com.bigcustard.scene2dplus.image.command.ChangeNameCommand;
+import com.bigcustard.scene2dplus.image.command.ChangeWidthCommand;
+import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ImageAreaController {
     private final ImageArea view;
     private final ImageAreaModel model;
+    private CommandHistory commandHistory;
 
-    public ImageAreaController(ImageArea view, ImageAreaModel model) {
+    public ImageAreaController(ImageArea view, ImageAreaModel model, CommandHistory commandHistory) {
         this.view = view;
         this.model = model;
+        this.commandHistory = commandHistory;
     }
 
     public void init() {
@@ -70,15 +79,19 @@ public class ImageAreaController {
     }
 
     private void addRenameBehaviour(ImageControls imageControls) {
-        imageControls.getNameField().setTextFieldListener((field, c) -> imageControls.getImage().setName(field.getText()));
+        addBehaviour(imageControls.getNameField(), () -> new ChangeNameCommand(imageControls.getImage(), imageControls.getNameField().getText()));
     }
 
     private void addWidthChangeBehaviour(ImageControls imageControls) {
-        imageControls.getWidthField().setTextFieldListener((field, c) -> imageControls.getImage().setWidth(parseInt(field)));
+        addBehaviour(imageControls.getWidthField(), () -> new ChangeWidthCommand(imageControls.getImage(), parseInt(imageControls.getWidthField())));
     }
 
     private void addHeightChangeBehaviour(ImageControls imageControls) {
-        imageControls.getHeightField().setTextFieldListener((field, c) -> imageControls.getImage().setHeight(parseInt(field)));
+        addBehaviour(imageControls.getHeightField(), () -> new ChangeHeightCommand(imageControls.getImage(), parseInt(imageControls.getHeightField())));
+    }
+
+    private void addBehaviour(TextFieldPlus textField, Supplier<Command> commandSupplier) {
+        textField.setTextFieldListener((field, c) -> commandHistory.execute(commandSupplier.get()));
     }
 
     private void addDeleteBehaviour(ImageControls imageControls) {

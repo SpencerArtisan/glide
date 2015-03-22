@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.textarea.command.TestClipboard;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -26,6 +28,7 @@ public class ImageAreaControllerTest {
     private TestTextField widthField = new TestTextField();
     private TestTextField heightField = new TestTextField();
     private TestTextButton deleteButton = new TestTextButton();
+    private CommandHistory commandHistory = new CommandHistory();
 
     @Before
     public void before() {
@@ -36,7 +39,7 @@ public class ImageAreaControllerTest {
         when(view.getImageControls(gameImage)).thenReturn(imageControls);
         when(model.addImage(any())).thenReturn(gameImage);
         when(model.getImages()).thenReturn(Arrays.asList(gameImage));
-        subject = spy(new ImageAreaController(view, model));
+        subject = spy(new ImageAreaController(view, model, commandHistory));
         doReturn(clipboard).when(subject).getClipboard();
         subject.init();
     }
@@ -92,6 +95,20 @@ public class ImageAreaControllerTest {
         @Test
         public void it_ChangesTheImageWidth() {
             verify(gameImage).setWidth(100);
+        }
+    }
+
+    public class WhenUndoing {
+        @Before
+        public void before() {
+            when(gameImage.width()).thenReturn(200);
+            widthField.enter("300");
+            commandHistory.undo();
+        }
+
+        @Test
+        public void it_RestoresTheOldWidth() {
+            verify(gameImage).setWidth(200);
         }
     }
 

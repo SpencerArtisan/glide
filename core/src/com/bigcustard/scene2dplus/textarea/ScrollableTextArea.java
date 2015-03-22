@@ -42,7 +42,6 @@ public class ScrollableTextArea extends ScrollPane {
             float newScrollY = (model.caret().location().y + 2) * textArea().getRowHeight() - getHeight();
             setScrollY(newScrollY);
         } else if (isOffTop(caretPosition)) {
-            System.out.println("OFF TOP");
             float newScrollY = (model.caret().location().y - 2) * textArea().getRowHeight();
             setScrollY(newScrollY);
         }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +18,13 @@ public class ImageArea extends ScrollPane {
     private Skin skin;
     private Table table;
 
-    public ImageArea(ImageAreaModel model, Skin skin) {
+    public ImageArea(ImageAreaModel model, Skin skin, CommandHistory commandHistory) {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
         createImportButton(skin);
         layoutControls();
-        ImageAreaController controller = new ImageAreaController(this, model);
+        ImageAreaController controller = new ImageAreaController(this, model, commandHistory);
         controller.init();
     }
 
