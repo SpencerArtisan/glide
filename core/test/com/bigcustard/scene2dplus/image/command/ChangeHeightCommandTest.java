@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ChangeHeightTest {
+public class ChangeHeightCommandTest {
     private ChangeHeightCommand command;
     @Mock private ImagePlus image;
 

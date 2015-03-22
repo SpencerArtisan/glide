@@ -152,7 +152,7 @@ public class ImageAreaControllerTest {
         @Before
         public void before() {
             when(gameImage.width()).thenReturn(50);
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -165,7 +165,7 @@ public class ImageAreaControllerTest {
         @Before
         public void before() {
             when(gameImage.width()).thenReturn(null);
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -178,7 +178,7 @@ public class ImageAreaControllerTest {
         @Before
         public void before() {
             when(gameImage.height()).thenReturn(50);
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -191,7 +191,7 @@ public class ImageAreaControllerTest {
         @Before
         public void before() {
             when(gameImage.name()).thenReturn("name");
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -204,7 +204,7 @@ public class ImageAreaControllerTest {
         @Before
         public void before() {
             when(gameImage.name()).thenReturn("");
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -220,7 +220,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isNameValid()).thenReturn(false);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -236,7 +236,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isNameValid()).thenReturn(true);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -252,7 +252,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isWidthValid()).thenReturn(false);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -268,7 +268,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isWidthValid()).thenReturn(true);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -284,7 +284,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isHeightValid()).thenReturn(false);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test
@@ -300,7 +300,7 @@ public class ImageAreaControllerTest {
             when(result.image()).thenReturn(gameImage);
             when(result.isHeightValid()).thenReturn(true);
             when(model.validateImages()).thenReturn(Arrays.asList(result));
-            subject.onModelChange(gameImage);
+            subject.onImageChanged(gameImage);
         }
 
         @Test

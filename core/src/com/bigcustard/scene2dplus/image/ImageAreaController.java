@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.image.command.AddImageCommand;
 import com.bigcustard.scene2dplus.image.command.ChangeHeightCommand;
 import com.bigcustard.scene2dplus.image.command.ChangeNameCommand;
 import com.bigcustard.scene2dplus.image.command.ChangeWidthCommand;
@@ -25,6 +26,7 @@ public class ImageAreaController {
         this.view = view;
         this.model = model;
         this.commandHistory = commandHistory;
+        model.addImageAddedListener(this::onImageAdded);
     }
 
     public void init() {
@@ -57,10 +59,10 @@ public class ImageAreaController {
     }
 
     private void addImageListener(ImagePlus gameImage) {
-        gameImage.addListener(() -> onModelChange(gameImage));
+        gameImage.addListener(() -> onImageChanged(gameImage));
     }
 
-    void onModelChange(ImagePlus image) {
+    void onImageChanged(ImagePlus image) {
         ImageControls imageControls = view.getImageControls(image);
         imageControls.getWidthField().setText(ObjectUtils.toString(image.width()));
         imageControls.getHeightField().setText(ObjectUtils.toString(image.height()));
@@ -107,14 +109,19 @@ public class ImageAreaController {
 
     private void onImageUrlProvided(String url) {
         try {
-            ImagePlus gameImage = model.addImage(url);
-            view.onImageAdded(gameImage);
-            addImageAdjustmentBehaviour(gameImage);
-            validate();
+            commandHistory.execute(new AddImageCommand(model, url));
         } catch (Exception e) {
             view.showFailure();
         }
     }
+
+    private void onImageAdded(ImagePlus image) {
+        view.onImageAdded(image);
+        addImageAdjustmentBehaviour(image);
+        validate();
+    }
+
+
 
     private Integer parseInt(TextField textField) {
         String text = textField.getText();

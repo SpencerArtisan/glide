@@ -9,28 +9,28 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ChangeNameTest {
-    private ChangeNameCommand command;
+public class ChangeWidthCommandTest {
+    private ChangeWidthCommand command;
     @Mock private ImagePlus image;
 
     @Before
     public void before() {
         initMocks(this);
-        when(image.name()).thenReturn("old name");
-        command = new ChangeNameCommand(image, "new name");
+        when(image.width()).thenReturn(100);
+        command = new ChangeWidthCommand(image, 200);
     }
 
     @Test
     public void itChangesTheWidth() {
         command.execute();
-        verify(image).setName("new name");
+        verify(image).setWidth(200);
     }
 
     @Test
     public void undoRestoresTheWidth() {
         command.execute();
         command.undo();
-        verify(image).setName("old name");
+        verify(image).setWidth(100);
     }
 
 }

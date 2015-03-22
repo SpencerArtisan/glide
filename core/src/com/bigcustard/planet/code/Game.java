@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Game implements ImageAreaModel {
@@ -43,6 +44,7 @@ public class Game implements ImageAreaModel {
     private Files files;
     private Function<String, InputStream> urlStreamProvider;
     private List<Runnable> listeners = new ArrayList<>();
+    private List<Consumer<ImagePlus>> imageAddedListeners = new ArrayList<>();
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
@@ -108,6 +110,7 @@ public class Game implements ImageAreaModel {
         images.add(0, gameImage);
         gameImage.addListener(this::informListeners);
         informListeners();
+        informImageAddedListeners(gameImage);
         return gameImage;
     }
 
@@ -183,9 +186,19 @@ public class Game implements ImageAreaModel {
         listeners.add(listener);
     }
 
+    public void addImageAddedListener(Consumer<ImagePlus> listener) {
+        imageAddedListeners.add(listener);
+    }
+
     private void informListeners() {
         for (Runnable listener : listeners) {
             listener.run();
+        }
+    }
+
+    private void informImageAddedListeners(ImagePlus image) {
+        for (Consumer<ImagePlus> listener : imageAddedListeners) {
+            listener.accept(image);
         }
     }
 
