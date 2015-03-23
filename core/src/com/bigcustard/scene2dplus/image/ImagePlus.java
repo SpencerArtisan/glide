@@ -18,7 +18,7 @@ public class ImagePlus {
     private int originalHeight;
     private Integer width;
     private Integer height;
-    private List<Runnable> listeners = new ArrayList<>();
+    private List<Runnable> changeListeners = new ArrayList<>();
 
     public ImagePlus(FileHandle file) {
         this(file, generateName(file), null, null);
@@ -88,8 +88,8 @@ public class ImagePlus {
         fireChange();
     }
 
-    public void addListener(Runnable listener) {
-        listeners.add(listener);
+    public void registerChangeListener(Runnable listener) {
+        changeListeners.add(listener);
     }
 
     private void init() {
@@ -106,7 +106,7 @@ public class ImagePlus {
     }
 
     private void fireChange() {
-        for (Runnable listener : listeners) {
+        for (Runnable listener : changeListeners) {
             listener.run();
         }
     }

@@ -219,7 +219,7 @@ public class GameTest {
         when(mockFile.name()).thenReturn("image.png");
         Game game = newGame();
         game.addImage(mockImage);
-        game.deleteImage(mockImage);
+        game.removeImage(mockImage);
         assertThat(game.getImages()).isEmpty();
         verify(mockFiles.local("games/Unnamed Game/image.png"), never()).delete();
     }

@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Game implements ImageAreaModel {
@@ -41,8 +41,9 @@ public class Game implements ImageAreaModel {
     private Preferences preferences;
     private Files files;
     private Function<String, InputStream> urlStreamProvider;
-    private List<Runnable> listeners = new ArrayList<>();
-    private List<BiConsumer<ImagePlus, Boolean>> imagesChangedListeners = new ArrayList<>();
+    private List<Runnable> changeListeners = new ArrayList<>();
+    private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
+    private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
@@ -58,7 +59,10 @@ public class Game implements ImageAreaModel {
 
     @VisibleForTesting
     static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        return new Game(findUniqueName(files), TEMPLATE, new ArrayList<>(), streamProvider, preferences, files, runner, validator);
+        String name = findUniqueName(files);
+        String code = TEMPLATE;
+        ArrayList<ImagePlus> images = new ArrayList<>();
+        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
     }
 
     @VisibleForTesting
@@ -86,9 +90,28 @@ public class Game implements ImageAreaModel {
         this.runner = runner;
         this.imageValidator = validator;
         for (ImagePlus image : images) {
-            image.addListener(this::informListeners);
+            image.registerChangeListener(this::informChangeListeners);
         }
         setName(name);
+    }
+
+    @Override
+    public void registerAddImageListener(Consumer<ImagePlus> listener) {
+        addImageListeners.add(listener);
+    }
+
+    @Override
+    public void registerRemoveImageListener(Consumer<ImagePlus> listener) {
+        removeImageListeners.add(listener);
+    }
+
+    public void registerChangeListener(Runnable listener) {
+        changeListeners.add(listener);
+    }
+
+    @Override
+    public void addValidationListener(ImagePlus image, Consumer<ImageValidator.Result> listener) {
+        // todo
     }
 
     @Override
@@ -104,12 +127,17 @@ public class Game implements ImageAreaModel {
         }
     }
 
-    public ImagePlus addImage(ImagePlus gameImage) {
-        images.add(0, gameImage);
-        gameImage.addListener(this::informListeners);
-        informListeners();
-        informImagesChangeListeners(gameImage, true);
-        return gameImage;
+    public ImagePlus addImage(ImagePlus image) {
+        images.add(0, image);
+        informAddImageListeners(image);
+        return image;
+    }
+
+    @Override
+    public void removeImage(ImagePlus image) {
+        images.remove(image);
+        save();
+        informRemoveImageListeners(image);
     }
 
     public String code() {
@@ -118,7 +146,7 @@ public class Game implements ImageAreaModel {
 
     public void setCode(String code) {
         this.code = code;
-        informListeners();
+        informChangeListeners();
         save();
     }
 
@@ -146,19 +174,8 @@ public class Game implements ImageAreaModel {
         return images;
     }
 
-    @Override
     public List<ImageValidator.Result> validateImages() {
         return imageValidator.validate(images);
-    }
-
-    @Override
-    public void deleteImage(ImagePlus image) {
-        images.remove(image);
-        // Don't delete the image file as we may want to undo
-        save();
-        //todo - 2 listeners?
-        informListeners();
-        informImagesChangeListeners(image, true);
     }
 
     public void save() {
@@ -182,23 +199,21 @@ public class Game implements ImageAreaModel {
         save();
     }
 
-    public void addListener(Runnable listener) {
-        listeners.add(listener);
-    }
-
-    public void addImagesChangeListener(BiConsumer<ImagePlus, Boolean> listener) {
-        imagesChangedListeners.add(listener);
-    }
-
-    private void informListeners() {
-        for (Runnable listener : listeners) {
+    private void informChangeListeners() {
+        for (Runnable listener : changeListeners) {
             listener.run();
         }
     }
 
-    private void informImagesChangeListeners(ImagePlus image, boolean added) {
-        for (BiConsumer<ImagePlus, Boolean> listener : imagesChangedListeners) {
-            listener.accept(image, added);
+    private void informAddImageListeners(ImagePlus image) {
+        for (Consumer<ImagePlus> listener : addImageListeners) {
+            listener.accept(image);
+        }
+    }
+
+    private void informRemoveImageListeners(ImagePlus image) {
+        for (Consumer<ImagePlus> listener : removeImageListeners) {
+            listener.accept(image);
         }
     }
 

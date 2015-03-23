@@ -16,6 +16,7 @@ import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.image.ImageArea;
+import com.bigcustard.scene2dplus.image.ImageAreaController;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.textarea.ScrollableTextArea;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
@@ -79,12 +80,13 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game, this::getGameName));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitListener));
-        game.addListener(buttonBar::refreshEnabledStatuses);
+        game.registerChangeListener(buttonBar::refreshEnabledStatuses);
     }
 
     private void createImageArea() {
         ImageAreaModel imageAreaModel = game;
-        imageArea = new ImageArea(imageAreaModel, skin, commandHistory);
+        imageArea = new ImageArea(imageAreaModel, skin);
+        new ImageAreaController(imageArea, imageAreaModel, commandHistory).init();
     }
 
     private void createTextArea(Game game) {

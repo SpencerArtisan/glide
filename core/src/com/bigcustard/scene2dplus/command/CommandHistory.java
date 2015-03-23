@@ -41,6 +41,6 @@ public class CommandHistory {
     }
 
     private void clearRedoChain() {
-        executedCommands = lastCommandIndex == -1 ? new LinkedList<>() : executedCommands.subList(0, lastCommandIndex);
+        executedCommands = lastCommandIndex == -1 ? new LinkedList<>() : executedCommands.subList(0, lastCommandIndex + 1);
     }
 }

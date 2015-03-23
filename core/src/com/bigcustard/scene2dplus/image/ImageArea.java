@@ -4,49 +4,52 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ImageArea extends ScrollPane {
-    public static final float WIDTH = 250;
-    private TextButton importButton;
-    private Map<ImagePlus, ImageControls> imageControlMap = new HashMap<>();
+    public static final int WIDTH = 250;
     private ImageAreaModel model;
     private Skin skin;
+    private TextButton importButton;
+    private Map<ImagePlus, ImageControls> imageControlMap = new HashMap<>();
+    private List<Consumer<ImageControls>> imageControlsAddListener = new ArrayList<>();
+    private List<Consumer<ImageControls>> imageControlsRemoveListener = new ArrayList<>();
 
-    public ImageArea(ImageAreaModel model, Skin skin, CommandHistory commandHistory) {
+    public ImageArea(ImageAreaModel model, Skin skin) {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
         createImportButton(skin);
+        createAllImageControls();
         layoutControls();
-        ImageAreaController controller = new ImageAreaController(this, model, commandHistory);
-        controller.init();
+        addModelChangeBehaviour(model);
     }
 
-    private void createImportButton(Skin skin) {
-        importButton = new TextButton("Add from clipboard", skin);
+    void registerImportButtonListener(Runnable onClicked) {
+        importButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                onClicked.run();
+            }
+        });
     }
 
-    public TextButton importButton() {
-        return importButton;
+    void registerAddImageControlsListener(Consumer<ImageControls> onChanged) {
+        imageControlsAddListener.add(onChanged);
     }
 
-    public ImageControls getImageControls(ImagePlus image) {
-        if (!imageControlMap.containsKey(image)) {
-            createImageControls(image);
-        }
-        return imageControlMap.get(image);
+    void registerRemoveImageControlsListener(Consumer<ImageControls> onChanged) {
+        imageControlsRemoveListener.add(onChanged);
     }
 
-    private void createImageControls(ImagePlus image) {
-        ImageControls imageControls = new ImageControls(image, skin);
-        imageControlMap.put(image, imageControls);
+    Collection<ImageControls> getAllImageControls() {
+        return imageControlMap.values();
     }
 
-    public void showFailure() {
+    void onImageImportFailure() {
         importButton.setText("Dodgy image!");
         importButton.addAction(
                 Actions.sequence(
@@ -57,15 +60,19 @@ public class ImageArea extends ScrollPane {
                         Actions.run(() -> importButton.setText("Add from clipboard"))));
     }
 
-    public void layoutControls() {
+    private void layoutControls() {
         Table layoutTable = (Table) getWidget();
         layoutTable.clearChildren();
+
         addHeader(layoutTable);
         addImportButton(layoutTable);
-
-        for (ImagePlus gameImage : model.getImages()) {
-            addImageControls(layoutTable, gameImage);
+        for (ImageControls imageControls : getAllImageControls()) {
+            imageControls.addTo(layoutTable, WIDTH, skin);
         }
+    }
+
+    private void createImportButton(Skin skin) {
+        importButton = new TextButton("Add from clipboard", skin);
     }
 
     private void addHeader(Table table) {
@@ -79,15 +86,44 @@ public class ImageArea extends ScrollPane {
         table.add(importButton).width(WIDTH);
     }
 
-    private void addImageControls(Table table, ImagePlus gameImage) {
-        ImageControls imageControls = getImageControls(gameImage);
+    private void onAddImage(ImagePlus image) {
+        ImageControls imageControls = createImageControls(image);
+        informImageControlAddListeners(imageControls);
+        layoutControls();
+    }
 
-        table.row();
-        Actor image = imageControls.getImageControl(WIDTH);
-        table.add(image).width(image.getWidth()).height(image.getHeight()).padTop(20);
-        table.row();
-        table.add(imageControls.getNameField()).width(WIDTH);
-        table.row();
-        table.add(imageControls.getSizeArea(WIDTH, skin));
+    private void onRemoveImage(ImagePlus image) {
+        ImageControls imageControls = imageControlMap.remove(image);
+        informImageControlRemoveListeners(imageControls);
+        layoutControls();
+    }
+
+    private void createAllImageControls() {
+        for (ImagePlus image : model.getImages()) {
+            createImageControls(image);
+        }
+    }
+
+    private ImageControls createImageControls(ImagePlus image) {
+        ImageControls imageControls = new ImageControls(model, image, skin);
+        imageControlMap.put(image, imageControls);
+        return imageControls;
+    }
+
+    private void informImageControlAddListeners(ImageControls imageControls) {
+        for (Consumer<ImageControls> listener : imageControlsAddListener) {
+            listener.accept(imageControls);
+        }
+    }
+
+    private void informImageControlRemoveListeners(ImageControls imageControls) {
+        for (Consumer<ImageControls> listener : imageControlsRemoveListener) {
+            listener.accept(imageControls);
+        }
+    }
+
+    private void addModelChangeBehaviour(ImageAreaModel model) {
+        model.registerAddImageListener(this::onAddImage);
+        model.registerRemoveImageListener(this::onRemoveImage);
     }
 }

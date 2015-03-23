@@ -21,7 +21,7 @@ public class AddImageCommand implements Command {
 
     @Override
     public void undo() {
-        model.deleteImage(image);
+        model.removeImage(image);
     }
 
     @Override

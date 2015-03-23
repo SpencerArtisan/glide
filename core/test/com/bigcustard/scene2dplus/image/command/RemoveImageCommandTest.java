@@ -9,28 +9,28 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class DeleteImageCommandTest {
-    private DeleteImageCommand command;
+public class RemoveImageCommandTest {
+    private RemoveImageCommand command;
     @Mock private ImageAreaModel model;
     @Mock private ImagePlus image;
 
     @Before
     public void before() {
         initMocks(this);
-        command = new DeleteImageCommand(model, image);
+        command = new RemoveImageCommand(model, image);
     }
 
     @Test
     public void removesAnImage() {
         command.execute();
-        verify(model).deleteImage(image);
+        verify(model).removeImage(image);
     }
 
     @Test
     public void undoReaddsTheImage() {
         command.execute();
         command.undo();
-        verify(model).deleteImage(image);
+        verify(model).removeImage(image);
     }
 
 }

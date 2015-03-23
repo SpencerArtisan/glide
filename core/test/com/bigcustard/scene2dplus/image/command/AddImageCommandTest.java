@@ -30,7 +30,7 @@ public class AddImageCommandTest {
     public void undoRemovesTheImage() {
         command.execute();
         command.undo();
-        verify(model).deleteImage(any(ImagePlus.class));
+        verify(model).removeImage(any(ImagePlus.class));
     }
 
 }

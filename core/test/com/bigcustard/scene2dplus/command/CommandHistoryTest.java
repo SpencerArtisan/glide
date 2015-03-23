@@ -74,4 +74,15 @@ public class CommandHistoryTest {
         history.execute(command);
         assertThat(history.canRedo()).isFalse();
     }
+
+    @Test
+    public void cannotRedoOnceNewCommandAddedLongHistory() {
+        history.execute(command);
+        history.execute(command);
+        history.execute(command);
+        history.undo();
+        history.undo();
+        history.execute(command);
+        assertThat(history.canRedo()).isFalse();
+    }
 }
