@@ -15,10 +15,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class Game implements ImageAreaModel {
+public class Game {
     public static final String PREFERENCES_KEY = "Game";
     private static final String RECENT_GAME = "MostRecentGameName";
     private static String FOLDER = "games";
@@ -28,22 +27,18 @@ public class Game implements ImageAreaModel {
     static String TEMPLATE =
                       "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
-                    + "// Start writing your planet below. \n"
+                    + "// Start writing your game below. \n"
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
 
     private String name;
     private String code;
     private CodeRunner runner;
-    private ImageValidator imageValidator;
-    private List<ImagePlus> images;
-
     private Preferences preferences;
     private Files files;
-    private Function<String, InputStream> urlStreamProvider;
     private List<Runnable> changeListeners = new ArrayList<>();
-    private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
-    private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
+
+    private ImageAreaModel images;
 
     public static Game create() {
         return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
@@ -82,62 +77,35 @@ public class Game implements ImageAreaModel {
     }
 
     private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        this.images = images;
-        this.urlStreamProvider = streamProvider;
+        this.images = new ImageAreaModel(images, streamProvider, validator, files.local(FOLDER + "/" + name));
         this.preferences = preferences;
         this.files = files;
         this.code = code;
         this.runner = runner;
-        this.imageValidator = validator;
         for (ImagePlus image : images) {
             image.registerChangeListener(this::informChangeListeners);
         }
         setName(name);
     }
 
-    @Override
-    public void registerAddImageListener(Consumer<ImagePlus> listener) {
-        addImageListeners.add(listener);
+    public ImageAreaModel getImages() {
+        return images;
     }
 
-    @Override
-    public void registerRemoveImageListener(Consumer<ImagePlus> listener) {
-        removeImageListeners.add(listener);
+    public ImagePlus addImage(String url) {
+        return images.addImage(url);
+    }
+
+    public ImagePlus addImage(ImagePlus image) {
+        return images.addImage(image);
+    }
+
+    public void removeImage(ImagePlus image) {
+        images.removeImage(image);
     }
 
     public void registerChangeListener(Runnable listener) {
         changeListeners.add(listener);
-    }
-
-    @Override
-    public void addValidationListener(ImagePlus image, Consumer<ImageValidator.Result> listener) {
-        // todo
-    }
-
-    @Override
-    public ImagePlus addImage(String url) {
-        InputStream imageStream = urlStreamProvider.apply(url);
-        try {
-            FileHandle mainImageFile = generateImageFileHandle(url);
-            mainImageFile.write(imageStream, false);
-            imageStream.close();
-            return addImage(new ImagePlus(mainImageFile));
-        } catch (IOException e) {
-            throw new InaccessibleUrlException(url, e);
-        }
-    }
-
-    public ImagePlus addImage(ImagePlus image) {
-        images.add(0, image);
-        informAddImageListeners(image);
-        return image;
-    }
-
-    @Override
-    public void removeImage(ImagePlus image) {
-        images.remove(image);
-        save();
-        informRemoveImageListeners(image);
     }
 
     public String code() {
@@ -170,29 +138,22 @@ public class Game implements ImageAreaModel {
         preferences.flush();
     }
 
-    public List<ImagePlus> getImages() {
-        return images;
-    }
-
-    public List<ImageValidator.Result> validateImages() {
-        return imageValidator.validate(images);
-    }
 
     public void save() {
         getCodeFile(name, files).writeString(code, false);
         getManifestFile(name, files).writeString(new Json().toJson(GameDetails.fromGame(this)), false);
     }
 
-    public boolean isNamed() {
-        return !name.startsWith(DEFAULT_NAME);
-    }
-
     public void delete() {
         files.local(FOLDER + "/" + name).deleteDirectory();
     }
 
+    public boolean isNamed() {
+        return !name.startsWith(DEFAULT_NAME);
+    }
+
     public boolean isValid() {
-        return runner.isValid(code) && imageValidator.isValid(images);
+        return runner.isValid(code) && images.isValid(images);
     }
 
     public void run() {
@@ -202,18 +163,6 @@ public class Game implements ImageAreaModel {
     private void informChangeListeners() {
         for (Runnable listener : changeListeners) {
             listener.run();
-        }
-    }
-
-    private void informAddImageListeners(ImagePlus image) {
-        for (Consumer<ImagePlus> listener : addImageListeners) {
-            listener.accept(image);
-        }
-    }
-
-    private void informRemoveImageListeners(ImagePlus image) {
-        for (Consumer<ImagePlus> listener : removeImageListeners) {
-            listener.accept(image);
         }
     }
 
@@ -278,26 +227,6 @@ public class Game implements ImageAreaModel {
         }
     }
 
-    private FileHandle generateImageFileHandle(String url) {
-        String filename = url.substring(url.lastIndexOf("/") + 1);
-        return files.local(findUniqueImageName(FOLDER + "/" + name + "/" + filename));
-    }
-
-    private String findUniqueImageName(String pathname) {
-        int dotIndex = pathname.lastIndexOf('.');
-        String pathnameExcludingExtension = pathname.substring(0, dotIndex);
-        String extension = pathname.substring(dotIndex);
-
-        String candidate = pathname;
-        int suffix = 2;
-        while (files.local(candidate).exists()) {
-            candidate = pathnameExcludingExtension + suffix++ + extension;
-            System.out.println("candidate = " + candidate);
-        }
-        return candidate;
-    }
-
-
     public static FileHandle[] allGameFolders(Files files) {
         return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
@@ -307,7 +236,7 @@ public class Game implements ImageAreaModel {
 
         public static GameDetails fromGame(Game game) {
             GameDetails details = new GameDetails();
-            for (ImagePlus image : game.images) {
+            for (ImagePlus image : game.getImages().getImages()) {
                 details.images.add(GameImageDetails.fromGameImage(image));
             }
             return details;

@@ -84,7 +84,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        ImageAreaModel imageAreaModel = game;
+        ImageAreaModel imageAreaModel = game.getImages();
         imageArea = new ImageArea(imageAreaModel, skin);
         new ImageAreaController(imageArea, imageAreaModel, commandHistory).init();
     }
