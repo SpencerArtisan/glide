@@ -43,7 +43,7 @@ public class ImageAreaControllerTest {
         initMocks(this);
 
         when(model.addImage(anyString())).thenReturn(image);
-        when(model.getImages()).thenReturn(Arrays.asList(image));
+        when(model.images()).thenReturn(Arrays.asList(image));
         when(view.getAllImageControls()).thenReturn(Arrays.asList(imageControls));
         when(imageControls.getImage()).thenReturn(image);
 

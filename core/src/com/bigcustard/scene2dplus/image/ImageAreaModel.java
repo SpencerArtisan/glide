@@ -1,28 +1,34 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
 import com.bigcustard.planet.code.InaccessibleUrlException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ImageAreaModel {
-    private List<ImagePlus> images;
+    private static String IMAGE_DETAIL_FILE = "manifest.json";
+
+    private List<ImagePlus> images = new ArrayList<>();
     private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
     private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
     private Function<String, InputStream> urlStreamProvider;
     private ImageValidator imageValidator;
     private FileHandle folder;
 
-    public ImageAreaModel(List<ImagePlus> images, Function<String, InputStream> urlStreamProvider, ImageValidator imageValidator, FileHandle folder) {
-        this.images = images;
+    public ImageAreaModel() {
+        this(ImageAreaModel::defaultStreamProvider, new ImageValidator());
+    }
+
+    public ImageAreaModel(Function<String, InputStream> urlStreamProvider, ImageValidator imageValidator) {
         this.urlStreamProvider = urlStreamProvider;
         this.imageValidator = imageValidator;
-        this.folder = folder;
     }
 
     public void registerAddImageListener(Consumer<ImagePlus> listener) {
@@ -37,7 +43,7 @@ public class ImageAreaModel {
         // todo
     }
 
-    public List<ImagePlus> getImages() {
+    public List<ImagePlus> images() {
         return images;
     }
 
@@ -102,5 +108,70 @@ public class ImageAreaModel {
             System.out.println("candidate = " + candidate);
         }
         return candidate;
+    }
+
+    private void readImages() {
+        FileHandle imageDetails = folder.child(IMAGE_DETAIL_FILE);
+        if (imageDetails.exists()) {
+            String manifest = imageDetails.readString();
+            ImageListDetails imageListDetails = new Json().fromJson(ImageListDetails.class, manifest);
+            for (ImageDetails image : imageListDetails.images) {
+                try {
+                    images.add(image.toImage(folder));
+                } catch (Exception e) {
+                    System.out.println("Failed to add game image: " + e);
+                }
+            }
+        }
+    }
+
+    public ImageAreaModel fromFolder(FileHandle folder) {
+        this.folder = folder;
+        readImages();
+        return this;
+    }
+
+    public void save() {
+        folder.child(IMAGE_DETAIL_FILE).writeString(new Json().toJson(ImageListDetails.fromModel(this)), false);
+
+    }
+    private static InputStream defaultStreamProvider(String url) {
+        try {
+            return new URL(url).openStream();
+        } catch (IOException e) {
+            throw new InaccessibleUrlException(url, e);
+        }
+    }
+
+    private static class ImageListDetails {
+        private List<ImageDetails> images = new ArrayList<>();
+
+        public static ImageListDetails fromModel(ImageAreaModel model) {
+            ImageListDetails details = new ImageListDetails();
+            for (ImagePlus image : model.images()) {
+                details.images.add(ImageDetails.fromImage(image));
+            }
+            return details;
+        }
+    }
+    private static class ImageDetails {
+        private String filename;
+        private String name;
+        private int width;
+        private int height;
+
+        public static ImageDetails fromImage(ImagePlus image) {
+            ImageDetails details = new ImageDetails();
+            details.name = image.name();
+            details.filename = image.filename();
+            details.width = image.width();
+            details.height = image.height();
+            return details;
+        }
+
+        public ImagePlus toImage(FileHandle parentFolder) {
+            FileHandle imageFile = parentFolder.child(filename);
+            return new ImagePlus(imageFile, name, width, height);
+        }
     }
 }

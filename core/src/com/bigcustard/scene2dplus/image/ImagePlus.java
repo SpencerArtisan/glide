@@ -25,7 +25,6 @@ public class ImagePlus {
     }
 
     public ImagePlus(FileHandle file, String name, Integer width, Integer height) {
-        if (!file.exists()) throw new NoImageFileException(file);
         this.file = file;
         this.name = name;
         this.width = width;
@@ -94,6 +93,7 @@ public class ImagePlus {
 
     private void init() {
         if (image == null) {
+            if (!file.exists()) throw new NoImageFileException(file);
             Texture texture = new Texture(file);
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             TextureRegion textureRegion = new TextureRegion(texture);

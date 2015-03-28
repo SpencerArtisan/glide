@@ -4,26 +4,19 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImageValidator;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class Game {
     public static final String PREFERENCES_KEY = "Game";
     private static final String RECENT_GAME = "MostRecentGameName";
-    private static String FOLDER = "games";
     public static final String DEFAULT_NAME = "Unnamed Game";
+    private static String FOLDER = "games";
     private static String CODE_FILE = "code.groovy";
-    private static String GAME_DETAIL_FILE = "manifest.json";
     static String TEMPLATE =
                       "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
@@ -31,77 +24,59 @@ public class Game {
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
 
-    private String name;
     private String code;
-    private CodeRunner runner;
     private Preferences preferences;
-    private Files files;
     private List<Runnable> changeListeners = new ArrayList<>();
-
     private ImageAreaModel images;
+    private FileHandle gameFolder;
 
     public static Game create() {
-        return create(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
+        return create(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files.local(FOLDER), new ImageAreaModel());
     }
 
     public static Game mostRecent() {
-        return mostRecent(Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
+        return mostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files.local(FOLDER), new ImageAreaModel());
     }
 
     public static Game from(FileHandle gameFolder) {
-        return from(gameFolder, Game::defaultStreamProvider, Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files, new CodeRunner(), new ImageValidator());
+        return from(Gdx.app.getPreferences(PREFERENCES_KEY), gameFolder, new ImageAreaModel());
     }
 
     @VisibleForTesting
-    static Game create(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        String name = findUniqueName(files);
+    static Game create(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel) {
+        FileHandle gameFolder = findUniqueName(parentFolder);
         String code = TEMPLATE;
-        ArrayList<ImagePlus> images = new ArrayList<>();
-        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
+        return new Game(preferences, gameFolder, code, imageModel);
     }
 
     @VisibleForTesting
-    static Game mostRecent(Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        String name = preferences.getString(RECENT_GAME);
-        String code = getCodeFile(name, files).readString();
-        List<ImagePlus> images = readImages(name, files);
-        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
+    static Game mostRecent(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel) {
+        FileHandle gameFolder = parentFolder.child(preferences.getString(RECENT_GAME));
+        return from(preferences, gameFolder, imageModel);
     }
 
     @VisibleForTesting
-    static Game from(FileHandle gameFolder, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        String name = gameFolder.name();
-        String code = getCodeFile(name, files).readString();
-        List<ImagePlus> images = readImages(name, files);
-        return new Game(name, code, images, streamProvider, preferences, files, runner, validator);
+    static Game from(Preferences preferences, FileHandle gameFolder, ImageAreaModel imageModel) {
+        String code = gameFolder.child(CODE_FILE).readString();
+        return new Game(preferences, gameFolder, code, imageModel);
     }
 
-    private Game(String name, String code, List<ImagePlus> images, Function<String, InputStream> streamProvider, Preferences preferences, Files files, CodeRunner runner, ImageValidator validator) {
-        this.images = new ImageAreaModel(images, streamProvider, validator, files.local(FOLDER + "/" + name));
+    private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
+        this.images = imageAreaModel.fromFolder(gameFolder);
+        this.gameFolder = gameFolder;
         this.preferences = preferences;
-        this.files = files;
         this.code = code;
-        this.runner = runner;
-        for (ImagePlus image : images) {
+        for (ImagePlus image : imageAreaModel.images()) {
             image.registerChangeListener(this::informChangeListeners);
         }
-        setName(name);
     }
 
-    public ImageAreaModel getImages() {
+    public static FileHandle[] allGameFolders(Files files) {
+        return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));
+    }
+
+    public ImageAreaModel images() {
         return images;
-    }
-
-    public ImagePlus addImage(String url) {
-        return images.addImage(url);
-    }
-
-    public ImagePlus addImage(ImagePlus image) {
-        return images.addImage(image);
-    }
-
-    public void removeImage(ImagePlus image) {
-        images.removeImage(image);
     }
 
     public void registerChangeListener(Runnable listener) {
@@ -119,41 +94,42 @@ public class Game {
     }
 
     public String name() {
-        return name;
+        return gameFolder.name();
     }
 
     public void setName(String newName) throws GameRenameException {
         if (isChangingName(newName)) {
-            FileHandle source = files.local(FOLDER + "/" + name);
-            FileHandle target = files.local(FOLDER + "/" + newName);
+            FileHandle source = gameFolder;
+            FileHandle target = gameFolder.sibling(newName);
             if (target.exists()) {
                 throw new GameRenameException("Cannot name planet " + newName + " as that name is taken!");
             }
             if (source.exists()) {
                 source.moveTo(target);
             }
+            gameFolder = target;
+            preferences.putString(RECENT_GAME, newName);
+            preferences.flush();
         }
-        this.name = newName;
-        preferences.putString(RECENT_GAME, name);
-        preferences.flush();
     }
 
 
     public void save() {
-        getCodeFile(name, files).writeString(code, false);
-        getManifestFile(name, files).writeString(new Json().toJson(GameDetails.fromGame(this)), false);
+        gameFolder.child(CODE_FILE).writeString(code, false);
+        images.save();
     }
 
     public void delete() {
-        files.local(FOLDER + "/" + name).deleteDirectory();
+        gameFolder.deleteDirectory();
     }
 
     public boolean isNamed() {
-        return !name.startsWith(DEFAULT_NAME);
+        return !name().startsWith(DEFAULT_NAME);
     }
 
     public boolean isValid() {
-        return runner.isValid(code) && images.isValid(images);
+        return true;
+//        return runner.isValid(code) && images.isValid(images);
     }
 
     public void run() {
@@ -166,101 +142,26 @@ public class Game {
         }
     }
 
-    private static List<ImagePlus> readImages(String gameName, Files files) {
-        String manifest = getManifestFile(gameName, files).readString();
-        GameDetails gameDetails = new Json().fromJson(GameDetails.class, manifest);
-        ArrayList<ImagePlus> gameImages = new ArrayList<>();
-        for (GameImageDetails image : gameDetails.images) {
-            try {
-                gameImages.add(image.toGameImage(gameName, files));
-            } catch (Exception e) {
-                System.out.println("Failed to add game image: " + e);
-            }
-        }
-        return gameImages;
-    }
-
-    private static FileHandle getManifestFile(String gameName, Files files) {
-        return files.local(FOLDER + "/" + gameName + "/" + GAME_DETAIL_FILE);
-    }
-
-    private static FileHandle getCodeFile(String gameName, Files files) {
-        return files.local(FOLDER + "/" + gameName + "/" + CODE_FILE);
-    }
-
-    private static FileHandle getImageFile(String gameName, String imageFilename, Files files) {
-        return files.local(FOLDER + "/" + gameName + "/" + imageFilename);
-    }
-
     public static boolean hasMostRecent() {
-        return hasMostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.app.getFiles());
+        return hasMostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.app.getFiles().local(FOLDER));
     }
 
-    static boolean hasMostRecent(Preferences preferences, Files files) {
+    static boolean hasMostRecent(Preferences preferences, FileHandle parentFolder) {
         String gameName = preferences.getString(RECENT_GAME);
-        return gameExists(gameName, files);
+        FileHandle gameFolder = parentFolder.child(gameName);
+        return gameFolder.exists() && gameFolder.child(CODE_FILE).exists();
     }
 
-    private static boolean gameExists(String gameName, Files files) {
-        String gameFolder = FOLDER + "/" + gameName;
-        return files.local(gameFolder).exists() && getCodeFile(gameName, files).exists();
-    }
-
-    private static String findUniqueName(Files files) {
-        String candidate = DEFAULT_NAME;
+    private static FileHandle findUniqueName(FileHandle parentFolder) {
+        FileHandle candidate = parentFolder.child(DEFAULT_NAME);
         int suffix = 2;
-        while (gameExists(candidate, files)) {
-            candidate = DEFAULT_NAME + " " + suffix++;
+        while (candidate.exists()) {
+            candidate = parentFolder.child(DEFAULT_NAME + " " + suffix++);
         }
         return candidate;
     }
 
-    private boolean isChangingName(String name) {
-        return this.name != null && !this.name.equals(name);
-    }
-
-    private static InputStream defaultStreamProvider(String url) {
-        try {
-            return new URL(url).openStream();
-        } catch (IOException e) {
-            throw new InaccessibleUrlException(url, e);
-        }
-    }
-
-    public static FileHandle[] allGameFolders(Files files) {
-        return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));
-    }
-
-    private static class GameDetails {
-        private List<GameImageDetails> images = new ArrayList<>();
-
-        public static GameDetails fromGame(Game game) {
-            GameDetails details = new GameDetails();
-            for (ImagePlus image : game.getImages().getImages()) {
-                details.images.add(GameImageDetails.fromGameImage(image));
-            }
-            return details;
-        }
-    }
-
-    private static class GameImageDetails {
-        private String filename;
-        private String name;
-        private int width;
-        private int height;
-
-        public static GameImageDetails fromGameImage(ImagePlus image) {
-            GameImageDetails details = new GameImageDetails();
-            details.name = image.name();
-            details.filename = image.filename();
-            details.width = image.width();
-            details.height = image.height();
-            return details;
-        }
-
-        public ImagePlus toGameImage(String gameName, Files files) {
-            FileHandle imageFile = getImageFile(gameName, filename, files);
-            return new ImagePlus(imageFile, name, width, height);
-        }
+    private boolean isChangingName(String newName) {
+        return this.name() != null && !this.name().equals(newName);
     }
 }

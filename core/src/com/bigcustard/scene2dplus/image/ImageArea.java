@@ -99,7 +99,7 @@ public class ImageArea extends ScrollPane {
     }
 
     private void createAllImageControls() {
-        for (ImagePlus image : model.getImages()) {
+        for (ImagePlus image : model.images()) {
             createImageControls(image);
         }
     }
