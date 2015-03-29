@@ -53,14 +53,14 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         BlurpMain script = new BlurpMain() {
             @Override
             public void run() {
-                new ImageSprite("games/" + game.name() + "/" + game.images().images().get(0).filename(), 700, 450);
+                new ImageSprite("games/" + game.name() + "/" + game.images().images().get(0).filename(), 300, 150);
             }
         };
         runtime.start(script);
         BlurpScreen blurpScreen = runtime.getScreen();
         setScreen(blurpScreen);
         blurpScreen.setRenderListener((batch, delta, eventType) -> {
-            if (eventType == RenderListener.EventType.PreRender) {
+            if (eventType == RenderListener.EventType.PostRender) {
                 int crossX = viewport.getScreenWidth() - 40;
                 int crossY = viewport.getScreenHeight() - 40;
 
