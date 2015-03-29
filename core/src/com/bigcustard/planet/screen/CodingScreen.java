@@ -24,21 +24,25 @@ import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
 import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.function.Consumer;
+
 public class CodingScreen extends ScreenAdapter {
-    private final Skin skin;
+    private Skin skin;
     private Stage stage;
-    private Table table;
+    private Table layoutTable;
     private TextAreaModel model;
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
     private ButtonBar buttonBar;
     private CommandHistory commandHistory = new CommandHistory();
     private Game game;
-    private Runnable exitListener;
+    private Runnable exitToMainMenu;
+    private Consumer<Game> runGame;
 
-    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitListener) {
+    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame) {
         this.game = game;
-        this.exitListener = exitListener;
+        this.exitToMainMenu = exitToMainMenu;
+        this.runGame = runGame;
         this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
@@ -48,22 +52,22 @@ public class CodingScreen extends ScreenAdapter {
         createImageArea();
         layoutScreen();
 
-		stage.addActor(table);
+		stage.addActor(layoutTable);
 		stage.setKeyboardFocus(textArea.textArea());
 
 		Gdx.input.setInputProcessor(stage);
 	}
 
     private void layoutScreen() {
-        table = new Table();
-        table.background(skin.getDrawable("solarizedLine"));
-        table.row();
-        table.add(textArea).expand().fill();
-        table.add(imageArea).width(280).expandY().fillY();
-        table.row();
-        table.add(buttonBar).colspan(2).expandX().fillX();
-        table.setFillParent(true);
-        table.pack();
+        layoutTable = new Table();
+        layoutTable.background(skin.getDrawable("solarizedLine"));
+        layoutTable.row();
+        layoutTable.add(textArea).expand().fill();
+        layoutTable.add(imageArea).width(280).expandY().fillY();
+        layoutTable.row();
+        layoutTable.add(buttonBar).colspan(2).expandX().fillX();
+        layoutTable.setFillParent(true);
+        layoutTable.pack();
     }
 
     private void createButtonBar() {
@@ -77,9 +81,9 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game, this::getGameName));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game, this::getGameName, runGame));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitListener));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitToMainMenu));
         game.registerChangeListener(buttonBar::refreshEnabledStatuses);
     }
 

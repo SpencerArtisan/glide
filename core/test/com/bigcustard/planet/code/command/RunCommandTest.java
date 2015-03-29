@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ public class RunCommandTest {
     private TextAreaModel model;
     private SettableFuture<String> futureName;
     @Mock private Game game;
+    @Mock private Consumer<Game> runGame;
 
     @Before
     public void before() {
@@ -26,7 +28,7 @@ public class RunCommandTest {
         futureName = SettableFuture.create();
         Supplier<ListenableFuture<String>> nameSupplier = () -> futureName;
         model = new TextAreaModel("code", null);
-        command = new RunCommand(model, game, nameSupplier);
+        command = new RunCommand(model, game, nameSupplier, runGame);
     }
 
     @Test
@@ -47,8 +49,8 @@ public class RunCommandTest {
         command.execute();
         futureName.set("name");
         verify(game).setName("name");
-        verify(game).run();
-
+        verify(game).save();
+        verify(runGame).accept(game);
     }
 
     @Test
@@ -56,7 +58,7 @@ public class RunCommandTest {
         when(game.isNamed()).thenReturn(true);
         command.execute();
         verify(game, never()).setName(anyString());
-        verify(game).run();
-
+        verify(game).save();
+        verify(runGame).accept(game);
     }
 }

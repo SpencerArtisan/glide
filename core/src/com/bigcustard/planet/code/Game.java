@@ -4,8 +4,6 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.bigcustard.blurp.core.Runner;
-import com.bigcustard.blurp.model.BlurpMain;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.google.common.annotations.VisibleForTesting;
@@ -132,10 +130,6 @@ public class Game {
     public boolean isValid() {
         return true;
 //        return runner.isValid(code) && images.isValid(images);
-    }
-
-    public void run() {
-        save();
     }
 
     private void informChangeListeners() {

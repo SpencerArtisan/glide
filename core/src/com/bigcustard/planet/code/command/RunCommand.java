@@ -7,22 +7,26 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RunCommand extends AbstractTextAreaCommand {
     private Game game;
     private Supplier<ListenableFuture<String>> gameNameSupplier;
+    private Consumer<Game> runGame;
 
-    public RunCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier) {
+    public RunCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier, Consumer<Game> runGame) {
         super(model);
         this.game = game;
         this.gameNameSupplier = gameNameSupplier;
+        this.runGame = runGame;
     }
 
     @Override
     public void execute() {
         if (game.isNamed()) {
-            game.run();
+            game.save();
+            runGame.accept(game);
         } else {
             nameGame();
         }
@@ -34,7 +38,8 @@ public class RunCommand extends AbstractTextAreaCommand {
             @Override
             public void onSuccess(String gameName) {
                 game.setName(gameName);
-                game.run();
+                game.save();
+                runGame.accept(game);
             }
 
             @Override

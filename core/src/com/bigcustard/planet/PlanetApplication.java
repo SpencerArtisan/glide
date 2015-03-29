@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.core.Runner;
+import com.bigcustard.blurp.core.BlurpRuntime;
 import com.bigcustard.blurp.model.BlurpMain;
 import com.bigcustard.blurp.model.ImageSprite;
 import com.bigcustard.planet.code.Game;
@@ -38,9 +38,16 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         setScreen(welcomeScreen);
     }
 
-    private void showCodingScreen(Supplier<Game> programSupplier) {
-        CodingScreen codingScreen = new CodingScreen(programSupplier.get(), viewport, resourceManager, this::showWelcomeScreen);
-        setScreen(codingScreen);
+    private void showRunScreen(Game game) {
+        BlurpRuntime runtime = BlurpRuntime.begin(viewport);
+        BlurpMain script = new BlurpMain() {
+            @Override
+            public void run() {
+                new ImageSprite("games/" + game.name() + "/" + game.images().images().get(0).filename(), 700, 450);
+            }
+        };
+        runtime.start(script);
+        setScreen(runtime.getScreen());
     }
 
     private void configureGameLibraryButton(WelcomeScreen welcomeScreen) {
@@ -72,6 +79,11 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                 showCodingScreen(programSupplier);
             }
         });
+    }
+
+    private void showCodingScreen(Supplier<Game> programSupplier) {
+        CodingScreen codingScreen = new CodingScreen(programSupplier.get(), viewport, resourceManager, this::showWelcomeScreen, this::showRunScreen);
+        setScreen(codingScreen);
     }
 
     @Override
