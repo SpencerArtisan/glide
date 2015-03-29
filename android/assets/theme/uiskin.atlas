@@ -81,6 +81,13 @@ buttonSmallOver
   orig: 128, 46
   offset: 0, 0
   index: -1
+close
+  rotate: false
+  xy: 809, 363
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 copy
   rotate: false
   xy: 231, 162
@@ -105,7 +112,7 @@ cursor
   index: -1
 default-pane
   rotate: false
-  xy: 991, 392
+  xy: 295, 330
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -113,7 +120,7 @@ default-pane
   index: -1
 default-rect-pad
   rotate: false
-  xy: 991, 392
+  xy: 295, 330
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -129,7 +136,7 @@ default-pane-noborder
   index: -1
 default-rect
   rotate: false
-  xy: 290, 286
+  xy: 277, 220
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -137,7 +144,7 @@ default-rect
   index: -1
 default-rect-down
   rotate: false
-  xy: 276, 264
+  xy: 290, 264
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -145,7 +152,7 @@ default-rect-down
   index: -1
 default-round
   rotate: false
-  xy: 295, 313
+  xy: 276, 225
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -154,7 +161,7 @@ default-round
   index: -1
 default-round-down
   rotate: false
-  xy: 276, 269
+  xy: 276, 247
   size: 12, 20
   split: 5, 5, 5, 4
   orig: 12, 20
@@ -162,7 +169,7 @@ default-round-down
   index: -1
 default-round-horiz
   rotate: false
-  xy: 940, 361
+  xy: 974, 361
   size: 20, 12
   split: 4, 5, 4, 4
   pad: 1, 1, 5, 5
@@ -171,7 +178,7 @@ default-round-horiz
   index: -1
 default-round-large
   rotate: false
-  xy: 969, 375
+  xy: 276, 269
   size: 20, 20
   split: 5, 5, 5, 4
   orig: 20, 20
@@ -196,7 +203,7 @@ default-scroll
   index: -1
 default-select
   rotate: false
-  xy: 940, 375
+  xy: 974, 375
   size: 27, 20
   split: 4, 14, 4, 4
   orig: 27, 20
@@ -204,7 +211,7 @@ default-select
   index: -1
 default-select-selection
   rotate: false
-  xy: 295, 308
+  xy: 177, 154
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -243,7 +250,7 @@ default-splitpane-vertical
   index: -1
 default-window
   rotate: false
-  xy: 911, 366
+  xy: 945, 366
   size: 27, 29
   split: 4, 3, 20, 3
   orig: 27, 29
@@ -251,14 +258,14 @@ default-window
   index: -1
 exit
   rotate: false
-  xy: 809, 363
+  xy: 843, 363
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 flag
   rotate: false
-  xy: 843, 363
+  xy: 877, 363
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -307,7 +314,7 @@ save2
   index: -1
 save3
   rotate: false
-  xy: 877, 363
+  xy: 911, 363
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -321,7 +328,7 @@ scroll_horizontal
   index: -1
 selection
   rotate: false
-  xy: 768, 353
+  xy: 182, 156
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -399,7 +406,7 @@ tree-plus
   index: -1
 white
   rotate: false
-  xy: 1004, 517
+  xy: 768, 353
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
