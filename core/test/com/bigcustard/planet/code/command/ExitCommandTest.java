@@ -1,16 +1,12 @@
 package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.util.FutureSupplier;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.function.Supplier;
 
 import static org.mockito.Mockito.*;
 

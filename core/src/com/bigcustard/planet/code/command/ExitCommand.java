@@ -3,16 +3,8 @@ package com.bigcustard.planet.code.command;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameRenameException;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
-import com.bigcustard.scene2dplus.command.Command;
-import com.bigcustard.scene2dplus.textarea.TextAreaModel;
-import com.bigcustard.scene2dplus.textarea.command.AbstractTextAreaCommand;
 import com.bigcustard.util.FutureSupplier;
 import com.bigcustard.util.FutureSuppliers;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.function.Supplier;
 
 public class ExitCommand extends AbstractCommand {
     private final Game game;
@@ -52,22 +44,13 @@ public class ExitCommand extends AbstractCommand {
     }
 
     private void nameGame() {
-        ListenableFuture<String> futureGameName = gameNameSupplier.get();
-        Futures.addCallback(futureGameName, new FutureCallback<String>() {
-            @Override
-            public void onSuccess(String gameName) {
-                try {
-                    game.setName(gameName);
-                    game.save();
-                    exitProcess.run();
-                } catch (GameRenameException e) {
-                    System.out.println("Failed to save game: " + e);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                System.out.println("Error saving game " + t);
+        FutureSuppliers.onGet(gameNameSupplier, (gameName) -> {
+            try {
+                game.setName(gameName);
+                game.save();
+                exitProcess.run();
+            } catch (GameRenameException e) {
+                System.out.println("Failed to save game: " + e);
             }
         });
     }

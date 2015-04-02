@@ -9,8 +9,6 @@ import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class Game {

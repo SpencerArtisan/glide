@@ -1,7 +1,6 @@
 package com.bigcustard.scene2dplus.textarea.command;
 
 import com.bigcustard.scene2dplus.command.AbstractCommand;
-import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
 public abstract class AbstractTextAreaCommand extends AbstractCommand {

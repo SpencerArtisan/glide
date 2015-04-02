@@ -1,8 +1,6 @@
 package com.bigcustard.planet.plugin.groovy;
 
 import com.bigcustard.planet.code.SyntaxPart;
-import com.bigcustard.planet.plugin.groovy.GroovyColorCoder;
-import com.bigcustard.planet.plugin.groovy.GroovySyntax;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
