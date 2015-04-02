@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.function.Consumer;
@@ -51,11 +52,11 @@ public class ImageControls {
     }
 
     void registerWidthFieldListener(Consumer<Integer> onChange) {
-        widthField.setTextFieldListener((field, c) -> onChange.accept(Integer.parseInt(field.getText())));
+        widthField.setTextFieldListener((field, c) -> onChange.accept(textToInteger(field)));
     }
 
     void registerHeightFieldListener(Consumer<Integer> onChange) {
-        widthField.setTextFieldListener((field, c) -> onChange.accept(Integer.parseInt(field.getText())));
+        heightField.setTextFieldListener((field, c) -> onChange.accept(textToInteger(field)));
     }
 
     void registerDeleteButtonListener(Runnable onClicked) {
@@ -89,6 +90,10 @@ public class ImageControls {
         deleteButton.setColor(0.5f, 0.5f, 0.5f, 0.7f);
         group.addActor(deleteButton);
         return group;
+    }
+
+    private Integer textToInteger(TextField field) {
+        return Strings.isNullOrEmpty(field.getText()) ? null : Integer.parseInt(field.getText());
     }
 
     private Actor getSizeArea(float width, Skin skin) {
