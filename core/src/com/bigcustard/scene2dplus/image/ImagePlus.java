@@ -46,8 +46,9 @@ public class ImagePlus {
     }
 
     public void setName(String name) {
-        this.name = name;
-        informChangeListeners();
+        changeAttribute(() -> {
+            this.name = name;
+        });
     }
 
     public String filename() {
@@ -74,15 +75,23 @@ public class ImagePlus {
     }
 
     public void setWidth(Integer newWidth) {
+        changeAttribute(() -> {
+            if (newWidth != null) {
+                height = newWidth * originalHeight / originalWidth;
+                width = newWidth;
+            } else {
+                height = null;
+                width = null;
+            }
+        });
+    }
+
+    private void changeAttribute(Runnable doChange) {
         init();
         boolean initialValidationState = validate().isValid();
-        if (newWidth != null) {
-            height = newWidth * originalHeight / originalWidth;
-            width = newWidth;
-        } else {
-            height = null;
-            width = null;
-        }
+
+        doChange.run();
+
         if (initialValidationState != validate().isValid()) {
             informValidationListeners();
         }
@@ -90,15 +99,15 @@ public class ImagePlus {
     }
 
     public void setHeight(Integer newHeight) {
-        init();
-        if (newHeight != null) {
-            width = newHeight * originalWidth / originalHeight;
-            height = newHeight;
-        } else {
-            height = null;
-            width = null;
-        }
-        informChangeListeners();
+        changeAttribute(() -> {
+            if (newHeight != null) {
+                width = newHeight * originalWidth / originalHeight;
+                height = newHeight;
+            } else {
+                height = null;
+                width = null;
+            }
+        });
     }
 
     private void init() {

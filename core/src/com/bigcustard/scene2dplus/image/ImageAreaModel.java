@@ -126,7 +126,7 @@ public class ImageAreaModel {
             ImageListDetails imageListDetails = new Json().fromJson(ImageListDetails.class, manifest);
             for (ImageDetails image : imageListDetails.images) {
                 try {
-                    images.add(image.toImage(folder));
+                    addImage(image.toImage(folder));
                 } catch (Exception e) {
                     System.out.println("Failed to add game image: " + e);
                 }
