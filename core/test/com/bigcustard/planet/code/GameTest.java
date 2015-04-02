@@ -1,23 +1,13 @@
 package com.bigcustard.planet.code;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImageValidator;
-import org.assertj.core.util.Lists;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Answers;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.io.InputStream;
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -28,6 +18,7 @@ public class GameTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private FileHandle mockParentFolder;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageAreaModel mockImageModel;
     @Mock private ImagePlus mockImage;
+    @Mock private Syntax mockSyntax;
 
     @Before
     public void before() {
@@ -35,16 +26,22 @@ public class GameTest {
         when(mockParentFolder.child(anyString()).parent()).thenReturn(mockParentFolder);
 
     }
-//
-//    @Test
-//    @Ignore
-//    public void isValidIfCodeGood() {
-//        when(mockRunner.isValid("code")).thenReturn(true);
-//        when(mockValidator.isValid(Lists.emptyList())).thenReturn(true);
-//        Game game = newGame();
-//        game.setCode("code");
-//        assertThat(game.isValid()).isTrue();
-//    }
+
+    @Test
+    public void isValidIfCodeValid() {
+        Game game = newGame();
+        game.setCode("code");
+        when(mockSyntax.isValid("code")).thenReturn(true);
+        assertThat(game.isValid(mockSyntax)).isTrue();
+    }
+
+    @Test
+    public void isInvalidIfCodeInvalid() {
+        Game game = newGame();
+        game.setCode("code");
+        when(mockSyntax.isValid("code")).thenReturn(false);
+        assertThat(game.isValid(mockSyntax)).isFalse();
+    }
 //
 //    @Test
 //    public void isInvalidIfCodeBad() {

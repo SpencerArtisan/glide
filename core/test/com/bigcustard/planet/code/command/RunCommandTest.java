@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
@@ -33,13 +34,13 @@ public class RunCommandTest {
 
     @Test
     public void cannotExecuteWhenGameInvalid() {
-        when(game.isValid()).thenReturn(false);
+        when(game.isValid(any(Syntax.class))).thenReturn(false);
         assertThat(command.canExecute()).isFalse();
     }
 
     @Test
     public void canExecuteWhenGameValid() {
-        when(game.isValid()).thenReturn(true);
+        when(game.isValid(any(Syntax.class))).thenReturn(true);
         assertThat(command.canExecute()).isTrue();
     }
 

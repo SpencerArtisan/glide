@@ -127,8 +127,8 @@ public class Game {
         return !name().startsWith(DEFAULT_NAME);
     }
 
-    public boolean isValid() {
-        return true;
+    public boolean isValid(Syntax syntax) {
+        return syntax.isValid(code);
 //        return runner.isValid(code) && images.isValid(images);
     }
 

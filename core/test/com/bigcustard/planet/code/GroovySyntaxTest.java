@@ -69,7 +69,17 @@ public class GroovySyntaxTest {
     }
 
     @Test
+    public void goodGroovyCodeIsValid() {
+        assertThat(syntax.isValid("public void hello() {\n}")).isTrue();
+    }
+
+    @Test
     public void errorsInBadGroovy() {
         assertThat(syntax.errorLines("public void hello() {\n\"unended string\n}")).containsExactly(1);
     }
+
+	@Test
+	public void badGroovyCodeIsIsInvalid() {
+		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
+	}
 }

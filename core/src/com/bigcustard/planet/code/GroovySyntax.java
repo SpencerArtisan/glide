@@ -13,12 +13,17 @@ import java.util.*;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
-public class GroovySyntax {
+public class GroovySyntax implements Syntax {
     private static final Set KEYWORDS = ImmutableSet.of("public");
 
     public List<SyntaxPart> parse(String program) {
         List<SyntaxPart> classifiedWordsAndSpaces = categoriseWordsIntoTypes(program);
         return collapseAdjacentPartsWithSameType(classifiedWordsAndSpaces);
+    }
+
+    @Override
+    public boolean isValid(String code) {
+        return errorLines(code).isEmpty();
     }
 
     public Set<Integer> errorLines(String program) {
