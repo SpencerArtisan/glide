@@ -1,6 +1,8 @@
-package com.bigcustard.planet.code;
+package com.bigcustard.planet.plugin.groovy;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bigcustard.planet.code.SyntaxPart;
+import com.bigcustard.planet.plugin.groovy.GroovySyntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
@@ -29,11 +31,11 @@ public class GroovyColorCoder implements ColorCoder {
     private final Map<SyntaxPart.Type, String> colors;
     private final String errorColor;
 
-    public GroovyColorCoder() {
+    GroovyColorCoder() {
         this(new GroovySyntax(), DEFAULT_COLORS, DEFAULT_ERROR);
     }
 
-    public GroovyColorCoder(GroovySyntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor) {
+    GroovyColorCoder(GroovySyntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor) {
         this.syntax = syntax;
         this.colors = colors;
         this.errorColor = errorColor;

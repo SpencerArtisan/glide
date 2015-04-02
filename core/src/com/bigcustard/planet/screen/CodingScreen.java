@@ -8,7 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.GroovyColorCoder;
+import com.bigcustard.planet.plugin.Plugin;
+import com.bigcustard.planet.plugin.groovy.GroovyColorCoder;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
 import com.bigcustard.scene2dplus.button.ButtonBar;
@@ -38,11 +39,13 @@ public class CodingScreen extends ScreenAdapter {
     private Game game;
     private Runnable exitToMainMenu;
     private Consumer<Game> runGame;
+    private Plugin plugin;
 
-    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame) {
+    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame, Plugin plugin) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.runGame = runGame;
+        this.plugin = plugin;
         this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
@@ -81,7 +84,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game, this::getGameName, runGame));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(model, game, this::getGameName, runGame, plugin.syntax()));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(model, game, this::saveGameChoice, this::getGameName, exitToMainMenu));
         game.registerChangeListener(buttonBar::refreshEnabledStatuses);
@@ -94,7 +97,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), new GroovyColorCoder());
+        model = new TextAreaModel(game.code(), plugin.colorCoder());
         model.addListener(() -> game.setCode(model.getText()));
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }

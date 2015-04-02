@@ -20,6 +20,7 @@ public class RunCommandTest {
     private RunCommand command;
     private TextAreaModel model;
     private SettableFuture<String> futureName;
+    @Mock private Syntax syntax;
     @Mock private Game game;
     @Mock private Consumer<Game> runGame;
 
@@ -29,18 +30,18 @@ public class RunCommandTest {
         futureName = SettableFuture.create();
         Supplier<ListenableFuture<String>> nameSupplier = () -> futureName;
         model = new TextAreaModel("code", null);
-        command = new RunCommand(model, game, nameSupplier, runGame);
+        command = new RunCommand(model, game, nameSupplier, runGame, syntax);
     }
 
     @Test
     public void cannotExecuteWhenGameInvalid() {
-        when(game.isValid(any(Syntax.class))).thenReturn(false);
+        when(game.isValid(syntax)).thenReturn(false);
         assertThat(command.canExecute()).isFalse();
     }
 
     @Test
     public void canExecuteWhenGameValid() {
-        when(game.isValid(any(Syntax.class))).thenReturn(true);
+        when(game.isValid(syntax)).thenReturn(true);
         assertThat(command.canExecute()).isTrue();
     }
 

@@ -1,5 +1,7 @@
-package com.bigcustard.planet.code;
+package com.bigcustard.planet.plugin.groovy;
 
+import com.bigcustard.planet.code.Syntax;
+import com.bigcustard.planet.code.SyntaxPart;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -21,11 +23,15 @@ public class GroovySyntax implements Syntax {
         return collapseAdjacentPartsWithSameType(classifiedWordsAndSpaces);
     }
 
+    GroovySyntax() {
+    }
+
     @Override
     public boolean isValid(String code) {
         return errorLines(code).isEmpty();
     }
 
+    @Override
     public Set<Integer> errorLines(String program) {
         Set<Integer> errorLines = new HashSet<Integer>();
         try {

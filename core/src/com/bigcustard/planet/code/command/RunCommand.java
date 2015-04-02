@@ -1,7 +1,8 @@
 package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.GroovySyntax;
+import com.bigcustard.planet.code.Syntax;
+import com.bigcustard.planet.plugin.groovy.GroovySyntax;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.command.AbstractTextAreaCommand;
 import com.google.common.util.concurrent.FutureCallback;
@@ -15,12 +16,14 @@ public class RunCommand extends AbstractTextAreaCommand {
     private Game game;
     private Supplier<ListenableFuture<String>> gameNameSupplier;
     private Consumer<Game> runGame;
+    private Syntax syntax;
 
-    public RunCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier, Consumer<Game> runGame) {
+    public RunCommand(TextAreaModel model, Game game, Supplier<ListenableFuture<String>> gameNameSupplier, Consumer<Game> runGame, Syntax syntax) {
         super(model);
         this.game = game;
         this.gameNameSupplier = gameNameSupplier;
         this.runGame = runGame;
+        this.syntax = syntax;
     }
 
     @Override
@@ -53,6 +56,6 @@ public class RunCommand extends AbstractTextAreaCommand {
 
     @Override
     public boolean canExecute() {
-        return game.isValid(new GroovySyntax());
+        return game.isValid(syntax);
     }
 }
