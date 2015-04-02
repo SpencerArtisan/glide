@@ -126,7 +126,7 @@ public class ImageControls {
     }
 
 //    private void addValidationBehaviour() {
-//        model.addValidationListener(image, (result) -> {
+//        model.registerValidationListener(image, (result) -> {
 //            nameField.setValid(result.isNameValid());
 //            widthField.setValid(result.isWidthValid());
 //            heightField.setValid(result.isHeightValid());

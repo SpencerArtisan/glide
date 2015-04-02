@@ -39,7 +39,7 @@ public class ImageAreaModel {
         removeImageListeners.add(listener);
     }
 
-    public void addValidationListener(Runnable listener) {
+    public void registerValidationListener(Runnable listener) {
         validationListeners.add(listener);
     }
 
@@ -71,6 +71,7 @@ public class ImageAreaModel {
         if (initialValidState != isValid()) {
             informValidationListeners();
         }
+        image.registerValidationListener(this::informValidationListeners);
         return image;
     }
 

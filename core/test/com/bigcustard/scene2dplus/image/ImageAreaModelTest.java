@@ -3,10 +3,11 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.files.FileHandle;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.io.InputStream;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -22,7 +23,8 @@ public class ImageAreaModelTest {
     @Mock private ImagePlus mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Runnable mockValidatorListener;
+    @Mock private Runnable mockValidationListener;
+    @Captor private ArgumentCaptor<Runnable> imageValidationListenerCaptor;
 
     @Before
     public void before() {
@@ -34,35 +36,46 @@ public class ImageAreaModelTest {
         when(mockImageFile2.name()).thenReturn("image2.png");
         when(mockImage.validate()).thenReturn(mockValidationResult1);
         when(mockImage2.validate()).thenReturn(mockValidationResult2);
+        doNothing().when(mockImage).registerValidationListener(imageValidationListenerCaptor.capture());
     }
 
     @Test
-    public void sendValidationHintWhenAddInvalidImage() {
+    public void sendValidationEventWhenAddInvalidImage() {
         ImageAreaModel model = newModel();
-        model.addValidationListener(mockValidatorListener);
+        model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(false);
         model.addImage(mockImage);
-        verify(mockValidatorListener).run();
+        verify(mockValidationListener).run();
     }
 
     @Test
-    public void doesNotSendSecondValidationHintWhenAddSecondInvalidImage() {
+    public void sendValidationEventWhenImageSendsValidationEvent() {
         ImageAreaModel model = newModel();
-        model.addValidationListener(mockValidatorListener);
+        model.registerValidationListener(mockValidationListener);
+        when(mockValidationResult1.isValid()).thenReturn(true);
+        model.addImage(mockImage);
+        imageValidationListenerCaptor.getValue().run();
+        verify(mockValidationListener).run();
+    }
+
+    @Test
+    public void doesNotSendSecondValidationEventWhenAddSecondInvalidImage() {
+        ImageAreaModel model = newModel();
+        model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(false);
         when(mockValidationResult2.isValid()).thenReturn(false);
         model.addImage(mockImage);
         model.addImage(mockImage2);
-        verify(mockValidatorListener, times(1)).run();
+        verify(mockValidationListener, times(1)).run();
     }
 
     @Test
-    public void doesNotSendValidationHintWhenAddValidImage() {
+    public void doesNotSendValidationEventWhenAddValidImage() {
         ImageAreaModel model = newModel();
-        model.addValidationListener(mockValidatorListener);
+        model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
-        verify(mockValidatorListener, never()).run();
+        verify(mockValidationListener, never()).run();
     }
 
     @Test

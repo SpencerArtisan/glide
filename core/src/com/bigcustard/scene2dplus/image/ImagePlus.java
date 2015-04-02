@@ -20,6 +20,7 @@ public class ImagePlus {
     private Integer width;
     private Integer height;
     private List<Runnable> changeListeners = new ArrayList<>();
+    private List<Runnable> validationListeners = new ArrayList<>();
 
     public ImagePlus(FileHandle file) {
         this(file, generateName(file), null, null);
@@ -32,13 +33,21 @@ public class ImagePlus {
         this.height = height;
     }
 
+    public void registerValidationListener(Runnable listener) {
+        validationListeners.add(listener);
+    }
+
+    public void registerChangeListener(Runnable listener) {
+        changeListeners.add(listener);
+    }
+
     public String name() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-        fireChange();
+        informChangeListeners();
     }
 
     public String filename() {
@@ -66,6 +75,7 @@ public class ImagePlus {
 
     public void setWidth(Integer newWidth) {
         init();
+        boolean initialValidationState = validate().isValid();
         if (newWidth != null) {
             height = newWidth * originalHeight / originalWidth;
             width = newWidth;
@@ -73,7 +83,10 @@ public class ImagePlus {
             height = null;
             width = null;
         }
-        fireChange();
+        if (initialValidationState != validate().isValid()) {
+            informValidationListeners();
+        }
+        informChangeListeners();
     }
 
     public void setHeight(Integer newHeight) {
@@ -85,11 +98,7 @@ public class ImagePlus {
             height = null;
             width = null;
         }
-        fireChange();
-    }
-
-    public void registerChangeListener(Runnable listener) {
-        changeListeners.add(listener);
+        informChangeListeners();
     }
 
     private void init() {
@@ -106,10 +115,12 @@ public class ImagePlus {
         }
     }
 
-    private void fireChange() {
-        for (Runnable listener : changeListeners) {
-            listener.run();
-        }
+    private void informChangeListeners() {
+        changeListeners.stream().forEach(Runnable::run);
+    }
+
+    private void informValidationListeners() {
+        validationListeners.stream().forEach(Runnable::run);
     }
 
     private static String generateName(FileHandle file) {
