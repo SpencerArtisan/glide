@@ -19,7 +19,7 @@ public class ImageAreaModel {
     private List<ImagePlus> images = new ArrayList<>();
     private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
     private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
-    private List<Runnable> validationListeners = new ArrayList<>();
+    private List<Consumer<ImagePlus>> validationListeners = new ArrayList<>();
     private Function<String, InputStream> urlStreamProvider;
     private FileHandle folder;
 
@@ -39,7 +39,7 @@ public class ImageAreaModel {
         removeImageListeners.add(listener);
     }
 
-    public void registerValidationListener(Runnable listener) {
+    public void registerValidationListener(Consumer<ImagePlus> listener) {
         validationListeners.add(listener);
     }
 
@@ -69,9 +69,9 @@ public class ImageAreaModel {
         images.add(0, image);
         informAddImageListeners(image);
         if (initialValidState != isValid()) {
-            informValidationListeners();
+            informValidationListeners(image);
         }
-        image.registerValidationListener(this::informValidationListeners);
+        image.registerValidationListener(() -> informValidationListeners(image));
         return image;
     }
 
@@ -89,21 +89,15 @@ public class ImageAreaModel {
     }
 
     private void informAddImageListeners(ImagePlus image) {
-        for (Consumer<ImagePlus> listener : addImageListeners) {
-            listener.accept(image);
-        }
+        addImageListeners.stream().forEach((l) -> l.accept(image));
     }
 
     private void informRemoveImageListeners(ImagePlus image) {
-        for (Consumer<ImagePlus> listener : removeImageListeners) {
-            listener.accept(image);
-        }
+        removeImageListeners.stream().forEach((l) -> l.accept(image));
     }
 
-    private void informValidationListeners() {
-        for (Runnable listener : validationListeners) {
-            listener.run();
-        }
+    private void informValidationListeners(ImagePlus image) {
+        validationListeners.stream().forEach((l) -> l.accept(image));
     }
 
     private FileHandle generateImageFileHandle(String url) {

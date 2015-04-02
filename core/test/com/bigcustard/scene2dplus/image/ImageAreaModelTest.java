@@ -8,6 +8,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.io.InputStream;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -23,7 +24,7 @@ public class ImageAreaModelTest {
     @Mock private ImagePlus mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Runnable mockValidationListener;
+    @Mock private Consumer<ImagePlus> mockValidationListener;
     @Captor private ArgumentCaptor<Runnable> imageValidationListenerCaptor;
 
     @Before
@@ -45,7 +46,7 @@ public class ImageAreaModelTest {
         model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(false);
         model.addImage(mockImage);
-        verify(mockValidationListener).run();
+        verify(mockValidationListener).accept(mockImage);
     }
 
     @Test
@@ -55,7 +56,7 @@ public class ImageAreaModelTest {
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
         imageValidationListenerCaptor.getValue().run();
-        verify(mockValidationListener).run();
+        verify(mockValidationListener).accept(mockImage);
     }
 
     @Test
@@ -66,7 +67,7 @@ public class ImageAreaModelTest {
         when(mockValidationResult2.isValid()).thenReturn(false);
         model.addImage(mockImage);
         model.addImage(mockImage2);
-        verify(mockValidationListener, times(1)).run();
+        verify(mockValidationListener, times(1)).accept(mockImage);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class ImageAreaModelTest {
         model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
-        verify(mockValidationListener, never()).run();
+        verify(mockValidationListener, never()).accept(any(ImagePlus.class));
     }
 
     @Test

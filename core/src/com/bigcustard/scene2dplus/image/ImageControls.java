@@ -39,7 +39,7 @@ public class ImageControls {
         this.heightField = heightField;
         this.deleteButton = deleteButton;
         addModelChangeBehaviour();
-//        addValidationBehaviour();
+        addValidationBehaviour();
     }
 
     ImagePlus getImage() {
@@ -125,11 +125,12 @@ public class ImageControls {
         });
     }
 
-//    private void addValidationBehaviour() {
-//        model.registerValidationListener(image, (result) -> {
-//            nameField.setValid(result.isNameValid());
-//            widthField.setValid(result.isWidthValid());
-//            heightField.setValid(result.isHeightValid());
-//        });
-//    }
+    private void addValidationBehaviour() {
+        model.registerValidationListener((image) -> {
+            ValidationResult result = image.validate();
+            nameField.setValid(result.isNameValid());
+            widthField.setValid(result.isWidthValid());
+            heightField.setValid(result.isHeightValid());
+        });
+    }
 }
