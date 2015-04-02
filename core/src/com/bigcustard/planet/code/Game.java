@@ -62,11 +62,12 @@ public class Game {
     }
 
     private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
-        this.images = imageAreaModel.fromFolder(gameFolder);
+        this.images = imageAreaModel;
+        this.images.loadFromFolder(gameFolder);
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
-        for (ImagePlus image : imageAreaModel.images()) {
+        for (ImagePlus image : images.images()) {
             image.registerChangeListener(this::informChangeListeners);
         }
     }
@@ -128,8 +129,7 @@ public class Game {
     }
 
     public boolean isValid(Syntax syntax) {
-        return syntax.isValid(code);
-//        return runner.isValid(code) && images.isValid(images);
+        return syntax.isValid(code) && images.isValid();
     }
 
     private void informChangeListeners() {

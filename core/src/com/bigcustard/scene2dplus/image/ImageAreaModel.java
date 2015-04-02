@@ -75,7 +75,7 @@ public class ImageAreaModel {
         return image;
     }
 
-    private boolean isValid() {
+    public boolean isValid() {
         return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
     }
 
@@ -134,10 +134,9 @@ public class ImageAreaModel {
         }
     }
 
-    public ImageAreaModel fromFolder(FileHandle folder) {
+    public void loadFromFolder(FileHandle folder) {
         this.folder = folder;
         readImages();
-        return this;
     }
 
     private static InputStream defaultStreamProvider(String url) {

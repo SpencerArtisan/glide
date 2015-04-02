@@ -28,10 +28,11 @@ public class GameTest {
     }
 
     @Test
-    public void isValidIfCodeValid() {
+    public void isValidIfCodeAndImagesValid() {
         Game game = newGame();
         game.setCode("code");
         when(mockSyntax.isValid("code")).thenReturn(true);
+        when(mockImageModel.isValid()).thenReturn(true);
         assertThat(game.isValid(mockSyntax)).isTrue();
     }
 
@@ -40,30 +41,18 @@ public class GameTest {
         Game game = newGame();
         game.setCode("code");
         when(mockSyntax.isValid("code")).thenReturn(false);
+        when(mockImageModel.isValid()).thenReturn(true);
         assertThat(game.isValid(mockSyntax)).isFalse();
     }
-//
-//    @Test
-//    public void isInvalidIfCodeBad() {
-//        when(mockRunner.isValid("code")).thenReturn(false);
-//        when(mockValidator.isValid(Lists.emptyList())).thenReturn(true);
-//        Game game = newGame();
-//        game.setCode("code");
-//        assertThat(game.isValid()).isFalse();
-//    }
-//
-//    @Test
-//    @Ignore
-//    public void isInvalidIfImagesBad() {
-//        FileHandle mockFile = mockFiles.local("games/Unnamed Game/image.png");
-//        when(mockRunner.isValid("code")).thenReturn(true);
-//        when(mockValidator.isValid(Arrays.asList(any(ImagePlus.class)))).thenReturn(false);
-//        when(mockFile.name()).thenReturn("image.png");
-//        Game game = newGame();
-//        game.addImage("http://url/image.png");
-//        game.setCode("code");
-//        assertThat(game.isValid()).isFalse();
-//    }
+
+    @Test
+    public void isInvalidIfImagesInvalid() {
+        Game game = newGame();
+        game.setCode("code");
+        when(mockSyntax.isValid("code")).thenReturn(true);
+        when(mockImageModel.isValid()).thenReturn(false);
+        assertThat(game.isValid(mockSyntax)).isFalse();
+    }
 
     @Test
     public void createNewUsesTemplate() {
@@ -209,7 +198,7 @@ public class GameTest {
     public void mostRecentLoadsImages() {
         when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
         continueGame();
-        verify(mockImageModel).fromFolder(mockParentFolder.child("planet"));
+        verify(mockImageModel).loadFromFolder(mockParentFolder.child("planet"));
     }
 
     private Game newGame() {
