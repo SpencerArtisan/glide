@@ -3,6 +3,7 @@ package com.bigcustard.planet.code.command;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import com.bigcustard.util.FutureSupplier;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class RunCommandTest {
     public void before() {
         initMocks(this);
         futureName = SettableFuture.create();
-        Supplier<ListenableFuture<String>> nameSupplier = () -> futureName;
+        FutureSupplier<String> nameSupplier = () -> futureName;
         model = new TextAreaModel("code", null);
         command = new RunCommand(model, game, nameSupplier, runGame, syntax);
     }

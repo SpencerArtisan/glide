@@ -2,6 +2,7 @@ package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import com.bigcustard.util.FutureSupplier;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.Before;
@@ -26,8 +27,8 @@ public class ExitCommandTest {
 
     @Test
     public void executeWithUnnamedGameThenSave() {
-        Supplier<ListenableFuture<String>> nameSupplier = () -> Futures.immediateFuture("name") ;
-        Supplier<ListenableFuture<Boolean>> saveChoiceSupplier = () -> Futures.immediateFuture(true);
+        FutureSupplier<String> nameSupplier = () -> Futures.immediateFuture("name") ;
+        FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(true);
         when(game.isNamed()).thenReturn(false);
         command = new ExitCommand(model, game, saveChoiceSupplier, nameSupplier, exitProcess);
         command.execute();
@@ -37,8 +38,8 @@ public class ExitCommandTest {
 
     @Test
     public void executeWithUnnamedGameThenDelete() {
-        Supplier<ListenableFuture<String>> mockSupplier = mock(Supplier.class);
-        Supplier<ListenableFuture<Boolean>> saveChoiceSupplier = () -> Futures.immediateFuture(false);
+        FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
+        FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(false);
         when(game.isNamed()).thenReturn(false);
         command = new ExitCommand(model, game, saveChoiceSupplier, mockSupplier, exitProcess);
         command.execute();
@@ -48,7 +49,7 @@ public class ExitCommandTest {
 
     @Test
     public void executeWithNamedGameSavesAutomatically() {
-        Supplier<ListenableFuture<String>> mockSupplier = mock(Supplier.class);
+        FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
         when(game.isNamed()).thenReturn(true);
         command = new ExitCommand(model, game, null, mockSupplier, exitProcess);
         command.execute();
