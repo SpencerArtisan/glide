@@ -6,10 +6,12 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Game {
     public static final String PREFERENCES_KEY = "Game";
@@ -26,7 +28,7 @@ public class Game {
 
     private String code;
     private Preferences preferences;
-    private List<Runnable> changeListeners = new ArrayList<>();
+    private Notifier<Game> changeNotifier = new Notifier<>();
     private ImageAreaModel images;
     private FileHandle gameFolder;
 
@@ -68,7 +70,7 @@ public class Game {
         this.preferences = preferences;
         this.code = code;
         for (ImagePlus image : images.images()) {
-            image.registerChangeListener(this::informChangeListeners);
+            image.registerChangeListener((i) -> changeNotifier.notify(this));
         }
     }
 
@@ -80,8 +82,8 @@ public class Game {
         return images;
     }
 
-    public void registerChangeListener(Runnable listener) {
-        changeListeners.add(listener);
+    public void registerChangeListener(Consumer<Game> listener) {
+        changeNotifier.add(listener);
     }
 
     public String code() {
@@ -90,7 +92,7 @@ public class Game {
 
     public void setCode(String code) {
         this.code = code;
-        informChangeListeners();
+        changeNotifier.notify(this);
         save();
     }
 
@@ -130,12 +132,6 @@ public class Game {
 
     public boolean isValid(Syntax syntax) {
         return syntax.isValid(code) && images.isValid();
-    }
-
-    private void informChangeListeners() {
-        for (Runnable listener : changeListeners) {
-            listener.run();
-        }
     }
 
     public static boolean hasMostRecent() {

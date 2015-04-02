@@ -123,7 +123,7 @@ public class ImageControls {
     }
 
     private void addModelChangeBehaviour() {
-        image.registerChangeListener(() -> {
+        image.registerChangeListener((image) -> {
             widthField.setText(ObjectUtils.toString(image.width()));
             heightField.setText(ObjectUtils.toString(image.height()));
             nameField.setText(image.name());

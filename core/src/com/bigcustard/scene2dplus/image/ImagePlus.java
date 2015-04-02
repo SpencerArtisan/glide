@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.google.common.base.Strings;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ImagePlus {
     private static int MAX_NAME_LENGTH = 16;
@@ -19,8 +18,8 @@ public class ImagePlus {
     private int originalHeight;
     private Integer width;
     private Integer height;
-    private List<Runnable> changeListeners = new ArrayList<>();
-    private List<Runnable> validationListeners = new ArrayList<>();
+    private Notifier<ImagePlus> changeNotifier = new Notifier<>();
+    private Notifier<ImagePlus> validationNotifier = new Notifier<>();
 
     public ImagePlus(FileHandle file) {
         this(file, generateName(file), null, null);
@@ -33,12 +32,12 @@ public class ImagePlus {
         this.height = height;
     }
 
-    public void registerValidationListener(Runnable listener) {
-        validationListeners.add(listener);
+    public void registerValidationListener(Consumer<ImagePlus> listener) {
+        validationNotifier.add(listener);
     }
 
-    public void registerChangeListener(Runnable listener) {
-        changeListeners.add(listener);
+    public void registerChangeListener(Consumer<ImagePlus> listener) {
+        changeNotifier.add(listener);
     }
 
     public String name() {
@@ -93,9 +92,9 @@ public class ImagePlus {
         doChange.run();
 
         if (initialValidationState != validate().isValid()) {
-            informValidationListeners();
+            validationNotifier.notify(this);
         }
-        informChangeListeners();
+        changeNotifier.notify();
     }
 
     public void setHeight(Integer newHeight) {
@@ -122,14 +121,6 @@ public class ImagePlus {
             if (width == null) width = originalWidth;
             if (height == null) height = originalHeight;
         }
-    }
-
-    private void informChangeListeners() {
-        changeListeners.stream().forEach(Runnable::run);
-    }
-
-    private void informValidationListeners() {
-        validationListeners.stream().forEach(Runnable::run);
     }
 
     private static String generateName(FileHandle file) {

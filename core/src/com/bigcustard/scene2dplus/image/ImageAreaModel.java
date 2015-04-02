@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -17,9 +18,9 @@ public class ImageAreaModel {
     private static String IMAGE_DETAIL_FILE = "manifest.json";
 
     private List<ImagePlus> images = new ArrayList<>();
-    private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
-    private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
-    private List<Consumer<ImagePlus>> validationListeners = new ArrayList<>();
+    private Notifier<ImagePlus> addImageNotifier = new Notifier<>();
+    private Notifier<ImagePlus> removeImageNotifier = new Notifier<>();
+    private Notifier<ImagePlus> validationNotifier = new Notifier<>();
     private Function<String, InputStream> urlStreamProvider;
     private FileHandle folder;
 
@@ -32,15 +33,15 @@ public class ImageAreaModel {
     }
 
     public void registerAddImageListener(Consumer<ImagePlus> listener) {
-        addImageListeners.add(listener);
+        addImageNotifier.add(listener);
     }
 
     public void registerRemoveImageListener(Consumer<ImagePlus> listener) {
-        removeImageListeners.add(listener);
+        removeImageNotifier.add(listener);
     }
 
     public void registerValidationListener(Consumer<ImagePlus> listener) {
-        validationListeners.add(listener);
+        validationNotifier.add(listener);
     }
 
     public void save() {
@@ -67,11 +68,11 @@ public class ImageAreaModel {
     public ImagePlus addImage(ImagePlus image) {
         boolean initialValidState = isValid();
         images.add(0, image);
-        informAddImageListeners(image);
+        addImageNotifier.notify(image);
         if (initialValidState != isValid()) {
-            informValidationListeners(image);
+            validationNotifier.notify(image);
         }
-        image.registerValidationListener(() -> informValidationListeners(image));
+        image.registerValidationListener(validationNotifier::notify);
         return image;
     }
 
@@ -81,23 +82,11 @@ public class ImageAreaModel {
 
     public void removeImage(ImagePlus image) {
         images.remove(image);
-        informRemoveImageListeners(image);
+        removeImageNotifier.notify(image);
     }
 
     public ValidationResult[] validate() {
         return images.stream().map(ImagePlus::validate).toArray(ValidationResult[]::new);
-    }
-
-    private void informAddImageListeners(ImagePlus image) {
-        addImageListeners.stream().forEach((l) -> l.accept(image));
-    }
-
-    private void informRemoveImageListeners(ImagePlus image) {
-        removeImageListeners.stream().forEach((l) -> l.accept(image));
-    }
-
-    private void informValidationListeners(ImagePlus image) {
-        validationListeners.stream().forEach((l) -> l.accept(image));
     }
 
     private FileHandle generateImageFileHandle(String url) {

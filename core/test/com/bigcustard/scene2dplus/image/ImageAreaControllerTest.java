@@ -33,7 +33,7 @@ public class ImageAreaControllerTest {
     @Captor private ArgumentCaptor<Consumer<ImageControls>> removeImageControlsListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImagePlus>> addImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImagePlus>> removeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Runnable> imageChangeListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlus>> imageChangeListenerCaptor;
     private TestClipboard clipboard = new TestClipboard();
     private CommandHistory commandHistory = new CommandHistory();
     private ImageAreaController subject;

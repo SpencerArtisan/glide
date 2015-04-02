@@ -25,7 +25,7 @@ public class ImageAreaModelTest {
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
     @Mock private Consumer<ImagePlus> mockValidationListener;
-    @Captor private ArgumentCaptor<Runnable> imageValidationListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlus>> imageValidationListenerCaptor;
 
     @Before
     public void before() {
@@ -55,7 +55,7 @@ public class ImageAreaModelTest {
         model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
-        imageValidationListenerCaptor.getValue().run();
+        imageValidationListenerCaptor.getValue().accept(mockImage);
         verify(mockValidationListener).accept(mockImage);
     }
 
