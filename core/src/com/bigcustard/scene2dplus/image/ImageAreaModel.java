@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,17 +19,16 @@ public class ImageAreaModel {
     private List<ImagePlus> images = new ArrayList<>();
     private List<Consumer<ImagePlus>> addImageListeners = new ArrayList<>();
     private List<Consumer<ImagePlus>> removeImageListeners = new ArrayList<>();
+    private List<Runnable> validationListeners = new ArrayList<>();
     private Function<String, InputStream> urlStreamProvider;
-    private ImageValidator imageValidator;
     private FileHandle folder;
 
     public ImageAreaModel() {
-        this(ImageAreaModel::defaultStreamProvider, new ImageValidator());
+        this(ImageAreaModel::defaultStreamProvider);
     }
 
-    public ImageAreaModel(Function<String, InputStream> urlStreamProvider, ImageValidator imageValidator) {
+    public ImageAreaModel(Function<String, InputStream> urlStreamProvider) {
         this.urlStreamProvider = urlStreamProvider;
-        this.imageValidator = imageValidator;
     }
 
     public void registerAddImageListener(Consumer<ImagePlus> listener) {
@@ -39,8 +39,13 @@ public class ImageAreaModel {
         removeImageListeners.add(listener);
     }
 
-    public void addValidationListener(ImagePlus image, Consumer<ImageValidator.Result> listener) {
-        // todo
+    public void addValidationListener(Runnable listener) {
+        validationListeners.add(listener);
+    }
+
+    public void save() {
+        folder.child(IMAGE_DETAIL_FILE).writeString(new Json().toJson(ImageListDetails.fromModel(this)), false);
+
     }
 
     public List<ImagePlus> images() {
@@ -60,9 +65,17 @@ public class ImageAreaModel {
     }
 
     public ImagePlus addImage(ImagePlus image) {
+        boolean initialValidState = isValid();
         images.add(0, image);
         informAddImageListeners(image);
+        if (initialValidState != isValid()) {
+            informValidationListeners();
+        }
         return image;
+    }
+
+    private boolean isValid() {
+        return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
     }
 
     public void removeImage(ImagePlus image) {
@@ -70,13 +83,8 @@ public class ImageAreaModel {
         informRemoveImageListeners(image);
     }
 
-    public List<ImageValidator.Result> validateImages() {
-//        return imageValidator.validate(images);
-        return null;
-    }
-
-    public boolean isValid(ImageAreaModel images) {
-        return false;  //To change body of created methods use File | Settings | File Templates.
+    public ValidationResult[] validate() {
+        return images.stream().map(ImagePlus::validate).toArray(ValidationResult[]::new);
     }
 
     private void informAddImageListeners(ImagePlus image) {
@@ -88,6 +96,12 @@ public class ImageAreaModel {
     private void informRemoveImageListeners(ImagePlus image) {
         for (Consumer<ImagePlus> listener : removeImageListeners) {
             listener.accept(image);
+        }
+    }
+
+    private void informValidationListeners() {
+        for (Runnable listener : validationListeners) {
+            listener.run();
         }
     }
 
@@ -131,10 +145,6 @@ public class ImageAreaModel {
         return this;
     }
 
-    public void save() {
-        folder.child(IMAGE_DETAIL_FILE).writeString(new Json().toJson(ImageListDetails.fromModel(this)), false);
-
-    }
     private static InputStream defaultStreamProvider(String url) {
         try {
             return new URL(url).openStream();

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class TextFieldPlus extends TextField {
     private final TextureRegionDrawable white;
-    private boolean valid;
+    private boolean valid = true;
     private Drawable invalidBackground;
 
     public TextFieldPlus(String value, Skin skin) {

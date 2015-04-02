@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,4 +118,14 @@ public class ImagePlus {
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
         return filename.substring(0, nameLength);
     }
+
+    public ValidationResult validate() {
+        return new ValidationResult(
+                this,
+                width() != null,
+                height() != null,
+                !Strings.isNullOrEmpty(name()));
+        //&& Collections.frequency(imageNames, imagePlus.name()) == 1;
+    }
+
 }
