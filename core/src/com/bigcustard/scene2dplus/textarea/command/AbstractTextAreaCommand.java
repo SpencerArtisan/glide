@@ -1,9 +1,10 @@
 package com.bigcustard.scene2dplus.textarea.command;
 
+import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
-public abstract class AbstractTextAreaCommand implements Command {
+public abstract class AbstractTextAreaCommand extends AbstractCommand {
     protected TextAreaModel model;
     private TextAreaModel.State state;
 
@@ -15,10 +16,5 @@ public abstract class AbstractTextAreaCommand implements Command {
     @Override
     public void undo() {
         model.setState(state);
-    }
-
-    @Override
-    public boolean canExecute() {
-        return true;
     }
 }

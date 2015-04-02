@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 public class ExitCommandTest {
     private ExitCommand command;
     @Mock private Game game;
-    @Mock private TextAreaModel model;
     @Mock private Runnable exitProcess;
 
     @Before
@@ -30,7 +29,7 @@ public class ExitCommandTest {
         FutureSupplier<String> nameSupplier = () -> Futures.immediateFuture("name") ;
         FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(true);
         when(game.isNamed()).thenReturn(false);
-        command = new ExitCommand(model, game, saveChoiceSupplier, nameSupplier, exitProcess);
+        command = new ExitCommand(game, saveChoiceSupplier, nameSupplier, exitProcess);
         command.execute();
         verify(game).setName("name");
         verify(game).save();
@@ -41,7 +40,7 @@ public class ExitCommandTest {
         FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
         FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(false);
         when(game.isNamed()).thenReturn(false);
-        command = new ExitCommand(model, game, saveChoiceSupplier, mockSupplier, exitProcess);
+        command = new ExitCommand(game, saveChoiceSupplier, mockSupplier, exitProcess);
         command.execute();
         verifyZeroInteractions(mockSupplier);
         verify(game).delete();
@@ -51,7 +50,7 @@ public class ExitCommandTest {
     public void executeWithNamedGameSavesAutomatically() {
         FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
         when(game.isNamed()).thenReturn(true);
-        command = new ExitCommand(model, game, null, mockSupplier, exitProcess);
+        command = new ExitCommand(game, null, mockSupplier, exitProcess);
         command.execute();
         verify(game).save();
         verifyZeroInteractions(mockSupplier);

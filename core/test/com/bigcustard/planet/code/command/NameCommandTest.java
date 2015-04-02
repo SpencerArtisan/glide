@@ -16,7 +16,6 @@ import static org.mockito.Mockito.verify;
 
 public class NameCommandTest {
     @Mock private Game game;
-    @Mock private TextAreaModel model;
     private NameCommand command;
     private SettableFuture<String> futureName;
 
@@ -25,7 +24,7 @@ public class NameCommandTest {
         MockitoAnnotations.initMocks(this);
         futureName = SettableFuture.create();
         FutureSupplier<String> nameSupplier = () -> futureName;
-        command = new NameCommand(model, game, nameSupplier);
+        command = new NameCommand(game, nameSupplier);
     }
 
     @Test

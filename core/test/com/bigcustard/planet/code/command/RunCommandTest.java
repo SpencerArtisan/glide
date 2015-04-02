@@ -19,7 +19,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RunCommandTest {
     private RunCommand command;
-    private TextAreaModel model;
     private SettableFuture<String> futureName;
     @Mock private Syntax syntax;
     @Mock private Game game;
@@ -30,8 +29,7 @@ public class RunCommandTest {
         initMocks(this);
         futureName = SettableFuture.create();
         FutureSupplier<String> nameSupplier = () -> futureName;
-        model = new TextAreaModel("code", null);
-        command = new RunCommand(model, game, nameSupplier, runGame, syntax);
+        command = new RunCommand(game, nameSupplier, runGame, syntax);
     }
 
     @Test

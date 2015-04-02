@@ -2,6 +2,8 @@ package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameRenameException;
+import com.bigcustard.scene2dplus.command.AbstractCommand;
+import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.command.AbstractTextAreaCommand;
 import com.bigcustard.util.FutureSupplier;
@@ -12,18 +14,16 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.function.Supplier;
 
-public class ExitCommand extends AbstractTextAreaCommand {
-    private Game game;
-    private FutureSupplier<Boolean> saveChoiceSupplier;
-    private FutureSupplier<String> gameNameSupplier;
-    private Runnable exitProcess;
+public class ExitCommand extends AbstractCommand {
+    private final Game game;
+    private final FutureSupplier<Boolean> saveChoiceSupplier;
+    private final FutureSupplier<String> gameNameSupplier;
+    private final Runnable exitProcess;
 
-    public ExitCommand(TextAreaModel model,
-                       Game game,
+    public ExitCommand(Game game,
                        FutureSupplier<Boolean> saveChoiceSupplier,
                        FutureSupplier<String> gameNameSupplier,
                        Runnable exitProcess) {
-        super(model);
         this.game = game;
         this.saveChoiceSupplier = saveChoiceSupplier;
         this.gameNameSupplier = gameNameSupplier;
