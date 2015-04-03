@@ -8,6 +8,7 @@ import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
 
@@ -31,15 +32,15 @@ public class Game {
     private FileHandle gameFolder;
 
     public static Game create() {
-        return create(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files.local(FOLDER), new ImageAreaModel());
+        return create(preferences(), parentFolder(), new ImageAreaModel());
     }
 
     public static Game mostRecent() {
-        return mostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.files.local(FOLDER), new ImageAreaModel());
+        return mostRecent(preferences(), parentFolder(), new ImageAreaModel());
     }
 
     public static Game from(FileHandle gameFolder) {
-        return from(Gdx.app.getPreferences(PREFERENCES_KEY), gameFolder, new ImageAreaModel());
+        return from(preferences(), gameFolder, new ImageAreaModel());
     }
 
     @VisibleForTesting
@@ -67,13 +68,15 @@ public class Game {
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
-        for (ImagePlus image : images.images()) {
-            image.registerChangeListener((i) -> changeNotifier.notify(this));
-        }
     }
 
-    public static FileHandle[] allGameFolders(Files files) {
-        return files.local(FOLDER).list(file -> file.isDirectory() && !file.getName().startsWith("."));
+    public static FileHandle[] allGameFolders() {
+        return allGameFolders(parentFolder());
+    }
+
+    @VisibleForTesting
+    static FileHandle[] allGameFolders(FileHandle parentFolder) {
+        return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
     public ImageAreaModel images() {
@@ -133,11 +136,12 @@ public class Game {
     }
 
     public static boolean hasMostRecent() {
-        return hasMostRecent(Gdx.app.getPreferences(PREFERENCES_KEY), Gdx.app.getFiles().local(FOLDER));
+        return hasMostRecent(preferences(), Gdx.app.getFiles().local(FOLDER));
     }
 
     static boolean hasMostRecent(Preferences preferences, FileHandle parentFolder) {
         String gameName = preferences.getString(RECENT_GAME);
+        if (Strings.isNullOrEmpty(gameName)) return false;
         FileHandle gameFolder = parentFolder.child(gameName);
         return gameFolder.exists() && gameFolder.child(CODE_FILE).exists();
     }
@@ -149,6 +153,14 @@ public class Game {
             candidate = parentFolder.child(DEFAULT_NAME + " " + suffix++);
         }
         return candidate;
+    }
+
+    private static Preferences preferences() {
+        return Gdx.app.getPreferences(PREFERENCES_KEY);
+    }
+
+    private static FileHandle parentFolder() {
+        return Gdx.files.local(FOLDER);
     }
 
     private boolean isChangingName(String newName) {

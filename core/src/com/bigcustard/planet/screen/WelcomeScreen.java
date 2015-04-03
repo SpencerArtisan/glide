@@ -79,7 +79,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void createGameLibraryButton(Skin skin) {
 		gameLibraryButton = new TextButton("   Game Library   ", skin, "big");
-        boolean enabled = Game.allGameFolders(Gdx.files).length > 0;
+        boolean enabled = Game.allGameFolders().length > 0;
         gameLibraryButton.setDisabled(!enabled);
         gameLibraryButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
 	}

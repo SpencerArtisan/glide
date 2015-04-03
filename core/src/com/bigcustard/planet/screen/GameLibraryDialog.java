@@ -20,7 +20,7 @@ public class GameLibraryDialog extends Dialog {
         pad(20);
         text("Choose a game");
         row();
-        for (FileHandle gameDirectory : Game.allGameFolders(Gdx.files)) {
+        for (FileHandle gameDirectory : Game.allGameFolders()) {
             TextButton button = new TextButton("  " + gameDirectory.name() + "  ", skin, "big");
             getButtonTable().add(button).fillX().pad(10);
             setObject(button, gameDirectory);
