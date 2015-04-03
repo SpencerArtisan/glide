@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -31,11 +32,17 @@ public class GameTest {
     @Mock private ImagePlus mockImage;
     @Mock private Syntax mockSyntax;
     @Mock private Consumer<Game> mockChangeListener;
+    @Captor private ArgumentCaptor<Consumer<ImagePlus>> addImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlus>> removeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlus>> changeImageListenerCaptor;
 
     @Before
     public void before() {
         initMocks(this);
         when(mockGameFolder.child(Game.CODE_FILE)).thenReturn(mockCodeFile);
+        doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
+        doNothing().when(mockImageModel).registerRemoveImageListener(removeImageListenerCaptor.capture());
+        doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
     }
 
     @Test
@@ -250,6 +257,33 @@ public class GameTest {
         Game game = newGame();
         game.setCode("code");
         verify(mockGameFolder.child(Game.CODE_FILE)).writeString("code", false);
+    }
+
+    @Test
+    public void addImageStoresImageModel() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        when(mockGameFolder.name()).thenReturn("Unnamed Game");
+        newGame();
+        addImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockImageModel, times(2)).save();
+    }
+
+    @Test
+    public void removeImageStoresImageModel() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        when(mockGameFolder.name()).thenReturn("Unnamed Game");
+        newGame();
+        removeImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockImageModel, times(2)).save();
+    }
+
+    @Test
+    public void changeImageStoresImageModel() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        when(mockGameFolder.name()).thenReturn("Unnamed Game");
+        newGame();
+        changeImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockImageModel, times(2)).save();
     }
 
     @Test

@@ -19,6 +19,7 @@ public class ImageAreaModel {
 
     private Notifier<ImagePlus> addImageNotifier = new Notifier<>();
     private Notifier<ImagePlus> removeImageNotifier = new Notifier<>();
+    private Notifier<ImagePlus> changeImageNotifier = new Notifier<>();
     private Notifier<ImagePlus> validationNotifier = new Notifier<>();
     private Function<String, InputStream> urlStreamProvider;
     private List<ImagePlus> images = new ArrayList<>();
@@ -39,6 +40,10 @@ public class ImageAreaModel {
 
     public void registerRemoveImageListener(Consumer<ImagePlus> listener) {
         removeImageNotifier.add(listener);
+    }
+
+    public void registerChangeImageListener(Consumer<ImagePlus> listener) {
+        changeImageNotifier.add(listener);
     }
 
     public void registerValidationListener(Consumer<ImagePlus> listener) {
@@ -69,6 +74,7 @@ public class ImageAreaModel {
             validationNotifier.notify(image);
         }
         image.registerValidationListener(validationNotifier::notify);
+        image.registerChangeListener(changeImageNotifier::notify);
         return image;
     }
 

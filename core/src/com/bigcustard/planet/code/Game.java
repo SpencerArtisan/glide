@@ -67,6 +67,9 @@ public class Game {
         this.code = code;
         this.imageModel = imageAreaModel;
         this.imageModel.loadFromFolder(gameFolder);
+        this.imageModel.registerAddImageListener((image) -> imageModel.save());
+        this.imageModel.registerRemoveImageListener((image) -> imageModel.save());
+        this.imageModel.registerChangeImageListener((image) -> imageModel.save());
         save();
     }
 

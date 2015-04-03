@@ -104,7 +104,7 @@ public class ImagePlus {
         if (initialValidationState != validate().isValid()) {
             validationNotifier.notify(this);
         }
-        changeNotifier.notify();
+        changeNotifier.notify(this);
     }
 
     private void init() {
