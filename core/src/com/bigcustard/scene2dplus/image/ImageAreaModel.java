@@ -159,8 +159,8 @@ public class ImageAreaModel {
     private static class ImageDetails {
         private String filename;
         private String name;
-        private int width;
-        private int height;
+        private Integer width;
+        private Integer height;
 
         public ImageDetails() {
         }

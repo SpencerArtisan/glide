@@ -25,6 +25,7 @@ public class ImageControls {
         this.deleteButton = createDeleteButton(skin);
         addModelChangeBehaviour();
         addValidationBehaviour();
+        setValidState();
     }
 
     ImagePlus getImage() {
@@ -115,11 +116,13 @@ public class ImageControls {
     }
 
     private void addValidationBehaviour() {
-        image.registerValidationListener((image) -> {
-            ValidationResult result = image.validate();
-            nameField.setValid(result.isNameValid());
-            widthField.setValid(result.isWidthValid());
-            heightField.setValid(result.isHeightValid());
-        });
+        image.registerValidationListener((image) -> setValidState());
+    }
+
+    private void setValidState() {
+        ValidationResult result = image.validate();
+        nameField.setValid(result.isNameValid());
+        widthField.setValid(result.isWidthValid());
+        heightField.setValid(result.isHeightValid());
     }
 }
