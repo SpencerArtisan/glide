@@ -17,7 +17,6 @@ import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
-@Ignore
 public class TextAreaControllerIntegrationTest {
 	private TextAreaController subject;
 	private TextAreaModel model;
