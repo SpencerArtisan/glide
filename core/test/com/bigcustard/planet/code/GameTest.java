@@ -35,7 +35,7 @@ public class GameTest {
     @Before
     public void before() {
         initMocks(this);
-        when(mockGameFolder.child("code.groovy")).thenReturn(mockCodeFile);
+        when(mockGameFolder.child(Game.CODE_FILE)).thenReturn(mockCodeFile);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class GameTest {
         when(mockParentFolder.child("planet")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("planet");
         when(mockGameFolder.exists()).thenReturn(true);
-        when(mockGameFolder.child("code.groovy").exists()).thenReturn(false);
+        when(mockGameFolder.child(Game.CODE_FILE).exists()).thenReturn(false);
         when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
         assertThat(Game.hasMostRecent(mockPreferences, mockParentFolder)).isFalse();
     }
@@ -197,7 +197,7 @@ public class GameTest {
         when(mockParentFolder.child("planet")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("planet");
         when(mockGameFolder.exists()).thenReturn(true);
-        when(mockGameFolder.child("code.groovy").exists()).thenReturn(true);
+        when(mockGameFolder.child(Game.CODE_FILE).exists()).thenReturn(true);
         when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
         assertThat(Game.hasMostRecent(mockPreferences, mockParentFolder)).isTrue();
     }
@@ -246,7 +246,7 @@ public class GameTest {
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
         Game game = newGame();
         game.setCode("code");
-        verify(mockGameFolder.child("code.groovy")).writeString("code", false);
+        verify(mockGameFolder.child(Game.CODE_FILE)).writeString("code", false);
     }
 
     @Test
@@ -281,8 +281,8 @@ public class GameTest {
         when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder.name()).thenReturn("planet");
-        when(mockGameFolder.child("code.groovy").exists()).thenReturn(true);
-        when(mockGameFolder.child("code.groovy").readString()).thenReturn("code");
+        when(mockGameFolder.child(Game.CODE_FILE).exists()).thenReturn(true);
+        when(mockGameFolder.child(Game.CODE_FILE).readString()).thenReturn("code");
         assertThat(continueGame().name()).isEqualTo("planet");
         assertThat(continueGame().code()).isEqualTo("code");
     }
@@ -298,7 +298,7 @@ public class GameTest {
     @Test
     public void providesAccessToTheImageModel() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        assertThat(newGame().images()).isSameAs(mockImageModel);
+        assertThat(newGame().imageModel()).isSameAs(mockImageModel);
     }
 
     @Test

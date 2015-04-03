@@ -28,6 +28,5 @@ public class NameCommandTest {
         command.execute();
         futureName.set("name");
         verify(game).setName("name");
-        verify(game).save();
     }
 }

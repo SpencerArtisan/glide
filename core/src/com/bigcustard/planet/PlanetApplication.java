@@ -52,7 +52,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         BlurpMain script = new BlurpMain() {
             @Override
             public void run() {
-                new ImageSprite("games/" + game.name() + "/" + game.images().images().get(0).filename(), 300, 150);
+                new ImageSprite("games/" + game.name() + "/" + game.imageModel().images().get(0).filename(), 300, 150);
             }
         };
         runtime.start(script);

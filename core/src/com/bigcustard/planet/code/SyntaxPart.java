@@ -10,11 +10,11 @@ public class SyntaxPart {
 		this.type = type;
 	}
 
-    public Type getType() {
+    public Type type() {
         return type;
     }
 
-    public String getText() {
+    public String text() {
         return text;
     }
 
@@ -54,8 +54,8 @@ public class SyntaxPart {
                 '}';
     }
 
-    public static enum Type {
-		Keyword, Method, Comment, Bracket, Brace, Unclassified, Text, Quoted, UnclosedQuote
+    public enum Type {
+		Keyword, Method, Comment, Bracket, Brace, Unclassified, Quoted, UnclosedQuote
 	}
 }
 

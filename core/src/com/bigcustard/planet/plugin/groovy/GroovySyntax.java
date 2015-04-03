@@ -18,12 +18,10 @@ import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 public class GroovySyntax implements Syntax {
     private static final Set KEYWORDS = ImmutableSet.of("public");
 
+    @Override
     public List<SyntaxPart> parse(String program) {
         List<SyntaxPart> classifiedWordsAndSpaces = categoriseWordsIntoTypes(program);
         return collapseAdjacentPartsWithSameType(classifiedWordsAndSpaces);
-    }
-
-    GroovySyntax() {
     }
 
     @Override
@@ -69,11 +67,11 @@ public class GroovySyntax implements Syntax {
         for (SyntaxPart newElement : classifiedWordsAndSpaces) {
             if (!collapsed.isEmpty()) {
                 SyntaxPart lastElement = collapsed.get(collapsed.size() - 1);
-                if (lastElement.getType() == Comment && !newElement.getText().contains("\n")) {
+                if (lastElement.type() == Comment && !newElement.text().contains("\n")) {
                     newElement.setType(Comment);
                 }
-                if (lastElement.getType() == UnclosedQuote) {
-                    if (newElement.getType() == UnclosedQuote) {
+                if (lastElement.type() == UnclosedQuote) {
+                    if (newElement.type() == UnclosedQuote) {
                         lastElement.setType(Quoted);
                         newElement.setType(Quoted);
                     } else {
@@ -81,8 +79,8 @@ public class GroovySyntax implements Syntax {
                     }
                 }
 
-                if (lastElement.getType() == newElement.getType()) {
-                    newElement = new SyntaxPart(lastElement.getText() + newElement.getText(), newElement.getType());
+                if (lastElement.type() == newElement.type()) {
+                    newElement = new SyntaxPart(lastElement.text() + newElement.text(), newElement.type());
                     collapsed.remove(collapsed.size() - 1);
                 }
 

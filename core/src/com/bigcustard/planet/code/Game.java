@@ -1,11 +1,9 @@
 package com.bigcustard.planet.code;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.image.ImagePlus;
 import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
@@ -14,22 +12,22 @@ import java.util.function.Consumer;
 
 public class Game {
     public static final String PREFERENCES_KEY = "Game";
-    private static final String RECENT_GAME = "MostRecentGameName";
+    public static String CODE_FILE = "code.txt";
     public static final String DEFAULT_NAME = "Unnamed Game";
-    private static String FOLDER = "games";
-    private static String CODE_FILE = "code.groovy";
-    static String TEMPLATE =
+    public static String TEMPLATE =
                       "////////////////////////////////// \n"
                     + "// Welcome to Planet Burpl! \n"
                     + "// Start writing your game below. \n"
                     + "// Click here if you need help \n"
                     + "////////////////////////////////// \n\n";
+    private static final String RECENT_GAME = "MostRecentGameName";
+    private static String FOLDER = "games";
 
     private String code;
     private Preferences preferences;
-    private Notifier<Game> changeNotifier = new Notifier<>();
-    private ImageAreaModel images;
     private FileHandle gameFolder;
+    private Notifier<Game> changeNotifier = new Notifier<>();
+    private ImageAreaModel imageModel;
 
     public static Game create() {
         return create(preferences(), parentFolder(), new ImageAreaModel());
@@ -63,11 +61,11 @@ public class Game {
     }
 
     private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
-        this.images = imageAreaModel;
-        this.images.loadFromFolder(gameFolder);
+        this.imageModel = imageAreaModel;
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
+        this.imageModel.loadFromFolder(gameFolder);
     }
 
     public static FileHandle[] allGameFolders() {
@@ -79,8 +77,8 @@ public class Game {
         return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
-    public ImageAreaModel images() {
-        return images;
+    public ImageAreaModel imageModel() {
+        return imageModel;
     }
 
     public void registerChangeListener(Consumer<Game> listener) {
@@ -117,10 +115,9 @@ public class Game {
         }
     }
 
-
     public void save() {
         gameFolder.child(CODE_FILE).writeString(code, false);
-        images.save();
+        imageModel.save();
     }
 
     public void delete() {
@@ -132,11 +129,11 @@ public class Game {
     }
 
     public boolean isValid(Syntax syntax) {
-        return syntax.isValid(code) && images.isValid();
+        return syntax.isValid(code) && imageModel.isValid();
     }
 
     public static boolean hasMostRecent() {
-        return hasMostRecent(preferences(), Gdx.app.getFiles().local(FOLDER));
+        return hasMostRecent(preferences(), parentFolder());
     }
 
     static boolean hasMostRecent(Preferences preferences, FileHandle parentFolder) {

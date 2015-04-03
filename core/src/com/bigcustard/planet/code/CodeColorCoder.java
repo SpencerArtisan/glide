@@ -1,7 +1,6 @@
-package com.bigcustard.planet.plugin.groovy;
+package com.bigcustard.planet.code;
 
 import com.badlogic.gdx.graphics.Color;
-import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
@@ -13,28 +12,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GroovyColorCoder implements ColorCoder {
+import static com.bigcustard.planet.code.SyntaxPart.Type.*;
+
+public class CodeColorCoder implements ColorCoder {
 
     private static final Map<SyntaxPart.Type, String> DEFAULT_COLORS = ImmutableMap.<SyntaxPart.Type, String>builder().
-            put(SyntaxPart.Type.Unclassified, "#839496").
-            put(SyntaxPart.Type.Bracket, "#eee8d5").
-            put(SyntaxPart.Type.Brace, "WHITE").
-            put(SyntaxPart.Type.Keyword, "#b58900").
-            put(SyntaxPart.Type.Method, "#268bd2").
-            put(SyntaxPart.Type.Quoted, "#2aa198").
-            put(SyntaxPart.Type.UnclosedQuote, "RED").
-            put(SyntaxPart.Type.Comment, "#586e75").build();
+            put(Unclassified, "#839496").
+            put(Bracket, "#eee8d5").
+            put(Brace, "WHITE").
+            put(Keyword, "#b58900").
+            put(Method, "#268bd2").
+            put(Quoted, "#2aa198").
+            put(UnclosedQuote, "RED").
+            put(Comment, "#586e75").build();
     private static final String DEFAULT_ERROR = "dc322f88";
 
-    private final GroovySyntax syntax;
+    private final Syntax syntax;
     private final Map<SyntaxPart.Type, String> colors;
     private final String errorColor;
 
-    GroovyColorCoder() {
-        this(new GroovySyntax(), DEFAULT_COLORS, DEFAULT_ERROR);
+    public CodeColorCoder(Syntax syntax) {
+        this(syntax, DEFAULT_COLORS, DEFAULT_ERROR);
     }
 
-    GroovyColorCoder(GroovySyntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor) {
+    CodeColorCoder(Syntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor) {
         this.syntax = syntax;
         this.colors = colors;
         this.errorColor = errorColor;
@@ -46,9 +47,9 @@ public class GroovyColorCoder implements ColorCoder {
         List<String> parts = Lists.transform(parsed, new Function<SyntaxPart, String>() {
             @Override
             public String apply(SyntaxPart syntaxPart) {
-                return colors.containsKey(syntaxPart.getType()) ?
-                        String.format("[%s]%s[]", colors.get(syntaxPart.getType()), syntaxPart.getText()) :
-                        syntaxPart.getText();
+                return colors.containsKey(syntaxPart.type()) ?
+                        String.format("[%s]%s[]", colors.get(syntaxPart.type()), syntaxPart.text()) :
+                        syntaxPart.text();
             }
         });
         return StringUtils.join(parts.toArray());

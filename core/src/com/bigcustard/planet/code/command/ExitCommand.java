@@ -38,8 +38,8 @@ public class ExitCommand extends AbstractCommand {
                 nameGame();
             } else {
                 game.delete();
-                exitProcess.run();
             }
+            exitProcess.run();
         });
     }
 
@@ -48,7 +48,6 @@ public class ExitCommand extends AbstractCommand {
             try {
                 game.setName(gameName);
                 game.save();
-                exitProcess.run();
             } catch (GameRenameException e) {
                 System.out.println("Failed to save game: " + e);
             }

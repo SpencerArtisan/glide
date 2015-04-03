@@ -16,9 +16,6 @@ public class NameCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        FutureSuppliers.onGet(gameNameSupplier, (gameName) -> {
-            game.setName(gameName);
-            game.save();
-        });
+        FutureSuppliers.onGet(gameNameSupplier, game::setName);
     }
 }

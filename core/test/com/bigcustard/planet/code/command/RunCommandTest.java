@@ -47,7 +47,6 @@ public class RunCommandTest {
         command.execute();
         futureName.set("name");
         verify(game).setName("name");
-        verify(game).save();
         verify(runGame).accept(game);
     }
 

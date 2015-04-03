@@ -24,17 +24,20 @@ public class RunCommand extends AbstractCommand {
     @Override
     public void execute() {
         if (game.isNamed()) {
-            game.save();
-            runGame.accept(game);
+            saveAndRun();
         } else {
-            nameGame();
+            nameAndRun();
         }
     }
 
-    private void nameGame() {
+    private void saveAndRun() {
+        game.save();
+        runGame.accept(game);
+    }
+
+    private void nameAndRun() {
         FutureSuppliers.onGet(gameNameSupplier, (gameName) -> {
             game.setName(gameName);
-            game.save();
             runGame.accept(game);
         });
     }

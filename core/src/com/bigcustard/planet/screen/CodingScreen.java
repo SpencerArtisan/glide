@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
@@ -90,13 +91,13 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        ImageAreaModel imageAreaModel = game.images();
+        ImageAreaModel imageAreaModel = game.imageModel();
         imageArea = new ImageArea(imageAreaModel, skin);
         new ImageAreaController(imageArea, imageAreaModel, commandHistory).init();
     }
 
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), plugin.colorCoder());
+        model = new TextAreaModel(game.code(), new CodeColorCoder(plugin.syntax()));
         model.addListener((m) -> game.setCode(model.getText()));
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }

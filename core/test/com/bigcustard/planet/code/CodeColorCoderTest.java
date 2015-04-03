@@ -1,6 +1,8 @@
-package com.bigcustard.planet.plugin.groovy;
+package com.bigcustard.planet.code;
 
+import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.code.SyntaxPart;
+import com.bigcustard.planet.plugin.groovy.GroovySyntax;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
@@ -14,14 +16,14 @@ import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class GroovyColorCoderTest {
-	private GroovyColorCoder coder;
-	@Mock private GroovySyntax syntax;
+public class CodeColorCoderTest {
+	private CodeColorCoder coder;
+	@Mock private Syntax syntax;
 	
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new GroovyColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW"), "ff0000");
+		coder = new CodeColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW"), "ff0000");
 	}
 
 	@Test
