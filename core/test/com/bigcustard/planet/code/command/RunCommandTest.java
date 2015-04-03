@@ -16,7 +16,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RunCommandTest {
     private RunCommand command;
-    private SettableFuture<String> futureName;
     @Mock private Syntax syntax;
     @Mock private Game game;
     @Mock private Consumer<Game> runGame;
@@ -24,9 +23,7 @@ public class RunCommandTest {
     @Before
     public void before() {
         initMocks(this);
-        futureName = SettableFuture.create();
-        FutureSupplier<String> nameSupplier = () -> futureName;
-        command = new RunCommand(game, nameSupplier, runGame, syntax);
+        command = new RunCommand(game, runGame, syntax);
     }
 
     @Test
@@ -42,20 +39,8 @@ public class RunCommandTest {
     }
 
     @Test
-    public void forcesNamingUnnamedGames() {
-        when(game.isNamed()).thenReturn(false);
+    public void execute() {
         command.execute();
-        futureName.set("name");
-        verify(game).setName("name");
-        verify(runGame).accept(game);
-    }
-
-    @Test
-    public void dontHaveToNameNamedGames() {
-        when(game.isNamed()).thenReturn(true);
-        command.execute();
-        verify(game, never()).setName(anyString());
-        verify(game).save();
         verify(runGame).accept(game);
     }
 }

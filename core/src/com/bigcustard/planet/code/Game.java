@@ -66,6 +66,7 @@ public class Game {
         this.preferences = preferences;
         this.code = code;
         this.imageModel.loadFromFolder(gameFolder);
+        save();
     }
 
     public static FileHandle[] allGameFolders() {

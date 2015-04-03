@@ -85,7 +85,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::getGameName, runGame, plugin.syntax()));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, runGame, plugin.syntax()));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());

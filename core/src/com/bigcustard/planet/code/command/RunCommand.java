@@ -10,36 +10,18 @@ import java.util.function.Consumer;
 
 public class RunCommand extends AbstractCommand {
     private Game game;
-    private FutureSupplier<String> gameNameSupplier;
     private Consumer<Game> runGame;
     private Syntax syntax;
 
-    public RunCommand(Game game, FutureSupplier<String> gameNameSupplier, Consumer<Game> runGame, Syntax syntax) {
+    public RunCommand(Game game, Consumer<Game> runGame, Syntax syntax) {
         this.game = game;
-        this.gameNameSupplier = gameNameSupplier;
         this.runGame = runGame;
         this.syntax = syntax;
     }
 
     @Override
     public void execute() {
-        if (game.isNamed()) {
-            saveAndRun();
-        } else {
-            nameAndRun();
-        }
-    }
-
-    private void saveAndRun() {
-        game.save();
         runGame.accept(game);
-    }
-
-    private void nameAndRun() {
-        FutureSuppliers.onGet(gameNameSupplier, (gameName) -> {
-            game.setName(gameName);
-            runGame.accept(game);
-        });
     }
 
     @Override
