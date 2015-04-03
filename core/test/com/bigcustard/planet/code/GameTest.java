@@ -347,6 +347,33 @@ public class GameTest {
         verify(mockChangeListener).accept(game);
     }
 
+    @Test
+    public void notifiesOfImageAdd() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.registerChangeListener(mockChangeListener);
+        addImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void notifiesOfImageRemove() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.registerChangeListener(mockChangeListener);
+        removeImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void notifiesOfImageChange() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.registerChangeListener(mockChangeListener);
+        changeImageListenerCaptor.getValue().accept(mockImage);
+        verify(mockChangeListener).accept(game);
+    }
+
     private Game newGame() {
         return Game.create(mockPreferences, mockParentFolder, mockImageModel);
     }

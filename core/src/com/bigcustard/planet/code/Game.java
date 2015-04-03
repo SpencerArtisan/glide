@@ -67,9 +67,9 @@ public class Game {
         this.code = code;
         this.imageModel = imageAreaModel;
         this.imageModel.loadFromFolder(gameFolder);
-        this.imageModel.registerAddImageListener((image) -> imageModel.save());
-        this.imageModel.registerRemoveImageListener((image) -> imageModel.save());
-        this.imageModel.registerChangeImageListener((image) -> imageModel.save());
+        this.imageModel.registerAddImageListener((image) -> onImageChange());
+        this.imageModel.registerRemoveImageListener((image) -> onImageChange());
+        this.imageModel.registerChangeImageListener((image) -> onImageChange());
         save();
     }
 
@@ -157,6 +157,11 @@ public class Game {
             candidate = parentFolder.child(DEFAULT_NAME + " " + suffix++);
         }
         return candidate;
+    }
+
+    private void onImageChange() {
+        imageModel.save();
+        changeNotifier.notify(this);
     }
 
     private static Preferences preferences() {
