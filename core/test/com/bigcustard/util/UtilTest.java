@@ -1,5 +1,6 @@
-package com.bigcustard;
+package com.bigcustard.util;
 
+import com.bigcustard.util.Util;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

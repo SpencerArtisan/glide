@@ -1,4 +1,4 @@
-package com.bigcustard;
+package com.bigcustard.util;
 
 import java.util.function.Supplier;
 

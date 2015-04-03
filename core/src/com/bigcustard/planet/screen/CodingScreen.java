@@ -16,6 +16,7 @@ import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
+import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.bigcustard.scene2dplus.image.ImageArea;
 import com.bigcustard.scene2dplus.image.ImageAreaController;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
@@ -86,7 +87,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::getGameName, runGame, plugin.syntax()));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, exitToMainMenu));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
     }
 
@@ -103,7 +104,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     @Override
-    public void render(float delta) { 
+    public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -116,6 +117,11 @@ public class CodingScreen extends ScreenAdapter {
 		super.resize(width, height);
 //		textArea.setSize(width, height);
 	}
+
+    private void errorReporter(Exception e, Runnable onClosed) {
+        ErrorDialog errorDialog = new ErrorDialog(skin, e, onClosed);
+        errorDialog.show(stage);
+    }
 
     private ListenableFuture<String> getGameName() {
         NameGameDialog nameGameDialog = new NameGameDialog(game, skin);

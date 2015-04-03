@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
-import static com.bigcustard.Util.tryTo;
+import static com.bigcustard.util.Util.tryTo;
 
 public class ButtonBar extends HorizontalGroup {
     private Skin skin;

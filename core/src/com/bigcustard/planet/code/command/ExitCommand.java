@@ -6,26 +6,31 @@ import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.util.FutureSupplier;
 import com.bigcustard.util.FutureSuppliers;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 public class ExitCommand extends AbstractCommand {
     private final Game game;
     private final FutureSupplier<Boolean> saveChoiceSupplier;
     private final FutureSupplier<String> gameNameSupplier;
+    private BiConsumer<Exception, Runnable> errorReporter;
     private final Runnable exitProcess;
 
     public ExitCommand(Game game,
                        FutureSupplier<Boolean> saveChoiceSupplier,
                        FutureSupplier<String> gameNameSupplier,
+                       BiConsumer<Exception, Runnable> errorReporter,
                        Runnable exitProcess) {
         this.game = game;
         this.saveChoiceSupplier = saveChoiceSupplier;
         this.gameNameSupplier = gameNameSupplier;
+        this.errorReporter = errorReporter;
         this.exitProcess = exitProcess;
     }
 
     @Override
     public void execute() {
         if (game.isNamed()) {
-            game.save();
             exitProcess.run();
         } else {
             nameOrDeleteGame();
@@ -35,22 +40,23 @@ public class ExitCommand extends AbstractCommand {
     private void nameOrDeleteGame() {
         FutureSuppliers.onGet(saveChoiceSupplier, (save) -> {
             if (save) {
-                nameGame();
+                saveGame();
             } else {
                 game.delete();
+                exitProcess.run();
             }
-            exitProcess.run();
         });
     }
 
-    private void nameGame() {
-        FutureSuppliers.onGet(gameNameSupplier, (gameName) -> {
+    private void saveGame() {
+        FutureSuppliers.onGet(gameNameSupplier, (newName) -> {
             try {
-                game.setName(gameName);
-                game.save();
+                game.setName(newName);
+                exitProcess.run();
             } catch (GameRenameException e) {
-                System.out.println("Failed to save game: " + e);
+                errorReporter.accept(e, this::saveGame);
             }
         });
     }
+
 }
