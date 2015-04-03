@@ -143,6 +143,7 @@ public class GameTest {
         FileHandle mockGameFolder2 = mock(FileHandle.class);
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockParentFolder.child("Unnamed Game 2")).thenReturn(mockGameFolder2);
+        when(mockGameFolder2.child(Game.CODE_FILE)).thenReturn(mockCodeFile);
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder2.exists()).thenReturn(false);
         when(mockGameFolder2.name()).thenReturn("Unnamed Game 2");
@@ -157,6 +158,8 @@ public class GameTest {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockParentFolder.child("Unnamed Game 2")).thenReturn(mockGameFolder2);
         when(mockParentFolder.child("Unnamed Game 3")).thenReturn(mockGameFolder3);
+        when(mockGameFolder2.child(Game.CODE_FILE)).thenReturn(mockCodeFile);
+        when(mockGameFolder3.child(Game.CODE_FILE)).thenReturn(mockCodeFile);
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder2.exists()).thenReturn(true);
         when(mockGameFolder3.exists()).thenReturn(false);
