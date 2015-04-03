@@ -12,6 +12,6 @@ public class Notifier<T> {
     }
 
     public void notify(T object) {
-        listeners.stream().forEach((l) -> l.accept(object));
+        listeners.forEach((l) -> l.accept(object));
     }
 }

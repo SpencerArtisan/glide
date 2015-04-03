@@ -18,10 +18,6 @@ public class SyntaxPart {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public void setType(Type type) {
         this.type = type;
     }

@@ -21,7 +21,7 @@ public class ReturnCommandTest {
     public void execute() {
         command = new ReturnCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("\n");
+        assertThat(model.text()).isEqualTo("\n");
         XYAssert.assertThat(model.caret()).at(0, 1);
     }
 
@@ -31,7 +31,7 @@ public class ReturnCommandTest {
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
         command = new ReturnCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("hel\nere");
+        assertThat(model.text()).isEqualTo("hel\nere");
         assertThat(model.caret().isAreaSelected()).isFalse();
         XYAssert.assertThat(model.caret()).at(0, 1);
     }
@@ -41,7 +41,7 @@ public class ReturnCommandTest {
         command = new ReturnCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("");
+        assertThat(model.text()).isEqualTo("");
         XYAssert.assertThat(model.caret()).at(0, 0);
     }
 
@@ -52,7 +52,7 @@ public class ReturnCommandTest {
         command = new ReturnCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
         assertThat(model.caret().isAreaSelected()).isTrue();
         XYAssert.assertThat(model.caret().selection().getLeft()).at(3, 0);
         XYAssert.assertThat(model.caret().selection().getRight()).at(2, 1);

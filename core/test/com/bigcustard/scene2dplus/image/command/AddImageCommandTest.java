@@ -11,8 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class AddImageCommandTest {
-    private AddImageCommand command;
     @Mock private ImageAreaModel model;
+    private AddImageCommand command;
 
     @Before
     public void before() {

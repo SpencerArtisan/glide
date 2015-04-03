@@ -11,16 +11,18 @@ import org.mockito.MockitoAnnotations;
 import java.util.function.BiConsumer;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ExitCommandTest {
     private ExitCommand command;
     @Mock private Game game;
     @Mock private Runnable exitProcess;
     @Mock private BiConsumer<Exception, Runnable> mockErrorReporter;
+    @Mock private FutureSupplier<String> mockSupplier;
 
     @Before
     public void before() {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
     }
 
     @Test
@@ -35,7 +37,6 @@ public class ExitCommandTest {
 
     @Test
     public void executeWithUnnamedGameThenDelete() {
-        FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
         FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(false);
         when(game.isNamed()).thenReturn(false);
         command = new ExitCommand(game, saveChoiceSupplier, mockSupplier, mockErrorReporter, exitProcess);
@@ -46,7 +47,6 @@ public class ExitCommandTest {
 
     @Test
     public void executeWithNamedGameSavesAutomatically() {
-        FutureSupplier<String> mockSupplier = mock(FutureSupplier.class);
         when(game.isNamed()).thenReturn(true);
         command = new ExitCommand(game, null, mockSupplier, mockErrorReporter, exitProcess);
         command.execute();

@@ -23,10 +23,11 @@ public class Game {
     private static final String RECENT_GAME = "MostRecentGameName";
     private static String FOLDER = "games";
 
-    private String code;
     private Preferences preferences;
     private FileHandle gameFolder;
     private Notifier<Game> changeNotifier = new Notifier<>();
+
+    private String code;
     private ImageAreaModel imageModel;
 
     public static Game create() {
@@ -61,10 +62,10 @@ public class Game {
     }
 
     private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
-        this.imageModel = imageAreaModel;
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
+        this.imageModel = imageAreaModel;
         this.imageModel.loadFromFolder(gameFolder);
         save();
     }
@@ -78,12 +79,12 @@ public class Game {
         return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
-    public ImageAreaModel imageModel() {
-        return imageModel;
-    }
-
     public void registerChangeListener(Consumer<Game> listener) {
         changeNotifier.add(listener);
+    }
+
+    public ImageAreaModel imageModel() {
+        return imageModel;
     }
 
     public String code() {
@@ -105,11 +106,12 @@ public class Game {
             FileHandle source = gameFolder;
             FileHandle target = gameFolder.sibling(newName);
             if (target.exists()) {
-                throw new GameRenameException("Cannot name planet " + newName + " as that name is taken!");
+                throw new GameRenameException(newName);
             }
-            if (source.exists()) {
-                source.moveTo(target);
+            if (!source.exists()) {
+                save();
             }
+            source.moveTo(target);
             gameFolder = target;
             preferences.putString(RECENT_GAME, newName);
             preferences.flush();
@@ -137,6 +139,7 @@ public class Game {
         return hasMostRecent(preferences(), parentFolder());
     }
 
+    @VisibleForTesting
     static boolean hasMostRecent(Preferences preferences, FileHandle parentFolder) {
         String gameName = preferences.getString(RECENT_GAME);
         if (Strings.isNullOrEmpty(gameName)) return false;
@@ -162,6 +165,6 @@ public class Game {
     }
 
     private boolean isChangingName(String newName) {
-        return this.name() != null && !this.name().equals(newName);
+        return !name().equals(newName);
     }
 }

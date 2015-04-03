@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ChangeWidthCommandTest {
-    private ChangeWidthCommand command;
     @Mock private ImagePlus image;
+    private ChangeWidthCommand command;
 
     @Before
     public void before() {

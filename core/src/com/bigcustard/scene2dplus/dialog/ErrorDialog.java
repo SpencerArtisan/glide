@@ -15,6 +15,12 @@ public class ErrorDialog extends Dialog {
         layoutControls();
     }
 
+    @Override
+    protected void result(Object object) {
+        super.result(object);
+        onClosed.run();
+    }
+
     private void layoutControls() {
         Table contentTable = getContentTable();
         contentTable.padTop(20).padLeft(40).padRight(40);
@@ -22,11 +28,5 @@ public class ErrorDialog extends Dialog {
         contentTable.row();
         button("Got it");
         getButtonTable().pad(25);
-    }
-
-    @Override
-    protected void result(Object object) {
-        super.result(object);
-        onClosed.run();
     }
 }

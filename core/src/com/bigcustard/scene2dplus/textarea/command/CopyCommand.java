@@ -3,6 +3,7 @@ package com.bigcustard.scene2dplus.textarea.command;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import com.google.common.annotations.VisibleForTesting;
 
 public class CopyCommand extends AbstractTextAreaCommand {
     public CopyCommand(TextAreaModel model) {
@@ -23,7 +24,8 @@ public class CopyCommand extends AbstractTextAreaCommand {
         }
     }
 
-    public Clipboard getClipboard() {
+    @VisibleForTesting
+    protected Clipboard getClipboard() {
         return Gdx.app.getClipboard();
     }
 }

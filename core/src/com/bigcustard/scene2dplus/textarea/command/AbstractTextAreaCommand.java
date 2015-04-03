@@ -9,7 +9,7 @@ public abstract class AbstractTextAreaCommand extends AbstractCommand {
 
     public AbstractTextAreaCommand(TextAreaModel model) {
         this.model = model;
-        state = model.getState();
+        state = model.state();
     }
 
     @Override

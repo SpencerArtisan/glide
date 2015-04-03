@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ChangeNameCommandTest {
-    private ChangeNameCommand command;
     @Mock private ImagePlus image;
+    private ChangeNameCommand command;
 
     @Before
     public void before() {

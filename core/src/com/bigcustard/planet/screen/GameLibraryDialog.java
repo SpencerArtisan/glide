@@ -15,6 +15,15 @@ public class GameLibraryDialog extends Dialog {
         layoutControls(skin);
     }
 
+    public SettableFuture<FileHandle> getFutureGame() {
+        return futureGame;
+    }
+
+    @Override
+    protected void result(Object object) {
+        futureGame.set((FileHandle) object);
+    }
+
     private void layoutControls(Skin skin) {
         pad(20);
         text("Choose a game");
@@ -25,14 +34,5 @@ public class GameLibraryDialog extends Dialog {
             setObject(button, gameDirectory);
             getButtonTable().row();
         }
-    }
-
-    public SettableFuture<FileHandle> getFutureGame() {
-        return futureGame;
-    }
-
-    @Override
-    protected void result(Object object) {
-        futureGame.set((FileHandle) object);
     }
 }

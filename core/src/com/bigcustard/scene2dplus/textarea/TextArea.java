@@ -14,10 +14,12 @@ import com.bigcustard.scene2dplus.XY;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class TextArea extends Actor {
     private static final int TOP_MARGIN = 29;
     private static final int LEFT_MARGIN = 8;
+    private static final int COLUMN_WIDTH = 14;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
     private TextField.TextFieldStyle style;
@@ -50,6 +52,14 @@ public class TextArea extends Actor {
         return new XY<>((int) caretX, (int) caretY);
     }
 
+    float getRowHeight() {
+        return style.font.getLineHeight();
+    }
+
+    private float getColumnWidth() {
+        return COLUMN_WIDTH;
+    }
+
     private void drawBackground(Batch batch) {
         style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
     }
@@ -75,7 +85,7 @@ public class TextArea extends Actor {
         if (selection != null) {
             XY<Integer> topLeftSelection = caretLocationToPosition(selection.getLeft());
             XY<Integer> bottomRightSelection = caretLocationToPosition(selection.getRight());
-            if (selection.getLeft().y != selection.getRight().y) {
+            if (!Objects.equals(selection.getLeft().y, selection.getRight().y)) {
                 style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, getWidth() - topLeftSelection.x, getRowHeight());
                 style.selection.draw(batch, 0, bottomRightSelection.y + getRowHeight(), getWidth(), topLeftSelection.y - bottomRightSelection.y - getRowHeight());
                 style.selection.draw(batch, 0, bottomRightSelection.y, bottomRightSelection.x, getRowHeight());
@@ -88,8 +98,7 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
         XY<Integer> textStart = caretLocationToPosition(new XY<>(0, 0));
-        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.getColoredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
-
+        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
         setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
         ((Layout) getParent()).invalidate();
     }
@@ -98,13 +107,5 @@ public class TextArea extends Actor {
         Drawable caretImage = style.cursor;
         XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
         caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
-    }
-
-    float getRowHeight() {
-        return style.font.getLineHeight();
-    }
-
-    private float getColumnWidth() {
-        return 14;
     }
 }

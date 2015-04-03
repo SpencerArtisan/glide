@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RedoCommandTest {
-    private RedoCommand command;
     @Mock private CommandHistory history;
+    private RedoCommand command;
 
     @Before
     public void before() {

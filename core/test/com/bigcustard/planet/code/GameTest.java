@@ -219,7 +219,7 @@ public class GameTest {
     }
 
     @Test
-    public void changingGameNameWhenNoGameDirectoryDoesNotAttemptSourceRename() {
+    public void changingGameNameWhenNoGameDirectorySavesFirst() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.exists()).thenReturn(false);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
@@ -228,7 +228,7 @@ public class GameTest {
         when(mockNewGameFolder.exists()).thenReturn(false);
         Game game = newGame();
         game.setName("name");
-        verify(mockGameFolder, never()).moveTo(mockNewGameFolder);
+        verify(mockGameFolder.child(Game.CODE_FILE), times(2)).writeString(game.code(), false);
     }
 
     @Test(expected = GameRenameException.class)

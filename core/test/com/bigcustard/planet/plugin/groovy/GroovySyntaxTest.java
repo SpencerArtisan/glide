@@ -64,6 +64,14 @@ public class GroovySyntaxTest {
                 new SyntaxPart(" suffix", Unclassified));
 	}
 
+	@Test
+	public void stringWithBrackets() throws Exception {
+        assertThat(syntax.parse("prefix \"(quoted)\" suffix")).containsExactly(
+                new SyntaxPart("prefix ", Unclassified),
+                new SyntaxPart("\"(quoted)\"", Quoted),
+                new SyntaxPart(" suffix", Unclassified));
+	}
+
     @Test
     public void noErrorsInGoodGroovy() {
         assertThat(syntax.errorLines("public void hello() {\n}")).isEmpty();

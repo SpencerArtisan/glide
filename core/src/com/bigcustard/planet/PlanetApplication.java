@@ -120,7 +120,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                 resourceManager,
                 this::showWelcomeScreen,
                 this::showRunScreen,
-                PLUGIN);
+                PLUGIN.syntax());
         setScreen(codingScreen);
     }
 

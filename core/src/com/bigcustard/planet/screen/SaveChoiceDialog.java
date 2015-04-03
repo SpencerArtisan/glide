@@ -13,6 +13,15 @@ public class SaveChoiceDialog extends Dialog {
         layoutControls();
     }
 
+    public SettableFuture<Boolean> getFutureSaveChoice() {
+        return futureSaveChoice;
+    }
+
+    @Override
+    protected void result(Object save) {
+        futureSaveChoice.set((boolean) save);
+    }
+
     private void layoutControls() {
         Table contentTable = getContentTable();
         contentTable.padTop(20).padLeft(40).padRight(40);
@@ -22,14 +31,5 @@ public class SaveChoiceDialog extends Dialog {
         getButtonTable().getCells().get(0).padRight(40);
         button("Delete", false);
         getButtonTable().pad(25);
-    }
-
-    public SettableFuture<Boolean> getFutureSaveChoice() {
-        return futureSaveChoice;
-    }
-
-    @Override
-    protected void result(Object save) {
-        futureSaveChoice.set((boolean) save);
     }
 }

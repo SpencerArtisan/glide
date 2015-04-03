@@ -9,6 +9,7 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.textarea.command.*;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.awt.event.KeyEvent;
 
@@ -131,11 +132,13 @@ public class TextAreaController extends ClickListener {
                 !Key.Right.is(character);
     }
 
+    @VisibleForTesting
     protected boolean isControlDown() {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
                 Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
     }
 
+    @VisibleForTesting
     protected boolean isShiftDown() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ||
                 Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);

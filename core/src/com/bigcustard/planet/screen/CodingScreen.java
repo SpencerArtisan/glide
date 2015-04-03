@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
-import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
@@ -29,6 +29,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.function.Consumer;
 
 public class CodingScreen extends ScreenAdapter {
+    private CommandHistory commandHistory = new CommandHistory();
     private Skin skin;
     private Stage stage;
     private Table layoutTable;
@@ -36,17 +37,16 @@ public class CodingScreen extends ScreenAdapter {
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
     private ButtonBar buttonBar;
-    private CommandHistory commandHistory = new CommandHistory();
     private Game game;
     private Runnable exitToMainMenu;
     private Consumer<Game> runGame;
-    private Plugin plugin;
+    private Syntax syntax;
 
-    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame, Plugin plugin) {
+    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame, Syntax syntax) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.runGame = runGame;
-        this.plugin = plugin;
+        this.syntax = syntax;
         this.stage = new Stage(viewport);
 
 		skin = resourceManager.getSkin();
@@ -85,7 +85,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, runGame, plugin.syntax()));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, runGame, syntax));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
@@ -98,8 +98,8 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), new CodeColorCoder(plugin.syntax()));
-        model.addListener((m) -> game.setCode(model.getText()));
+        model = new TextAreaModel(game.code(), new CodeColorCoder(syntax));
+        model.addChangeListener((m) -> game.setCode(model.text()));
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
 

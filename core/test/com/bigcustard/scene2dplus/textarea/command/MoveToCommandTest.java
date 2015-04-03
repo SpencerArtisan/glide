@@ -30,7 +30,7 @@ public class MoveToCommandTest {
         command = new MoveToCommand(model, new XY<Integer>(0, 2));
         command.execute();
         XYAssert.assertThat(model.caret()).at(0, 2);
-        assertThat(model.getText()).isEqualTo("\n\n");
+        assertThat(model.text()).isEqualTo("\n\n");
     }
 
     @Test

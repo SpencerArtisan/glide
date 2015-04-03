@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CommandHistoryTest {
-    private CommandHistory history = new CommandHistory();
     @Mock private Command command;
+    private CommandHistory history = new CommandHistory();
 
     @Before
     public void before() {

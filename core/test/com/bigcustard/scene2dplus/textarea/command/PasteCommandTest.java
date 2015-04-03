@@ -47,14 +47,14 @@ public class PasteCommandTest {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
         command.execute();
-        assertThat(model.getText()).isEqualTo("helpastedere");
+        assertThat(model.text()).isEqualTo("helpastedere");
     }
 
     @Test
     public void executeWhenNoSelection() {
         model.setText("hello\nthere");
         command.execute();
-        assertThat(model.getText()).isEqualTo("pastedhello\nthere");
+        assertThat(model.text()).isEqualTo("pastedhello\nthere");
     }
 
     @Test
@@ -62,12 +62,12 @@ public class PasteCommandTest {
         model.setText("hello\nthere");
         model.caret().moveDown();
         command.execute();
-        assertThat(model.getText()).isEqualTo("hello\npastedthere");
+        assertThat(model.text()).isEqualTo("hello\npastedthere");
     }
 
     @Test
     public void executeWhenNoSelectionCaretOnEmpty() {
         command.execute();
-        assertThat(model.getText()).isEqualTo("pasted");
+        assertThat(model.text()).isEqualTo("pasted");
     }
 }

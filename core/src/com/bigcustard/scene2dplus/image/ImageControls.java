@@ -11,34 +11,18 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.function.Consumer;
 
 public class ImageControls {
-    private final ImageAreaModel model;
     private final ImagePlus image;
     private final TextFieldPlus nameField;
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
     private final Button deleteButton;
 
-    public ImageControls(ImageAreaModel model, ImagePlus image, Skin skin) {
-        this(model,
-                image,
-                createNameField(image, skin),
-                createSizeField(image.width(), skin),
-                createSizeField(image.height(), skin),
-                createDeleteButton(skin));
-    }
-
-    private ImageControls(ImageAreaModel model,
-                          ImagePlus image,
-                          TextFieldPlus nameField,
-                          TextFieldPlus widthField,
-                          TextFieldPlus heightField,
-                          Button deleteButton) {
-        this.model = model;
+    public ImageControls(ImagePlus image, Skin skin) {
         this.image = image;
-        this.nameField = nameField;
-        this.widthField = widthField;
-        this.heightField = heightField;
-        this.deleteButton = deleteButton;
+        this.nameField = createNameField(image, skin);
+        this.widthField = createSizeField(image.width(), skin);
+        this.heightField = createSizeField(image.height(), skin);
+        this.deleteButton = createDeleteButton(skin);
         addModelChangeBehaviour();
         addValidationBehaviour();
     }
@@ -131,7 +115,7 @@ public class ImageControls {
     }
 
     private void addValidationBehaviour() {
-        model.registerValidationListener((image) -> {
+        image.registerValidationListener((image) -> {
             ValidationResult result = image.validate();
             nameField.setValid(result.isNameValid());
             widthField.setValid(result.isWidthValid());

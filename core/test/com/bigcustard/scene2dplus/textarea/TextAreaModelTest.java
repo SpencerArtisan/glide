@@ -26,7 +26,7 @@ public class TextAreaModelTest {
 	public void textColorCoded() throws Exception {
 		model.setText("text");
 		when(colorCoder.encode("text")).thenReturn("encoded text");
-		assertThat(model.getColoredText()).isEqualTo("encoded text");
+		assertThat(model.coloredText()).isEqualTo("encoded text");
 	}
 
     @Test

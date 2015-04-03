@@ -3,6 +3,7 @@ package com.bigcustard.planet.plugin.groovy;
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import groovy.lang.GroovyClassLoader;
@@ -25,8 +26,8 @@ public class GroovySyntax implements Syntax {
     }
 
     @Override
-    public boolean isValid(String code) {
-        return errorLines(code).isEmpty();
+    public boolean isValid(String program) {
+        return errorLines(program).isEmpty();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class GroovySyntax implements Syntax {
     }
 
     private List<SyntaxPart> collapseAdjacentPartsWithSameType(List<SyntaxPart> classifiedWordsAndSpaces) {
-        List<SyntaxPart> collapsed = new ArrayList<SyntaxPart>();
+        List<SyntaxPart> collapsed = new ArrayList<>();
         for (SyntaxPart newElement : classifiedWordsAndSpaces) {
             if (!collapsed.isEmpty()) {
                 SyntaxPart lastElement = collapsed.get(collapsed.size() - 1);

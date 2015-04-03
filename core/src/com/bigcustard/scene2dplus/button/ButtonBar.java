@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
-import static com.bigcustard.util.Util.tryTo;
+import static com.bigcustard.util.Util.tryGet;
 
 public class ButtonBar extends HorizontalGroup {
     private Skin skin;
@@ -39,6 +39,15 @@ public class ButtonBar extends HorizontalGroup {
         addButton(new ImageTextButton(text, skin, styleName), commandFactory);
     }
 
+    public void refreshEnabledStatuses() {
+        SnapshotArray<Actor> children = getChildren();
+        for (Actor child : children) {
+            if (child instanceof Button) {
+                child.fire(new RefreshEnabledStatusEvent());
+            }
+        }
+    }
+
     private void addButton(final Button button, Supplier<Command> commandFactory) {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -47,7 +56,7 @@ public class ButtonBar extends HorizontalGroup {
 
             public boolean handle(Event event) {
                 if (event instanceof RefreshEnabledStatusEvent) {
-                    boolean enable = tryTo(() -> commandFactory.get().canExecute(), false);
+                    boolean enable = tryGet(() -> commandFactory.get().canExecute(), false);
                     button.setDisabled(!enable);
                     button.setTouchable(enable ? enabled : disabled);
                 }
@@ -56,16 +65,6 @@ public class ButtonBar extends HorizontalGroup {
         });
         addActor(button);
         refreshEnabledStatuses();
-    }
-
-    public void refreshEnabledStatuses() {
-        SnapshotArray<Actor> children = getChildren();
-        for (Actor child : children) {
-            if (child instanceof Button) {
-                Button button = (Button) child;
-                button.fire(new RefreshEnabledStatusEvent());
-            }
-        }
     }
 
     private static class RefreshEnabledStatusEvent extends Event {}

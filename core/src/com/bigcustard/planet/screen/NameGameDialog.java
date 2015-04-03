@@ -14,18 +14,7 @@ public class NameGameDialog extends Dialog {
 
     public NameGameDialog(Game game, Skin skin) {
         super("", skin);
-        createNameField(game, skin);
-        layoutControls();
-    }
-
-    private void layoutControls() {
-        Table contentTable = getContentTable();
-        contentTable.padTop(20).padLeft(60).padRight(60);
-        text("Name your game");
-        contentTable.row();
-        contentTable.add(nameTextField).expandX().fillX().padTop(20).padBottom(25);
-        contentTable.row();
-        button("Save").padBottom(25);
+        layoutControls(game, skin);
     }
 
     public TextField getNameTextField() {
@@ -41,11 +30,21 @@ public class NameGameDialog extends Dialog {
         futureGameName.set(nameTextField.getText());
     }
 
-    private TextField createNameField(Game game, Skin skin) {
+    private void layoutControls(Game game, Skin skin) {
+        Table contentTable = getContentTable();
+        contentTable.padTop(20).padLeft(60).padRight(60);
+        text("Name your game");
+        contentTable.row();
+        createNameField(game, skin);
+        contentTable.add(nameTextField).expandX().fillX().padTop(20).padBottom(25);
+        contentTable.row();
+        button("Save").padBottom(25);
+    }
+
+    private void createNameField(Game game, Skin skin) {
         nameTextField = new TextField(game.isNamed() ? game.name() : "", skin);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(16);
         nameTextField.setCursorPosition(nameTextField.getText().length());
-        return nameTextField;
     }
 }

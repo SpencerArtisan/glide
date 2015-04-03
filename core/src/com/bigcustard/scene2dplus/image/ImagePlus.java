@@ -85,18 +85,6 @@ public class ImagePlus {
         });
     }
 
-    private void changeAttribute(Runnable doChange) {
-        init();
-        boolean initialValidationState = validate().isValid();
-
-        doChange.run();
-
-        if (initialValidationState != validate().isValid()) {
-            validationNotifier.notify(this);
-        }
-        changeNotifier.notify();
-    }
-
     public void setHeight(Integer newHeight) {
         changeAttribute(() -> {
             if (newHeight != null) {
@@ -107,6 +95,16 @@ public class ImagePlus {
                 width = null;
             }
         });
+    }
+
+    private void changeAttribute(Runnable doChange) {
+        init();
+        boolean initialValidationState = validate().isValid();
+        doChange.run();
+        if (initialValidationState != validate().isValid()) {
+            validationNotifier.notify(this);
+        }
+        changeNotifier.notify();
     }
 
     private void init() {
@@ -136,7 +134,6 @@ public class ImagePlus {
                 width() != null,
                 height() != null,
                 !Strings.isNullOrEmpty(name()));
-        //&& Collections.frequency(imageNames, imagePlus.name()) == 1;
     }
 
 }

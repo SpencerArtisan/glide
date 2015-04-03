@@ -10,9 +10,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RemoveImageCommandTest {
-    private RemoveImageCommand command;
     @Mock private ImageAreaModel model;
     @Mock private ImagePlus image;
+    private RemoveImageCommand command;
 
     @Before
     public void before() {

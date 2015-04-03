@@ -19,7 +19,7 @@ public class TabCommandTest {
     public void executeInColumnZeroOnEmptyLine() {
         command = new TabCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("    ");
+        assertThat(model.text()).isEqualTo("    ");
     }
 
     @Test
@@ -27,7 +27,7 @@ public class TabCommandTest {
         model.insert("ab");
         command = new TabCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("ab  ");
+        assertThat(model.text()).isEqualTo("ab  ");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TabCommandTest {
         model.setText("abcd");
         command = new TabCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("    abcd");
+        assertThat(model.text()).isEqualTo("    abcd");
     }
 
     @Test
@@ -44,7 +44,7 @@ public class TabCommandTest {
         model.caret().moveRight(2);
         command = new TabCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("ab  cd");
+        assertThat(model.text()).isEqualTo("ab  cd");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TabCommandTest {
         command = new TabCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("");
+        assertThat(model.text()).isEqualTo("");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TabCommandTest {
         command = new TabCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("ab");
+        assertThat(model.text()).isEqualTo("ab");
     }
 
     @Test
@@ -70,7 +70,7 @@ public class TabCommandTest {
         command = new TabCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("abcd");
+        assertThat(model.text()).isEqualTo("abcd");
     }
 
     @Test
@@ -80,6 +80,6 @@ public class TabCommandTest {
         command = new TabCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("abcd");
+        assertThat(model.text()).isEqualTo("abcd");
     }
 }

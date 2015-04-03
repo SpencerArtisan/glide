@@ -87,8 +87,9 @@ public class WelcomeScreen extends ScreenAdapter {
 	private void animate(Label title) {
         outerTable.getColor().a = 0f;
         outerTable.addAction(Actions.fadeIn(2f));
-		title.setPosition(-400, 660);
-		title.addAction(Actions.moveTo(50, 660, 0.6f, Interpolation.pow2));
+		float labelY = stage.getViewport().getWorldHeight() - 100;
+		title.setPosition(-400, labelY);
+		title.addAction(Actions.moveTo(50, labelY, 0.6f, Interpolation.pow2));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {

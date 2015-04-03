@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.image.command.*;
+import com.google.common.annotations.VisibleForTesting;
 
 public class ImageAreaController {
     private final ImageArea view;
@@ -22,10 +23,7 @@ public class ImageAreaController {
         addImageListChangeBehaviour();
     }
 
-    private void addImageListChangeBehaviour() {
-        view.registerAddImageControlsListener(this::addImageAdjustmentBehaviour);
-    }
-
+    @VisibleForTesting
     protected Clipboard getClipboard() {
         return Gdx.app.getClipboard();
     }
@@ -38,6 +36,10 @@ public class ImageAreaController {
         for (ImageControls imageControls : view.getAllImageControls()) {
             addImageAdjustmentBehaviour(imageControls);
         }
+    }
+
+    private void addImageListChangeBehaviour() {
+        view.registerAddImageControlsListener(this::addImageAdjustmentBehaviour);
     }
 
     private void addImageAdjustmentBehaviour(ImageControls imageControls) {

@@ -17,7 +17,6 @@ public class TextAreaModel {
 	private ColorCoder colorCoder;
     private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
 
-	
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
 		this.colorCoder = colorCoder;
@@ -28,12 +27,16 @@ public class TextAreaModel {
 	public TextAreaModel(ColorCoder colorCoder) {
 		this("", colorCoder);
 	}
-	
+
+	public void addChangeListener(Consumer<TextAreaModel> listener) {
+		changeNotifier.add(listener);
+	}
+
 	public Caret caret() {
 		return caret;
 	}
 
-    public State getState() {
+    public State state() {
         return new State();
     }
 
@@ -46,26 +49,26 @@ public class TextAreaModel {
         changeNotifier.notify(this);
     }
 
-    public String getText() {
-		return text;
-	}
-	
-	public String getColoredText() {
-		return colorCoder.encode(text);
+	public void clear() {
+		setText("");
 	}
 
-    public Map<Integer, Color> getColoredLines() {
-        return colorCoder.colorLines(text);
-    }
+    public String text() {
+		return text;
+	}
 
 	public void setText(String text) {
 		this.text = text;
 		changeNotifier.notify(this);
 	}
 
-	public void clear() {
-		setText("");
+	public String coloredText() {
+		return colorCoder.encode(text);
 	}
+
+    public Map<Integer, Color> getColoredLines() {
+        return colorCoder.colorLines(text);
+    }
 
 	public String insert(String characters) {
         int fromIndex, toIndex;
@@ -149,7 +152,7 @@ public class TextAreaModel {
 	}
 
 	private int currentLineLength() {
-		int startRowIndex = getIndexForRow(caret.getY());
+		int startRowIndex = getIndexForRow(caret.y());
 		int endOfRowIndex = text.indexOf('\n', startRowIndex);
 		if (endOfRowIndex == -1) {
 			endOfRowIndex = text.length();
@@ -160,10 +163,6 @@ public class TextAreaModel {
 	private int numberOfRows() {
 		return StringUtils.countMatches(text, "\n");
 	}
-
-    public void addListener(Consumer<TextAreaModel> listener) {
-        changeNotifier.add(listener);
-    }
 
     public class Caret {
 		private XY<Integer> location;
@@ -210,7 +209,7 @@ public class TextAreaModel {
 			changeNotifier.notify(TextAreaModel.this);
         }
 
-		private int getX() {
+		private int x() {
 			return location.x;
 		}
 
@@ -218,7 +217,7 @@ public class TextAreaModel {
 			setLocation(x, location.y);
 		}
 
-		private int getY() {
+		private int y() {
 			return location.y;
 		}
 
@@ -228,8 +227,8 @@ public class TextAreaModel {
 		}
 
 		public void moveLeft() {
-			if (getX() != 0) {
-				setX(getX() - 1);
+			if (x() != 0) {
+				setX(x() - 1);
 			}
 		}
 
@@ -238,30 +237,33 @@ public class TextAreaModel {
 		}
 
 		public void moveRight(int n) {
-            setX(getX() + n);
-			if (getX() > currentLineLength()) {
+            setX(x() + n);
+			if (x() > currentLineLength()) {
                 setX(currentLineLength());
 			}
 		}
 
 		public void moveUp() {
-			if (getY() != 0) {
-				setY(getY() - 1);
+			if (y() != 0) {
+				setY(y() - 1);
 			}
 		}
 		
 		public void moveDown() {
-			setY(getY() + 1);
+			setY(y() + 1);
 		}
-		
 
 		public void moveToBottom() {
 			setY(numberOfRows());
 		}
 
+		public boolean isAreaSelected() {
+			return selection != null;
+		}
+
 		private void changeXIfBeyondEndOfLine() {
 			int lineLength = currentLineLength();
-			if (getX() > lineLength) {
+			if (x() > lineLength) {
 				setX(lineLength);
 			}
 		}
@@ -270,10 +272,6 @@ public class TextAreaModel {
 		public String toString() {
 			return "Caret " + location;
 		}
-
-        public boolean isAreaSelected() {
-            return selection != null;
-        }
     }
 
     public class State {
@@ -282,7 +280,7 @@ public class TextAreaModel {
         private Pair<XY<Integer>, XY<Integer>> caretSelection;
 
         private State() {
-            this.text = getText();
+            this.text = text();
             this.caretLocation = caret().location();
             this.caretSelection = caret().selection();
         }

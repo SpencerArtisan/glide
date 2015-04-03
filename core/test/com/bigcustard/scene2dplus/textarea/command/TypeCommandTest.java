@@ -21,7 +21,7 @@ public class TypeCommandTest {
     public void executeSingleCharacter() {
         command = new TypeCommand(model, "a");
         command.execute();
-        assertThat(model.getText()).isEqualTo("a");
+        assertThat(model.text()).isEqualTo("a");
         XYAssert.assertThat(model.caret()).at(1, 0);
     }
 
@@ -29,7 +29,7 @@ public class TypeCommandTest {
     public void executeMultipleCharacters() {
         command = new TypeCommand(model, "abcd");
         command.execute();
-        assertThat(model.getText()).isEqualTo("abcd");
+        assertThat(model.text()).isEqualTo("abcd");
         XYAssert.assertThat(model.caret()).at(4, 0);
     }
 
@@ -39,7 +39,7 @@ public class TypeCommandTest {
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
         command = new TypeCommand(model, "abcd");
         command.execute();
-        assertThat(model.getText()).isEqualTo("helabcdere");
+        assertThat(model.text()).isEqualTo("helabcdere");
         XYAssert.assertThat(model.caret()).at(7, 0);
         assertThat(model.caret().isAreaSelected()).isFalse();
     }
@@ -49,7 +49,7 @@ public class TypeCommandTest {
         command = new TypeCommand(model, "a");
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("");
+        assertThat(model.text()).isEqualTo("");
         XYAssert.assertThat(model.caret()).at(0, 0);
     }
 
@@ -58,7 +58,7 @@ public class TypeCommandTest {
         command = new TypeCommand(model, "abcd");
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("");
+        assertThat(model.text()).isEqualTo("");
         XYAssert.assertThat(model.caret()).at(0, 0);
     }
 
@@ -69,7 +69,7 @@ public class TypeCommandTest {
         command = new TypeCommand(model, "abcd");
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
         assertThat(model.caret().isAreaSelected()).isTrue();
         XYAssert.assertThat(model.caret().selection().getLeft()).at(3, 0);
         XYAssert.assertThat(model.caret().selection().getRight()).at(2, 1);

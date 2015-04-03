@@ -22,7 +22,7 @@ public class DeleteCommandTest {
     public void execute() {
         command = new DeleteCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("tex");
+        assertThat(model.text()).isEqualTo("tex");
     }
 
     @Test
@@ -31,7 +31,7 @@ public class DeleteCommandTest {
         model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
         command = new DeleteCommand(model);
         command.execute();
-        assertThat(model.getText()).isEqualTo("helere");
+        assertThat(model.text()).isEqualTo("helere");
         assertThat(model.caret().isAreaSelected()).isFalse();
         XYAssert.assertThat(model.caret()).at(3, 0);
     }
@@ -41,7 +41,7 @@ public class DeleteCommandTest {
         command = new DeleteCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("text");
+        assertThat(model.text()).isEqualTo("text");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class DeleteCommandTest {
         command = new DeleteCommand(model);
         command.execute();
         command.undo();
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
         assertThat(model.caret().isAreaSelected()).isTrue();
         XYAssert.assertThat(model.caret().selection().getLeft()).at(3, 0);
         XYAssert.assertThat(model.caret().selection().getRight()).at(2, 1);

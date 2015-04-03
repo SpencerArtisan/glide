@@ -3,6 +3,7 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.planet.code.InaccessibleUrlException;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,18 +17,19 @@ import java.util.function.Function;
 public class ImageAreaModel {
     private static String IMAGE_DETAIL_FILE = "manifest.json";
 
-    private List<ImagePlus> images = new ArrayList<>();
     private Notifier<ImagePlus> addImageNotifier = new Notifier<>();
     private Notifier<ImagePlus> removeImageNotifier = new Notifier<>();
     private Notifier<ImagePlus> validationNotifier = new Notifier<>();
     private Function<String, InputStream> urlStreamProvider;
+    private List<ImagePlus> images = new ArrayList<>();
     private FileHandle folder;
 
     public ImageAreaModel() {
         this(ImageAreaModel::defaultStreamProvider);
     }
 
-    public ImageAreaModel(Function<String, InputStream> urlStreamProvider) {
+    @VisibleForTesting
+    ImageAreaModel(Function<String, InputStream> urlStreamProvider) {
         this.urlStreamProvider = urlStreamProvider;
     }
 
@@ -41,11 +43,6 @@ public class ImageAreaModel {
 
     public void registerValidationListener(Consumer<ImagePlus> listener) {
         validationNotifier.add(listener);
-    }
-
-    public void save() {
-        folder.child(IMAGE_DETAIL_FILE).writeString(new Json().toJson(ImageListDetails.fromModel(this)), false);
-
     }
 
     public List<ImagePlus> images() {
@@ -75,17 +72,30 @@ public class ImageAreaModel {
         return image;
     }
 
+    public void save() {
+        folder.child(IMAGE_DETAIL_FILE).writeString(new Json().toJson(new ImageListDetails(this)), false);
+    }
+
     public boolean isValid() {
         return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
     }
 
     public void removeImage(ImagePlus image) {
+        boolean initialValidState = isValid();
         images.remove(image);
         removeImageNotifier.notify(image);
+        if (initialValidState != isValid()) {
+            validationNotifier.notify(image);
+        }
     }
 
     public ValidationResult[] validate() {
         return images.stream().map(ImagePlus::validate).toArray(ValidationResult[]::new);
+    }
+
+    public void loadFromFolder(FileHandle folder) {
+        this.folder = folder;
+        readImages();
     }
 
     private FileHandle generateImageFileHandle(String url) {
@@ -102,7 +112,6 @@ public class ImageAreaModel {
         int suffix = 2;
         while (candidate.exists()) {
             candidate = folder.child(filenameExcludingExtension + suffix++ + extension);
-            System.out.println("candidate = " + candidate);
         }
         return candidate;
     }
@@ -122,11 +131,6 @@ public class ImageAreaModel {
         }
     }
 
-    public void loadFromFolder(FileHandle folder) {
-        this.folder = folder;
-        readImages();
-    }
-
     private static InputStream defaultStreamProvider(String url) {
         try {
             return new URL(url).openStream();
@@ -136,29 +140,30 @@ public class ImageAreaModel {
     }
 
     private static class ImageListDetails {
-        private List<ImageDetails> images = new ArrayList<>();
+        private ImageDetails[] images;
 
-        public static ImageListDetails fromModel(ImageAreaModel model) {
-            ImageListDetails details = new ImageListDetails();
-            for (ImagePlus image : model.images()) {
-                details.images.add(ImageDetails.fromImage(image));
-            }
-            return details;
+        public ImageListDetails() {
+        }
+
+        public ImageListDetails(ImageAreaModel model) {
+            images = model.images().stream().map(ImageDetails::new).toArray(ImageDetails[]::new);
         }
     }
+
     private static class ImageDetails {
         private String filename;
         private String name;
         private int width;
         private int height;
 
-        public static ImageDetails fromImage(ImagePlus image) {
-            ImageDetails details = new ImageDetails();
-            details.name = image.name();
-            details.filename = image.filename();
-            details.width = image.width();
-            details.height = image.height();
-            return details;
+        public ImageDetails() {
+        }
+
+        public ImageDetails(ImagePlus image) {
+            name = image.name();
+            filename = image.filename();
+            width = image.width();
+            height = image.height();
         }
 
         public ImagePlus toImage(FileHandle parentFolder) {

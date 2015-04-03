@@ -12,8 +12,8 @@ import static org.mockito.Mockito.spy;
 
 public class CopyCommandTest {
     private TextAreaModel model;
-    private CopyCommand command;
     private Clipboard clipboard;
+    private CopyCommand command;
 
     @Before
     public void before() {
@@ -41,7 +41,7 @@ public class CopyCommandTest {
         model.caret().setSelection(new XY<>(3, 0), new XY<>(2, 1));
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("lo\nth");
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CopyCommandTest {
         model.setText("hello\nthere");
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("hello\n");
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
     }
 
     @Test
@@ -58,6 +58,6 @@ public class CopyCommandTest {
         model.caret().moveDown();
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("there\n");
-        assertThat(model.getText()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("hello\nthere");
     }
 }

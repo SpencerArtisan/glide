@@ -7,17 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.util.*;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class ImageArea extends ScrollPane {
     public static final int WIDTH = 250;
-    private ImageAreaModel model;
     private Skin skin;
+    private ImageAreaModel model;
     private TextButton importButton;
     private Map<ImagePlus, ImageControls> imageControlMap = new HashMap<>();
-    private List<Consumer<ImageControls>> imageControlsAddListener = new ArrayList<>();
-    private List<Consumer<ImageControls>> imageControlsRemoveListener = new ArrayList<>();
+    private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
+    private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
 
     public ImageArea(ImageAreaModel model, Skin skin) {
         super(new Table(), skin);
@@ -38,11 +37,11 @@ public class ImageArea extends ScrollPane {
     }
 
     void registerAddImageControlsListener(Consumer<ImageControls> onChanged) {
-        imageControlsAddListener.add(onChanged);
+        addImageControlsNotifier.add(onChanged);
     }
 
     void registerRemoveImageControlsListener(Consumer<ImageControls> onChanged) {
-        imageControlsRemoveListener.add(onChanged);
+        removeImageControlsNotifier.add(onChanged);
     }
 
     Collection<ImageControls> getAllImageControls() {
@@ -63,12 +62,9 @@ public class ImageArea extends ScrollPane {
     private void layoutControls() {
         Table layoutTable = (Table) getWidget();
         layoutTable.clearChildren();
-
         addHeader(layoutTable);
         addImportButton(layoutTable);
-        for (ImageControls imageControls : getAllImageControls()) {
-            imageControls.addTo(layoutTable, WIDTH, skin);
-        }
+        getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
     }
 
     private void createImportButton(Skin skin) {
@@ -86,44 +82,30 @@ public class ImageArea extends ScrollPane {
         table.add(importButton).width(WIDTH);
     }
 
-    private void onAddImage(ImagePlus image) {
-        ImageControls imageControls = createImageControls(image);
-        informImageControlAddListeners(imageControls);
-        layoutControls();
-    }
-
-    private void onRemoveImage(ImagePlus image) {
-        ImageControls imageControls = imageControlMap.remove(image);
-        informImageControlRemoveListeners(imageControls);
-        layoutControls();
-    }
-
     private void createAllImageControls() {
-        for (ImagePlus image : model.images()) {
-            createImageControls(image);
-        }
+        model.images().forEach(this::createImageControls);
     }
 
     private ImageControls createImageControls(ImagePlus image) {
-        ImageControls imageControls = new ImageControls(model, image, skin);
+        ImageControls imageControls = new ImageControls(image, skin);
         imageControlMap.put(image, imageControls);
         return imageControls;
-    }
-
-    private void informImageControlAddListeners(ImageControls imageControls) {
-        for (Consumer<ImageControls> listener : imageControlsAddListener) {
-            listener.accept(imageControls);
-        }
-    }
-
-    private void informImageControlRemoveListeners(ImageControls imageControls) {
-        for (Consumer<ImageControls> listener : imageControlsRemoveListener) {
-            listener.accept(imageControls);
-        }
     }
 
     private void addModelChangeBehaviour(ImageAreaModel model) {
         model.registerAddImageListener(this::onAddImage);
         model.registerRemoveImageListener(this::onRemoveImage);
+    }
+
+    private void onAddImage(ImagePlus image) {
+        ImageControls imageControls = createImageControls(image);
+        addImageControlsNotifier.notify(imageControls);
+        layoutControls();
+    }
+
+    private void onRemoveImage(ImagePlus image) {
+        ImageControls imageControls = imageControlMap.remove(image);
+        removeImageControlsNotifier.notify(imageControls);
+        layoutControls();
     }
 }

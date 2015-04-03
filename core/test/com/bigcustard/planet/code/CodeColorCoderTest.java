@@ -1,16 +1,19 @@
 package com.bigcustard.planet.code;
 
+import com.badlogic.gdx.graphics.Color;
 import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.planet.plugin.groovy.GroovySyntax;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,6 +54,13 @@ public class CodeColorCoderTest {
     @Test
     public void colorErrorLine() {
         when(syntax.errorLines("hello\nthere")).thenReturn(ImmutableSet.of(1));
-//        assertThat(coder.colorLines("hello\nthere")).containsExactly(MapEntry.<String, Color>entry(1, Color.valueOf("ff0000")));
+        assertThat(coder.colorLines("hello\nthere"))
+				.containsExactly(MapEntry.<String, Color>entry(1, Color.valueOf("ff0000")));
+    }
+
+    @Test
+    public void doNotColorValidLine() {
+        when(syntax.errorLines("hello\nthere")).thenReturn(Collections.<Integer>emptySet());
+        assertThat(coder.colorLines("hello\nthere")).isEmpty();
     }
 }

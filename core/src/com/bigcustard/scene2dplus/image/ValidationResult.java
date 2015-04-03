@@ -1,10 +1,10 @@
 package com.bigcustard.scene2dplus.image;
 
 public class ValidationResult {
-    private ImagePlus image;
-    private boolean widthValid = true;
-    private boolean heightValid = true;
-    private boolean nameValid = true;
+    private final ImagePlus image;
+    private final boolean widthValid;
+    private final boolean heightValid;
+    private final boolean nameValid;
 
     public ValidationResult(ImagePlus image, boolean widthValid, boolean heightValid, boolean nameValid) {
         this.image = image;

@@ -8,14 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class TextFieldPlus extends TextField {
-    private final TextureRegionDrawable white;
     private boolean valid = true;
     private Drawable invalidBackground;
 
     public TextFieldPlus(String value, Skin skin) {
         super(value, skin);
-        white = (TextureRegionDrawable) skin.getDrawable("white");
+        TextureRegionDrawable white = (TextureRegionDrawable) skin.getDrawable("white");
         invalidBackground = white.tint(Color.valueOf("dc322f88"));
+    }
+
+    public void setValid(boolean isValid) {
+        valid = isValid;
     }
 
     @Override
@@ -29,9 +32,5 @@ public class TextFieldPlus extends TextField {
         super.draw(batch, parentAlpha);
         getStyle().background = originalBackground;
         getStyle().focusedBackground = originalFocussedBackground;
-    }
-
-    public void setValid(boolean isValid) {
-        valid = isValid;
     }
 }

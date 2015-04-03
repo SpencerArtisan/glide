@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class UndoCommandTest {
-    private UndoCommand command;
     @Mock private CommandHistory history;
+    private UndoCommand command;
 
     @Before
     public void before() {
