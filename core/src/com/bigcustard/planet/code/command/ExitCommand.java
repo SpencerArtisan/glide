@@ -58,5 +58,4 @@ public class ExitCommand extends AbstractCommand {
             }
         });
     }
-
 }
