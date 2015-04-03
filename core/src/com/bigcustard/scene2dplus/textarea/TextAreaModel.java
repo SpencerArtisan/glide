@@ -2,19 +2,20 @@ package com.bigcustard.scene2dplus.textarea;
 
 import com.badlogic.gdx.graphics.Color;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.scene2dplus.image.Notifier;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 
 public class TextAreaModel {
 	private String text;
 	private Caret caret;
 	private ColorCoder colorCoder;
-    private List<Runnable> listeners = new ArrayList<>();
+    private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
 
 	
 	public TextAreaModel(String text, ColorCoder colorCoder) {
@@ -42,7 +43,7 @@ public class TextAreaModel {
         if (state.caretSelection != null) {
             caret().setSelection(state.caretSelection.getLeft(), state.caretSelection.getRight());
         }
-        informListeners();
+        changeNotifier.notify(this);
     }
 
     public String getText() {
@@ -59,7 +60,7 @@ public class TextAreaModel {
 
 	public void setText(String text) {
 		this.text = text;
-        informListeners();
+		changeNotifier.notify(this);
 	}
 
 	public void clear() {
@@ -160,14 +161,8 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
-    public void addListener(Runnable listener) {
-        listeners.add(listener);
-    }
-
-    private void informListeners() {
-        for (Runnable listener : listeners) {
-            listener.run();
-        }
+    public void addListener(Consumer<TextAreaModel> listener) {
+        changeNotifier.add(listener);
     }
 
     public class Caret {
@@ -202,17 +197,17 @@ public class TextAreaModel {
 
         public void clearSelection() {
             selection = null;
-            informListeners();
+            changeNotifier.notify(TextAreaModel.this);
         }
 
         public void setSelection(XY<Integer> start, XY<Integer> end) {
             setLocation(end);
-            if (start.y < end.y || (start.y == end.y && start.x < end.x)) {
+            if (start.y < end.y || (Objects.equals(start.y, end.y) && start.x < end.x)) {
                 selection = Pair.of(start, end);
             } else {
                 selection = Pair.of(end, start);
-            }
-            informListeners();
+			}
+			changeNotifier.notify(TextAreaModel.this);
         }
 
 		private int getX() {

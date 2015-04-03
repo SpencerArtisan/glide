@@ -97,7 +97,7 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createTextArea(Game game) {
         model = new TextAreaModel(game.code(), plugin.colorCoder());
-        model.addListener(() -> game.setCode(model.getText()));
+        model.addListener((m) -> game.setCode(model.getText()));
         textArea = new ScrollableTextArea(model, skin, commandHistory);
     }
 
