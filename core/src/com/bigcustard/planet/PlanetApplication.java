@@ -95,7 +95,10 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                     @Override
                     public void onSuccess(FileHandle gameFolder) {
                         try {
-                            showCodingScreen(() -> Game.from(gameFolder));
+                            if (gameFolder != null)
+                                showCodingScreen(() -> Game.from(gameFolder));
+                            else
+                                welcomeScreen.getTable().setVisible(true);
                         } catch (Exception e) {
                             new ErrorDialog(resourceManager.getSkin(), e, () ->
                                     welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
