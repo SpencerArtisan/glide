@@ -90,6 +90,10 @@ public class Game {
         return imageModel;
     }
 
+    public FileHandle folder() {
+        return gameFolder;
+    }
+
     public String code() {
         return code;
     }
