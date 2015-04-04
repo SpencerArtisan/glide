@@ -70,9 +70,7 @@ public class ImageControls {
         group.setHeight(uiImage.getHeight() * width / uiImage.getWidth());
         group.setWidth(width);
 
-        deleteButton.setPosition(width - 20, group.getHeight() - 15);
-        deleteButton.setSize(30, 30);
-        deleteButton.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+        deleteButton.setPosition(width - 34, group.getHeight() - 34);
         group.addActor(deleteButton);
         return group;
     }
