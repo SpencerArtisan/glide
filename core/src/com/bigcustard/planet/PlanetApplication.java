@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -103,6 +104,12 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                             new ErrorDialog(resourceManager.getSkin(), e, () ->
                                     welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
                         }
+                        boolean enabled = Game.allGameFolders().length > 0;
+                        welcomeScreen.getGameLibraryButton().setDisabled(!enabled);
+                        welcomeScreen.getGameLibraryButton().setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
+                        enabled = Game.hasMostRecent();
+                        welcomeScreen.getContinueGameButton().setDisabled(!enabled);
+                        welcomeScreen.getContinueGameButton().setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
                     }
 
                     @Override
