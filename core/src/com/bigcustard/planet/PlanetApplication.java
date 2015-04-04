@@ -44,6 +44,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         configureGameButton(welcomeScreen.getNewGameButton(), Game::create);
         configureGameButton(welcomeScreen.getContinueGameButton(), Game::mostRecent);
         configureGameLibraryButton(welcomeScreen);
+        configureQuitButton(welcomeScreen);
         setScreen(welcomeScreen);
     }
 
@@ -100,6 +101,15 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                         System.out.println("Error saving game " + t);
                     }
                 });
+            }
+        });
+    }
+
+    private void configureQuitButton(WelcomeScreen welcomeScreen) {
+        welcomeScreen.getQuitButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.exit(0);
             }
         });
     }

@@ -25,6 +25,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
 	private TextButton gameLibraryButton;
+	private TextButton quitButton;
 
 	public WelcomeScreen(Viewport viewport, ResourceManager resourceManager) {
 		super();
@@ -36,6 +37,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	    createNewGameButton(skin);
 	    createContinueGameButton(skin);
 	    createGameLibraryButton(skin);
+	    createQuitButton(skin);
 		TextureRegionDrawable backgroundRegion = createBackground();
 		layoutScreen(backgroundRegion);		
 		animate(title);
@@ -66,6 +68,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		return continueGameButton;
 	}
 
+	public TextButton getQuitButton() {
+		return quitButton;
+	}
+
 	private void createNewGameButton(Skin skin) {
 		newGameButton = new TextButton("    New Game    ", skin, "big");
 	}
@@ -82,6 +88,10 @@ public class WelcomeScreen extends ScreenAdapter {
         boolean enabled = Game.allGameFolders().length > 0;
         gameLibraryButton.setDisabled(!enabled);
         gameLibraryButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
+	}
+
+	private void createQuitButton(Skin skin) {
+		quitButton = new TextButton("       Quit       ", skin, "big");
 	}
 
 	private void animate(Label title) {
@@ -101,6 +111,8 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.add(continueGameButton).padTop(20f).colspan(2).fillX();
 		table.row();
 		table.add(gameLibraryButton).padTop(20f).colspan(2).fillX();
+		table.row();
+		table.add(quitButton).padTop(20f).colspan(2).fillX();
 		outerTable.background(backgroundRegion);
         outerTable.add(table);
         outerTable.setFillParent(true);
