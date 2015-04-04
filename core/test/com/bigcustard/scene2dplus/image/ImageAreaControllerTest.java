@@ -11,7 +11,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -22,7 +21,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ImageAreaControllerTest {
     @Mock private ImageArea view;
     @Mock private ImageAreaModel model;
-    @Mock private ImagePlusModel image;
+    @Mock private ImageModel image;
     @Mock private ImageControls imageControls;
     @Captor private ArgumentCaptor<Runnable> removeButtonListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<String>> nameListenerCaptor;
@@ -31,9 +30,9 @@ public class ImageAreaControllerTest {
     @Captor private ArgumentCaptor<Runnable> importButtonListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageControls>> addImageControlsListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageControls>> removeImageControlsListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> addImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> removeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> imageChangeListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> imageChangeListenerCaptor;
     private TestClipboard clipboard = new TestClipboard();
     private CommandHistory commandHistory = new CommandHistory();
     private ImageAreaController subject;
@@ -98,7 +97,7 @@ public class ImageAreaControllerTest {
 //
 //            @Test
 //            public void it_RemovesTheImage() {
-//                verify(model).removeImage(any(ImagePlusModel.class));
+//                verify(model).removeImage(any(ImageModel.class));
 //            }
 //        }
 //    }

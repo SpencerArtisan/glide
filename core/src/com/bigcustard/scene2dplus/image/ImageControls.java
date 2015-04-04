@@ -11,13 +11,13 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.function.Consumer;
 
 public class ImageControls {
-    private final ImagePlusModel image;
+    private final ImageModel image;
     private final TextFieldPlus nameField;
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
     private final Button deleteButton;
 
-    public ImageControls(ImagePlusModel image, Skin skin) {
+    public ImageControls(ImageModel image, Skin skin) {
         this.image = image;
         this.nameField = createNameField(image, skin);
         this.widthField = createSizeField(image.width(), skin);
@@ -28,7 +28,7 @@ public class ImageControls {
         setValidState();
     }
 
-    ImagePlusModel getImage() {
+    ImageModel getImage() {
         return image;
     }
 
@@ -64,7 +64,7 @@ public class ImageControls {
 
     private Actor getImageControl(float width) {
         WidgetGroup group = new WidgetGroup();
-        Image uiImage = new ImagePlus(image).asImage();
+        Image uiImage = ImageUtils.asImage(image.file());
         uiImage.setFillParent(true);
         group.addActor(uiImage);
         group.setHeight(uiImage.getHeight() * width / uiImage.getWidth());
@@ -89,7 +89,7 @@ public class ImageControls {
         return table;
     }
 
-    private static TextFieldPlus createNameField(ImagePlusModel image, Skin skin) {
+    private static TextFieldPlus createNameField(ImageModel image, Skin skin) {
         TextFieldPlus textField = new TextFieldPlus(image.name(), skin);
         textField.setAlignment(Align.center);
         textField.setMaxLength(image.maxNameLength());

@@ -5,20 +5,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.bigcustard.planet.code.InaccessibleUrlException;
 import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
-import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
+import com.bigcustard.scene2dplus.image.ImageUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.function.Function;
 
 public class AddImageCommand extends AbstractCommand {
     private ImageAreaModel model;
     private String url;
-    private ImagePlusModel image;
+    private ImageModel image;
 
     public AddImageCommand(ImageAreaModel model, String url) {
         this.model = model;
@@ -30,14 +28,14 @@ public class AddImageCommand extends AbstractCommand {
         image = addImage(url);
     }
 
-    public ImagePlusModel addImage(String url) {
+    public ImageModel addImage(String url) {
         InputStream imageStream = inputStream(url);
         try {
             FileHandle mainImageFile = generateImageFileHandle(url);
             mainImageFile.write(imageStream, false);
             imageStream.close();
             XY<Integer> imageSize = imageSize(mainImageFile);
-            image = new ImagePlusModel(mainImageFile, imageSize.x, imageSize.y);
+            image = new ImageModel(mainImageFile, imageSize.x, imageSize.y);
             return model.addImage(image);
         } catch (IOException e) {
             throw new InaccessibleUrlException(url, e);
@@ -68,7 +66,7 @@ public class AddImageCommand extends AbstractCommand {
     }
 
     protected XY<Integer> imageSize(FileHandle mainImageFile) {
-        Image image = ImagePlus.asImage(mainImageFile);
+        Image image = ImageUtils.asImage(mainImageFile);
         return new XY<>((int) image.getWidth(), (int) image.getHeight());
     }
 

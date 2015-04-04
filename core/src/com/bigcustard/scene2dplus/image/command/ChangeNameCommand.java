@@ -1,15 +1,14 @@
 package com.bigcustard.scene2dplus.image.command;
 
 import com.bigcustard.scene2dplus.command.Command;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
 
 public class ChangeNameCommand implements Command {
     private final String oldName;
     private final String newName;
-    private final ImagePlusModel image;
+    private final ImageModel image;
 
-    public ChangeNameCommand(ImagePlusModel image, String name) {
+    public ChangeNameCommand(ImageModel image, String name) {
         this.image = image;
         this.newName = name;
         this.oldName = image.name();

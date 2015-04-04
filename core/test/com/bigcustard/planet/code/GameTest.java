@@ -3,17 +3,13 @@ package com.bigcustard.planet.code;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
-import com.sun.media.sound.FFT;
+import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -30,12 +26,12 @@ public class GameTest {
     @Mock private FileHandle mockParentFolder;
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockCodeFile;
-    @Mock private ImagePlusModel mockImage;
+    @Mock private ImageModel mockImage;
     @Mock private Syntax mockSyntax;
     @Mock private Consumer<Game> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> addImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> removeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> changeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> changeImageListenerCaptor;
 
     @Before
     public void before() {

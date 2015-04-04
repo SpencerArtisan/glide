@@ -2,41 +2,35 @@ package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import com.bigcustard.planet.code.InaccessibleUrlException;
-import com.google.common.annotations.VisibleForTesting;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ImageAreaModel {
     private static String IMAGE_DETAIL_FILE = "manifest.json";
 
-    private Notifier<ImagePlusModel> addImageNotifier = new Notifier<>();
-    private Notifier<ImagePlusModel> removeImageNotifier = new Notifier<>();
-    private Notifier<ImagePlusModel> changeImageNotifier = new Notifier<>();
-    private Notifier<ImagePlusModel> validationNotifier = new Notifier<>();
-    private List<ImagePlusModel> images = new ArrayList<>();
+    private Notifier<ImageModel> addImageNotifier = new Notifier<>();
+    private Notifier<ImageModel> removeImageNotifier = new Notifier<>();
+    private Notifier<ImageModel> changeImageNotifier = new Notifier<>();
+    private Notifier<ImageModel> validationNotifier = new Notifier<>();
+    private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
 
-    public void registerAddImageListener(Consumer<ImagePlusModel> listener) {
+    public void registerAddImageListener(Consumer<ImageModel> listener) {
         addImageNotifier.add(listener);
     }
 
-    public void registerRemoveImageListener(Consumer<ImagePlusModel> listener) {
+    public void registerRemoveImageListener(Consumer<ImageModel> listener) {
         removeImageNotifier.add(listener);
     }
 
-    public void registerChangeImageListener(Consumer<ImagePlusModel> listener) {
+    public void registerChangeImageListener(Consumer<ImageModel> listener) {
         changeImageNotifier.add(listener);
     }
 
-    public void registerValidationListener(Consumer<ImagePlusModel> listener) {
+    public void registerValidationListener(Consumer<ImageModel> listener) {
         validationNotifier.add(listener);
     }
 
@@ -44,11 +38,11 @@ public class ImageAreaModel {
         return folder;
     }
 
-    public List<ImagePlusModel> images() {
+    public List<ImageModel> images() {
         return images;
     }
 
-    public ImagePlusModel addImage(ImagePlusModel image) {
+    public ImageModel addImage(ImageModel image) {
         boolean initialValidState = isValid();
         images.add(0, image);
         addImageNotifier.notify(image);
@@ -68,7 +62,7 @@ public class ImageAreaModel {
         return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
     }
 
-    public void removeImage(ImagePlusModel image) {
+    public void removeImage(ImageModel image) {
         boolean initialValidState = isValid();
         images.remove(image);
         removeImageNotifier.notify(image);
@@ -78,7 +72,7 @@ public class ImageAreaModel {
     }
 
     public ValidationResult[] validate() {
-        return images.stream().map(ImagePlusModel::validate).toArray(ValidationResult[]::new);
+        return images.stream().map(ImageModel::validate).toArray(ValidationResult[]::new);
     }
 
     public void loadFromFolder(FileHandle folder) {
@@ -121,16 +115,16 @@ public class ImageAreaModel {
         public ImageDetails() {
         }
 
-        public ImageDetails(ImagePlusModel image) {
+        public ImageDetails(ImageModel image) {
             name = image.name();
             filename = image.filename();
             width = image.width();
             height = image.height();
         }
 
-        public ImagePlusModel toImage(FileHandle parentFolder) {
+        public ImageModel toImage(FileHandle parentFolder) {
             FileHandle imageFile = parentFolder.child(filename);
-            return new ImagePlusModel(imageFile, name, width, height);
+            return new ImageModel(imageFile, name, width, height);
         }
     }
 }

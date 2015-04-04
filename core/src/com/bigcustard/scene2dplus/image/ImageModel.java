@@ -5,7 +5,7 @@ import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
 
-public class ImagePlusModel {
+public class ImageModel {
     private static int MAX_NAME_LENGTH = 16;
 
     private FileHandle file;
@@ -14,14 +14,14 @@ public class ImagePlusModel {
     private int originalHeight;
     private Integer width;
     private Integer height;
-    private Notifier<ImagePlusModel> changeNotifier = new Notifier<>();
-    private Notifier<ImagePlusModel> validationNotifier = new Notifier<>();
+    private Notifier<ImageModel> changeNotifier = new Notifier<>();
+    private Notifier<ImageModel> validationNotifier = new Notifier<>();
 
-    public ImagePlusModel(FileHandle file, Integer width, Integer height) {
+    public ImageModel(FileHandle file, Integer width, Integer height) {
         this(file, generateName(file), width, height);
     }
 
-    public ImagePlusModel(FileHandle file, String name, Integer width, Integer height) {
+    public ImageModel(FileHandle file, String name, Integer width, Integer height) {
         this.file = file;
         this.name = name;
         this.width = width;
@@ -30,11 +30,11 @@ public class ImagePlusModel {
         this.originalHeight = height;
     }
 
-    public void registerValidationListener(Consumer<ImagePlusModel> listener) {
+    public void registerValidationListener(Consumer<ImageModel> listener) {
         validationNotifier.add(listener);
     }
 
-    public void registerChangeListener(Consumer<ImagePlusModel> listener) {
+    public void registerChangeListener(Consumer<ImageModel> listener) {
         changeNotifier.add(listener);
     }
 
@@ -52,7 +52,7 @@ public class ImagePlusModel {
         return file.name();
     }
 
-    public FileHandle getFile() {
+    public FileHandle file() {
         return file;
     }
 

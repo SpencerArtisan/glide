@@ -1,19 +1,19 @@
 package com.bigcustard.scene2dplus.image;
 
 public class ValidationResult {
-    private final ImagePlusModel image;
+    private final ImageModel image;
     private final boolean widthValid;
     private final boolean heightValid;
     private final boolean nameValid;
 
-    public ValidationResult(ImagePlusModel image, boolean widthValid, boolean heightValid, boolean nameValid) {
+    public ValidationResult(ImageModel image, boolean widthValid, boolean heightValid, boolean nameValid) {
         this.image = image;
         this.widthValid = widthValid;
         this.heightValid = heightValid;
         this.nameValid = nameValid;
     }
 
-    public ImagePlusModel image() {
+    public ImageModel image() {
         return image;
     }
 

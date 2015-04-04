@@ -1,15 +1,14 @@
 package com.bigcustard.scene2dplus.image.command;
 
 import com.bigcustard.scene2dplus.command.Command;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
 
 public class ChangeHeightCommand implements Command {
     private final Integer oldHeight;
     private final Integer newHeight;
-    private final ImagePlusModel image;
+    private final ImageModel image;
 
-    public ChangeHeightCommand(ImagePlusModel image, Integer height) {
+    public ChangeHeightCommand(ImageModel image, Integer height) {
         this.image = image;
         this.newHeight = height;
         this.oldHeight = image.height();

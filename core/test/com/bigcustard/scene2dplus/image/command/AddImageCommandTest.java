@@ -3,14 +3,12 @@ package com.bigcustard.scene2dplus.image.command;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import java.io.InputStream;
-import java.util.function.Function;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -48,7 +46,7 @@ public class AddImageCommandTest {
     public void addImageFromUrl() {
         command.execute();
         verify(imageFile).write(mockImageStream, false);
-        verify(model).addImage(any(ImagePlusModel.class));
+        verify(model).addImage(any(ImageModel.class));
     }
 
     @Test
@@ -58,13 +56,13 @@ public class AddImageCommandTest {
         when(imageFile2.name()).thenReturn("image2.png");
         command.execute();
         verify(imageFile2).write(mockImageStream, false);
-        verify(model).addImage(any(ImagePlusModel.class));
+        verify(model).addImage(any(ImageModel.class));
     }
 
     @Test
     public void undoRemovesTheImage() {
         command.execute();
         command.undo();
-        verify(model).removeImage(any(ImagePlusModel.class));
+        verify(model).removeImage(any(ImageModel.class));
     }
 }

@@ -1,15 +1,14 @@
 package com.bigcustard.scene2dplus.image.command;
 
 import com.bigcustard.scene2dplus.command.Command;
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
 
 public class ChangeWidthCommand implements Command {
     private final Integer oldWidth;
     private final Integer newWidth;
-    private final ImagePlusModel image;
+    private final ImageModel image;
 
-    public ChangeWidthCommand(ImagePlusModel image, Integer width) {
+    public ChangeWidthCommand(ImageModel image, Integer width) {
         this.image = image;
         this.newWidth = width;
         this.oldWidth = image.width();

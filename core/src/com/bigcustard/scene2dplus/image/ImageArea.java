@@ -14,7 +14,7 @@ public class ImageArea extends ScrollPane {
     private Skin skin;
     private ImageAreaModel model;
     private TextButton importButton;
-    private Map<ImagePlusModel, ImageControls> imageControlMap = new HashMap<>();
+    private Map<ImageModel, ImageControls> imageControlMap = new HashMap<>();
     private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
     private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
 
@@ -86,7 +86,7 @@ public class ImageArea extends ScrollPane {
         model.images().forEach(this::createImageControls);
     }
 
-    private ImageControls createImageControls(ImagePlusModel image) {
+    private ImageControls createImageControls(ImageModel image) {
         ImageControls imageControls = new ImageControls(image, skin);
         imageControlMap.put(image, imageControls);
         return imageControls;
@@ -97,13 +97,13 @@ public class ImageArea extends ScrollPane {
         model.registerRemoveImageListener(this::onRemoveImage);
     }
 
-    private void onAddImage(ImagePlusModel image) {
+    private void onAddImage(ImageModel image) {
         ImageControls imageControls = createImageControls(image);
         addImageControlsNotifier.notify(imageControls);
         layoutControls();
     }
 
-    private void onRemoveImage(ImagePlusModel image) {
+    private void onRemoveImage(ImageModel image) {
         ImageControls imageControls = imageControlMap.remove(image);
         removeImageControlsNotifier.notify(imageControls);
         layoutControls();

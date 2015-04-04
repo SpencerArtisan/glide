@@ -1,7 +1,6 @@
 package com.bigcustard.scene2dplus.image.command;
 
-import com.bigcustard.scene2dplus.image.ImagePlus;
-import com.bigcustard.scene2dplus.image.ImagePlusModel;
+import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,7 +10,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ChangeNameCommandTest {
-    @Mock private ImagePlusModel image;
+    @Mock private ImageModel image;
     private ChangeNameCommand command;
 
     @Before

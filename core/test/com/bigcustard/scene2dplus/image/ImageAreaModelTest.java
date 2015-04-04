@@ -7,7 +7,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
-import java.io.InputStream;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,14 +18,14 @@ public class ImageAreaModelTest {
     @Mock private FileHandle mockManifestFile;
     @Mock private FileHandle mockImageFile;
     @Mock private FileHandle mockImageFile2;
-    @Mock private ImagePlusModel mockImage;
-    @Mock private ImagePlusModel mockImage2;
+    @Mock private ImageModel mockImage;
+    @Mock private ImageModel mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Consumer<ImagePlusModel> mockValidationListener;
-    @Mock private Consumer<ImagePlusModel> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> imageValidationListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> imageChangeListenerCaptor;
+    @Mock private Consumer<ImageModel> mockValidationListener;
+    @Mock private Consumer<ImageModel> mockChangeListener;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> imageValidationListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageModel>> imageChangeListenerCaptor;
 
     @Before
     public void before() {
@@ -87,7 +86,7 @@ public class ImageAreaModelTest {
         model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
-        verify(mockValidationListener, never()).accept(any(ImagePlusModel.class));
+        verify(mockValidationListener, never()).accept(any(ImageModel.class));
     }
 
     @Test
