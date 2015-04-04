@@ -19,15 +19,14 @@ public class ImageAreaModelTest {
     @Mock private FileHandle mockManifestFile;
     @Mock private FileHandle mockImageFile;
     @Mock private FileHandle mockImageFile2;
-    @Mock private InputStream mockImageStream;
-    @Mock private ImagePlus mockImage;
-    @Mock private ImagePlus mockImage2;
+    @Mock private ImagePlusModel mockImage;
+    @Mock private ImagePlusModel mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Consumer<ImagePlus> mockValidationListener;
-    @Mock private Consumer<ImagePlus> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImagePlus>> imageValidationListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlus>> imageChangeListenerCaptor;
+    @Mock private Consumer<ImagePlusModel> mockValidationListener;
+    @Mock private Consumer<ImagePlusModel> mockChangeListener;
+    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> imageValidationListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> imageChangeListenerCaptor;
 
     @Before
     public void before() {
@@ -88,7 +87,7 @@ public class ImageAreaModelTest {
         model.registerValidationListener(mockValidationListener);
         when(mockValidationResult1.isValid()).thenReturn(true);
         model.addImage(mockImage);
-        verify(mockValidationListener, never()).accept(any(ImagePlus.class));
+        verify(mockValidationListener, never()).accept(any(ImagePlusModel.class));
     }
 
     @Test
@@ -98,23 +97,6 @@ public class ImageAreaModelTest {
         model.addImage(mockImage2);
         assertThat(model.validate()).containsExactly(mockValidationResult2, mockValidationResult1);
     }
-
-//    @Test
-//    public void addImageFromUrl() {
-//        ImageAreaModel model = newModel();
-//        model.addImage("http://url/image.png");
-//        verify(mockImageFile).write(mockImageStream, false);
-//        assertThat(model.images()).extracting("name").containsExactly("image");
-//    }
-
-//    @Test
-//    public void addImageFromUrlDuplicateName() {
-//        when(mockImageFile.exists()).thenReturn(true);
-//        ImageAreaModel model = newModel();
-//        model.addImage("http://url/image.png");
-//        verify(mockImageFile2).write(mockImageStream, false);
-//        assertThat(model.images()).extracting("name").containsExactly("image2");
-//    }
 
     @Test
     public void saveStoresImageDetails() {
@@ -146,14 +128,14 @@ public class ImageAreaModelTest {
 
     private ImageAreaModel newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
-        ImageAreaModel model = new ImageAreaModel((name) -> mockImageStream);
+        ImageAreaModel model = new ImageAreaModel();
         model.loadFromFolder(mockImageFolder);
         return model;
     }
 
     private ImageAreaModel existingModel() {
         when(mockManifestFile.exists()).thenReturn(true);
-        ImageAreaModel model = new ImageAreaModel((name) -> mockImageStream);
+        ImageAreaModel model = new ImageAreaModel();
         model.loadFromFolder(mockImageFolder);
         return model;
     }

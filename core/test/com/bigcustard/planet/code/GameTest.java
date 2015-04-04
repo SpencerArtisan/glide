@@ -4,6 +4,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.ImagePlusModel;
 import com.sun.media.sound.FFT;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +30,12 @@ public class GameTest {
     @Mock private FileHandle mockParentFolder;
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockCodeFile;
-    @Mock private ImagePlus mockImage;
+    @Mock private ImagePlusModel mockImage;
     @Mock private Syntax mockSyntax;
     @Mock private Consumer<Game> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImagePlus>> addImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlus>> removeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImagePlus>> changeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> addImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> removeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImagePlusModel>> changeImageListenerCaptor;
 
     @Before
     public void before() {

@@ -2,6 +2,7 @@ package com.bigcustard.scene2dplus.image.command;
 
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.ImagePlusModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,7 +12,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RemoveImageCommandTest {
     @Mock private ImageAreaModel model;
-    @Mock private ImagePlus image;
+    @Mock private ImagePlusModel image;
     private RemoveImageCommand command;
 
     @Before

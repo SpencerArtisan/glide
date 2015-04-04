@@ -3,12 +3,13 @@ package com.bigcustard.scene2dplus.image.command;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImagePlus;
+import com.bigcustard.scene2dplus.image.ImagePlusModel;
 
 public class RemoveImageCommand implements Command {
     private ImageAreaModel model;
-    private ImagePlus image;
+    private ImagePlusModel image;
 
-    public RemoveImageCommand(ImageAreaModel model, ImagePlus image) {
+    public RemoveImageCommand(ImageAreaModel model, ImagePlusModel image) {
         this.model = model;
         this.image = image;
     }
