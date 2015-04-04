@@ -1,13 +1,12 @@
 package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.bigcustard.planet.code.Game;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class GameLibraryDialog extends Dialog {
+    private static int COLUMNS = 3;
     private SettableFuture<FileHandle> futureGame = SettableFuture.create();
 
     public GameLibraryDialog(Skin skin) {
@@ -26,13 +25,20 @@ public class GameLibraryDialog extends Dialog {
 
     private void layoutControls(Skin skin) {
         pad(20);
-        text("Choose a game");
+        text("Choose a game").padBottom(20);
         row();
+        int i = 0;
         for (FileHandle gameDirectory : Game.allGameFolders()) {
-            TextButton button = new TextButton("  " + gameDirectory.name() + "  ", skin, "big");
-            getButtonTable().add(button).fillX().pad(10);
+            TextButton button = new TextButton("  " + gameDirectory.name() + "  ", skin);
+            getButtonTable().add(button).fillX().padLeft(10).padRight(6).padTop(6);
             setObject(button, gameDirectory);
-            getButtonTable().row();
+            getButtonTable().add(createDeleteButton(skin));
+            if (++i%3 == 0) getButtonTable().row();
         }
     }
+
+    private static Button createDeleteButton(Skin skin) {
+        return new ImageButton(skin, "trash-button");
+    }
+
 }

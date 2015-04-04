@@ -99,6 +99,7 @@ public class ImageAreaModel {
         private ImageDetails[] images;
 
         public ImageListDetails() {
+            images = new ImageDetails[0];
         }
 
         public ImageListDetails(ImageAreaModel model) {
