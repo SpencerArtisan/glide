@@ -22,6 +22,7 @@ import com.bigcustard.planet.screen.CodingScreen;
 import com.bigcustard.planet.screen.GameLibraryDialog;
 import com.bigcustard.planet.screen.ResourceManager;
 import com.bigcustard.planet.screen.WelcomeScreen;
+import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 
@@ -41,8 +42,8 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
 
     private void showWelcomeScreen() {
         WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
-        configureGameButton(welcomeScreen.getNewGameButton(), Game::create);
-        configureGameButton(welcomeScreen.getContinueGameButton(), Game::mostRecent);
+        configureGameButton(welcomeScreen, welcomeScreen.getNewGameButton(), Game::create);
+        configureGameButton(welcomeScreen, welcomeScreen.getContinueGameButton(), Game::mostRecent);
         configureGameLibraryButton(welcomeScreen);
         configureQuitButton(welcomeScreen);
         setScreen(welcomeScreen);
@@ -93,7 +94,12 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
                 Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
                     @Override
                     public void onSuccess(FileHandle gameFolder) {
-                        showCodingScreen(() -> Game.from(gameFolder));
+                        try {
+                            showCodingScreen(() -> Game.from(gameFolder));
+                        } catch (Exception e) {
+                            new ErrorDialog(resourceManager.getSkin(), e, () ->
+                                    welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
+                        }
                     }
 
                     @Override
@@ -114,11 +120,16 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
         });
     }
 
-    private void configureGameButton(TextButton button, Supplier<Game> programSupplier) {
+    private void configureGameButton(WelcomeScreen welcomeScreen, TextButton button, Supplier<Game> programSupplier) {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                showCodingScreen(programSupplier);
+                try {
+                    showCodingScreen(programSupplier);
+                } catch (Exception e) {
+                    new ErrorDialog(resourceManager.getSkin(), e, () ->
+                            welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
+                }
             }
         });
     }
