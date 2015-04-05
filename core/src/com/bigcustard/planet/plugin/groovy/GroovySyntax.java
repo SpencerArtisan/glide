@@ -3,7 +3,6 @@ package com.bigcustard.planet.plugin.groovy;
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import groovy.lang.GroovyClassLoader;

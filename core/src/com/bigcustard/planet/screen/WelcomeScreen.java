@@ -1,7 +1,6 @@
 package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -20,14 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.core.BlurpRuntime;
-import com.bigcustard.blurp.model.BlurpMain;
-import com.bigcustard.blurp.model.ImageSprite;
-import com.bigcustard.blurp.ui.BlurpScreen;
-import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
@@ -188,44 +180,11 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private TextureRegionDrawable createBackground() {
 		Texture backgroundTexture = new Texture(Gdx.files.internal("images/WelcomeBackground.png"));
-		backgroundTexture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 	}
 
-	private void showRunScreen(Game game) {
-		BlurpRuntime runtime = BlurpRuntime.begin(viewport);
-		BlurpMain script = new BlurpMain() {
-			@Override
-			public void run() {
-				new ImageSprite("games/" + game.name() + "/build/" + game.imageModel().images().get(0).filename(), 300, 150);
-			}
-		};
-		runtime.start(script);
-		BlurpScreen blurpScreen = runtime.getScreen();
-		setScreen.accept(blurpScreen);
-		blurpScreen.setRenderListener((batch, delta, eventType) -> {
-			if (eventType == RenderListener.EventType.PostRender) {
-				int crossX = viewport.getScreenWidth() - 40;
-				int crossY = viewport.getScreenHeight() - 40;
 
-				Drawable closeIcon = skin.getDrawable("close");
-				closeIcon.draw(batch, crossX, crossY, 32, 32);
-
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(crossX, crossY)) {
-					runtime.end();
-					showCodingScreen(() -> game);
-				}
-			}
-		});
-	}
-
-	private boolean clickedOnClose(int crossX, int crossY) {
-		int x = Gdx.input.getX();
-		int y = Gdx.input.getY();
-		Vector3 world = viewport.getCamera().unproject(new Vector3(x, y, 0));
-		return world.x > crossX && world.x < crossX + 32 &&
-				world.y > crossY && world.y < crossY + 32;
-	}
 
 
 	private void showCodingScreen(Supplier<Game> programSupplier) {
@@ -241,6 +200,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		} catch (Exception e) {
 			showError(e);
 		}
+	}
+
+	private void showRunScreen(Game game) {
+		RunScreen.showRunScreen(viewport, skin, game, setScreen, () -> showCodingScreen(() -> game));
 	}
 
 	private void showError(Throwable e) {

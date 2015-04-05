@@ -7,7 +7,6 @@ import com.bigcustard.util.FutureSupplier;
 import com.bigcustard.util.FutureSuppliers;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class ExitCommand extends AbstractCommand {
     private final Game game;

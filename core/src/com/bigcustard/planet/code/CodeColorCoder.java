@@ -3,17 +3,12 @@ package com.bigcustard.planet.code;
 import com.badlogic.gdx.graphics.Color;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
