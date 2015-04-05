@@ -30,7 +30,6 @@ import com.google.common.util.concurrent.Futures;
 import java.util.function.Supplier;
 
 public class PlanetApplication extends com.badlogic.gdx.Game {
-    private static Plugin PLUGIN = new GroovyPlugin();
     private Viewport viewport;
     private ResourceManager resourceManager;
 
@@ -42,117 +41,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
     }
 
     private void showWelcomeScreen() {
-        WelcomeScreen welcomeScreen = new WelcomeScreen(viewport, resourceManager);
-        configureGameButton(welcomeScreen, welcomeScreen.getNewGameButton(), Game::create);
-        configureGameButton(welcomeScreen, welcomeScreen.getContinueGameButton(), Game::mostRecent);
-        configureGameLibraryButton(welcomeScreen);
-        configureQuitButton(welcomeScreen);
-        setScreen(welcomeScreen);
-    }
-
-    private void showRunScreen(Game game) {
-        BlurpRuntime runtime = BlurpRuntime.begin(viewport);
-        BlurpMain script = new BlurpMain() {
-            @Override
-            public void run() {
-                new ImageSprite("games/" + game.name() + "/build/" + game.imageModel().images().get(0).filename(), 300, 150);
-            }
-        };
-        runtime.start(script);
-        BlurpScreen blurpScreen = runtime.getScreen();
-        setScreen(blurpScreen);
-        blurpScreen.setRenderListener((batch, delta, eventType) -> {
-            if (eventType == RenderListener.EventType.PostRender) {
-                int crossX = viewport.getScreenWidth() - 40;
-                int crossY = viewport.getScreenHeight() - 40;
-
-                Drawable closeIcon = resourceManager.getSkin().getDrawable("close");
-                closeIcon.draw(batch, crossX, crossY, 32, 32);
-
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(crossX, crossY)) {
-                    runtime.end();
-                    showCodingScreen(() -> game);
-                }
-            }
-        });
-    }
-
-    private boolean clickedOnClose(int crossX, int crossY) {
-        int x = Gdx.input.getX();
-        int y = Gdx.input.getY();
-        Vector3 world = viewport.getCamera().unproject(new Vector3(x, y, 0));
-        return world.x > crossX && world.x < crossX + 32 &&
-                world.y > crossY && world.y < crossY + 32;
-    }
-
-    private void configureGameLibraryButton(WelcomeScreen welcomeScreen) {
-        welcomeScreen.getGameLibraryButton().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                welcomeScreen.getTable().setVisible(false);
-                GameLibraryDialog dialog = new GameLibraryDialog(resourceManager.getSkin());
-                dialog.show(welcomeScreen.getStage());
-                Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
-                    @Override
-                    public void onSuccess(FileHandle gameFolder) {
-                        try {
-                            if (gameFolder != null)
-                                showCodingScreen(() -> Game.from(gameFolder));
-                            else
-                                welcomeScreen.getTable().setVisible(true);
-                        } catch (Exception e) {
-                            new ErrorDialog(resourceManager.getSkin(), e, () ->
-                                    welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
-                        }
-                        boolean enabled = Game.allGameFolders().length > 0;
-                        welcomeScreen.getGameLibraryButton().setDisabled(!enabled);
-                        welcomeScreen.getGameLibraryButton().setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
-                        enabled = Game.hasMostRecent();
-                        welcomeScreen.getContinueGameButton().setDisabled(!enabled);
-                        welcomeScreen.getContinueGameButton().setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        System.out.println("Error saving game " + t);
-                    }
-                });
-            }
-        });
-    }
-
-    private void configureQuitButton(WelcomeScreen welcomeScreen) {
-        welcomeScreen.getQuitButton().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.exit(0);
-            }
-        });
-    }
-
-    private void configureGameButton(WelcomeScreen welcomeScreen, TextButton button, Supplier<Game> programSupplier) {
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                try {
-                    showCodingScreen(programSupplier);
-                } catch (Exception e) {
-                    new ErrorDialog(resourceManager.getSkin(), e, () ->
-                            welcomeScreen.getTable().setVisible(true)).show(welcomeScreen.getStage());
-                }
-            }
-        });
-    }
-
-    private void showCodingScreen(Supplier<Game> programSupplier) {
-        CodingScreen codingScreen = new CodingScreen(
-                programSupplier.get(),
-                viewport,
-                resourceManager,
-                this::showWelcomeScreen,
-                this::showRunScreen,
-                PLUGIN.syntax());
-        setScreen(codingScreen);
+        new WelcomeScreen(viewport, resourceManager.getSkin(), this::setScreen).showWelcomeScreen();
     }
 
     @Override

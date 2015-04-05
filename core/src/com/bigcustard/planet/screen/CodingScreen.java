@@ -42,14 +42,13 @@ public class CodingScreen extends ScreenAdapter {
     private Consumer<Game> runGame;
     private Syntax syntax;
 
-    public CodingScreen(Game game, Viewport viewport, ResourceManager resourceManager, Runnable exitToMainMenu, Consumer<Game> runGame, Syntax syntax) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Game> runGame, Syntax syntax) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.runGame = runGame;
         this.syntax = syntax;
         this.stage = new Stage(viewport);
-
-		skin = resourceManager.getSkin();
+		this.skin = skin;
 
         createTextArea(game);
         createButtonBar();

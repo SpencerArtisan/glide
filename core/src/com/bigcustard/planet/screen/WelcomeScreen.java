@@ -1,12 +1,17 @@
 package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -14,11 +19,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.blurp.core.BlurpRuntime;
+import com.bigcustard.blurp.model.BlurpMain;
+import com.bigcustard.blurp.model.ImageSprite;
+import com.bigcustard.blurp.ui.BlurpScreen;
+import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.plugin.Plugin;
+import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
+import com.bigcustard.scene2dplus.dialog.ErrorDialog;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class WelcomeScreen extends ScreenAdapter {
+	private static Plugin PLUGIN = new GroovyPlugin();
+	private final Skin skin;
 	private Table table;
 	private Table outerTable;
 	private Stage stage;
@@ -26,25 +48,30 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextButton continueGameButton;
 	private TextButton gameLibraryButton;
 	private TextButton quitButton;
+	private Consumer<Screen> setScreen;
+	private Viewport viewport;
+	private Label title;
 
-	public WelcomeScreen(Viewport viewport, ResourceManager resourceManager) {
+	public WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen) {
 		super();
+		this.setScreen = setScreen;
 		this.stage = new Stage(viewport);
+		this.viewport = viewport;
+		this.skin = skin;
 
-        Skin skin = resourceManager.getSkin();
+		createTitle();
+	    createNewGameButton();
+		createContinueGameButton();
+		createGameLibraryButton();
+		createQuitButton();
+		refreshButtonEnabledStatuses();
+		layoutScreen(createBackground());
+	}
 
-	    Label title = createTitle(skin);
-	    createNewGameButton(skin);
-	    createContinueGameButton(skin);
-	    createGameLibraryButton(skin);
-	    createQuitButton(skin);
-		TextureRegionDrawable backgroundRegion = createBackground();
-		layoutScreen(backgroundRegion);		
-		animate(title);
-
-		stage.addActor(outerTable);
-		stage.addActor(title);
-		
+	public void showWelcomeScreen() {
+		refreshButtonEnabledStatuses();
+		animateTitle();
+		setScreen.accept(this);
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -52,54 +79,93 @@ public class WelcomeScreen extends ScreenAdapter {
         return table;
     }
 
-    public Stage getStage() {
-        return stage;
-    }
+	@Override
+	public void render(float delta) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    public TextButton getNewGameButton() {
-		return newGameButton;
+		stage.act(Math.min(delta, 1 / 60f));
+		stage.draw();
 	}
 
-	public TextButton getGameLibraryButton() {
-		return gameLibraryButton;
+	private void refreshButtonEnabledStatuses() {
+		boolean continueEnabled = Game.hasMostRecent();
+		continueGameButton.setDisabled(!continueEnabled);
+		continueGameButton.setTouchable(continueEnabled ? Touchable.enabled : Touchable.disabled);
+
+		boolean libraryEnabled = Game.allGameFolders().length > 0;
+		gameLibraryButton.setDisabled(!libraryEnabled);
+		gameLibraryButton.setTouchable(libraryEnabled ? Touchable.enabled : Touchable.disabled);
 	}
 
-	public TextButton getContinueGameButton() {
-		return continueGameButton;
+	private void createTitle() {
+		title = new Label("Welcome to Planet Burpl", skin);
 	}
 
-	public TextButton getQuitButton() {
-		return quitButton;
-	}
-
-	private void createNewGameButton(Skin skin) {
+	private void createNewGameButton() {
 		newGameButton = new TextButton("    New Game    ", skin, "big");
+		newGameButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				showCodingScreen(Game::create);
+			}
+		});
 	}
 
-	private void createContinueGameButton(Skin skin) {
+	private void createContinueGameButton() {
 		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
-        boolean enabled = Game.hasMostRecent();
-        continueGameButton.setDisabled(!enabled);
-        continueGameButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
+		continueGameButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				showCodingScreen(Game::mostRecent);
+			}
+		});
 	}
 
-	private void createGameLibraryButton(Skin skin) {
+	private void createGameLibraryButton() {
 		gameLibraryButton = new TextButton("   Game Library   ", skin, "big");
-        boolean enabled = Game.allGameFolders().length > 0;
-        gameLibraryButton.setDisabled(!enabled);
-        gameLibraryButton.setTouchable(enabled ? Touchable.enabled : Touchable.disabled);
+		gameLibraryButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				hideButtons();
+				GameLibraryDialog dialog = new GameLibraryDialog(skin);
+				dialog.show(stage);
+				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
+					@Override
+					public void onSuccess(FileHandle gameFolder) {
+						showButtons();
+						refreshButtonEnabledStatuses();
+						if (gameFolder != null) {
+							showCodingScreen(() -> Game.from(gameFolder));
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						showError(t);
+					}
+				});
+			}
+		});
 	}
 
-	private void createQuitButton(Skin skin) {
+	private void createQuitButton() {
 		quitButton = new TextButton("       Quit       ", skin, "big");
+		quitButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				System.exit(0);
+			}
+		});
 	}
 
-	private void animate(Label title) {
+	private void animateTitle() {
         outerTable.getColor().a = 0f;
-        outerTable.addAction(Actions.fadeIn(2f));
-		float labelY = stage.getViewport().getWorldHeight() - 100;
+		outerTable.addAction(Actions.fadeIn(2f));
+		float labelY = stage.getViewport().getWorldHeight() - 90;
 		title.setPosition(-400, labelY);
 		title.addAction(Actions.moveTo(50, labelY, 0.6f, Interpolation.pow2));
+		stage.addActor(title);
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
@@ -114,9 +180,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.row();
 		table.add(quitButton).padTop(20f).colspan(2).fillX();
 		outerTable.background(backgroundRegion);
-        outerTable.add(table);
-        outerTable.setFillParent(true);
-        outerTable.pack();
+		outerTable.add(table);
+		outerTable.setFillParent(true);
+		outerTable.pack();
+		stage.addActor(outerTable);
 	}
 
 	private TextureRegionDrawable createBackground() {
@@ -125,16 +192,66 @@ public class WelcomeScreen extends ScreenAdapter {
         return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 	}
 
-	private Label createTitle(Skin skin) {
-	    return new Label("Welcome to Planet Burpl", skin);
+	private void showRunScreen(Game game) {
+		BlurpRuntime runtime = BlurpRuntime.begin(viewport);
+		BlurpMain script = new BlurpMain() {
+			@Override
+			public void run() {
+				new ImageSprite("games/" + game.name() + "/build/" + game.imageModel().images().get(0).filename(), 300, 150);
+			}
+		};
+		runtime.start(script);
+		BlurpScreen blurpScreen = runtime.getScreen();
+		setScreen.accept(blurpScreen);
+		blurpScreen.setRenderListener((batch, delta, eventType) -> {
+			if (eventType == RenderListener.EventType.PostRender) {
+				int crossX = viewport.getScreenWidth() - 40;
+				int crossY = viewport.getScreenHeight() - 40;
+
+				Drawable closeIcon = skin.getDrawable("close");
+				closeIcon.draw(batch, crossX, crossY, 32, 32);
+
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(crossX, crossY)) {
+					runtime.end();
+					showCodingScreen(() -> game);
+				}
+			}
+		});
 	}
 
-    @Override
-    public void render(float delta) { 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                                                                                
-        stage.act(Math.min(delta, 1 / 60f));
-        stage.draw();
-    }  	  
+	private boolean clickedOnClose(int crossX, int crossY) {
+		int x = Gdx.input.getX();
+		int y = Gdx.input.getY();
+		Vector3 world = viewport.getCamera().unproject(new Vector3(x, y, 0));
+		return world.x > crossX && world.x < crossX + 32 &&
+				world.y > crossY && world.y < crossY + 32;
+	}
+
+
+	private void showCodingScreen(Supplier<Game> programSupplier) {
+		try {
+			CodingScreen codingScreen = new CodingScreen(
+					programSupplier.get(),
+					viewport,
+					skin,
+					this::showWelcomeScreen,
+					this::showRunScreen,
+					PLUGIN.syntax());
+			setScreen.accept(codingScreen);
+		} catch (Exception e) {
+			showError(e);
+		}
+	}
+
+	private void showError(Throwable e) {
+		new ErrorDialog(skin, e, this::showButtons).show(stage);
+	}
+
+	private void showButtons() {
+		getTable().setVisible(true);
+	}
+
+	private void hideButtons() {
+		getTable().setVisible(false);
+	}
 }

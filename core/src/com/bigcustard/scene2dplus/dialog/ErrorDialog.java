@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class ErrorDialog extends Dialog {
-    private Exception exception;
+    private Throwable exception;
     private Runnable onClosed;
 
-    public ErrorDialog(Skin skin, Exception exception, Runnable onClosed) {
+    public ErrorDialog(Skin skin, Throwable exception, Runnable onClosed) {
         super("", skin);
         this.exception = exception;
         this.onClosed = onClosed;
