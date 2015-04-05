@@ -184,9 +184,6 @@ public class WelcomeScreen extends ScreenAdapter {
         return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 	}
 
-
-
-
 	private void showCodingScreen(Supplier<Game> programSupplier) {
 		try {
 			CodingScreen codingScreen = new CodingScreen(
