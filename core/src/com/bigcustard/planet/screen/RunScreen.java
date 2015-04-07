@@ -18,6 +18,7 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import java.io.StringReader;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class RunScreen {
@@ -26,10 +27,13 @@ public class RunScreen {
         BlurpRuntime blurpRuntime = BlurpRuntime.begin(viewport);
         blurpRuntime.start("Groovy", game.code());
         setScreen.accept(blurpRuntime.getScreen());
+        AtomicBoolean alive = new AtomicBoolean(true);
 
         blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
-            batch.setColor(1,1,1,1);
+            if (!alive.get()) return;
+
             if (eventType == RenderListener.EventType.PostRender) {
+                batch.setColor(1,1,1,1);
                 int crossX = viewport.getScreenWidth() - 40;
                 int crossY = viewport.getScreenHeight() - 40;
 
@@ -37,6 +41,8 @@ public class RunScreen {
                 closeIcon.draw(batch, crossX, crossY, closeIcon.getMinWidth(), closeIcon.getMinHeight());
 
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(viewport, crossX, crossY)) {
+                    alive.set(false);
+                    System.out.println("END");
                     blurpRuntime.end();
                     exit.run();
                 }

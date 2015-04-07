@@ -15,11 +15,11 @@ public class Game {
     public static String CODE_FILE = "code.txt";
     public static final String DEFAULT_NAME = "Unnamed Game";
     public static String TEMPLATE =
-                      "////////////////////////////////// \n"
-                    + "// Welcome to Planet Burpl! \n"
-                    + "// Start writing your game below. \n"
-                    + "// Click here if you need help \n"
-                    + "////////////////////////////////// \n\n";
+                      "////////////////////////////////////////////// \n"
+                    + "//         Welcome to Planet Burpl!         // \n"
+                    + "//      Start writing your game below       // \n"
+                    + "// Look in the Game Library for inspiration // \n"
+                    + "////////////////////////////////////////////// \n\n";
     private static final String RECENT_GAME = "MostRecentGameName";
     private static String FOLDER = "games";
 
