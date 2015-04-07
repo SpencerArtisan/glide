@@ -28,12 +28,13 @@ public class RunScreen {
         setScreen.accept(blurpRuntime.getScreen());
 
         blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
+            batch.setColor(1,1,1,1);
             if (eventType == RenderListener.EventType.PostRender) {
                 int crossX = viewport.getScreenWidth() - 40;
                 int crossY = viewport.getScreenHeight() - 40;
 
                 Drawable closeIcon = skin.getDrawable("close");
-                closeIcon.draw(batch, crossX, crossY, 32, 32);
+                closeIcon.draw(batch, crossX, crossY, closeIcon.getMinWidth(), closeIcon.getMinHeight());
 
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(viewport, crossX, crossY)) {
                     blurpRuntime.end();
