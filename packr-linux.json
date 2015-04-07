@@ -1,0 +1,14 @@
+{
+    "platform": "linux64",
+    "jdk": "jre.zip",
+    "executable": "myapp",
+    "appjar": "desktop/build/libs/desktop-1.0.jar",
+    "mainclass": "com/bigcustard/planet/desktop/DesktopLauncher",
+    "vmargs": [
+       "-Xmx1G"
+    ],
+    "resources": [
+    ],
+    "minimizejre": "soft",
+    "outdir": "Burpx"
+}

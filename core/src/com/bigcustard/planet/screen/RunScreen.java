@@ -7,30 +7,27 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.core.BlurpRuntime;
-import com.bigcustard.blurp.model.BlurpMain;
-import com.bigcustard.blurp.model.ImageSprite;
+import com.bigcustard.blurp.bootstrap.BlurpRunnable;
+import com.bigcustard.blurp.bootstrap.BlurpRuntime;
+import com.bigcustard.blurp.scripting.ScriptEngineBlurpRunnable;
 import com.bigcustard.blurp.ui.BlurpScreen;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import java.io.StringReader;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class RunScreen {
 
     public static void showRunScreen(Viewport viewport, Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
+        BlurpRuntime blurpRuntime = BlurpRuntime.begin(viewport);
+        blurpRuntime.start("Groovy", game.code());
+        setScreen.accept(blurpRuntime.getScreen());
 
-        BlurpRuntime runtime = BlurpRuntime.begin(viewport);
-        BlurpMain script = new BlurpMain() {
-            @Override
-            public void run() {
-                new ImageSprite("games/" + game.name() + "/build/" + game.imageModel().images().get(0).filename(), 300, 150);
-            }
-        };
-        runtime.start(script);
-        BlurpScreen blurpScreen = runtime.getScreen();
-        setScreen.accept(blurpScreen);
-        blurpScreen.setRenderListener((batch, delta, eventType) -> {
+        blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
             if (eventType == RenderListener.EventType.PostRender) {
                 int crossX = viewport.getScreenWidth() - 40;
                 int crossY = viewport.getScreenHeight() - 40;
@@ -39,7 +36,7 @@ public class RunScreen {
                 closeIcon.draw(batch, crossX, crossY, 32, 32);
 
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(viewport, crossX, crossY)) {
-                    runtime.end();
+                    blurpRuntime.end();
                     exit.run();
                 }
             }
