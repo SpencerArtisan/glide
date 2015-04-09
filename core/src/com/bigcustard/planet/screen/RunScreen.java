@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.bootstrap.BlurpRunnable;
@@ -27,6 +30,16 @@ public class RunScreen {
         BlurpRuntime blurpRuntime = BlurpRuntime.begin(viewport);
         blurpRuntime.start("Groovy", game.code());
         setScreen.accept(blurpRuntime.getScreen());
+
+//        ImageButton closeButton = new ImageButton(skin, "close-button");
+//        closeButton.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                blurpRuntime.end();
+//            }
+//        });
+//        closeButton.setPosition(viewport.getScreenWidth() - 40, viewport.getScreenHeight() - 40);
+//        blurpRuntime.getScreen().addActor(closeButton);
 
         blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
             int crossX = viewport.getScreenWidth() - 40;
