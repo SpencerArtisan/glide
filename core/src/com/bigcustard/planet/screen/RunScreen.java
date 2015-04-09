@@ -27,22 +27,20 @@ public class RunScreen {
         BlurpRuntime blurpRuntime = BlurpRuntime.begin(viewport);
         blurpRuntime.start("Groovy", game.code());
         setScreen.accept(blurpRuntime.getScreen());
-        AtomicBoolean alive = new AtomicBoolean(true);
 
         blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
-            if (!alive.get()) return;
+            int crossX = viewport.getScreenWidth() - 40;
+            int crossY = viewport.getScreenHeight() - 40;
+
+            Drawable closeIcon = skin.getDrawable("close");
 
             if (eventType == RenderListener.EventType.PostRender) {
-                batch.setColor(1,1,1,1);
-                int crossX = viewport.getScreenWidth() - 40;
-                int crossY = viewport.getScreenHeight() - 40;
-
-                Drawable closeIcon = skin.getDrawable("close");
                 closeIcon.draw(batch, crossX, crossY, closeIcon.getMinWidth(), closeIcon.getMinHeight());
+            }
 
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickedOnClose(viewport, crossX, crossY)) {
-                    alive.set(false);
-                    System.out.println("END");
+            if (eventType == RenderListener.EventType.PostFrame) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) &&
+                        clickedOnClose(viewport, crossX, crossY, closeIcon.getMinWidth(), closeIcon.getMinHeight())) {
                     blurpRuntime.end();
                     exit.run();
                 }
@@ -50,11 +48,11 @@ public class RunScreen {
         });
     }
 
-    private static boolean clickedOnClose(Viewport viewport, int crossX, int crossY) {
+    private static boolean clickedOnClose(Viewport viewport, int crossX, int crossY, float width, float height) {
         int x = Gdx.input.getX();
         int y = Gdx.input.getY();
         Vector3 world = viewport.getCamera().unproject(new Vector3(x, y, 0));
-        return world.x > crossX && world.x < crossX + 32 &&
-                world.y > crossY && world.y < crossY + 32;
+        return world.x > crossX && world.x < crossX + width &&
+                world.y > crossY && world.y < crossY + height;
     }
 }
