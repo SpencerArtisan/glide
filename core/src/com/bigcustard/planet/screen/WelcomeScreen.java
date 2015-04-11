@@ -200,7 +200,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void showRunScreen(Game game) {
-		RunScreen.showRunScreen(viewport, skin, game, setScreen, () -> showCodingScreen(() -> game));
+		new RunScreen(viewport, skin, game, setScreen, () -> showCodingScreen(() -> game)).showScreen();
 	}
 
 	private void showError(Throwable e) {

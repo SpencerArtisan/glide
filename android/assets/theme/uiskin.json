@@ -32,7 +32,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
     trash-button: { imageUp: trash, imageOver: trash-highlight },
-    close-button: { imageUp: close, imageOver: close }
+    close-button: { imageUp: close, imageOver: close-over }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: { vScroll: default-scroll, vScrollKnob: default-round, hScrollKnob: default-round-horiz, hScroll: default-scroll }
