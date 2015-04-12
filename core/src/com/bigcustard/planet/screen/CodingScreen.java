@@ -1,6 +1,7 @@
 package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,7 +30,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.function.Consumer;
 
 public class CodingScreen extends ScreenAdapter {
-    private CommandHistory commandHistory = new CommandHistory();
     private Skin skin;
     private Stage stage;
     private Table layoutTable;
@@ -39,13 +39,13 @@ public class CodingScreen extends ScreenAdapter {
     private ButtonBar buttonBar;
     private Game game;
     private Runnable exitToMainMenu;
-    private Consumer<Game> runGame;
+    private Consumer<Screen> setScreen;
     private Syntax syntax;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Game> runGame, Syntax syntax) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, Syntax syntax) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
-        this.runGame = runGame;
+        this.setScreen = setScreen;
         this.syntax = syntax;
         this.stage = new Stage(viewport);
 		this.skin = skin;
@@ -57,8 +57,7 @@ public class CodingScreen extends ScreenAdapter {
 
 		stage.addActor(layoutTable);
 		stage.setKeyboardFocus(textArea.textArea());
-
-		Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
 	}
 
     private void layoutScreen() {
@@ -76,30 +75,37 @@ public class CodingScreen extends ScreenAdapter {
     private void createButtonBar() {
         buttonBar = new ButtonBar(skin);
         buttonBar.addSpacer(1);
-        buttonBar.addTextButton("Past <", () -> new UndoCommand(commandHistory));
+        buttonBar.addTextButton("Past <", () -> new UndoCommand(game.getCommandHistory()));
         buttonBar.addImage("tardis2");
-        buttonBar.addTextButton("> Future", () -> new RedoCommand(commandHistory));
+        buttonBar.addTextButton("> Future", () -> new RedoCommand(game.getCommandHistory()));
         buttonBar.addSpacer(16);
         buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, runGame, syntax));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::showRunScreen, syntax));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
     }
 
+    private void showRunScreen(Game game) {
+        new RunScreen(stage.getViewport(), skin, game, setScreen, () -> {
+            setScreen.accept(this);
+            Gdx.input.setInputProcessor(stage);
+        }).showScreen();
+    }
+
     private void createImageArea() {
         ImageAreaModel imageAreaModel = game.imageModel();
         imageArea = new ImageArea(imageAreaModel, skin);
-        new ImageAreaController(imageArea, imageAreaModel, commandHistory).init();
+        new ImageAreaController(imageArea, imageAreaModel, game.getCommandHistory()).init();
     }
 
     private void createTextArea(Game game) {
         model = new TextAreaModel(game.code(), new CodeColorCoder(syntax));
         model.addChangeListener((m) -> game.setCode(model.text()));
-        textArea = new ScrollableTextArea(model, skin, commandHistory);
+        textArea = new ScrollableTextArea(model, skin, game.getCommandHistory());
     }
 
     @Override

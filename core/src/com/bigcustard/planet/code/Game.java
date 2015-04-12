@@ -3,6 +3,7 @@ package com.bigcustard.planet.code;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
@@ -29,6 +30,7 @@ public class Game {
 
     private String code;
     private ImageAreaModel imageModel;
+    private CommandHistory commandHistory;
 
     public static Game create() {
         return create(preferences(), parentFolder(), new ImageAreaModel());
@@ -62,6 +64,7 @@ public class Game {
     }
 
     private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
+        this.commandHistory = new CommandHistory();
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
@@ -71,6 +74,10 @@ public class Game {
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
         save();
+    }
+
+    public CommandHistory getCommandHistory() {
+        return commandHistory;
     }
 
     public static FileHandle[] allGameFolders() {

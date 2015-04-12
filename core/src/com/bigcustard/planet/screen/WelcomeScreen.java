@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -191,16 +192,12 @@ public class WelcomeScreen extends ScreenAdapter {
 					viewport,
 					skin,
 					this::showWelcomeScreen,
-					this::showRunScreen,
+					setScreen,
 					PLUGIN.syntax());
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {
 			showError(e);
 		}
-	}
-
-	private void showRunScreen(Game game) {
-		new RunScreen(viewport, skin, game, setScreen, () -> showCodingScreen(() -> game)).showScreen();
 	}
 
 	private void showError(Throwable e) {
