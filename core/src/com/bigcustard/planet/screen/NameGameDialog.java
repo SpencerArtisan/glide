@@ -30,9 +30,14 @@ public class NameGameDialog extends Dialog {
         futureGameName.set(nameTextField.getText());
     }
 
+    @Override
+    public float getPrefWidth() {
+        return 440;
+    }
+
     private void layoutControls(Game game, Skin skin) {
         Table contentTable = getContentTable();
-        contentTable.padTop(20).padLeft(60).padRight(60);
+        contentTable.padTop(20).padLeft(40).padRight(40);
         text("Name your game");
         contentTable.row();
         createNameField(game, skin);
@@ -44,7 +49,7 @@ public class NameGameDialog extends Dialog {
     private void createNameField(Game game, Skin skin) {
         nameTextField = new TextField(game.isNamed() ? game.name() : "", skin);
         nameTextField.setAlignment(Align.center);
-        nameTextField.setMaxLength(16);
+        nameTextField.setMaxLength(24);
         nameTextField.setCursorPosition(nameTextField.getText().length());
     }
 }
