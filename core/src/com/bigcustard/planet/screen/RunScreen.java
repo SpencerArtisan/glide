@@ -61,8 +61,10 @@ public class RunScreen {
     }
 
     private void renderStage(Batch batch, float delta) {
+        if (batch.isDrawing()) batch.end();
         getStage(batch).act(Math.min(delta, 1 / 60f));
         getStage(batch).draw();
+
     }
 
     private Stage getStage(Batch batch) {
