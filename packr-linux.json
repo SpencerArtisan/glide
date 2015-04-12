@@ -1,6 +1,6 @@
 {
     "platform": "linux64",
-    "jdk": "jre.zip",
+    "jdk": "jdk.zip",
     "executable": "myapp",
     "appjar": "desktop/build/libs/desktop-1.0.jar",
     "mainclass": "com/bigcustard/planet/desktop/DesktopLauncher",
@@ -8,7 +8,8 @@
        "-Xmx1G"
     ],
     "resources": [
+      "android/assets"
     ],
     "minimizejre": "soft",
-    "outdir": "Burpx"
+    "outdir": "Burpl-linux"
 }
