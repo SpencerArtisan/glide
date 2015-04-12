@@ -4,9 +4,7 @@
 // Use KEYBOARD to use keys to control stuff //
 ///////////////////////////////////////////////
 
-import com.bigcustard.blurp.bootstrap.*
-import com.bigcustard.blurp.core.*
-import com.bigcustard.blurp.model.*
+import com.bigcustard.blurp.model.Key
 
 world = blurp.imageSprite("world.png")
 
