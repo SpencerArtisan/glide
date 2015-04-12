@@ -36,7 +36,7 @@ public class TypeCommandTest {
     @Test
     public void executeWhenAreaSelected() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         command = new TypeCommand(model, "abcd");
         command.execute();
         assertThat(model.text()).isEqualTo("helabcdere");
@@ -65,7 +65,7 @@ public class TypeCommandTest {
     @Test
     public void undoWhenAreaSelected() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         command = new TypeCommand(model, "abcd");
         command.execute();
         command.undo();

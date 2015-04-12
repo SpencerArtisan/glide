@@ -34,7 +34,7 @@ public class AddImageCommand extends AbstractCommand {
             FileHandle mainImageFile = generateImageFileHandle(url);
             mainImageFile.write(imageStream, false);
             imageStream.close();
-            XY<Integer> imageSize = imageSize(mainImageFile);
+            XY imageSize = imageSize(mainImageFile);
             image = new ImageModel(mainImageFile, imageSize.x, imageSize.y);
             return model.addImage(image);
         } catch (IOException e) {
@@ -65,9 +65,9 @@ public class AddImageCommand extends AbstractCommand {
         return candidate;
     }
 
-    protected XY<Integer> imageSize(FileHandle mainImageFile) {
+    protected XY imageSize(FileHandle mainImageFile) {
         Image image = ImageUtils.asImage(mainImageFile);
-        return new XY<>((int) image.getWidth(), (int) image.getHeight());
+        return new XY((int) image.getWidth(), (int) image.getHeight());
     }
 
     protected InputStream inputStream(String url) {

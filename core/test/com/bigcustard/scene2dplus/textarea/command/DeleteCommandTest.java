@@ -28,7 +28,7 @@ public class DeleteCommandTest {
     @Test
     public void executeWhenAreaSelected() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         command = new DeleteCommand(model);
         command.execute();
         assertThat(model.text()).isEqualTo("helere");
@@ -47,7 +47,7 @@ public class DeleteCommandTest {
     @Test
     public void undoWhenAreaSelected() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         command = new DeleteCommand(model);
         command.execute();
         command.undo();

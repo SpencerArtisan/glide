@@ -17,7 +17,7 @@ public class TextAreaController extends ClickListener {
     private TextAreaModel model;
     private ScrollableTextArea view;
     private CommandHistory commandHistory;
-    private XY<Integer> touchDownLocation;
+    private XY touchDownLocation;
     private boolean dragging;
 
     public TextAreaController(TextAreaModel model, ScrollableTextArea view, CommandHistory commandHistory) {
@@ -53,7 +53,7 @@ public class TextAreaController extends ClickListener {
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         if (isOver(event.getListenerActor(), x, y)) {
-            XY<Integer> caretLocation = view.worldPositionToCaretLocation(new XY<>((int) x, (int) y));
+            XY caretLocation = view.worldPositionToCaretLocation(new XY((int) x, (int) y));
             if (dragging) {
                 dragging = false;
                 commandHistory.execute(new SelectCommand(model, touchDownLocation, caretLocation));
@@ -67,7 +67,7 @@ public class TextAreaController extends ClickListener {
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         if (isOver(event.getListenerActor(), x, y)) {
             model.caret().clearSelection();
-            this.touchDownLocation = view.worldPositionToCaretLocation(new XY<>((int) x, (int) y));
+            this.touchDownLocation = view.worldPositionToCaretLocation(new XY((int) x, (int) y));
             Stage stage = view.getStage();
             if (stage != null) stage.setKeyboardFocus(view);
         }
@@ -78,7 +78,7 @@ public class TextAreaController extends ClickListener {
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
         if (isOver(event.getListenerActor(), x, y)) {
             dragging = true;
-            XY<Integer> dragLocation = view.worldPositionToCaretLocation(new XY<>((int) x, (int) y));
+            XY dragLocation = view.worldPositionToCaretLocation(new XY((int) x, (int) y));
             new SelectCommand(model, touchDownLocation, dragLocation).execute();
         }
     }

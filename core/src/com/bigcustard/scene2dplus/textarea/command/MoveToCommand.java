@@ -4,9 +4,9 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
 public class MoveToCommand extends AbstractTextAreaCommand {
-    private final XY<Integer> newCaretLocation;
+    private final XY newCaretLocation;
 
-    public MoveToCommand(TextAreaModel model, XY<Integer> caretLocation) {
+    public MoveToCommand(TextAreaModel model, XY caretLocation) {
         super(model);
         this.newCaretLocation = caretLocation;
     }

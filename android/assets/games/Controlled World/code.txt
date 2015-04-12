@@ -17,4 +17,3 @@ while (true) {
     blurp.blurpify()
 }
 
-

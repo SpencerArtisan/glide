@@ -15,7 +15,7 @@ public class SelectCommandTest {
     @Before
     public void before() {
         model = new TextAreaModel("hello\nthere", null);
-        command = new SelectCommand(model, new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        command = new SelectCommand(model, new XY(3, 0), new XY(2, 1));
     }
 
     @Test

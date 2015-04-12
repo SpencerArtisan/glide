@@ -1,42 +1,39 @@
 package com.bigcustard.scene2dplus;
 
-public class XY<T> {
-	public final T x, y;
+import com.google.common.base.Objects;
 
-	public XY(T x, T y) {
+public class XY {
+	public final int x, y;
+
+	public XY(float x, float y) {
+		this((int) x, (int) y);
+	}
+
+	public XY(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((x == null) ? 0 : x.hashCode());
-		result = prime * result + ((y == null) ? 0 : y.hashCode());
-		return result;
+	public XY add(XY deltaXY) {
+		return new XY(x + deltaXY.x, y + deltaXY.y);
+	}
+
+	public XY subtract(XY deltaXY) {
+		return new XY(x - deltaXY.x, y - deltaXY.y);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		XY other = (XY) obj;
-		if (x == null) {
-			if (other.x != null)
-				return false;
-		} else if (!x.equals(other.x))
-			return false;
-		if (y == null) {
-			if (other.y != null)
-				return false;
-		} else if (!y.equals(other.y))
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		XY xy = (XY) o;
+		return Objects.equal(x, xy.x) &&
+				Objects.equal(y, xy.y);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(x, y);
 	}
 
 	@Override

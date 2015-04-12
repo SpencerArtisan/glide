@@ -112,8 +112,8 @@ public class TextAreaModel {
     }
 
     public String getCurrentLine() {
-        XY<Integer> location = caret().location();
-        int fromIndex = getIndex(new XY<>(0, location.y));
+        XY location = caret().location();
+        int fromIndex = getIndex(new XY(0, location.y));
         int toIndex = fromIndex + currentLineLength();
         return text.substring(fromIndex, toIndex);
     }
@@ -132,7 +132,7 @@ public class TextAreaModel {
 		caret.setLocation(textIndex - index, row);
 	}
 
-    private int getIndex(XY<Integer> location) {
+    private int getIndex(XY location) {
         int index = getIndexForRow(location.y);
         index += location.x;
         return Math.min(index, text.length());
@@ -165,33 +165,33 @@ public class TextAreaModel {
 	}
 
     public class Caret {
-		private XY<Integer> location;
-        private Pair<XY<Integer>, XY<Integer>> selection;
+		private XY location;
+        private Pair<XY, XY> selection;
 		
 		private Caret() {
 			this(0, 0);
 		}
 
         private Caret(int x, int y) {
-			this.location = new XY<>(x, y);
+			this.location = new XY(x, y);
 		}
 
-		public XY<Integer> location() {
+		public XY location() {
 			return location;
 		}
 
-        public Pair<XY<Integer>, XY<Integer>> selection() {
+        public Pair<XY, XY> selection() {
             return selection;
         }
 
-        public void setLocation(XY<Integer> caretLocation) {
+        public void setLocation(XY caretLocation) {
 			this.location = caretLocation;
             changeXIfBeyondEndOfLine();
             clearSelection();
 		}
 
         private void setLocation(int x, int y) {
-			setLocation(new XY<>(x, y));
+			setLocation(new XY(x, y));
 		}
 
         public void clearSelection() {
@@ -199,7 +199,7 @@ public class TextAreaModel {
             changeNotifier.notify(TextAreaModel.this);
         }
 
-        public void setSelection(XY<Integer> start, XY<Integer> end) {
+        public void setSelection(XY start, XY end) {
             setLocation(end);
             if (start.y < end.y || (Objects.equals(start.y, end.y) && start.x < end.x)) {
                 selection = Pair.of(start, end);
@@ -276,8 +276,8 @@ public class TextAreaModel {
 
     public class State {
         private String text;
-        private XY<Integer> caretLocation;
-        private Pair<XY<Integer>, XY<Integer>> caretSelection;
+        private XY caretLocation;
+        private Pair<XY, XY> caretSelection;
 
         private State() {
             this.text = text();

@@ -40,16 +40,16 @@ public class TextArea extends Actor {
         drawText(batch);
     }
 
-    public XY<Integer> caretLocationToPosition(XY<Integer> caret) {
+    public XY caretLocationToPosition(XY caret) {
         float x = LEFT_MARGIN + getX() + caret.x * getColumnWidth();
         float y = -TOP_MARGIN + getHeight() + getY() - caret.y * getRowHeight();
-        return new XY<>((int) x, (int) y);
+        return new XY((int) x, (int) y);
     }
 
-    public XY<Integer> worldPositionToCaretLocation(XY<Integer> worldXY) {
+    public XY worldPositionToCaretLocation(XY worldXY) {
         float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth();
         float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
-        return new XY<>((int) caretX, (int) caretY);
+        return new XY((int) caretX, (int) caretY);
     }
 
     float getRowHeight() {
@@ -66,7 +66,7 @@ public class TextArea extends Actor {
 
     private void drawCurrentLineBackground(Batch batch) {
         if (model.caret().selection() == null) {
-            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<>(0, model.caret().location().y));
+            XY topLeftCurrent = caretLocationToPosition(new XY(0, model.caret().location().y));
             style.focusedBackground.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
@@ -75,16 +75,16 @@ public class TextArea extends Actor {
         Map<Integer, Color> coloredLines = model.getColoredLines();
         for (Map.Entry<Integer, Color> colorLine : coloredLines.entrySet()) {
             SpriteDrawable background = white.tint(colorLine.getValue());
-            XY<Integer> topLeftCurrent = caretLocationToPosition(new XY<>(0, colorLine.getKey()));
+            XY topLeftCurrent = caretLocationToPosition(new XY(0, colorLine.getKey()));
             background.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
     }
 
     private void drawSelectionBackground(Batch batch) {
-        Pair<XY<Integer>, XY<Integer>> selection = model.caret().selection();
+        Pair<XY, XY> selection = model.caret().selection();
         if (selection != null) {
-            XY<Integer> topLeftSelection = caretLocationToPosition(selection.getLeft());
-            XY<Integer> bottomRightSelection = caretLocationToPosition(selection.getRight());
+            XY topLeftSelection = caretLocationToPosition(selection.getLeft());
+            XY bottomRightSelection = caretLocationToPosition(selection.getRight());
             if (!Objects.equals(selection.getLeft().y, selection.getRight().y)) {
                 style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, getWidth() - topLeftSelection.x, getRowHeight());
                 style.selection.draw(batch, 0, bottomRightSelection.y + getRowHeight(), getWidth(), topLeftSelection.y - bottomRightSelection.y - getRowHeight());
@@ -97,7 +97,7 @@ public class TextArea extends Actor {
 
     private void drawText(Batch batch) {
         style.font.setMarkupEnabled(true);
-        XY<Integer> textStart = caretLocationToPosition(new XY<>(0, 0));
+        XY textStart = caretLocationToPosition(new XY(0, 0));
         BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
         setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
         ((Layout) getParent()).invalidate();
@@ -105,7 +105,7 @@ public class TextArea extends Actor {
 
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
-        XY<Integer> caretPosition = caretLocationToPosition(model.caret().location());
+        XY caretPosition = caretLocationToPosition(model.caret().location());
         caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
     }
 }

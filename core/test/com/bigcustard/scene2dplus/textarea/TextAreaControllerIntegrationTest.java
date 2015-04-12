@@ -37,8 +37,8 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void clickingInsideTextAreaSetsCaret() throws Exception {
 		model.setText("Hello\nWorld");
-		XY<Integer> caretLocation = new XY<Integer>(3, 1);
-		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		XY caretLocation = new XY(3, 1);
+		XY clickPosition = new XY(42, 84);
 		when(view.worldPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(event, clickPosition.x, clickPosition.y, 0, 0);
 		XYAssert.assertThat(model.caret()).at(3, 1);
@@ -47,8 +47,8 @@ public class TextAreaControllerIntegrationTest {
 	@Test
 	public void clickingBeyondLineSetsCaretAtLineEnd() throws Exception {
 		model.setText("Hello\nWorld");
-		XY<Integer> caretLocation = new XY<Integer>(99, 1);
-		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		XY caretLocation = new XY(99, 1);
+		XY clickPosition = new XY(42, 84);
 		when(view.worldPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(event, clickPosition.x, clickPosition.y, 0, 0);
         XYAssert.assertThat(model.caret()).at(5, 1);
@@ -56,8 +56,8 @@ public class TextAreaControllerIntegrationTest {
 	
 	@Test
 	public void clickingBeyondRowsInsertsRowsAndSetsCaret() throws Exception {
-		XY<Integer> caretLocation = new XY<Integer>(10, 3);
-		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		XY caretLocation = new XY(10, 3);
+		XY clickPosition = new XY(42, 84);
 		when(view.worldPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(event, clickPosition.x, clickPosition.y, 0, 0);
 		assertThat(model.text()).isEqualTo(("\n\n\n"));
@@ -66,8 +66,8 @@ public class TextAreaControllerIntegrationTest {
 
 	@Test
 	public void clickingBeyondRowsAndEnteringText() throws Exception {
-		XY<Integer> caretLocation = new XY<Integer>(10, 3);
-		XY<Integer> clickPosition = new XY<Integer>(42, 84);
+		XY caretLocation = new XY(10, 3);
+		XY clickPosition = new XY(42, 84);
 		when(view.worldPositionToCaretLocation(clickPosition)).thenReturn(caretLocation);
 		subject.touchUp(event, clickPosition.x, clickPosition.y, 0, 0);
         subject.keyTyped(event, 'h');
@@ -77,10 +77,10 @@ public class TextAreaControllerIntegrationTest {
 
     @Test
     public void selectArea() {
-        XY<Integer> areaStartScreen = new XY<Integer>(10, 300);
-        XY<Integer> areaStart = new XY<Integer>(0, 0);
-        XY<Integer> areaEndScreen = new XY<Integer>(10, 200);
-        XY<Integer> areaEnd = new XY<Integer>(0, 5);
+        XY areaStartScreen = new XY(10, 300);
+        XY areaStart = new XY(0, 0);
+        XY areaEndScreen = new XY(10, 200);
+        XY areaEnd = new XY(0, 5);
         when(view.worldPositionToCaretLocation(areaStartScreen)).thenReturn(areaStart);
         when(view.worldPositionToCaretLocation(areaEndScreen)).thenReturn(areaEnd);
         subject.touchDown(event, areaStartScreen.x, areaStartScreen.y, 0, 0);
@@ -92,8 +92,8 @@ public class TextAreaControllerIntegrationTest {
     @Test
     public void typeWhenAreaSelectedReplacesText() {
         model.setText("hello\nthere");
-        XY<Integer> selectionStart = new XY<Integer>(3, 0);
-        XY<Integer> selectionEnd = new XY<Integer>(2, 1);
+        XY selectionStart = new XY(3, 0);
+        XY selectionEnd = new XY(2, 1);
         model.caret().setSelection(selectionStart, selectionEnd);
         model.insert("Z");
         assertThat(model.text()).isEqualTo("helZere");
@@ -102,8 +102,8 @@ public class TextAreaControllerIntegrationTest {
     @Test
     public void typeWhenAreaSelectedBeyondText() {
         model.setText("");
-        XY<Integer> selectionStart = new XY<Integer>(3, 0);
-        XY<Integer> selectionEnd = new XY<Integer>(2, 1);
+        XY selectionStart = new XY(3, 0);
+        XY selectionEnd = new XY(2, 1);
         model.caret().setSelection(selectionStart, selectionEnd);
         model.insert("Z");
         assertThat(model.text()).isEqualTo("\nZ");
@@ -112,8 +112,8 @@ public class TextAreaControllerIntegrationTest {
     @Test
     public void deletedWhenAreaSelectedDeletedSelectedText() {
         model.setText("hello\nthere");
-        XY<Integer> selectionStart = new XY<Integer>(3, 0);
-        XY<Integer> selectionEnd = new XY<Integer>(2, 1);
+        XY selectionStart = new XY(3, 0);
+        XY selectionEnd = new XY(2, 1);
         model.caret().setSelection(selectionStart, selectionEnd);
         model.deleteCharacter();
         assertThat(model.text()).isEqualTo("helere");

@@ -20,14 +20,14 @@ public class MoveToCommandTest {
     @Test
     public void execute() {
         model.setText("hello\nthere");
-        command = new MoveToCommand(model, new XY<Integer>(2, 1));
+        command = new MoveToCommand(model, new XY(2, 1));
         command.execute();
         XYAssert.assertThat(model.caret()).at(2, 1);
     }
 
     @Test
     public void executeBeyondFileLength() {
-        command = new MoveToCommand(model, new XY<Integer>(0, 2));
+        command = new MoveToCommand(model, new XY(0, 2));
         command.execute();
         XYAssert.assertThat(model.caret()).at(0, 2);
         assertThat(model.text()).isEqualTo("\n\n");
@@ -36,8 +36,8 @@ public class MoveToCommandTest {
     @Test
     public void executeWhenSelection() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
-        command = new MoveToCommand(model, new XY<Integer>(0, 0));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
+        command = new MoveToCommand(model, new XY(0, 0));
         command.execute();
         assertThat(model.caret().isAreaSelected()).isFalse();
         XYAssert.assertThat(model.caret()).at(0, 0);
@@ -46,7 +46,7 @@ public class MoveToCommandTest {
     @Test
     public void undo() {
         model.setText("hello\nthere");
-        command = new MoveToCommand(model, new XY<Integer>(2, 1));
+        command = new MoveToCommand(model, new XY(2, 1));
         command.execute();
         command.undo();
         XYAssert.assertThat(model.caret()).at(0, 0);

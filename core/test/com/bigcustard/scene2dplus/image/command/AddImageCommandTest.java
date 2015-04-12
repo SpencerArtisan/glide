@@ -28,8 +28,8 @@ public class AddImageCommandTest {
         initMocks(this);
         command = new AddImageCommand(model, "http://url/image.png") {
             @Override
-            protected XY<Integer> imageSize(FileHandle mainImageFile) {
-                return new XY<>(1, 2);
+            protected XY imageSize(FileHandle mainImageFile) {
+                return new XY(1, 2);
             }
 
             @Override

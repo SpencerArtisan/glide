@@ -39,21 +39,21 @@ public class TextAreaModelTest {
     @Test
     public void selectionMoveCaretToEndLocation_ForwardSelection() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         XYAssert.assertThat(model.caret().location()).at(2, 1);
     }
 
     @Test
     public void selectionMoveCaretToEndLocation_ReverseSelection() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(2, 1), new XY<Integer>(3, 0));
+        model.caret().setSelection(new XY(2, 1), new XY(3, 0));
         XYAssert.assertThat(model.caret().location()).at(3, 0);
     }
 
     @Test
     public void getSelectionWhenThisIsOne() {
         model.setText("hello\nthere");
-        model.caret().setSelection(new XY<Integer>(3, 0), new XY<Integer>(2, 1));
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         assertThat(model.getSelection()).isEqualTo("lo\nth");
     }
 
