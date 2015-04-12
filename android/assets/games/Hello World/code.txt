@@ -1,6 +1,7 @@
 ////////////////////////////////////////////// 
 //         Welcome to Planet Burpl!         // 
-//      Start writing your game below       // 
-// Look in the Game Library for inspiration // 
+//                                          // 
+//  This demo shows a picture of the world  // 
 ////////////////////////////////////////////// 
 
+blurp.imageSprite("world.png")

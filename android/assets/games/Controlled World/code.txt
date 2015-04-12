@@ -1,0 +1,22 @@
+///////////////////////////////////////////////
+//         Welcome to Planet Burpl!          //
+//                                           //
+// Use KEYBOARD to use keys to control stuff //
+///////////////////////////////////////////////
+
+import com.bigcustard.blurp.bootstrap.*
+import com.bigcustard.blurp.core.*
+import com.bigcustard.blurp.model.*
+
+world = blurp.imageSprite("world.png")
+
+while (true) {
+    if (keyboard.isKeyDown(Key.LEFT)) world.x -= 2
+    if (keyboard.isKeyDown(Key.RIGHT)) world.x += 2
+    if (keyboard.isKeyDown(Key.UP)) world.y += 2
+    if (keyboard.isKeyDown(Key.DOWN)) world.y -= 2
+
+    blurp.blurpify()
+}
+
+

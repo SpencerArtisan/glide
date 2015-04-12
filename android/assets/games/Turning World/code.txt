@@ -1,0 +1,14 @@
+////////////////////////////////////////////// 
+//         Welcome to Planet Burpl!         // 
+//                                          // 
+//    Use ROTATEBY to rotate your sprite    // 
+////////////////////////////////////////////// 
+
+world = blurp.imageSprite("world.png")
+
+while (true) {
+    world.rotateBy(1)
+    blurp.blurpify()
+}
+
+

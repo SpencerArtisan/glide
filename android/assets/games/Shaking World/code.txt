@@ -1,0 +1,13 @@
+////////////////////////////////////////////// 
+//         Welcome to Planet Burpl!         // 
+//                                          // 
+//   Use SCALE to shrink and grow sprites   // 
+//     Use RANDOM for random numbers        //
+////////////////////////////////////////////// 
+
+world = blurp.imageSprite("world.png")
+
+while (true) {
+    world.scale(utils.random(0.95, 1.05))
+    blurp.blurpify()
+}
