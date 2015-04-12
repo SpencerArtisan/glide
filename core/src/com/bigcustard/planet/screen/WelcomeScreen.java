@@ -13,16 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
+import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
@@ -44,6 +42,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Consumer<Screen> setScreen;
 	private Viewport viewport;
 	private Label title;
+	private Cell<Label> titleCell;
 
 	public WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen) {
 		super();
@@ -154,11 +153,9 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void animateTitle() {
         outerTable.getColor().a = 0f;
-		outerTable.addAction(Actions.fadeIn(2f));
-		float labelY = stage.getViewport().getWorldHeight() - 90;
-		title.setPosition(-400, labelY);
-		title.addAction(Actions.moveTo(50, labelY, 0.6f, Interpolation.pow2));
-		stage.addActor(title);
+		outerTable.addAction(Actions.fadeIn(1.3f));
+		titleCell.padLeft(-400);
+		outerTable.addAction(new ChangePaddingAction(this.titleCell, 50, 1, Interpolation.pow2));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
@@ -173,7 +170,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.row();
 		table.add(quitButton).padTop(20f).colspan(2).fillX();
 		outerTable.background(backgroundRegion);
-		outerTable.add(table);
+		title.setX(-55);
+		titleCell = outerTable.add(title).expand().padTop(40).padLeft(50).top().left();
+		outerTable.row();
+		outerTable.add(table).expandY().top();
 		outerTable.setFillParent(true);
 		outerTable.pack();
 		stage.addActor(outerTable);
