@@ -18,6 +18,7 @@ public class CodeColorCoder implements ColorCoder {
             put(Unclassified, "#839496").
             put(Bracket, "#eee8d5").
             put(Brace, "WHITE").
+            put(Dot, "WHITE").
             put(Keyword, "#b58900").
             put(Method, "#268bd2").
             put(Quoted, "#2aa198").

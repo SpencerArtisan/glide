@@ -2,21 +2,36 @@ package com.bigcustard.planet.plugin.groovy;
 
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.SyntaxPart;
+import com.bigcustard.util.Tokenizer;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ObjectArrays;
 import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
 public class GroovySyntax implements Syntax {
-    private static final Set KEYWORDS = ImmutableSet.of("public");
+    private static final Set KEYWORDS = ImmutableSet.of(
+            "public", "boolean", "break", "case", "catch", "char", "class", "const", "continue", "do",
+            "double", "else", "enum", "extends", "final", "finally", "float", "for", "goto", "if",
+            "implements", "import", "int", "interface", "long", "new", "package", "private", "protected",
+            "public", "return", "static", "super", "switch", "this", "throw", "throws", "try", "void", "while",
+            "keyboard", "isKeyDown", "Key", "blurp", "blurpify", "true", "false", "imageSprite", "utils",
+            "random", "scale", "UP", "DOWN", "LEFT", "RIGHT", "SPACE", "rotateBy", "colour", "setPosition",
+            "moveTowards", "scale", "flipX", "flipY"
+    );
+    private static String[] TOKENS = new String[] {" ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", "."};
+    private static String[] OPERATORS = new String[] {"==", "<", ">", "<=", ">=", "!=", "=", "++", "--", "+=",
+                                                      "-=", "+", "-", " / ", "*", "&&", "||", ","};
 
     @Override
     public List<SyntaxPart> parse(String program) {
@@ -48,13 +63,15 @@ public class GroovySyntax implements Syntax {
             }
         } catch (Exception e) {
             // Something unexpected when awry
+            System.out.println("Failed to parse code: " + e);
         }
         return errorLines;
     }
 
     @SuppressWarnings("unchecked")
     private List<SyntaxPart> categoriseWordsIntoTypes(String program) {
-        List wordsAndSpaces = Collections.list(new StringTokenizer(program, " \t\n\r\f(){}\"", true));
+        String[] deliminators = ObjectArrays.concat(TOKENS, OPERATORS, String.class);
+        List<String> wordsAndSpaces = new Tokenizer(program, deliminators).run();
         return Lists.transform(wordsAndSpaces, new Function<String, SyntaxPart>() {
             public SyntaxPart apply(String word) {
                 return new SyntaxPart(word, getType(word));
@@ -101,6 +118,10 @@ public class GroovySyntax implements Syntax {
             return Comment;
         } else if (word.equals("\"")) {
             return UnclosedQuote;
+        } else if (word.equals(".")) {
+            return Dot;
+        } else if (Arrays.asList(OPERATORS).contains(word)) {
+            return Operator;
         }
         return Unclassified;
     }

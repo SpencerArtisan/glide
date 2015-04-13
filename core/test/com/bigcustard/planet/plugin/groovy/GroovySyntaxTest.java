@@ -28,6 +28,148 @@ public class GroovySyntaxTest {
 	}
 
 	@Test
+	public void dot() throws Exception {
+        assertThat(syntax.parse("blah.wibble")).containsExactly(
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart(".", Dot),
+				new SyntaxPart("wibble", Unclassified));
+	}
+
+	@Test
+	public void comma() throws Exception {
+        assertThat(syntax.parse("blah, wibble")).containsExactly(
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart(",", Operator),
+				new SyntaxPart(" wibble", Unclassified));
+	}
+
+	@Test
+	public void equals() throws Exception {
+        assertThat(syntax.parse("a == b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("==", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void greaterThan() throws Exception {
+        assertThat(syntax.parse("a > b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart(">", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void lessThan() throws Exception {
+        assertThat(syntax.parse("a < b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("<", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void greaterThanOrEqualTo() throws Exception {
+        assertThat(syntax.parse("a >= b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart(">=", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void lessThanOrEqualTo() throws Exception {
+        assertThat(syntax.parse("a <= b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("<=", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void assign() throws Exception {
+        assertThat(syntax.parse("a = b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("=", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void add() throws Exception {
+        assertThat(syntax.parse("a + b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("+", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void subtract() throws Exception {
+        assertThat(syntax.parse("a - b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("-", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void divide() throws Exception {
+        assertThat(syntax.parse("a / b")).containsExactly(
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" / ", Operator),
+				new SyntaxPart("b", Unclassified));
+	}
+
+	@Test
+	public void multiply() throws Exception {
+        assertThat(syntax.parse("a * b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("*", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void increment() throws Exception {
+        assertThat(syntax.parse("a += b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("+=", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void incrementByOne() throws Exception {
+        assertThat(syntax.parse("a++")).containsExactly(
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart("++", Operator));
+	}
+
+	@Test
+	public void decrementByOne() throws Exception {
+        assertThat(syntax.parse("a--")).containsExactly(
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart("--", Operator));
+	}
+
+	@Test
+	public void decrement() throws Exception {
+        assertThat(syntax.parse("a -= b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("-=", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void and() throws Exception {
+        assertThat(syntax.parse("a && b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("&&", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
+	public void or() throws Exception {
+        assertThat(syntax.parse("a || b")).containsExactly(
+				new SyntaxPart("a ", Unclassified),
+				new SyntaxPart("||", Operator),
+				new SyntaxPart(" b", Unclassified));
+	}
+
+	@Test
 	public void bracket() throws Exception {
         assertThat(syntax.parse("(blah)")).containsExactly(
 				new SyntaxPart("(", Bracket),
