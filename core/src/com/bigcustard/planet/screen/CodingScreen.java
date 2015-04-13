@@ -14,7 +14,6 @@ import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
 import com.bigcustard.scene2dplus.button.ButtonBar;
-import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;

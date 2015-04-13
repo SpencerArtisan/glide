@@ -5,8 +5,6 @@ import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
-import com.bigcustard.util.FutureSupplier;
-import com.google.common.util.concurrent.SettableFuture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

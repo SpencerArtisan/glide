@@ -1,6 +1,5 @@
 package com.bigcustard.util;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import org.junit.Test;
 

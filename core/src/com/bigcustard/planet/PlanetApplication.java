@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.screen.ResourceManager;
 import com.bigcustard.planet.screen.WelcomeScreen;
-import com.bigcustard.scene2dplus.command.CommandHistory;
 
 public class PlanetApplication extends com.badlogic.gdx.Game {
     private Viewport viewport;

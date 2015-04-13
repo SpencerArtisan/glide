@@ -21,7 +21,6 @@ import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
-import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -120,14 +119,15 @@ public class WelcomeScreen extends ScreenAdapter {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				hideButtons();
-				GameLibraryDialog dialog = new GameLibraryDialog(skin);
+				final GameLibraryDialog dialog = new GameLibraryDialog(skin);
 				dialog.show(stage);
 				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
 					@Override
 					public void onSuccess(FileHandle gameFolder) {
-						showButtons();
+						showMainMenu();
 						refreshButtonEnabledStatuses();
 						if (gameFolder != null) {
+							dialog.remove();
 							showCodingScreen(() -> Game.from(gameFolder));
 						}
 					}
@@ -201,10 +201,10 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void showError(Throwable e) {
-		new ErrorDialog(skin, e, this::showButtons).show(stage);
+		new ErrorDialog(skin, e, this::showMainMenu).show(stage);
 	}
 
-	private void showButtons() {
+	private void showMainMenu() {
 		getTable().setVisible(true);
 	}
 
