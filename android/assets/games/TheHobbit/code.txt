@@ -4,7 +4,7 @@
 // Click here if you need help 
 ////////////////////////////////// 
 
-blurp.imageSprite("image2.jpg")
+blurp.imageSprite("c64_hobbit.jpg")
 
 
 

@@ -37,6 +37,8 @@ public class RunScreen {
 
     public void showScreen() {
         BlurpConfiguration config = new BlurpConfiguration(viewport);
+        String contentRoot = game.folder().path() + "/build";
+        config.setContentRoot(contentRoot);
 
         blurpRuntime = BlurpRuntime.begin(config);
         blurpRuntime.start("Groovy", game.code());
@@ -44,7 +46,6 @@ public class RunScreen {
         blurpRuntime.onRenderEvent(new RenderListener() {
             @Override
             public void handlePreRenderEvent(float v) {
-
             }
 
             @Override
