@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
@@ -35,11 +36,19 @@ public class RunScreen {
     }
 
     public void showScreen() {
-        blurpRuntime = BlurpRuntime.begin(viewport);
+        BlurpConfiguration config = new BlurpConfiguration(viewport);
+
+        blurpRuntime = BlurpRuntime.begin(config);
         blurpRuntime.start("Groovy", game.code());
         setScreen.accept(blurpRuntime.getScreen());
-        blurpRuntime.getScreen().setRenderListener((batch, delta, eventType) -> {
-            if (eventType == RenderListener.EventType.PostFrame) {
+        blurpRuntime.onRenderEvent(new RenderListener() {
+            @Override
+            public void handlePreRenderEvent(float v) {
+
+            }
+
+            @Override
+            public void handlePostRenderEvent(Batch batch, float delta) {
                 renderStage(batch, delta);
             }
         });

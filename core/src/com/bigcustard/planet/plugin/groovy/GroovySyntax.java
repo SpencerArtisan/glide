@@ -23,7 +23,7 @@ public class GroovySyntax implements Syntax {
             "double", "else", "enum", "extends", "final", "finally", "float", "for", "goto", "if",
             "implements", "import", "int", "interface", "long", "new", "package", "private", "protected",
             "public", "return", "static", "super", "switch", "this", "throw", "throws", "try", "void", "while",
-            "keyboard", "isKeyDown", "Key", "blurp", "blurpify", "true", "false", "imageSprite", "utils",
+            "keyboard", "isKeyPressed", "keys", "blurp", "blurpify", "true", "false", "imageSprite", "utils",
             "random", "scale", "UP", "DOWN", "LEFT", "RIGHT", "SPACE", "rotateBy", "colour", "setPosition",
             "moveTowards", "scale", "flipX", "flipY"
     );
