@@ -120,7 +120,7 @@ public class CodingScreen extends ScreenAdapter {
         errorLabel.setVisible(false);
         game.registerChangeListener((g) -> {
             errorLabel.setVisible(game.runtimeError() != null);
-            errorLabel.setText("Run error: " + game.runtimeError());
+            errorLabel.setText("Runtime error: " + game.runtimeError());
         });
     }
 

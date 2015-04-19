@@ -6,18 +6,4 @@
 
 blurp.imageSprite("1415500673_r.png")
 
-
-
-
-
-
-
-
-
-
-
-csdc
-
-
-ds
-ffff23
+ddddd

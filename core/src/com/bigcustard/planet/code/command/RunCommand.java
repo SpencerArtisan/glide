@@ -26,6 +26,7 @@ public class RunCommand extends AbstractCommand {
     public void execute() {
         buildFolder.mkdirs();
         game.imageModel().images().forEach(this::resize);
+        game.setRuntimeError(null);
         runGame.accept(game);
     }
 
