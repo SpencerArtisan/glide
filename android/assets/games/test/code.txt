@@ -4,3 +4,4 @@
 // Look in the Game Library for inspiration // 
 ////////////////////////////////////////////// 
 
+blurp.imageSprite("1415500673_r.png")

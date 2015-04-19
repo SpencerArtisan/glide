@@ -26,7 +26,7 @@ public class AddImageCommandTest {
     @Before
     public void before() {
         initMocks(this);
-        command = new AddImageCommand(model, "http://url/image.png") {
+        command = new AddImageCommand(model, "http://url/image.png?queryparams") {
             @Override
             protected XY imageSize(FileHandle mainImageFile) {
                 return new XY(1, 2);

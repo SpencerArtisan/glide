@@ -49,6 +49,7 @@ public class AddImageCommand extends AbstractCommand {
 
     private FileHandle generateImageFileHandle(String url) {
         String filename = url.substring(url.lastIndexOf("/") + 1);
+        filename = filename.contains("?") ? filename.substring(0, filename.indexOf("?")) : filename;
         return findUniqueImageName(filename);
     }
 
