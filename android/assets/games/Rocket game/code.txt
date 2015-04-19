@@ -13,7 +13,7 @@ f_u_alien.y=1000
 f_u_alien.x=80
 
 //alien movement
-movement=+8
+movement=8
 
 //bulets
 bullet=blurp.imageSprite("bullet.gif")
@@ -34,16 +34,14 @@ if (keyboard.isKeyPressed(keys.SPACE)&& !fired){
     bullet.x=Rocket.x
 }
 if (fired) {
-    bullet.y+=25
+    bullet.y+=5
     if(bullet.y>1200){
        fired=false
     }
 }
 
 //alien move
-movement {
-  
- blurp.blurpify()
+  blurp.blurpify()
 }
 
 

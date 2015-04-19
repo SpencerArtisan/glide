@@ -6,7 +6,7 @@ import com.google.common.base.Strings;
 import java.util.function.Consumer;
 
 public class ImageModel {
-    private static int MAX_NAME_LENGTH = 16;
+    private static int MAX_NAME_LENGTH = 12;
 
     private FileHandle file;
     private String name;
@@ -105,7 +105,7 @@ public class ImageModel {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
-        return filename.substring(0, nameLength);
+        return filename.substring(0, nameLength) + filename.substring(dotIndex);
     }
 
     public ValidationResult validate() {
