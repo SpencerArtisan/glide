@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
+import com.bigcustard.blurp.bootstrap.BlurpExceptionHandler;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
@@ -52,6 +53,10 @@ public class RunScreen {
             public void handlePostRenderEvent(Batch batch, float delta) {
                 renderStage(batch, delta);
             }
+        });
+        blurpRuntime.onException(e -> {
+            Throwable error = e.getCause().getCause().getCause();
+            System.out.println(error);
         });
     }
 
