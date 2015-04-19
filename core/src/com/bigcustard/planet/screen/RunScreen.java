@@ -55,8 +55,8 @@ public class RunScreen {
             }
         });
         blurpRuntime.onException(e -> {
-            Throwable error = e.getCause().getCause().getCause();
-            System.out.println(error);
+            game.setRuntimeError(e);
+            exitGame();
         });
     }
 
@@ -81,10 +81,14 @@ public class RunScreen {
         closeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                blurpRuntime.end();
-                exit.run();
+                exitGame();
             }
         });
+    }
+
+    private void exitGame() {
+        blurpRuntime.end();
+        exit.run();
     }
 
     private void layoutScreen() {

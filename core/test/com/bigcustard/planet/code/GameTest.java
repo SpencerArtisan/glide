@@ -11,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
@@ -369,6 +370,38 @@ public class GameTest {
         game.registerChangeListener(mockChangeListener);
         changeImageListenerCaptor.getValue().accept(mockImage);
         verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void notifiesOfRuntimeError() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.registerChangeListener(mockChangeListener);
+        game.setRuntimeError(new RuntimeException("Bad stuff"));
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void runtimeErrorMessageWhenNone() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        assertThat(game.runtimeError()).isNull();
+    }
+
+    @Test
+    public void extractRuntimeErrorMessage() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.setRuntimeError(new RuntimeException(new RuntimeException(new RuntimeException(new ScriptException("Bad stuff")))));
+        assertThat(game.runtimeError()).isEqualTo("Bad stuff");
+    }
+
+    @Test
+    public void unexpectedRuntimeErrorMessage() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame();
+        game.setRuntimeError(new RuntimeException("Bad stuff"));
+        assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 
     private Game newGame() {

@@ -47,7 +47,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-vertical: { background: default-slider, knob: default-round }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: { font: big-font, fontColor: solarizedLight }
+	default: { font: big-font, fontColor: solarizedLight },
+    error: { font: big-font, fontColor: solarizedLight, background: solarizedError }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { font: code-font, fontColor: white, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground }

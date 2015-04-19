@@ -31,6 +31,7 @@ public class Game {
     private String code;
     private ImageAreaModel imageModel;
     private CommandHistory commandHistory;
+    private RuntimeException runtimeError;
 
     public static Game create() {
         return create(preferences(), parentFolder(), new ImageAreaModel());
@@ -151,6 +152,19 @@ public class Game {
 
     public static boolean hasMostRecent() {
         return hasMostRecent(preferences(), parentFolder());
+    }
+
+    public void setRuntimeError(RuntimeException runtimeError) {
+        this.runtimeError = runtimeError;
+        changeNotifier.notify(this);
+    }
+
+    public String runtimeError() {
+        try {
+            return runtimeError == null ? null : runtimeError.getCause().getCause().getCause().getMessage();
+        } catch (Exception e) {
+            return runtimeError.getMessage();
+        }
     }
 
     @VisibleForTesting

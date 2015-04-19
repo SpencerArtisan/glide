@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -40,6 +41,7 @@ public class CodingScreen extends ScreenAdapter {
     private Runnable exitToMainMenu;
     private Consumer<Screen> setScreen;
     private Syntax syntax;
+    private Label errorLabel;
 
     public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, Syntax syntax) {
         this.game = game;
@@ -50,6 +52,7 @@ public class CodingScreen extends ScreenAdapter {
 		this.skin = skin;
 
         createTextArea(game);
+        createErrorLabel(game);
         createButtonBar();
         createImageArea();
         layoutScreen();
@@ -60,10 +63,15 @@ public class CodingScreen extends ScreenAdapter {
 	}
 
     private void layoutScreen() {
+        Table textAreaTable = new Table();
+        textAreaTable.add(textArea).fill().expand();
+        textAreaTable.row();
+        textAreaTable.add(errorLabel).expandX().fillX();
+
         layoutTable = new Table();
         layoutTable.background(skin.getDrawable("solarizedLine"));
         layoutTable.row();
-        layoutTable.add(textArea).expand().fill();
+        layoutTable.add(textAreaTable).expand().fill();
         layoutTable.add(imageArea).width(280).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
@@ -107,6 +115,15 @@ public class CodingScreen extends ScreenAdapter {
         textArea = new ScrollableTextArea(model, skin, game.getCommandHistory());
     }
 
+    private void createErrorLabel(Game game) {
+        errorLabel = new Label("", skin, "error");
+        errorLabel.setVisible(false);
+        game.registerChangeListener((g) -> {
+            errorLabel.setVisible(game.runtimeError() != null);
+            errorLabel.setText("Run error: " + game.runtimeError());
+        });
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -119,7 +136,6 @@ public class CodingScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-//		textArea.setSize(width, height);
 	}
 
     private void errorReporter(Exception e, Runnable onClosed) {
