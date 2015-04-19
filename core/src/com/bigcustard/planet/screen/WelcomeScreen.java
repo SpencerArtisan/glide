@@ -193,7 +193,7 @@ public class WelcomeScreen extends ScreenAdapter {
 					skin,
 					this::showWelcomeScreen,
 					setScreen,
-					PLUGIN.syntax());
+					PLUGIN);
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {
 			showError(e);

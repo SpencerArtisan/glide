@@ -14,6 +14,7 @@ import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Syntax;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
+import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
@@ -40,14 +41,14 @@ public class CodingScreen extends ScreenAdapter {
     private Game game;
     private Runnable exitToMainMenu;
     private Consumer<Screen> setScreen;
-    private Syntax syntax;
+    private Plugin languagePlugin;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, Syntax syntax) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, Plugin languagePlugin) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.setScreen = setScreen;
-        this.syntax = syntax;
+        this.languagePlugin = languagePlugin;
         this.stage = new Stage(viewport);
 		this.skin = skin;
 
@@ -90,14 +91,14 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::showRunScreen, syntax));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::showRunScreen, languagePlugin));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
     }
 
-    private void showRunScreen(Game game) {
-        new RunScreen(stage.getViewport(), skin, game, setScreen, () -> {
+    private void showRunScreen(Game game, String language) {
+        new RunScreen(stage.getViewport(), skin, game, language, setScreen, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
         }).showScreen();
@@ -110,7 +111,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), new CodeColorCoder(syntax));
+        model = new TextAreaModel(game.code(), new CodeColorCoder(languagePlugin.syntax()));
         model.addChangeListener((m) -> game.setCode(model.text()));
         textArea = new ScrollableTextArea(model, skin, game.getCommandHistory());
     }

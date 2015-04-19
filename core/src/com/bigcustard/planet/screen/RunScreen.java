@@ -25,12 +25,14 @@ public class RunScreen {
     private BlurpRuntime blurpRuntime;
     private ImageButton closeButton;
     private Game game;
+    private String language;
     private Consumer<Screen> setScreen;
     private Runnable exit;
 
-    public RunScreen(Viewport viewport, Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
+    public RunScreen(Viewport viewport, Skin skin, Game game, String language, Consumer<Screen> setScreen, Runnable exit) {
         this.game = game;
         this.viewport = viewport;
+        this.language = language;
         this.setScreen = setScreen;
         this.exit = exit;
         this.skin = skin;
@@ -42,7 +44,7 @@ public class RunScreen {
         config.setContentRoot(contentRoot);
 
         blurpRuntime = BlurpRuntime.begin(config);
-        blurpRuntime.start("Groovy", game.code());
+        blurpRuntime.start(language, game.code(), game.name().replace(" ", "_"));
         setScreen.accept(blurpRuntime.getScreen());
         blurpRuntime.onRenderEvent(new RenderListener() {
             @Override

@@ -5,5 +5,5 @@ import com.bigcustard.planet.code.Syntax;
 
 public interface Plugin {
     Syntax syntax();
-    Runner runner();
+    String language();
 }

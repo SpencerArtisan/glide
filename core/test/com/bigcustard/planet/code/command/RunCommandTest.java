@@ -3,6 +3,7 @@ package com.bigcustard.planet.code.command;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Syntax;
+import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -18,13 +19,14 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RunCommandTest {
     private RunCommand command;
+    @Mock private Plugin languagePlugin;
     @Mock private Syntax syntax;
     @Mock private FileHandle gameFolder;
     @Mock private FileHandle buildFolder;
     @Mock private ImageAreaModel imageAreaModel;
     @Mock private ImageModel imageModel;
     @Mock private Game game;
-    @Mock private Consumer<Game> runGame;
+    @Mock private BiConsumer<Game, String> runGame;
 
     @Before
     public void before() {
@@ -32,7 +34,9 @@ public class RunCommandTest {
         when(game.imageModel()).thenReturn(imageAreaModel);
         when(game.folder()).thenReturn(gameFolder);
         when(gameFolder.child("build")).thenReturn(buildFolder);
-        command = spy(new RunCommand(game, runGame, syntax));
+        when(languagePlugin.syntax()).thenReturn(syntax);
+        when(languagePlugin.language()).thenReturn("language");
+        command = spy(new RunCommand(game, runGame, languagePlugin));
         doNothing().when(command).resize(any(ImageModel.class));
     }
 
@@ -64,6 +68,6 @@ public class RunCommandTest {
     @Test
     public void execute() {
         command.execute();
-        verify(runGame).accept(game);
+        verify(runGame).accept(game, "language");
     }
 }

@@ -11,7 +11,7 @@ public class GroovyPlugin implements Plugin {
     }
 
     @Override
-    public Runner runner() {
-        return new GroovyRunner();
+    public String language() {
+        return "groovy";
     }
 }
