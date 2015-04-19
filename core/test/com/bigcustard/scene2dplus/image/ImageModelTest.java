@@ -34,7 +34,7 @@ public class ImageModelTest {
     public void longImageName() {
         when(mockImageFile.name()).thenReturn("a_long_image_file_name.png");
         subject = new ImageModel(mockImageFile, 100, 50);
-        assertThat(subject.name()).isEqualTo("a_long_image.png");
+        assertThat(subject.name()).isEqualTo("a_long_image_.png");
     }
 
     @Test
