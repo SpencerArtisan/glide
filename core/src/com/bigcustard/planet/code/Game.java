@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class Game {
     public static final String PREFERENCES_KEY = "Game";
-    public static String CODE_FILE = "code.txt";
+    private static String CODE_FILE_WITHOUT_SUFFIX = "code";
     public static final String DEFAULT_NAME = "Unnamed Game";
     public static String TEMPLATE =
                       "////////////////////////////////////////////// \n"
@@ -32,6 +32,7 @@ public class Game {
     private ImageAreaModel imageModel;
     private CommandHistory commandHistory;
     private RuntimeException runtimeError;
+    private Language language;
 
     public static Game create() {
         return create(preferences(), parentFolder(), new ImageAreaModel());
@@ -49,7 +50,7 @@ public class Game {
     static Game create(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel) {
         FileHandle gameFolder = findUniqueName(parentFolder);
         String code = TEMPLATE;
-        return new Game(preferences, gameFolder, code, imageModel);
+        return new Game(preferences, gameFolder, code, imageModel, Language.Groovy);
     }
 
     @VisibleForTesting
@@ -60,12 +61,13 @@ public class Game {
 
     @VisibleForTesting
     static Game from(Preferences preferences, FileHandle gameFolder, ImageAreaModel imageModel) {
-        String code = gameFolder.child(CODE_FILE).readString();
-        return new Game(preferences, gameFolder, code, imageModel);
+        String code = gameFolder.child("code.groovy").readString();
+        return new Game(preferences, gameFolder, code, imageModel, Language.Groovy);
     }
 
-    private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel) {
+    private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel, Language language) {
         this.commandHistory = new CommandHistory();
+        this.language = language;
         this.gameFolder = gameFolder;
         this.preferences = preferences;
         this.code = code;
@@ -75,6 +77,10 @@ public class Game {
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
         save();
+    }
+
+    public Language language() {
+        return language;
     }
 
     public CommandHistory getCommandHistory() {
@@ -134,7 +140,7 @@ public class Game {
     }
 
     public void save() {
-        gameFolder.child(CODE_FILE).writeString(code, false);
+        gameFolder.child("code.groovy").writeString(code, false);
         imageModel.save();
     }
 
@@ -146,8 +152,8 @@ public class Game {
         return !name().startsWith(DEFAULT_NAME);
     }
 
-    public boolean isValid(Syntax syntax) {
-        return syntax.isValid(code) && imageModel.isValid();
+    public boolean isValid() {
+        return language.isValid(code) && imageModel.isValid();
     }
 
     public static boolean hasMostRecent() {
@@ -172,7 +178,7 @@ public class Game {
         String gameName = preferences.getString(RECENT_GAME);
         if (Strings.isNullOrEmpty(gameName)) return false;
         FileHandle gameFolder = parentFolder.child(gameName);
-        return gameFolder.exists() && gameFolder.child(CODE_FILE).exists();
+        return gameFolder.exists() && gameFolder.child("code.groovy").exists();
     }
 
     private static FileHandle findUniqueName(FileHandle parentFolder) {

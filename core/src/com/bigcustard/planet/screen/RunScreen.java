@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
-import com.bigcustard.blurp.bootstrap.BlurpExceptionHandler;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
@@ -25,14 +24,12 @@ public class RunScreen {
     private BlurpRuntime blurpRuntime;
     private ImageButton closeButton;
     private Game game;
-    private String language;
     private Consumer<Screen> setScreen;
     private Runnable exit;
 
-    public RunScreen(Viewport viewport, Skin skin, Game game, String language, Consumer<Screen> setScreen, Runnable exit) {
+    public RunScreen(Viewport viewport, Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
         this.game = game;
         this.viewport = viewport;
-        this.language = language;
         this.setScreen = setScreen;
         this.exit = exit;
         this.skin = skin;
@@ -43,8 +40,10 @@ public class RunScreen {
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
+        System.setProperty("org.jruby.embed.localvariable.behavior", "transient");
+
         blurpRuntime = BlurpRuntime.begin(config);
-        blurpRuntime.start(language, game.code(), game.name().replace(" ", "_"));
+        blurpRuntime.start(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
         setScreen.accept(blurpRuntime.getScreen());
         blurpRuntime.onRenderEvent(new RenderListener() {
             @Override

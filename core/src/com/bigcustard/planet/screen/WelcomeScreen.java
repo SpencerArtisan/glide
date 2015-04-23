@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.plugin.Plugin;
-import com.bigcustard.planet.plugin.groovy.GroovyPlugin;
+import com.bigcustard.planet.plugin.jruby.JRubyPlugin;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class WelcomeScreen extends ScreenAdapter {
-	private static Plugin PLUGIN = new GroovyPlugin();
+	private static Plugin PLUGIN = new JRubyPlugin();
 	private final Skin skin;
 	private Table table;
 	private Table outerTable;

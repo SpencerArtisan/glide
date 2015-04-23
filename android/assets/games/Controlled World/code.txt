@@ -1,17 +1,16 @@
-///////////////////////////////////////////////
-//         Welcome to Planet Burpl!          //
-//                                           //
-// Use KEYBOARD to use keys to control stuff //
-///////////////////////////////////////////////
+#///////////////////////////////////////////////
+#//         Welcome to Planet Burpl!          //
+#//                                           //
+#// Use KEYBOARD to use keys to control stuff //
+#///////////////////////////////////////////////
 
+world = $blurp.imageSprite("world.png")
 
-world = blurp.imageSprite("world.png")
+while true do
+    world.x -= 8 if ($keyboard.isKeyPressed($keys.LEFT))
+    world.x += 8 if ($keyboard.isKeyPressed($keys.RIGHT)) 
+    world.y += 8 if ($keyboard.isKeyPressed($keys.UP))
+    world.y -= 8 if ($keyboard.isKeyPressed($keys.DOWN))
 
-while (true) {
-    if (keyboard.isKeyPressed(keys.LEFT)) world.x -= 2
-    if (keyboard.isKeyPressed(keys.RIGHT)) world.x += 2
-    if (keyboard.isKeyPressed(keys.UP)) world.y += 2
-    if (keyboard.isKeyPressed(keys.DOWN)) world.y -= 2
-
-    blurp.blurpify()
-}
+    $blurp.blurpify()
+end

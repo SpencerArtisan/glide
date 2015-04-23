@@ -1,7 +1,7 @@
-////////////////////////////////////////////// 
-//         Welcome to Planet Burpl!         // 
-//                                          // 
-//  This demo shows a picture of the world  // 
-////////////////////////////////////////////// 
+#////////////////////////////////////////////// 
+#//         Welcome to Planet Burpl!         // 
+#//                                          // 
+#//  This demo shows a picture of the world  // 
+#////////////////////////////////////////////// 
 
-blurp.imageSprite("world.png")
+$blurp.imageSprite("world.png")

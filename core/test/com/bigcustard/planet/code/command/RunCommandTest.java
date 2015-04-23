@@ -12,6 +12,7 @@ import org.mockito.Mock;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -26,7 +27,7 @@ public class RunCommandTest {
     @Mock private ImageAreaModel imageAreaModel;
     @Mock private ImageModel imageModel;
     @Mock private Game game;
-    @Mock private BiConsumer<Game, String> runGame;
+    @Mock private Consumer<Game> runGame;
 
     @Before
     public void before() {
@@ -34,9 +35,7 @@ public class RunCommandTest {
         when(game.imageModel()).thenReturn(imageAreaModel);
         when(game.folder()).thenReturn(gameFolder);
         when(gameFolder.child("build")).thenReturn(buildFolder);
-        when(languagePlugin.syntax()).thenReturn(syntax);
-        when(languagePlugin.language()).thenReturn("language");
-        command = spy(new RunCommand(game, runGame, languagePlugin));
+        command = spy(new RunCommand(game, runGame));
         doNothing().when(command).resize(any(ImageModel.class));
     }
 
@@ -55,19 +54,19 @@ public class RunCommandTest {
 
     @Test
     public void cannotExecuteWhenGameInvalid() {
-        when(game.isValid(syntax)).thenReturn(false);
+        when(game.isValid()).thenReturn(false);
         assertThat(command.canExecute()).isFalse();
     }
 
     @Test
     public void canExecuteWhenGameValid() {
-        when(game.isValid(syntax)).thenReturn(true);
+        when(game.isValid()).thenReturn(true);
         assertThat(command.canExecute()).isTrue();
     }
 
     @Test
     public void execute() {
         command.execute();
-        verify(runGame).accept(game, "language");
+        verify(runGame).accept(game);
     }
 }
