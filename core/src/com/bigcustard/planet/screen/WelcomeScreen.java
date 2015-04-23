@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.Language;
 import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.planet.plugin.jruby.JRubyPlugin;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
@@ -98,7 +99,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				showCodingScreen(Game::create);
+				showCodingScreen(() -> Game.create(Language.Groovy));
 			}
 		});
 	}

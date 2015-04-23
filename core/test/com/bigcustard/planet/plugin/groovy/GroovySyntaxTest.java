@@ -178,6 +178,24 @@ public class GroovySyntaxTest {
 	}
 
 	@Test
+	public void squareBracket() throws Exception {
+        assertThat(syntax.parse("[blah]")).containsExactly(
+				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart("]", SquareBracket));
+	}
+
+	@Test
+	public void doubleSquareBracket() throws Exception {
+        assertThat(syntax.parse("[[blah]]")).containsExactly(
+				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart("]", SquareBracket),
+				new SyntaxPart("]", SquareBracket));
+	}
+
+	@Test
 	public void brace() throws Exception {
         assertThat(syntax.parse("{blah}")).containsExactly(
 				new SyntaxPart("{", Brace),

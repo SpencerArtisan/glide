@@ -55,8 +55,9 @@ public class CodeColorCoder implements ColorCoder {
     }
 
     private String colorCode(SyntaxPart syntaxPart) {
-        return colors.containsKey(syntaxPart.type()) ?
-                String.format("[%s]%s[]", colors.get(syntaxPart.type()), syntaxPart.text()) :
-                syntaxPart.text();
+        String color = colors.get(syntaxPart.type());
+        String text = syntaxPart.text();
+        if (text.equals("[")) text = "[[";
+        return colors.containsKey(syntaxPart.type()) ? String.format("[%s]%s[]", color, text) : text;
     }
 }

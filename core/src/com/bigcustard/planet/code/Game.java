@@ -34,8 +34,8 @@ public class Game {
     private RuntimeException runtimeError;
     private Language language;
 
-    public static Game create() {
-        return create(preferences(), parentFolder(), new ImageAreaModel());
+    public static Game create(Language language) {
+        return create(preferences(), parentFolder(), new ImageAreaModel(), language);
     }
 
     public static Game mostRecent() {
@@ -47,10 +47,10 @@ public class Game {
     }
 
     @VisibleForTesting
-    static Game create(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel) {
+    static Game create(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel, Language language) {
         FileHandle gameFolder = findUniqueName(parentFolder);
         String code = TEMPLATE;
-        return new Game(preferences, gameFolder, code, imageModel, Language.Groovy);
+        return new Game(preferences, gameFolder, code, imageModel, language);
     }
 
     @VisibleForTesting

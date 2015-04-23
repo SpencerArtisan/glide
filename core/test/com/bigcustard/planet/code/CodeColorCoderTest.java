@@ -23,7 +23,29 @@ public class CodeColorCoderTest {
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new CodeColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW"), "ff0000");
+		coder = new CodeColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW", SquareBracket, "WHITE"), "ff0000");
+	}
+
+	@Test
+	public void openSquareBracket() throws Exception {
+		when(syntax.parse("[")).thenReturn(Arrays.asList(
+				new SyntaxPart("[", SquareBracket)));
+		assertThat(coder.encode("[")).isEqualTo("[WHITE][[[]");
+	}
+
+	@Test
+	public void doubleOpenSquareBracket() throws Exception {
+		when(syntax.parse("[[")).thenReturn(Arrays.asList(
+				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("[", SquareBracket)));
+		assertThat(coder.encode("[[")).isEqualTo("[WHITE][[[][WHITE][[[]");
+	}
+
+	@Test
+	public void closeSquareBracket() throws Exception {
+		when(syntax.parse("]")).thenReturn(Arrays.asList(
+				new SyntaxPart("]", SquareBracket)));
+		assertThat(coder.encode("]")).isEqualTo("[WHITE]][]");
 	}
 
 	@Test

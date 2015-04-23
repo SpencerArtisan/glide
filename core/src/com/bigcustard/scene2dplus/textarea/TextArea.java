@@ -96,11 +96,16 @@ public class TextArea extends Actor {
     }
 
     private void drawText(Batch batch) {
-        style.font.setMarkupEnabled(true);
-        XY textStart = caretLocationToPosition(new XY(0, 0));
-        BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
-        setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
-        ((Layout) getParent()).invalidate();
+        try {
+            style.font.setMarkupEnabled(true);
+            XY textStart = caretLocationToPosition(new XY(0, 0));
+            BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
+            setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
+            ((Layout) getParent()).invalidate();
+        } catch (Exception e) {
+            System.out.println("Failed to draw text: " + model.coloredText());
+            throw e;
+        }
     }
 
     private void drawCaret(Batch batch) {

@@ -27,7 +27,7 @@ public class GroovySyntax implements Syntax {
             "random", "scale", "UP", "DOWN", "LEFT", "RIGHT", "SPACE", "rotateBy", "colour", "setPosition",
             "moveTowards", "scale", "flipX", "flipY"
     );
-    private static String[] TOKENS = new String[] {" ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", "."};
+    private static String[] TOKENS = new String[] {" ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]"};
     private static String[] OPERATORS = new String[] {"==", "<", ">", "<=", ">=", "!=", "=", "++", "--", "+=",
                                                       "-=", "+", "-", " / ", "*", "&&", "||", ","};
 
@@ -94,7 +94,11 @@ public class GroovySyntax implements Syntax {
                     }
                 }
 
-                if (lastElement.type() == newElement.type()) {
+                if (lastElement.type() != Brace &&
+                        lastElement.type() != Bracket &&
+                        lastElement.type() != SquareBracket &&
+                        lastElement.type() != Dot &&
+                        lastElement.type() == newElement.type()) {
                     newElement = new SyntaxPart(lastElement.text() + newElement.text(), newElement.type());
                     collapsed.remove(collapsed.size() - 1);
                 }
@@ -110,6 +114,8 @@ public class GroovySyntax implements Syntax {
             return Keyword;
         } else if (word.equals("(") || word.equals(")")) {
             return Bracket;
+        } else if (word.equals("[") || word.equals("]")) {
+            return SquareBracket;
         } else if (word.equals("{") || word.equals("}")) {
             return Brace;
         } else if (word.startsWith("//")) {
