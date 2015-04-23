@@ -28,7 +28,6 @@ public class GameTest {
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockGroovyCodeFile;
     @Mock private ImageModel mockImage;
-    @Mock private Syntax mockSyntax;
     @Mock private Consumer<Game> mockChangeListener;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
@@ -100,29 +99,29 @@ public class GameTest {
     @Test
     public void isValidIfCodeAndImagesValid() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setCode("code");
-        when(mockSyntax.isValid("code")).thenReturn(true);
+        when(game.language().isValid("code")).thenReturn(true);
         when(mockImageModel.isValid()).thenReturn(true);
         assertThat(game.isValid()).isTrue();
     }
 
-//    @Test
-//    public void isInvalidIfCodeInvalid() {
-//        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-//        Game game = newGame();
-//        game.setCode("code");
-//        when(mockSyntax.isValid("code")).thenReturn(false);
-//        when(mockImageModel.isValid()).thenReturn(true);
-//        assertThat(game.isValid()).isFalse();
-//    }
+    @Test
+    public void isInvalidIfCodeInvalid() {
+        when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        Game game = newGame(Language.Groovy);
+        game.setCode("code");
+        when(game.language().isValid("code")).thenReturn(false);
+        when(mockImageModel.isValid()).thenReturn(true);
+        assertThat(game.isValid()).isFalse();
+    }
 
     @Test
     public void isInvalidIfImagesInvalid() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setCode("code");
-        when(mockSyntax.isValid("code")).thenReturn(true);
+        when(game.language().isValid("code")).thenReturn(true);
         when(mockImageModel.isValid()).thenReturn(false);
         assertThat(game.isValid()).isFalse();
     }
@@ -130,7 +129,7 @@ public class GameTest {
     @Test
     public void createNewUsesTemplate() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         assertThat(game.code()).isEqualTo(Game.TEMPLATE);
     }
 
@@ -139,7 +138,7 @@ public class GameTest {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
         when(mockGameFolder.exists()).thenReturn(false);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         assertThat(game.name()).isEqualTo("Unnamed Game");
     }
 
@@ -152,7 +151,7 @@ public class GameTest {
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder2.exists()).thenReturn(false);
         when(mockGameFolder2.name()).thenReturn("Unnamed Game 2");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         assertThat(game.name()).isEqualTo("Unnamed Game 2");
     }
 
@@ -169,7 +168,7 @@ public class GameTest {
         when(mockGameFolder2.exists()).thenReturn(true);
         when(mockGameFolder3.exists()).thenReturn(false);
         when(mockGameFolder3.name()).thenReturn("Unnamed Game 3");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         assertThat(game.name()).isEqualTo("Unnamed Game 3");
     }
 
@@ -214,7 +213,7 @@ public class GameTest {
     public void changingGameNameRenamesDirectory() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         when(mockGameFolder.exists()).thenReturn(true);
         FileHandle mockNewGameFolder = mock(FileHandle.class);
         when(mockGameFolder.sibling("name")).thenReturn(mockNewGameFolder);
@@ -231,7 +230,7 @@ public class GameTest {
         FileHandle mockNewGameFolder = mock(FileHandle.class);
         when(mockGameFolder.sibling("name")).thenReturn(mockNewGameFolder);
         when(mockNewGameFolder.exists()).thenReturn(false);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setName("name");
         verify(mockGameFolder.child("code.groovy"), times(2)).writeString(game.code(), false);
     }
@@ -243,7 +242,7 @@ public class GameTest {
         FileHandle mockNewGameFolder = mock(FileHandle.class);
         when(mockGameFolder.sibling("name")).thenReturn(mockNewGameFolder);
         when(mockNewGameFolder.exists()).thenReturn(true);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         when(mockGameFolder.exists()).thenReturn(true);
         game.setName("name");
     }
@@ -252,7 +251,7 @@ public class GameTest {
     public void changingTextStoresCode() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setCode("code");
         verify(mockGameFolder.child("code.groovy")).writeString("code", false);
     }
@@ -261,7 +260,7 @@ public class GameTest {
     public void addImageStoresImageModel() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        newGame();
+        newGame(Language.Groovy);
         addImageListenerCaptor.getValue().accept(mockImage);
         verify(mockImageModel, times(2)).save();
     }
@@ -270,7 +269,7 @@ public class GameTest {
     public void removeImageStoresImageModel() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        newGame();
+        newGame(Language.Groovy);
         removeImageListenerCaptor.getValue().accept(mockImage);
         verify(mockImageModel, times(2)).save();
     }
@@ -279,7 +278,7 @@ public class GameTest {
     public void changeImageStoresImageModel() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        newGame();
+        newGame(Language.Groovy);
         changeImageListenerCaptor.getValue().accept(mockImage);
         verify(mockImageModel, times(2)).save();
     }
@@ -288,7 +287,7 @@ public class GameTest {
     public void deleteRemovesFolder() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.delete();
         verify(mockGameFolder).deleteDirectory();
     }
@@ -297,7 +296,7 @@ public class GameTest {
     public void isUnnamedWhenNew() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        assertThat(newGame().isNamed()).isFalse();
+        assertThat(newGame(Language.Groovy).isNamed()).isFalse();
     }
 
     @Test
@@ -305,7 +304,7 @@ public class GameTest {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
         when(mockGameFolder.name()).thenReturn("name");
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setName("name");
         assertThat(game.isNamed()).isTrue();
     }
@@ -333,13 +332,13 @@ public class GameTest {
     @Test
     public void providesAccessToTheImageModel() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        assertThat(newGame().imageModel()).isSameAs(mockImageModel);
+        assertThat(newGame(Language.Groovy).imageModel()).isSameAs(mockImageModel);
     }
 
     @Test
     public void notifiesOfCodeChange() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.registerChangeListener(mockChangeListener);
         game.setCode("change");
         verify(mockChangeListener).accept(game);
@@ -348,7 +347,7 @@ public class GameTest {
     @Test
     public void notifiesOfImageAdd() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.registerChangeListener(mockChangeListener);
         addImageListenerCaptor.getValue().accept(mockImage);
         verify(mockChangeListener).accept(game);
@@ -357,7 +356,7 @@ public class GameTest {
     @Test
     public void notifiesOfImageRemove() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.registerChangeListener(mockChangeListener);
         removeImageListenerCaptor.getValue().accept(mockImage);
         verify(mockChangeListener).accept(game);
@@ -366,7 +365,7 @@ public class GameTest {
     @Test
     public void notifiesOfImageChange() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.registerChangeListener(mockChangeListener);
         changeImageListenerCaptor.getValue().accept(mockImage);
         verify(mockChangeListener).accept(game);
@@ -375,7 +374,7 @@ public class GameTest {
     @Test
     public void notifiesOfRuntimeError() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.registerChangeListener(mockChangeListener);
         game.setRuntimeError(new RuntimeException("Bad stuff"));
         verify(mockChangeListener).accept(game);
@@ -384,14 +383,14 @@ public class GameTest {
     @Test
     public void runtimeErrorMessageWhenNone() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         assertThat(game.runtimeError()).isNull();
     }
 
     @Test
     public void extractRuntimeErrorMessage() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setRuntimeError(new RuntimeException(new RuntimeException(new RuntimeException(new ScriptException("Bad stuff")))));
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
@@ -399,12 +398,12 @@ public class GameTest {
     @Test
     public void unexpectedRuntimeErrorMessage() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        Game game = newGame();
+        Game game = newGame(Language.Groovy);
         game.setRuntimeError(new RuntimeException("Bad stuff"));
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 
-    private Game newGame() {
+    private Game newGame(Language language) {
         return Game.create(mockPreferences, mockParentFolder, mockImageModel);
     }
 

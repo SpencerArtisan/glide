@@ -34,7 +34,7 @@ if (keyboard.isKeyPressed(keys.SPACE)&& !fired){
     bullet.x=Rocket.x
 }
 if (fired) {
-    bullet.y+=5
+    bullet.y+=25
     if(bullet.y>1200){
        fired=false
     }
