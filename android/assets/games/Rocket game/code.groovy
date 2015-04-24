@@ -16,7 +16,7 @@ f_u_alien.y=1000
 f_u_alien.x=80
 
 //f_u_aliens
-f_u_aliens=[
+
 
 //alien movement
 movement=8

@@ -27,13 +27,13 @@ public class ImageUtils {
             String extension = source.extension();
             BufferedImage inputImage = ImageIO.read(imageFile);
 
-            final int color = inputImage.getRGB(0, 0);
-            java.awt.Image transparentImage = makeColorTransparent(inputImage, new Color(color));
+//            final int color = inputImage.getRGB(0, 0);
+//            java.awt.Image transparentImage = makeColorTransparent(inputImage, new Color(color));
 
             BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = outputImage.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-            g.drawImage(transparentImage, 0, 0, width, height, null);
+            g.drawImage(inputImage, 0, 0, width, height, null);
             g.dispose();
 
             ImageIO.write(outputImage, extension, target.file());
