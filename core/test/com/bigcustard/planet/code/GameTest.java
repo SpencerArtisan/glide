@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -27,6 +28,7 @@ public class GameTest {
     @Mock private FileHandle mockParentFolder;
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockGroovyCodeFile;
+    @Mock private FileHandle mockJRubyCodeFile;
     @Mock private ImageModel mockImage;
     @Mock private Consumer<Game> mockChangeListener;
     @Mock private Language mockLanguage;
@@ -38,6 +40,8 @@ public class GameTest {
     public void before() {
         initMocks(this);
         when(mockGameFolder.child("code.groovy")).thenReturn(mockGroovyCodeFile);
+        when(mockGroovyCodeFile.extension()).thenReturn("groovy");
+        when(mockJRubyCodeFile.extension()).thenReturn("jruby");
         doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerRemoveImageListener(removeImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
@@ -404,11 +408,29 @@ public class GameTest {
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 
+    @Test
+    public void fromFileUsesGroovySuffixToDetermineLanguage() {
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[]{mockGroovyCodeFile});
+        Game game = fromGame();
+        assertThat(game.language()).isEqualTo(Language.Groovy);
+    }
+
+    @Test
+    public void fromFileUsesRubySuffixToDetermineLanguage() {
+        Game game = fromGame();
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockJRubyCodeFile});
+        assertThat(game.language()).isEqualTo(Language.JRuby);
+    }
+
     private Game newGame(Language language) {
         return Game.create(mockPreferences, mockParentFolder, mockImageModel, language);
     }
 
     private Game continueGame() {
         return Game.mostRecent(mockPreferences, mockParentFolder, mockImageModel);
+    }
+
+    private Game fromGame() {
+        return Game.from(mockPreferences, mockGameFolder, mockImageModel);
     }
 }
