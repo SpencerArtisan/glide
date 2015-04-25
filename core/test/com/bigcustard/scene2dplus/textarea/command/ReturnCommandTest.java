@@ -4,6 +4,7 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.XYAssert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,10 +19,21 @@ public class ReturnCommandTest {
     }
 
     @Test
-    public void execute() {
+    public void executeWhenEmptyText() {
         command = new ReturnCommand(model);
         command.execute();
         assertThat(model.text()).isEqualTo("\n");
+        XYAssert.assertThat(model.caret()).at(0, 1);
+    }
+
+    @Test
+    @Ignore
+    public void executeMaintainsTabSpace() {
+        model.setText("  hello");
+        model.caret().setLocation(new XY(2, 0));
+        command = new ReturnCommand(model);
+        command.execute();
+        assertThat(model.text()).isEqualTo("  hello\n  ");
         XYAssert.assertThat(model.caret()).at(0, 1);
     }
 

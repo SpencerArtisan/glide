@@ -23,9 +23,10 @@ public class GroovySyntax implements Syntax {
             "double", "else", "enum", "extends", "final", "finally", "float", "for", "goto", "if",
             "implements", "import", "int", "interface", "long", "new", "package", "private", "protected",
             "public", "return", "static", "super", "switch", "this", "throw", "throws", "try", "void", "while",
-            "keyboard", "isKeyPressed", "keys", "blurp", "blurpify", "true", "false", "imageSprite", "utils",
-            "random", "scale", "UP", "DOWN", "LEFT", "RIGHT", "SPACE", "rotateBy", "colour", "setPosition",
-            "moveTowards", "scale", "flipX", "flipY"
+            "keyboard", "isKeyPressed", "Key", "blurp", "blurpify", "true", "false", "createTextSprite",
+            "createImageSprite", "utils", "random", "scale", "Key_Left", "Key_Down", "Key_Up", "Key_Right",
+            "Key_Space", "rotateBy", "colour", "setPosition", "moveTowards", "scale", "flipX", "flipY",
+            "position", "x", "y", "in", "add", "Colours", "text"
     );
     private static String[] TOKENS = new String[] {" ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]"};
     private static String[] OPERATORS = new String[] {"==", "<", ">", "<=", ">=", "!=", "=", "++", "--", "+=",

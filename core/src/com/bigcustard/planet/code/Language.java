@@ -27,4 +27,18 @@ public class Language {
     public String scriptEngine() {
         return scriptEngine;
     }
+
+    @Override
+    public String toString() {
+        return scriptEngine;
+    }
+
+    public static Language from(String scriptEngine) {
+        if (scriptEngine.equals(JRuby.scriptEngine())) {
+            return JRuby;
+        } else if (scriptEngine.equals(Groovy.scriptEngine())) {
+            return Groovy;
+        }
+        throw new IllegalArgumentException("Unknown language " + scriptEngine);
+    }
 }

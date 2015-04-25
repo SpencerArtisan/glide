@@ -9,6 +9,8 @@ import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.function.Consumer;
 
 public class Game {
@@ -61,8 +63,11 @@ public class Game {
 
     @VisibleForTesting
     static Game from(Preferences preferences, FileHandle gameFolder, ImageAreaModel imageModel) {
-        String code = gameFolder.child("code.groovy").readString();
-        return new Game(preferences, gameFolder, code, imageModel, Language.Groovy);
+        FileHandle[] codeFiles = gameFolder.list((dir, name) -> {
+            return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
+        });
+        FileHandle codeFile = codeFiles[0];
+        return new Game(preferences, gameFolder, codeFile.readString(), imageModel, Language.from(codeFile.extension()));
     }
 
     private Game(Preferences preferences, FileHandle gameFolder, String code, ImageAreaModel imageAreaModel, Language language) {
