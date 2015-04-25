@@ -23,9 +23,12 @@ while (true) {
     world.moveTowards(targetX,targetY,speed) 
    if (world.x == targetX && world.y == targetY) {
         targetX = utils.random(50, 1550)
+        
         targetY = utils.random(50, 1000)
         speed = utils.random(100, 1000)
     }
+    
+
 
  world1.moveTowards(targetX1, targetY1, speed1)
     blurp.blurpify()

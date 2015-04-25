@@ -27,14 +27,13 @@ public class ReturnCommandTest {
     }
 
     @Test
-    @Ignore
     public void executeMaintainsTabSpace() {
         model.setText("  hello");
-        model.caret().setLocation(new XY(2, 0));
+        model.caret().setLocation(new XY(4, 0));
         command = new ReturnCommand(model);
         command.execute();
-        assertThat(model.text()).isEqualTo("  hello\n  ");
-        XYAssert.assertThat(model.caret()).at(0, 1);
+        assertThat(model.text()).isEqualTo("  he\n  llo");
+        XYAssert.assertThat(model.caret()).at(2, 1);
     }
 
     @Test
