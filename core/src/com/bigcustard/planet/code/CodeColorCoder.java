@@ -54,10 +54,13 @@ public class CodeColorCoder implements ColorCoder {
         return Maps.asMap(syntax.errorLines(program), input -> errorColor);
     }
 
+    private String encodeSpecialCharacters(String program) {
+        return program.replace("[", "[[");
+    }
+
     private String colorCode(SyntaxPart syntaxPart) {
         String color = colors.get(syntaxPart.type());
-        String text = syntaxPart.text();
-        if (text.equals("[")) text = "[[";
+        String text = encodeSpecialCharacters(syntaxPart.text());
         return colors.containsKey(syntaxPart.type()) ? String.format("[%s]%s[]", color, text) : text;
     }
 }
