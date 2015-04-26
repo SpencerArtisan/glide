@@ -8,7 +8,7 @@
 // Create 4 worlds and spread them out horizontally
 worlds = []
 for (i in 1..4) {
-    world = blurp.imageSprite("world.png")
+    world = blurp.createImageSprite("world.png")
     world.x = i * 350
     world.y = 900
     worlds.add world

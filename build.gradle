@@ -46,7 +46,7 @@ project(":desktop") {
 }
 
 //project(":android") {
-//    apply plugin: "android"
+//    apply language: "android"
 //
 //    configurations { natives }
 //

@@ -4,7 +4,7 @@
 //   Use MOVETOWARDS to move your sprite    // 
 ////////////////////////////////////////////// 
 
-world = blurp.imageSprite("world.png")
+world = blurp.createImageSprite("world.png")
 targetX = 400
 targetY = 300
 speed = 500

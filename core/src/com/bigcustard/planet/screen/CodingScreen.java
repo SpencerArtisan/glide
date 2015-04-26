@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
-import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
@@ -41,7 +40,7 @@ public class CodingScreen extends ScreenAdapter {
     private Consumer<Screen> setScreen;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, Plugin languagePlugin) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.setScreen = setScreen;

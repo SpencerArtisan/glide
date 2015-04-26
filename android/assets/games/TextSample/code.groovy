@@ -5,7 +5,7 @@
 ////////////////////////////////////////////// 
 import com.bigcustard.blurp.model.constants.Colours
 
-text = blurp.createTexSprite("Score: -----").position(80, 1000)
+text = blurp.createTextSprite("Score: -----").position(80, 1000)
 text.colour = Colours.DODGER_BLUE
 score = 1000
 

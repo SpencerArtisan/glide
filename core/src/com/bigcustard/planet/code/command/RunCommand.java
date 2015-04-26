@@ -2,13 +2,10 @@ package com.bigcustard.planet.code.command;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.Language;
-import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.image.ImageUtils;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class RunCommand extends AbstractCommand {

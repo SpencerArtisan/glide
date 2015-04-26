@@ -1,7 +1,7 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.plugin.groovy.GroovySyntax;
-import com.bigcustard.planet.plugin.jruby.JRubySyntax;
+import com.bigcustard.planet.language.GroovySyntax;
+import com.bigcustard.planet.language.JRubySyntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 
 public class Language {

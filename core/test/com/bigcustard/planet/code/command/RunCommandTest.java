@@ -3,7 +3,6 @@ package com.bigcustard.planet.code.command;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Syntax;
-import com.bigcustard.planet.plugin.Plugin;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.util.Arrays;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +18,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RunCommandTest {
     private RunCommand command;
-    @Mock private Plugin languagePlugin;
     @Mock private Syntax syntax;
     @Mock private FileHandle gameFolder;
     @Mock private FileHandle buildFolder;

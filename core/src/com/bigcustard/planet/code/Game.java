@@ -145,7 +145,7 @@ public class Game {
     }
 
     public void save() {
-        gameFolder.child("code.groovy").writeString(code, false);
+        gameFolder.child(CODE_FILE_WITHOUT_SUFFIX + "." + language().scriptEngine()).writeString(code, false);
         imageModel.save();
     }
 

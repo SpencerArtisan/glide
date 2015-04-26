@@ -40,6 +40,7 @@ public class GameTest {
     @Before
     public void before() {
         initMocks(this);
+        when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockGameFolder.child("code.groovy")).thenReturn(mockGroovyCodeFile);
         when(mockGroovyCodeFile.extension()).thenReturn("groovy");
         when(mockJRubyCodeFile.extension()).thenReturn("jruby");
