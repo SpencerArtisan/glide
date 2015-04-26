@@ -63,7 +63,7 @@ public class CodingScreen extends ScreenAdapter {
         Table textAreaTable = new Table();
         textAreaTable.add(textArea).fill().expand();
         textAreaTable.row();
-        textAreaTable.add(errorLabel).expandX().fillX();
+        textAreaTable.add(errorLabel).fillX();
 
         layoutTable = new Table();
         layoutTable.background(skin.getDrawable("solarizedLine"));
@@ -115,6 +115,7 @@ public class CodingScreen extends ScreenAdapter {
     private void createErrorLabel(Game game) {
         errorLabel = new Label("", skin, "error");
         errorLabel.setVisible(false);
+        errorLabel.setWrap(true);
         game.registerChangeListener((g) -> {
             errorLabel.setVisible(game.runtimeError() != null);
             errorLabel.setText("Runtime error: " + game.runtimeError());
