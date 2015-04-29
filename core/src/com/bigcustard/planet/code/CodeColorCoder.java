@@ -43,10 +43,14 @@ public class CodeColorCoder implements ColorCoder {
 
     @Override
     public String encode(String program) {
-        return FluentIterable
+        System.out.println("Encode start");
+        String res = FluentIterable
                 .from(syntax.parse(program))
                 .transform(this::colorCode)
                 .join(Joiner.on(""));
+        System.out.println("Encode end");
+
+        return res;
     }
 
     @Override

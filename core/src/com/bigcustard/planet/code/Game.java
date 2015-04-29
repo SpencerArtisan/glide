@@ -81,6 +81,7 @@ public class Game {
         this.imageModel.registerAddImageListener((image) -> onImageChange());
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
+        preferences.putString(RECENT_GAME, name());
         save();
     }
 

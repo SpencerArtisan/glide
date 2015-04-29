@@ -7,9 +7,13 @@
 import com.bigcustard.blurp.model.constants.*
 score=0
 text = blurp.createTextSprite("Score: -----").position(80, 1000)
+blurp.createTextSprite("Press ESCAPE to play again").position(80, 80)
+    
+ 
 
 
 
+collide= false
 
 kills=0
 //star
@@ -17,33 +21,28 @@ star=blurp.createImageSprite("Star.gif")
 
 //ufo
 ufo=blurp.createImageSprite("ufo")
-ufo.x=-1000
-ufo.y= 1000
+
 
 
 doublekill=blurp.createImageSprite("Double_kill")
-doublekill.y=20000
+
 
 
 
 ab=blurp.createImageSprite("bullet.gif")
-ab.y=-1000
-abfired= false
+
 
 
 
 
 //Rocket Sprite
 Rocket=blurp.createImageSprite("Rocket.png")
-Rocket.y=130
 
 
 
 
 //bulets
 bullet=blurp.createImageSprite("bullet.gif")
-bullet.y=-1000
-fired= false
 
 
 
@@ -53,12 +52,39 @@ fired= false
 f_u_aliens = []
 for (i in 1..15) {
     f_u_alien = blurp.createImageSprite("f_u_alien.png")
-    f_u_alien.x = i * 100
-    f_u_alien.y = 900
     f_u_aliens.add f_u_alien
+
 }
 
 //___________________________________________________________________________________________________
+
+//new game loop
+while(true) {
+    ufo.x=-1000
+    ufo.y= 1000
+    doublekill.y=20000
+    ab.y=-1000
+    abfired= false
+    Rocket.y=130
+    bullet.y=-1000
+    fired= false
+    score=0
+
+
+xposition=0
+for (f_u_alien in f_u_aliens) {
+    f_u_alien.x = xposition
+    f_u_alien.y = 900
+    xposition=xposition+100
+}
+    
+    
+
+
+
+       
+
+
 
 
 
@@ -112,7 +138,7 @@ while(true){
                 f_u_alien.y=200000
                 score=score+1
                 
-                            }
+             }
         }
 
         if (f_u_alien.x>1600){
@@ -176,11 +202,33 @@ while(true){
 //_________________________________________________________________________________________________
 //ufo colision
    
+        if (bullet.x>ufo.x-50 && bullet.x<ufo.x+50){
+            if (bullet.y>ufo.y-37 && bullet.y<ufo.y+37){
+                score=score+3
+                score=score+1
+                collide=true
 
+            }
+                                
+             
+        }
+        if (collide){
+            ufo.y-=12
+        }
+//_________________________________________________________________________________________________
+//game restart
+
+
+
+
+
+
+
+if (keyboard.isKeyJustPressed(Key_Escape)) {
+            break
+        }
     
  
-
-
 
 //_________________________________________________________________________________________________
    
@@ -192,7 +240,7 @@ while(true){
 
 
 }
-
+}
                     
 
 
