@@ -3,7 +3,6 @@
 //      Start writing your game below       // 
 // Look in the Game Library for inspiration // 
 ////////////////////////////////////////////// 
-import com.bigcustard.blurp.model.constants.Colours
 
 text = blurp.createTextSprite("Score: -----").position(80, 1000)
 text.colour = Colours.DODGER_BLUE

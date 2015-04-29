@@ -4,7 +4,7 @@
 #//    Use ROTATEBY to rotate your sprite    // 
 #////////////////////////////////////////////// 
 
-world = $blurp.imageSprite("world.png")
+world = $blurp.createImageSprite("world.png")
 
 while true do
     world.rotateBy(1)

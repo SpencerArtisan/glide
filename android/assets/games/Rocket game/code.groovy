@@ -3,15 +3,12 @@
 //      Start writing your game below       // 
 // Look in the Game Library for inspiration // 
 ////////////////////////////////////////////// 
-//left pocket
+
 import com.bigcustard.blurp.model.constants.*
+
 score=0
 text = blurp.createTextSprite("Score: -----").position(80, 1000)
 blurp.createTextSprite("Press ESCAPE to play again").position(80, 80)
-    
- 
-
-
 
 collide= false
 
@@ -22,32 +19,15 @@ star=blurp.createImageSprite("Star.gif")
 //ufo
 ufo=blurp.createImageSprite("ufo")
 
-
-
 doublekill=blurp.createImageSprite("Double_kill")
 
-
-
-
 ab=blurp.createImageSprite("bullet.gif")
-
-
-
-
 
 //Rocket Sprite
 Rocket=blurp.createImageSprite("Rocket.png")
 
-
-
-
 //bulets
 bullet=blurp.createImageSprite("bullet.gif")
-
-
-
-
-
 
 f_u_aliens = []
 for (i in 1..15) {
@@ -78,29 +58,14 @@ for (f_u_alien in f_u_aliens) {
     xposition=xposition+100
 }
     
-    
-
-
-
-       
-
-
-
-
-
-
-
 
 //main loop
-
-
 
 //rocket movement
 while(true){
    if (keyboard.isKeyPressed(Key.Key_Left)&& Rocket.x > 83) Rocket.x -= 8
    if (keyboard.isKeyPressed(Key.Key_Right)&& Rocket.x < 1600) Rocket.x += 8
 //__________________________________________________________________________________________________
-
 
 
 //bullet shoot
@@ -172,7 +137,7 @@ while(true){
     }
 
 //ab colision
-       if (ab.x>Rocket.x-50 && ab.x<Rocket.x+50){
+    if (ab.x>Rocket.x-50 && ab.x<Rocket.x+50){
             if (ab.y>Rocket.y-50 && ab.y<Rocket.y+50){
                 bang= blurp.createImageSprite("bang.png")
                 bang.y=Rocket.y
@@ -181,16 +146,16 @@ while(true){
                 blurp.createImageSprite("gameover.png")
 
                
-            }
         }
+    }
  
 
 //_________________________________________________________________________________________________
 
 //scoring
-        text.colour = Colours.DODGER_BLUE
+    text.colour = Colours.DODGER_BLUE
     
-        text.text = "Score: " + score
+    text.text = "Score: " + score
 //_________________________________________________________________________________________________
 //ufo movement
     ufo.x+= 12
@@ -202,43 +167,28 @@ while(true){
 //_________________________________________________________________________________________________
 //ufo colision
    
-        if (bullet.x>ufo.x-50 && bullet.x<ufo.x+50){
-            if (bullet.y>ufo.y-37 && bullet.y<ufo.y+37){
-                score=score+3
-                score=score+1
-                collide=true
-
-            }
-                                
-             
-        }
-        if (collide){
-            ufo.y-=12
-        }
+    if (bullet.x>ufo.x-50 && bullet.x<ufo.x+50){
+        if (bullet.y>ufo.y-37 && bullet.y<ufo.y+37){
+            score=score+3
+            score=score+1
+            collide=true
+        }                                             
+    }
+    if (collide){
+        ufo.y-=12
+    }
 //_________________________________________________________________________________________________
 //game restart
 
 
-
-
-
-
-
-if (keyboard.isKeyJustPressed(Key_Escape)) {
-            break
-        }
+    if (keyboard.isKeyJustPressed(Key_Escape)) {
+        break
+    }
     
- 
-
 //_________________________________________________________________________________________________
-   
 
      blurp.blurpify()
 //_________________________________________________________________________________________________
-
-
-
-
 }
 }
                     
