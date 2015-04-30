@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;

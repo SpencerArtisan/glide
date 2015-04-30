@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bigcustard.planet.language.Syntax;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.data.MapEntry;

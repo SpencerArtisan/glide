@@ -2,7 +2,7 @@ package com.bigcustard.planet.code.command;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.Syntax;
+import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import org.junit.Before;

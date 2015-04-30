@@ -1,19 +1,20 @@
-package com.bigcustard.planet.language.groovy;
+package com.bigcustard.planet.code;
 
 import com.bigcustard.planet.code.SyntaxPart;
-import com.bigcustard.planet.language.GroovySyntax;
+import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.planet.language.Syntax;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GroovySyntaxTest {
-	private GroovySyntax syntax;
+public class SyntaxTest {
+	private Syntax syntax;
 	
 	@Before
 	public void before() {
-	    syntax = new GroovySyntax();
+	    syntax = new Syntax(new GroovyKeywords());
     }
 
 	@Test

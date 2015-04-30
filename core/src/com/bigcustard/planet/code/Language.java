@@ -1,19 +1,21 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.language.GroovySyntax;
-import com.bigcustard.planet.language.JRubySyntax;
+import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.planet.language.Keywords;
+import com.bigcustard.planet.language.RubyKeywords;
+import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 
 public class Language {
-    public static Language JRuby = new Language(new JRubySyntax(), "jruby");
-    public static Language Groovy = new Language(new GroovySyntax(), "groovy");
+    public static Language JRuby = new Language(new RubyKeywords(), "jruby");
+    public static Language Groovy = new Language(new GroovyKeywords(), "groovy");
 
-    private Syntax syntax;
+    private final Syntax syntax;
     private String scriptEngine;
 
-    public Language(Syntax syntax, String scriptEngine) {
-        this.syntax = syntax;
+    public Language(Keywords keywords, String scriptEngine) {
         this.scriptEngine = scriptEngine;
+        this.syntax = new Syntax(keywords);
     }
 
     public boolean isValid(String code) {
@@ -40,5 +42,9 @@ public class Language {
             return Groovy;
         }
         throw new IllegalArgumentException("Unknown language " + scriptEngine);
+    }
+
+    public String[] keywords() {
+        return new String[0];
     }
 }
