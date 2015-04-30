@@ -26,14 +26,15 @@ public class SyntaxTest {
 	public void keyword() throws Exception {
         assertThat(syntax.parse("public wibble")).containsExactly(
 				new SyntaxPart("public", Keyword),
-				new SyntaxPart(" wibble", Unclassified));
+				new SyntaxPart(" ", Operator),
+				new SyntaxPart("wibble", Unclassified));
 	}
 
 	@Test
 	public void dot() throws Exception {
         assertThat(syntax.parse("blah.wibble")).containsExactly(
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart(".", Dot),
+				new SyntaxPart(".", Operator),
 				new SyntaxPart("wibble", Unclassified));
 	}
 
@@ -41,72 +42,72 @@ public class SyntaxTest {
 	public void comma() throws Exception {
         assertThat(syntax.parse("blah, wibble")).containsExactly(
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart(",", Operator),
-				new SyntaxPart(" wibble", Unclassified));
+				new SyntaxPart(", ", Operator),
+				new SyntaxPart("wibble", Unclassified));
 	}
 
 	@Test
 	public void equals() throws Exception {
         assertThat(syntax.parse("a == b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("==", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" == ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void greaterThan() throws Exception {
         assertThat(syntax.parse("a > b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart(">", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" > ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void lessThan() throws Exception {
         assertThat(syntax.parse("a < b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("<", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" < ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void greaterThanOrEqualTo() throws Exception {
         assertThat(syntax.parse("a >= b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart(">=", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" >= ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void lessThanOrEqualTo() throws Exception {
         assertThat(syntax.parse("a <= b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("<=", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" <= ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void assign() throws Exception {
         assertThat(syntax.parse("a = b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("=", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" = ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void add() throws Exception {
         assertThat(syntax.parse("a + b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("+", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" + ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void subtract() throws Exception {
         assertThat(syntax.parse("a - b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("-", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" - ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
@@ -120,17 +121,17 @@ public class SyntaxTest {
 	@Test
 	public void multiply() throws Exception {
         assertThat(syntax.parse("a * b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("*", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" * ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void increment() throws Exception {
         assertThat(syntax.parse("a += b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("+=", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" += ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
@@ -150,66 +151,67 @@ public class SyntaxTest {
 	@Test
 	public void decrement() throws Exception {
         assertThat(syntax.parse("a -= b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("-=", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" -= ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void and() throws Exception {
         assertThat(syntax.parse("a && b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("&&", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" && ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void or() throws Exception {
         assertThat(syntax.parse("a || b")).containsExactly(
-				new SyntaxPart("a ", Unclassified),
-				new SyntaxPart("||", Operator),
-				new SyntaxPart(" b", Unclassified));
+				new SyntaxPart("a", Unclassified),
+				new SyntaxPart(" || ", Operator),
+				new SyntaxPart("b", Unclassified));
 	}
 
 	@Test
 	public void bracket() throws Exception {
         assertThat(syntax.parse("(blah)")).containsExactly(
-				new SyntaxPart("(", Bracket),
+				new SyntaxPart("(", Operator),
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart(")", Bracket));
+				new SyntaxPart(")", Operator));
 	}
 
 	@Test
 	public void squareBracket() throws Exception {
         assertThat(syntax.parse("[blah]")).containsExactly(
-				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("[", Operator),
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart("]", SquareBracket));
+				new SyntaxPart("]", Operator));
 	}
 
 	@Test
 	public void doubleSquareBracket() throws Exception {
         assertThat(syntax.parse("[[blah]]")).containsExactly(
-				new SyntaxPart("[", SquareBracket),
-				new SyntaxPart("[", SquareBracket),
+				new SyntaxPart("[[", Operator),
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart("]", SquareBracket),
-				new SyntaxPart("]", SquareBracket));
+				new SyntaxPart("]]", Operator));
 	}
 
 	@Test
 	public void brace() throws Exception {
         assertThat(syntax.parse("{blah}")).containsExactly(
-				new SyntaxPart("{", Brace),
+				new SyntaxPart("{", Operator),
 				new SyntaxPart("blah", Unclassified),
-				new SyntaxPart("}", Brace));
+				new SyntaxPart("}", Operator));
 	}
 
 	@Test
 	public void comment() throws Exception {
         assertThat(syntax.parse("// Comment\nNon comment")).containsExactly(
                 new SyntaxPart("// Comment", Comment),
-                new SyntaxPart("\nNon comment", Unclassified));
+				new SyntaxPart("\n", Operator),
+				new SyntaxPart("Non", Unclassified),
+				new SyntaxPart(" ", Operator),
+				new SyntaxPart("comment", Unclassified));
 	}
 
 	@Test
@@ -221,17 +223,21 @@ public class SyntaxTest {
 	@Test
 	public void string() throws Exception {
         assertThat(syntax.parse("prefix \"quoted\" suffix")).containsExactly(
-                new SyntaxPart("prefix ", Unclassified),
+                new SyntaxPart("prefix", Unclassified),
+				new SyntaxPart(" ", Operator),
                 new SyntaxPart("\"quoted\"", Quoted),
-                new SyntaxPart(" suffix", Unclassified));
+				new SyntaxPart(" ", Operator),
+                new SyntaxPart("suffix", Unclassified));
 	}
 
 	@Test
 	public void stringWithBrackets() throws Exception {
         assertThat(syntax.parse("prefix \"(quoted)\" suffix")).containsExactly(
-                new SyntaxPart("prefix ", Unclassified),
+                new SyntaxPart("prefix", Unclassified),
+                new SyntaxPart(" ", Operator),
                 new SyntaxPart("\"(quoted)\"", Quoted),
-                new SyntaxPart(" suffix", Unclassified));
+				new SyntaxPart(" ", Operator),
+                new SyntaxPart("suffix", Unclassified));
 	}
 
     @Test

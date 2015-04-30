@@ -18,9 +18,9 @@ import java.util.*;
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
 public class Syntax {
-    private static String[] TOKENS = new String[] {" ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]"};
-    private static String[] OPERATORS = new String[] {"==", "<", ">", "<=", ">=", "!=", "=", "++", "--", "+=",
-                                                      "-=", "+", "-", " / ", "*", "&&", "||", ","};
+    private static String[] TOKENS = new String[] {
+            " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
+            "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ","};
     private Keywords languageKeywords;
 
     public Syntax(Keywords languageKeywords) {
@@ -61,8 +61,7 @@ public class Syntax {
 
     @SuppressWarnings("unchecked")
     private List<SyntaxPart> categoriseWordsIntoTypes(String program) {
-        String[] deliminators = ObjectArrays.concat(TOKENS, OPERATORS, String.class);
-        List<String> wordsAndSpaces = new Tokenizer(program, deliminators).run();
+        List<String> wordsAndSpaces = new Tokenizer(program, TOKENS).run();
         return Lists.transform(wordsAndSpaces, new Function<String, SyntaxPart>() {
             public SyntaxPart apply(String word) {
                 return new SyntaxPart(word, getType(word));
@@ -87,11 +86,7 @@ public class Syntax {
                     }
                 }
 
-                if (lastElement.type() != Brace &&
-                        lastElement.type() != Bracket &&
-                        lastElement.type() != SquareBracket &&
-                        lastElement.type() != Dot &&
-                        lastElement.type() == newElement.type()) {
+                if (lastElement.type() == newElement.type()) {
                     newElement = new SyntaxPart(lastElement.text() + newElement.text(), newElement.type());
                     collapsed.remove(collapsed.size() - 1);
                 }
@@ -105,19 +100,11 @@ public class Syntax {
     private SyntaxPart.Type getType(String word) {
         if (Sets.newHashSet(keywords()).contains(word)) {
             return Keyword;
-        } else if (word.equals("(") || word.equals(")")) {
-            return Bracket;
-        } else if (word.equals("[") || word.equals("]")) {
-            return SquareBracket;
-        } else if (word.equals("{") || word.equals("}")) {
-            return Brace;
         } else if (word.startsWith("//")) {
             return Comment;
         } else if (word.equals("\"")) {
             return UnclosedQuote;
-        } else if (word.equals(".")) {
-            return Dot;
-        } else if (Arrays.asList(OPERATORS).contains(word)) {
+        } else if (Arrays.asList(TOKENS).contains(word)) {
             return Operator;
         }
         return Unclassified;

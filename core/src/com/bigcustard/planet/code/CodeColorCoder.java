@@ -16,14 +16,11 @@ import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 public class CodeColorCoder implements ColorCoder {
 
     private static final Map<SyntaxPart.Type, String> DEFAULT_COLORS = ImmutableMap.<SyntaxPart.Type, String>builder().
-            put(Unclassified, "#839496").
-            put(Bracket, "#eee8d5").
-            put(Brace, "WHITE").
-            put(Dot, "WHITE").
             put(Keyword, "#b58900").
-            put(Method, "#268bd2").
+            put(Operator, "WHITE").
             put(Quoted, "#2aa198").
             put(UnclosedQuote, "RED").
+            put(Unclassified, "#839496").
             put(Comment, "#586e75").build();
     private static final String DEFAULT_ERROR = "dc322f88";
 

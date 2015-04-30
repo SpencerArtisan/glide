@@ -24,28 +24,28 @@ public class CodeColorCoderTest {
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new CodeColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Method, "YELLOW", SquareBracket, "WHITE"), "ff0000");
+		coder = new CodeColorCoder(syntax, ImmutableMap.of(Keyword, "BLUE", Operator, "WHITE"), "ff0000");
 	}
 
 	@Test
 	public void openSquareBracket() throws Exception {
 		when(syntax.parse("[")).thenReturn(Arrays.asList(
-				new SyntaxPart("[", SquareBracket)));
+				new SyntaxPart("[", Operator)));
 		assertThat(coder.encode("[")).isEqualTo("[WHITE][[[]");
 	}
 
 	@Test
 	public void doubleOpenSquareBracket() throws Exception {
 		when(syntax.parse("[[")).thenReturn(Arrays.asList(
-				new SyntaxPart("[", SquareBracket),
-				new SyntaxPart("[", SquareBracket)));
+				new SyntaxPart("[", Operator),
+				new SyntaxPart("[", Operator)));
 		assertThat(coder.encode("[[")).isEqualTo("[WHITE][[[][WHITE][[[]");
 	}
 
 	@Test
 	public void closeSquareBracket() throws Exception {
 		when(syntax.parse("]")).thenReturn(Arrays.asList(
-				new SyntaxPart("]", SquareBracket)));
+				new SyntaxPart("]", Operator)));
 		assertThat(coder.encode("]")).isEqualTo("[WHITE]][]");
 	}
 
@@ -65,10 +65,10 @@ public class CodeColorCoderTest {
 
     @Test
 	public void multipleElements() throws Exception {
-		when(syntax.parse("word1 word2")).thenReturn(Arrays.asList(
+		when(syntax.parse("word1 ==")).thenReturn(Arrays.asList(
 				new SyntaxPart("word1", Keyword),
-				new SyntaxPart(" word2", Method)));
-		assertThat(coder.encode("word1 word2")).isEqualTo("[BLUE]word1[][YELLOW] word2[]");
+				new SyntaxPart(" ==", Operator)));
+		assertThat(coder.encode("word1 ==")).isEqualTo("[BLUE]word1[][WHITE] ==[]");
 	}
 
     @Test
