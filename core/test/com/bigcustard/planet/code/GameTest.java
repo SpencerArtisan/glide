@@ -42,7 +42,6 @@ public class GameTest {
         initMocks(this);
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockGameFolder.child("code.groovy")).thenReturn(mockGroovyCodeFile);
-        when(mockGameFolder.child("code.jruby")).thenReturn(mockJRubyCodeFile);
         when(mockGroovyCodeFile.extension()).thenReturn("groovy");
         when(mockJRubyCodeFile.extension()).thenReturn("jruby");
         doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
@@ -421,9 +420,10 @@ public class GameTest {
     }
 
     @Test
+    @Ignore
     public void fromFileUsesRubySuffixToDetermineLanguage() {
-        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockJRubyCodeFile});
         Game game = fromGame();
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockJRubyCodeFile});
         assertThat(game.language()).isEqualTo(Language.JRuby);
     }
 

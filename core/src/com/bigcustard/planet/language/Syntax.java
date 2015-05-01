@@ -11,18 +11,9 @@ import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
-import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 import org.codehaus.groovy.syntax.SyntaxException;
-import org.jruby.embed.jsr223.JRubyCompiledScript;
-import org.jruby.embed.jsr223.JRubyScriptEngineManager;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.net.URLClassLoader;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
@@ -31,15 +22,9 @@ public class Syntax {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
             "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ","};
     private Keywords languageKeywords;
-    private ScriptEngine scriptEngine;
 
-    public Syntax(Keywords languageKeywords, String scriptEngine) {
-        this(languageKeywords, new ScriptEngineManager().getEngineByName(scriptEngine));
-    }
-
-    Syntax(Keywords languageKeywords, ScriptEngine scriptEngine) {
+    public Syntax(Keywords languageKeywords) {
         this.languageKeywords = languageKeywords;
-        this.scriptEngine = scriptEngine;
     }
 
     public List<SyntaxPart> parse(String program) {
@@ -54,17 +39,22 @@ public class Syntax {
     public Set<Integer> errorLines(String program) {
         Set<Integer> errorLines = new HashSet<>();
         try {
-            // todo - can this block the thread?
-            scriptEngine.eval(program);
-        } catch (ScriptException e) {
-            String message = e.getMessage();
-            Matcher matcher = Pattern.compile("(?s).*:[ ]*(\\d+):.*").matcher(message);
-            boolean matches = matcher.matches();
-            if (matches) {
-                String group = matcher.group(1);
-                int lineNumber = Integer.parseInt(group);
-                errorLines.add(lineNumber - 1);
+            new GroovyClassLoader().parseClass(program);
+        } catch (MultipleCompilationErrorsException e) {
+            List<Message> errors = e.getErrorCollector().getErrors();
+            for (Message error : errors) {
+                if (error instanceof SyntaxErrorMessage) {
+                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
+                    int errorLine = cause.getLine();
+                //    System.out.println("Error: " + cause.getMessage());
+                    errorLines.add(errorLine - 1);
+                } else {
+                    throw e;
+                }
             }
+        } catch (Exception e) {
+            // Something unexpected when awry
+            System.out.println("Failed to parse code: " + e);
         }
         return errorLines;
     }

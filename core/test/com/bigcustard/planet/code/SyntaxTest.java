@@ -1,12 +1,10 @@
 package com.bigcustard.planet.code;
 
+import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.planet.language.GroovyKeywords;
-import com.bigcustard.planet.language.RubyKeywords;
 import com.bigcustard.planet.language.Syntax;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.script.ScriptEngineManager;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,8 +14,8 @@ public class SyntaxTest {
 	
 	@Before
 	public void before() {
-		useGroovySyntax();
-	}
+	    syntax = new Syntax(new GroovyKeywords());
+    }
 
 	@Test
 	public void unclassified() throws Exception {
@@ -225,11 +223,11 @@ public class SyntaxTest {
 	@Test
 	public void string() throws Exception {
         assertThat(syntax.parse("prefix \"quoted\" suffix")).containsExactly(
-				new SyntaxPart("prefix", Unclassified),
+                new SyntaxPart("prefix", Unclassified),
 				new SyntaxPart(" ", Operator),
-				new SyntaxPart("\"quoted\"", Quoted),
+                new SyntaxPart("\"quoted\"", Quoted),
 				new SyntaxPart(" ", Operator),
-				new SyntaxPart("suffix", Unclassified));
+                new SyntaxPart("suffix", Unclassified));
 	}
 
 	@Test
@@ -240,30 +238,6 @@ public class SyntaxTest {
                 new SyntaxPart("\"(quoted)\"", Quoted),
 				new SyntaxPart(" ", Operator),
                 new SyntaxPart("suffix", Unclassified));
-	}
-
-    @Test
-    public void noErrorsInGoodRuby() {
-		useRubySyntax();
-		assertThat(syntax.errorLines("puts 'hi'")).isEmpty();
-    }
-
-	@Test
-    public void goodRubyCodeIsValid() {
-		useRubySyntax();
-        assertThat(syntax.isValid("puts 'hi'")).isTrue();
-    }
-
-	@Test
-	public void errorsInBadRuby() {
-		useRubySyntax();
-		assertThat(syntax.errorLines("puts 'unended string")).containsExactly(0);
-	}
-
-	@Test
-	public void badRubyCodeIsIsInvalid() {
-		useRubySyntax();
-		assertThat(syntax.isValid("puts 'unended string")).isFalse();
 	}
 
     @Test
@@ -284,13 +258,5 @@ public class SyntaxTest {
 	@Test
 	public void badGroovyCodeIsIsInvalid() {
 		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
-	}
-
-	private void useGroovySyntax() {
-		syntax = new Syntax(new GroovyKeywords(), "groovy");
-	}
-
-	private void useRubySyntax() {
-		syntax = new Syntax(new RubyKeywords(), "jruby");
 	}
 }

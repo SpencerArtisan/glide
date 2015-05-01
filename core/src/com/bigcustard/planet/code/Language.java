@@ -6,9 +6,6 @@ import com.bigcustard.planet.language.RubyKeywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 public class Language {
     public static Language JRuby = new Language(new RubyKeywords(), "jruby");
     public static Language Groovy = new Language(new GroovyKeywords(), "groovy");
@@ -18,7 +15,7 @@ public class Language {
 
     public Language(Keywords keywords, String scriptEngine) {
         this.scriptEngine = scriptEngine;
-        this.syntax = new Syntax(keywords, scriptEngine);
+        this.syntax = new Syntax(keywords);
     }
 
     public boolean isValid(String code) {
