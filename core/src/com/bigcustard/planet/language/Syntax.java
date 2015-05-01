@@ -1,19 +1,16 @@
 package com.bigcustard.planet.language;
 
-import com.bigcustard.planet.code.Language;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.util.Tokenizer;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Sets;
-import groovy.lang.GroovyClassLoader;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-import org.codehaus.groovy.control.messages.Message;
-import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
-import org.codehaus.groovy.syntax.SyntaxException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
@@ -22,9 +19,11 @@ public class Syntax {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
             "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ","};
     private Keywords languageKeywords;
+    private Function<String, Set<Integer>> errorLineChecker;
 
-    public Syntax(Keywords languageKeywords) {
+    public Syntax(Keywords languageKeywords, Function<String, Set<Integer>> errorLineChecker) {
         this.languageKeywords = languageKeywords;
+        this.errorLineChecker = errorLineChecker;
     }
 
     public List<SyntaxPart> parse(String program) {
@@ -37,26 +36,7 @@ public class Syntax {
     }
 
     public Set<Integer> errorLines(String program) {
-        Set<Integer> errorLines = new HashSet<>();
-        try {
-            new GroovyClassLoader().parseClass(program);
-        } catch (MultipleCompilationErrorsException e) {
-            List<Message> errors = e.getErrorCollector().getErrors();
-            for (Message error : errors) {
-                if (error instanceof SyntaxErrorMessage) {
-                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
-                    int errorLine = cause.getLine();
-                //    System.out.println("Error: " + cause.getMessage());
-                    errorLines.add(errorLine - 1);
-                } else {
-                    throw e;
-                }
-            }
-        } catch (Exception e) {
-            // Something unexpected when awry
-            System.out.println("Failed to parse code: " + e);
-        }
-        return errorLines;
+        return errorLineChecker.apply(program);
     }
 
     @SuppressWarnings("unchecked")

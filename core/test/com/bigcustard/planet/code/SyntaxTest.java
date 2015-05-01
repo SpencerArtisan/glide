@@ -1,7 +1,5 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.code.SyntaxPart;
-import com.bigcustard.planet.language.GroovyKeywords;
 import com.bigcustard.planet.language.Syntax;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,7 @@ public class SyntaxTest {
 	
 	@Before
 	public void before() {
-	    syntax = new Syntax(new GroovyKeywords());
+	    syntax = Language.Groovy.syntax();
     }
 
 	@Test
@@ -207,7 +205,7 @@ public class SyntaxTest {
 	@Test
 	public void comment() throws Exception {
         assertThat(syntax.parse("// Comment\nNon comment")).containsExactly(
-                new SyntaxPart("// Comment", Comment),
+				new SyntaxPart("// Comment", Comment),
 				new SyntaxPart("\n", Operator),
 				new SyntaxPart("Non", Unclassified),
 				new SyntaxPart(" ", Operator),
@@ -217,27 +215,27 @@ public class SyntaxTest {
 	@Test
 	public void longComment() throws Exception {
         assertThat(syntax.parse("////")).containsExactly(
-                new SyntaxPart("////", Comment));
+				new SyntaxPart("////", Comment));
 	}
 
 	@Test
 	public void string() throws Exception {
         assertThat(syntax.parse("prefix \"quoted\" suffix")).containsExactly(
-                new SyntaxPart("prefix", Unclassified),
+				new SyntaxPart("prefix", Unclassified),
 				new SyntaxPart(" ", Operator),
-                new SyntaxPart("\"quoted\"", Quoted),
+				new SyntaxPart("\"quoted\"", Quoted),
 				new SyntaxPart(" ", Operator),
-                new SyntaxPart("suffix", Unclassified));
+				new SyntaxPart("suffix", Unclassified));
 	}
 
 	@Test
 	public void stringWithBrackets() throws Exception {
         assertThat(syntax.parse("prefix \"(quoted)\" suffix")).containsExactly(
-                new SyntaxPart("prefix", Unclassified),
-                new SyntaxPart(" ", Operator),
-                new SyntaxPart("\"(quoted)\"", Quoted),
+				new SyntaxPart("prefix", Unclassified),
 				new SyntaxPart(" ", Operator),
-                new SyntaxPart("suffix", Unclassified));
+				new SyntaxPart("\"(quoted)\"", Quoted),
+				new SyntaxPart(" ", Operator),
+				new SyntaxPart("suffix", Unclassified));
 	}
 
     @Test
