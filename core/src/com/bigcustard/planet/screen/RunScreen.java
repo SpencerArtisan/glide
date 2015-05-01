@@ -40,8 +40,6 @@ public class RunScreen {
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
-        System.setProperty("org.jruby.embed.localvariable.behavior", "transient");
-
         blurpRuntime = BlurpRuntime.begin(config);
         blurpRuntime.start(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
         setScreen.accept(blurpRuntime.getScreen());

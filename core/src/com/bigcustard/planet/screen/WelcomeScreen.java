@@ -19,10 +19,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Language;
+import com.bigcustard.planet.code.command.NewCommand;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -96,9 +98,16 @@ public class WelcomeScreen extends ScreenAdapter {
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				showCodingScreen(() -> Game.create(Language.Groovy));
+				NewCommand newCommand = new NewCommand(WelcomeScreen.this::saveGameChoice, (language) -> showCodingScreen(() -> Game.create(language)));
+				newCommand.execute();
 			}
 		});
+	}
+
+	private ListenableFuture<Language> saveGameChoice() {
+		LanguageChoiceDialog languageChoiceDialog = new LanguageChoiceDialog(skin);
+		languageChoiceDialog.show(stage);
+		return languageChoiceDialog.getFutureLanguageChoice();
 	}
 
 	private void createContinueGameButton() {

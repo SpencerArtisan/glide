@@ -4,4 +4,6 @@
 #//  This demo shows a picture of the world  // 
 #////////////////////////////////////////////// 
 
-$blurp.imageSprite("world.png")
+#$blurp.createImageSprite("world.png")
+
+$blurp.blurpify
