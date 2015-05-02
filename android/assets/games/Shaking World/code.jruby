@@ -5,7 +5,7 @@
 #//     Use RANDOM for random numbers        //
 #////////////////////////////////////////////// 
 
-world = $blurp.imageSprite("world.png")
+world = $blurp.createImageSprite("world.png")
 
 while true do
     world.scale($utils.random(0.95, 1.05))

@@ -10,7 +10,7 @@ import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class GameLibraryDialog extends Dialog {
-    private static int COLUMNS = 3;
+    private static int COLUMNS = 2;
     private SettableFuture<FileHandle> futureGame = SettableFuture.create();
 
     public GameLibraryDialog(Skin skin) {
@@ -39,7 +39,7 @@ public class GameLibraryDialog extends Dialog {
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, gameFolder);
             getButtonTable().add(createDeleteButton(gameFolder, skin)).padTop(2);
-            if (++i%3 == 0) getButtonTable().row();
+            if (++i%COLUMNS == 0) getButtonTable().row();
         }
         getButtonTable().row();
 
