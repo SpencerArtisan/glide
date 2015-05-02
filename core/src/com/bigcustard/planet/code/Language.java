@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 public class Language {
-    public static Language JRuby = new Language(new RubyKeywords(), "jruby", (s) -> new HashSet<>());
-    public static Language Groovy = new Language(new GroovyKeywords(), "groovy", (program) -> {
+    public static Language JRuby = new Language(new RubyKeywords(), "jruby", "ruby-button", (s) -> new HashSet<>());
+    public static Language Groovy = new Language(new GroovyKeywords(), "groovy", "groovy-button", (program) -> {
         Set<Integer> errorLines = new HashSet<>();
         try {
             new GroovyClassLoader().parseClass(program);
@@ -41,9 +41,11 @@ public class Language {
 
     private final Syntax syntax;
     private String scriptEngine;
+    private String buttonStyle;
 
-    public Language(Keywords keywords, String scriptEngine, Function<String, Set<Integer>> errorLineChecker) {
+    public Language(Keywords keywords, String scriptEngine, String buttonStyle, Function<String, Set<Integer>> errorLineChecker) {
         this.scriptEngine = scriptEngine;
+        this.buttonStyle = buttonStyle;
         this.syntax = new Syntax(keywords, errorLineChecker);
     }
 
@@ -57,6 +59,10 @@ public class Language {
 
     public String scriptEngine() {
         return scriptEngine;
+    }
+
+    public String buttonStyle() {
+        return buttonStyle;
     }
 
     public Syntax syntax() {

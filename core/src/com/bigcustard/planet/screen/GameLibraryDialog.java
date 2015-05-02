@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.Language;
+import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class GameLibraryDialog extends Dialog {
@@ -33,8 +35,8 @@ public class GameLibraryDialog extends Dialog {
         row();
         int i = 0;
         for (FileHandle gameFolder : Game.allGameFolders()) {
-            TextButton button = new TextButton("  " + gameFolder.name() + "  ", skin);
-            getButtonTable().add(button).fillX().padLeft(10).padRight(6).padTop(6);
+            ImageTextButton button = createButton(skin, gameFolder);
+            getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, gameFolder);
             getButtonTable().add(createDeleteButton(gameFolder, skin)).padTop(2);
             if (++i%3 == 0) getButtonTable().row();
@@ -44,6 +46,16 @@ public class GameLibraryDialog extends Dialog {
         TextButton cancelButton = new TextButton("  Cancel  ", skin);
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
+    }
+
+    private ImageTextButton createButton(Skin skin, FileHandle gameFolder) {
+        String buttonStyle = Game.from(gameFolder).language().buttonStyle();
+        ImageTextButton button = new ImageTextButton(gameFolder.name() + "  ", skin, buttonStyle);
+        button.clearChildren();
+        button.add(new Spacer(8));
+        button.add(button.getImage());
+        button.add(button.getLabel());
+        return button;
     }
 
     private Button createDeleteButton(FileHandle gameFolder, Skin skin) {

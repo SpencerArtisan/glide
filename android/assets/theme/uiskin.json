@@ -29,6 +29,8 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     run-button: { font: default-font, fontColor: white, imageUp: flag, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
     save-button: { font: default-font, fontColor: white, imageUp: save3, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
     exit-button: { font: default-font, fontColor: white, imageUp: exit, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
+    ruby-button: { font: big-font, fontColor: white, imageUp: Ruby, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled },
+    groovy-button: { font: big-font, fontColor: white, imageUp: Groovy, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled },
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
     trash-button: { imageUp: trash, imageOver: trash-highlight },

@@ -22,6 +22,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class NewCommandTest {
     private NewCommand command;
     @Mock private Consumer<Language> runIDE;
+    @Mock private Runnable cancel;
 
     @Before
     public void before() {
@@ -30,14 +31,14 @@ public class NewCommandTest {
 
     @Test
     public void executeWithLanguageChoice() {
-        command = spy(new NewCommand(() -> Futures.immediateFuture(Language.JRuby), runIDE));
+        command = spy(new NewCommand(() -> Futures.immediateFuture(Language.JRuby), runIDE, cancel));
         command.execute();
         verify(runIDE).accept(Language.JRuby);
     }
 
     @Test
     public void executeWithCancel() {
-        command = spy(new NewCommand(() -> Futures.immediateFuture(null), runIDE));
+        command = spy(new NewCommand(() -> Futures.immediateFuture(null), runIDE, cancel));
         command.execute();
         verifyZeroInteractions(runIDE);
     }

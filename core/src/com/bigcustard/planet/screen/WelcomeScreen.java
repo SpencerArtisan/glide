@@ -98,7 +98,9 @@ public class WelcomeScreen extends ScreenAdapter {
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				NewCommand newCommand = new NewCommand(WelcomeScreen.this::saveGameChoice, (language) -> showCodingScreen(() -> Game.create(language)));
+				hideMainMenu();
+				NewCommand newCommand = new NewCommand(WelcomeScreen.this::saveGameChoice,
+						(language) -> showCodingScreen(() -> Game.create(language)), WelcomeScreen.this::showMainMenu);
 				newCommand.execute();
 			}
 		});
@@ -125,7 +127,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		gameLibraryButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				hideButtons();
+				hideMainMenu();
 				final GameLibraryDialog dialog = new GameLibraryDialog(skin);
 				dialog.show(stage);
 				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
@@ -194,6 +196,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void showCodingScreen(Supplier<Game> programSupplier) {
 		try {
+			showMainMenu();
 			CodingScreen codingScreen = new CodingScreen(
 					programSupplier.get(),
 					viewport,
@@ -215,7 +218,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		getTable().setVisible(true);
 	}
 
-	private void hideButtons() {
+	private void hideMainMenu() {
 		getTable().setVisible(false);
 	}
 }

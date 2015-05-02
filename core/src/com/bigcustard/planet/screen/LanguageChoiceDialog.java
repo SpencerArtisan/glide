@@ -1,9 +1,8 @@
 package com.bigcustard.planet.screen;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.bigcustard.planet.code.Language;
+import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class LanguageChoiceDialog extends Dialog {
@@ -11,7 +10,7 @@ public class LanguageChoiceDialog extends Dialog {
 
     public LanguageChoiceDialog(Skin skin) {
         super("", skin);
-        layoutControls();
+        layoutControls(skin);
     }
 
     public SettableFuture<Language> getFutureLanguageChoice() {
@@ -21,18 +20,32 @@ public class LanguageChoiceDialog extends Dialog {
     @Override
     protected void result(Object save) {
         futureLanguageChoice.set((Language) save);
+        remove();
     }
 
-    private void layoutControls() {
-        Table contentTable = getContentTable();
-        contentTable.padTop(20).padLeft(40).padRight(40);
+    private void layoutControls(Skin skin) {
+        padTop(20).padLeft(40).padRight(40);
         text("Which Language?");
-        contentTable.row();
-        button("Ruby", Language.JRuby);
-        contentTable.row();
-        button("Groovy", Language.Groovy);
-        contentTable.row();
-        button("Cancel", null).padTop(40);
-        getButtonTable().pad(25);
+        getButtonTable().padTop(20).padBottom(20);
+
+        ImageTextButton rubyButton = new ImageTextButton(" Ruby", skin, "ruby-button");
+        addButton(rubyButton, Language.JRuby);
+
+        ImageTextButton groovyButton = new ImageTextButton(" Groovy", skin, "groovy-button");
+        addButton(groovyButton, Language.Groovy);
+
+        getButtonTable().row();
+        TextButton cancelButton = new TextButton("  Cancel  ", skin);
+        setObject(cancelButton, null);
+        getButtonTable().add(cancelButton).padTop(20).padBottom(0).colspan(2);
+    }
+
+    private void addButton(ImageTextButton button, Language language) {
+        button.clearChildren();
+        button.add(new Spacer(3));
+        button.add(button.getImage());
+        button.add(button.getLabel());
+        getButtonTable().add(button).width(240).padLeft(10).padRight(10);
+        setObject(button, language);
     }
 }
