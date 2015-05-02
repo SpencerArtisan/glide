@@ -17,35 +17,49 @@ import java.util.List;
 import java.util.Set;
 
 public class Language {
-    public static Language JRuby = new Language(new RubyKeywords(), "jruby", "ruby-button", (s) -> new HashSet<>());
-    public static Language Groovy = new Language(new GroovyKeywords(), "groovy", "groovy-button", (program) -> {
-        Set<Integer> errorLines = new HashSet<>();
-        try {
-            new GroovyClassLoader().parseClass(program);
-        } catch (MultipleCompilationErrorsException e) {
-            List<Message> errors = e.getErrorCollector().getErrors();
-            for (Message error : errors) {
-                if (error instanceof SyntaxErrorMessage) {
-                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
-                    int errorLine = cause.getLine();
-                    errorLines.add(errorLine - 1);
-                } else {
-                    throw e;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to parse code: " + e);
-        }
-        return errorLines;
-    });
+    public static Language JRuby = new Language(new RubyKeywords(), "jruby", "ruby-button",
+                      "############################################## \n"
+                    + "##         Welcome to Planet Burpl!         ## \n"
+                    + "##      Start writing your game below       ## \n"
+                    + "## Look in the Game Library for inspiration ## \n"
+                    + "############################################## \n\n",
+                    (s) -> new HashSet<>());
+    public static Language Groovy = new Language(new GroovyKeywords(), "groovy", "groovy-button",
+                      "////////////////////////////////////////////// \n"
+                    + "//         Welcome to Planet Burpl!         // \n"
+                    + "//      Start writing your game below       // \n"
+                    + "// Look in the Game Library for inspiration // \n"
+                    + "////////////////////////////////////////////// \n\n",
+                    (program) -> {
+                            Set<Integer> errorLines = new HashSet<>();
+                            try {
+                                new GroovyClassLoader().parseClass(program);
+                            } catch (MultipleCompilationErrorsException e) {
+                                List<Message> errors = e.getErrorCollector().getErrors();
+                                for (Message error : errors) {
+                                    if (error instanceof SyntaxErrorMessage) {
+                                        SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
+                                        int errorLine = cause.getLine();
+                                        errorLines.add(errorLine - 1);
+                                    } else {
+                                        throw e;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Failed to parse code: " + e);
+                            }
+                            return errorLines;
+                        });
 
     private final Syntax syntax;
     private String scriptEngine;
     private String buttonStyle;
+    private String template;
 
-    public Language(Keywords keywords, String scriptEngine, String buttonStyle, Function<String, Set<Integer>> errorLineChecker) {
+    public Language(Keywords keywords, String scriptEngine, String buttonStyle, String template, Function<String, Set<Integer>> errorLineChecker) {
         this.scriptEngine = scriptEngine;
         this.buttonStyle = buttonStyle;
+        this.template = template;
         this.syntax = new Syntax(keywords, errorLineChecker);
     }
 
@@ -67,6 +81,10 @@ public class Language {
 
     public Syntax syntax() {
         return syntax;
+    }
+
+    public String template() {
+        return template;
     }
 
     @Override

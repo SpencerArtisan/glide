@@ -17,12 +17,6 @@ public class Game {
     public static final String PREFERENCES_KEY = "Game";
     private static String CODE_FILE_WITHOUT_SUFFIX = "code";
     public static final String DEFAULT_NAME = "Unnamed Game";
-    public static String TEMPLATE =
-                      "////////////////////////////////////////////// \n"
-                    + "//         Welcome to Planet Burpl!         // \n"
-                    + "//      Start writing your game below       // \n"
-                    + "// Look in the Game Library for inspiration // \n"
-                    + "////////////////////////////////////////////// \n\n";
     private static final String RECENT_GAME = "MostRecentGameName";
     private static String FOLDER = "games";
 
@@ -51,8 +45,7 @@ public class Game {
     @VisibleForTesting
     static Game create(Preferences preferences, FileHandle parentFolder, ImageAreaModel imageModel, Language language) {
         FileHandle gameFolder = findUniqueName(parentFolder);
-        String code = TEMPLATE;
-        return new Game(preferences, gameFolder, code, imageModel, language);
+        return new Game(preferences, gameFolder, language.template(), imageModel, language);
     }
 
     @VisibleForTesting

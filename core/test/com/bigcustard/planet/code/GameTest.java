@@ -136,8 +136,9 @@ public class GameTest {
     @Test
     public void createNewUsesTemplate() {
         when(mockParentFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
+        when(mockLanguage.template()).thenReturn("template");
         Game game = newGame(mockLanguage);
-        assertThat(game.code()).isEqualTo(Game.TEMPLATE);
+        assertThat(game.code()).isEqualTo("template");
     }
 
     @Test
