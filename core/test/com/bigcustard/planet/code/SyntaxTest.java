@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.bigcustard.planet.language.GroovyKeywords;
 import com.bigcustard.planet.language.Syntax;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class SyntaxTest {
 	
 	@Before
 	public void before() {
-	    syntax = Language.Groovy.syntax();
+	    useGroovySyntax();
     }
 
 	@Test
@@ -257,4 +258,37 @@ public class SyntaxTest {
 	public void badGroovyCodeIsIsInvalid() {
 		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
 	}
+
+	@Test
+	public void noErrorsInGoodRuby() {
+		useRubySyntax();
+		assertThat(syntax.errorLines("puts 'hi'")).isEmpty();
+	}
+
+	@Test
+	public void goodRubyCodeIsValid() {
+		useRubySyntax();
+		assertThat(syntax.isValid("puts 'hi'")).isTrue();
+	}
+
+	@Test
+	public void errorsInBadRuby() {
+		useRubySyntax();
+		assertThat(syntax.errorLines("puts 'unended string")).containsExactly(0);
+	}
+
+	@Test
+	public void badRubyCodeIsIsInvalid() {
+		useRubySyntax();
+		assertThat(syntax.isValid("puts 'unended string")).isFalse();
+	}
+
+	private void useGroovySyntax() {
+		syntax = Language.Groovy.syntax();
+	}
+
+	private void useRubySyntax() {
+		syntax = Language.JRuby.syntax();
+	}
+
 }

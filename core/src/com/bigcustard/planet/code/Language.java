@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.language.GroovyKeywords;
 import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.RubyKeywords;
@@ -11,7 +12,17 @@ import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
+import org.jruby.Ruby;
+import org.jruby.RubyInstanceConfig;
+import org.jruby.common.NullWarnings;
+import org.jruby.lexer.yacc.LexerSource;
+import org.jruby.parser.ParserConfiguration;
+import org.jruby.parser.Ruby20Parser;
+import org.jruby.parser.RubyParser;
+import org.jruby.parser.RubyParserResult;
+import org.jruby.util.JRubyClassLoader;
 
+import java.io.StringBufferInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +34,26 @@ public class Language {
                     + "##      Start writing your game below       ## \n"
                     + "## Look in the Game Library for inspiration ## \n"
                     + "############################################## \n\n",
-                    (s) -> new HashSet<>());
+            (program) -> {
+                Set<Integer> errorLines = new HashSet<>();
+
+                try {
+                    RubyParser parser = new Ruby20Parser();
+                    parser.setWarnings(new NullWarnings(null));
+                    Ruby runtime = Ruby.getGlobalRuntime();
+                    RubyInstanceConfig rconfig = new RubyInstanceConfig();
+                    ParserConfiguration config = new ParserConfiguration(runtime, 0, false, false, true, rconfig);
+                    LexerSource lexer = LexerSource.getSource("code", new StringBufferInputStream(program), null, config);
+                    parser.parse(config, lexer);
+                } catch (org.jruby.lexer.yacc.SyntaxException e) {
+                    errorLines.add(e.getPosition().getLine());
+                } catch (Exception e) {
+                    System.out.println("Failed to parse code: " + e);
+                }
+
+
+                return errorLines;
+            });
     public static Language Groovy = new Language(new GroovyKeywords(), "groovy", "groovy-button",
                       "////////////////////////////////////////////// \n"
                     + "//         Welcome to Planet Burpl!         // \n"

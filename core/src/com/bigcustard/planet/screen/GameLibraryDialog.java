@@ -31,7 +31,7 @@ public class GameLibraryDialog extends Dialog {
         getContentTable().clearChildren();
         getButtonTable().clearChildren();
         pad(20);
-        text("Choose a game").padBottom(15);
+        text("Choose a game").padBottom(25);
         row();
         int i = 0;
         for (FileHandle gameFolder : Game.allGameFolders()) {
@@ -54,6 +54,7 @@ public class GameLibraryDialog extends Dialog {
         button.clearChildren();
         button.add(new Spacer(8));
         button.add(button.getImage());
+        button.add(new Spacer(4));
         button.add(button.getLabel());
         return button;
     }
@@ -69,5 +70,4 @@ public class GameLibraryDialog extends Dialog {
         });
         return button;
     }
-
 }
