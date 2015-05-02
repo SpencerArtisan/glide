@@ -33,7 +33,6 @@ f_u_aliens = []
 for (i in 1..15) {
     f_u_alien = blurp.createImageSprite("f_u_alien.png")
     f_u_aliens.add f_u_alien
-
 }
 
 //___________________________________________________________________________________________________

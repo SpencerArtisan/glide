@@ -1,13 +1,13 @@
-#////////////////////////////////////////////// 
-#//         Welcome to Planet Burpl!         // 
-#//                                          // 
-#//   Use SCALE to shrink and grow sprites   // 
-#//     Use RANDOM for random numbers        //
-#////////////////////////////////////////////// 
+############################################ 
+#         Welcome to Planet Burpl!         # 
+#                                          #
+#   Use SCALE to shrink and grow sprites   #
+#     Use RANDOM for random numbers        #
+############################################ 
 
-world = $blurp.createImageSprite("world.png")
+world = $blurp.createImageSprite "world.png"
 
 while true do
-    world.scale($utils.random(0.95, 1.05))
+    world.scale $utils.random(0.95, 1.05)
     $blurp.blurpify
 end

@@ -7,4 +7,9 @@ public class RubyKeywords implements Keywords {
                 "else", "elsif", "end", "false", "for", "if", "in", "nil", "not", "or",
                 "new", "rescue", "return", "self", "super", "then", "true", "unless", "while"};
     }
+
+    @Override
+    public String comment() {
+        return "#";
+    }
 }

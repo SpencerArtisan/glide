@@ -13,4 +13,9 @@ public class FrameworkKeywords implements Keywords {
                 "Key_Space", "rotateBy", "colour", "setPosition", "moveTowards", "scale", "flipX", "flipY",
                 "position", "x", "y", "add", "Colours", "text"};
     }
+
+    @Override
+    public String comment() {
+        return null;
+    }
 }

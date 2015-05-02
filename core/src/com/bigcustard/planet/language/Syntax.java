@@ -80,7 +80,7 @@ public class Syntax {
     private SyntaxPart.Type getType(String word) {
         if (Sets.newHashSet(keywords()).contains(word)) {
             return Keyword;
-        } else if (word.startsWith("//")) {
+        } else if (word.startsWith(languageKeywords.comment())) {
             return Comment;
         } else if (word.equals("\"")) {
             return UnclosedQuote;

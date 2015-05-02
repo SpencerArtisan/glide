@@ -17,7 +17,7 @@ for (i in 1..4) {
 // Now move the worlds
 while (true) {
     for (world in worlds) {
-        world.y -= 10
+        world.y = world.y - 10
     }
     blurp.blurpify()
 }

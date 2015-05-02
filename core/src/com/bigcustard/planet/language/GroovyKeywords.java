@@ -9,4 +9,9 @@ public class GroovyKeywords implements Keywords {
                 "public", "return", "static", "super", "switch", "this", "throw", "throws", "try", "void", "while",
                 "true", "false", "in" };
     }
+
+    @Override
+    public String comment() {
+        return "//";
+    }
 }
