@@ -5,7 +5,7 @@
 ////////////////////////////////////////////// 
 
 text = blurp.createTextSprite("Score: -----").position(80, 1000)
-text.colour = Colours.DODGER_BLUE
+text.colour = DodgerBlue
 score = 1000
 
 while (true) {
@@ -13,3 +13,7 @@ while (true) {
     text.text = "Score: " + score    
     blurp.blurpify()
 }
+
+
+
+

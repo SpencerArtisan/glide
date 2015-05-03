@@ -27,6 +27,7 @@ public class ImageUtils {
             String extension = source.extension();
             BufferedImage inputImage = ImageIO.read(imageFile);
 
+            // TODO - Shrink with libgdx, blend modes
 //            final int color = inputImage.getRGB(0, 0);
 //            java.awt.Image transparentImage = makeColorTransparent(inputImage, new Color(color));
 

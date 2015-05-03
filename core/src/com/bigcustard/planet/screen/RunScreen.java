@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
@@ -36,7 +37,9 @@ public class RunScreen {
     }
 
     public void showScreen() {
-        BlurpConfiguration config = new BlurpConfiguration(viewport);
+        // todomaintain aspect ratio
+        Viewport newViewport = new FitViewport(800, 480);
+        BlurpConfiguration config = new BlurpConfiguration(newViewport);
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
