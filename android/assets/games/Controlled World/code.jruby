@@ -4,16 +4,9 @@
 # Use KEYBOARD to use keys to control stuff #
 #############################################
 
-java_import com.bigcustard.blurp.model.constants.Key
-java_import com.bigcustard.blurp.model.Sprite
-
 world = $blurp.createImageSprite "world.png"
-
 while true do
-    world.x(world.x - 8) if ($keyboard.isKeyPressed(Key::Key_Left))
- #   world.x += 8 if ($keyboard.isKeyPressed($keys.RIGHT)) 
- #   world.y += 8 if ($keyboard.isKeyPressed($keys.UP))
- #   world.y -= 8 if ($keyboard.isKeyPressed($keys.DOWN))
- 
-    $blurp.blurpify()
+    world.x(200) if ($keyboard.isKeyPressed(Key::Left))
+    world.x(500) if ($keyboard.isKeyPressed($keys.Right))
+    $blurp.blurpify
 end

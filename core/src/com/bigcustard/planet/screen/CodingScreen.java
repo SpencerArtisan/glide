@@ -93,7 +93,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void showRunScreen(Game game) {
-        new RunScreen(stage.getViewport(), skin, game, setScreen, () -> {
+        new RunScreen(skin, game, setScreen, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
         }).showScreen();

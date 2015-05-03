@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.RenderListener;
@@ -21,25 +20,24 @@ import java.util.function.Consumer;
 public class RunScreen {
     private Skin skin;
     private Stage stage;
-    private Viewport viewport;
     private BlurpRuntime blurpRuntime;
     private ImageButton closeButton;
     private Game game;
     private Consumer<Screen> setScreen;
     private Runnable exit;
+    private FitViewport viewport;
 
-    public RunScreen(Viewport viewport, Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
+    public RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
         this.game = game;
-        this.viewport = viewport;
         this.setScreen = setScreen;
         this.exit = exit;
         this.skin = skin;
     }
 
     public void showScreen() {
-        // todomaintain aspect ratio
-        Viewport newViewport = new FitViewport(800, 480);
-        BlurpConfiguration config = new BlurpConfiguration(newViewport);
+        // todo - maintain aspect ratio
+        viewport = new FitViewport(800, 480);
+        BlurpConfiguration config = new BlurpConfiguration(viewport);
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
