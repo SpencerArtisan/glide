@@ -104,8 +104,8 @@ public class ImageModel {
     private static String generateName(FileHandle file) {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');
-        int nameLength = Math.min(MAX_NAME_LENGTH - 4, dotIndex);
-        return filename.substring(0, nameLength) + filename.substring(dotIndex);
+        int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
+        return filename.substring(0, nameLength);
     }
 
     public ValidationResult validate() {

@@ -37,27 +37,9 @@ public class ImageUtils {
             g.drawImage(inputImage, 0, 0, width, height, null);
             g.dispose();
 
-            ImageIO.write(outputImage, extension, target.file());
+            ImageIO.write(outputImage, "png", target.file());
         } catch (IOException e) {
             Gdx.app.error("tag", "Failed to resize image", e);
         }
-    }
-
-    /**
-     * Make provided image transparent wherever color matches the provided color.
-     *
-     * @param im    BufferedImage whose color will be made transparent.
-     * @param color Color in provided image which will be made transparent.
-     * @return Image with transparency applied.
-     */
-    private static java.awt.Image makeColorTransparent(final BufferedImage im, final Color color) {
-        final ImageFilter filter = new RGBImageFilter() {
-            public final int filterRGB(final int x, final int y, final int rgb) {
-                return (rgb | 0xFF000000) == 0xFFFFFFFF ? 0x00FFFFFF & rgb : rgb;
-            }
-        };
-
-        final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
-        return Toolkit.getDefaultToolkit().createImage(ip);
     }
 }
