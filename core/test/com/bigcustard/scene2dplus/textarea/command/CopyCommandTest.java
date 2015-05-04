@@ -24,6 +24,11 @@ public class CopyCommandTest {
     }
 
     @Test
+    public void x() {
+
+    }
+
+    @Test
     public void canExecuteWhenSelection() {
         model.setText("hello\nthere");
         model.caret().setSelection(new XY(3, 0), new XY(2, 1));

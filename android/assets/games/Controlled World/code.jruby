@@ -5,8 +5,17 @@
 #############################################
 
 world = $blurp.createImageSprite "world.png"
+world.x(700)
+
 while true do
-    world.x(200) if ($keyboard.isKeyPressed(Key::Left))
-    world.x(500) if ($keyboard.isKeyPressed($keys.Right))
+    world.x = world.x - 10 if $keyboard.isKeyPressed($Key_Left)
     $blurp.blurpify
 end
+
+
+
+
+
+
+
+

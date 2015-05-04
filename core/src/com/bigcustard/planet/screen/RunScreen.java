@@ -55,6 +55,8 @@ public class RunScreen {
             }
         });
         blurpRuntime.onException(e -> {
+            System.err.println(e);
+            e.printStackTrace();
             game.setRuntimeError(e);
             exitGame();
         });
