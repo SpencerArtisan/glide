@@ -35,7 +35,6 @@ public class RunScreen {
     }
 
     public void showScreen() {
-        // todo - maintain aspect ratio
         viewport = new FitViewport(800, 480);
         BlurpConfiguration config = new BlurpConfiguration(viewport);
         String contentRoot = game.folder().path() + "/build";
@@ -58,7 +57,7 @@ public class RunScreen {
             System.err.println(e);
             e.printStackTrace();
             game.setRuntimeError(e);
-            exitGame();
+            exit.run();
         });
     }
 
@@ -66,7 +65,6 @@ public class RunScreen {
         if (batch.isDrawing()) batch.end();
         getStage(batch).act(Math.min(delta, 1 / 60f));
         getStage(batch).draw();
-
     }
 
     private Stage getStage(Batch batch) {

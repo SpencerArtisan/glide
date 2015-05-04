@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.command.ExitCommand;
@@ -96,6 +97,7 @@ public class CodingScreen extends ScreenAdapter {
         new RunScreen(skin, game, setScreen, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
+            stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         }).showScreen();
     }
 
