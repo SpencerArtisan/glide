@@ -70,7 +70,7 @@ public class RunScreen {
 
     private Stage getStage(Batch batch) {
         if (stage == null) {
-            stage = new Stage(viewport, batch);
+            stage = new Stage(new FitViewport(800, 480), batch);
             createCloseButton();
             layoutScreen();
         }

@@ -9,8 +9,6 @@ import com.bigcustard.scene2dplus.image.Notifier;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.function.Consumer;
 
 public class Game {
@@ -177,7 +175,9 @@ public class Game {
         String gameName = preferences.getString(RECENT_GAME);
         if (Strings.isNullOrEmpty(gameName)) return false;
         FileHandle gameFolder = parentFolder.child(gameName);
-        return gameFolder.exists() && gameFolder.child("code.groovy").exists();
+        return gameFolder.exists() && gameFolder.list((dir, name) -> {
+            return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
+        }).length > 0;
     }
 
     private static FileHandle findUniqueName(FileHandle parentFolder) {

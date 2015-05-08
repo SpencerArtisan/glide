@@ -17,7 +17,7 @@ import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 public class Syntax {
     private static String[] TOKENS = new String[] {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
-            "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$"};
+            "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";"};
     private Keywords languageKeywords;
     private Function<String, Set<Integer>> errorLineChecker;
 

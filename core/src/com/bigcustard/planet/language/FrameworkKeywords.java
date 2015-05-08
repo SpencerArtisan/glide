@@ -11,7 +11,8 @@ public class FrameworkKeywords implements Keywords {
                 "keyboard", "isKeyPressed", "Key", "blurp", "blurpify", "createTextSprite",
                 "createImageSprite", "utils", "random", "scale", "Key_Left", "Key_Down", "Key_Up", "Key_Right",
                 "Key_Space", "rotateBy", "colour", "setPosition", "moveTowards", "scale", "flipX", "flipY",
-                "position", "x", "y", "add", "Colours", "text"};
+                "position", "x", "y", "add", "Colours", "text", "rotation", "camera", "isRunningEffect",
+                "effects", "rotateTo", "moveTo", "zoom", "combine", "delayBeforeStart", "runEffect", "scaleX", "scaleY"};
     }
 
     @Override
