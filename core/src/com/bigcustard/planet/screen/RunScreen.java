@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
+import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 
@@ -42,7 +43,7 @@ public class RunScreen {
 
         blurpRuntime = BlurpRuntime.begin(config);
         blurpRuntime.start(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
-        setScreen.accept(blurpRuntime.getScreen());
+        setScreen.accept(BlurpStore.blurpScreen);
         blurpRuntime.onRenderEvent(new RenderListener() {
             @Override
             public void handlePreRenderEvent(float v) {

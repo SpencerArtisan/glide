@@ -9,15 +9,15 @@
 worlds = []
 for (i in 1..4) {
     world = blurp.createImageSprite("world.png")
-    world.x = i * 350
-    world.y = 900
+    world.x = i * 160
+    world.y = 600
     worlds.add world
 }
 
 // Now move the worlds
 while (true) {
     for (world in worlds) {
-        world.y = world.y - 10
+        world.y = world.y - 3
     }
     blurp.blurpify()
 }

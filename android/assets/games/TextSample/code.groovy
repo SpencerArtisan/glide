@@ -4,7 +4,7 @@
 // Look in the Game Library for inspiration // 
 ////////////////////////////////////////////// 
 
-text = blurp.createTextSprite("Score: -----").position(80, 400)
+text = blurp.createTextSprite("Score: -----").position(80, 440)
 text.colour = DodgerBlue
 score = 1000
 
