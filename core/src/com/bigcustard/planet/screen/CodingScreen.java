@@ -97,7 +97,6 @@ public class CodingScreen extends ScreenAdapter {
         new RunScreen(skin, game, setScreen, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
-            stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         }).showScreen();
     }
 
@@ -135,6 +134,7 @@ public class CodingScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
+        stage.getViewport().update(width, height, true);
 	}
 
     private void errorReporter(Exception e, Runnable onClosed) {

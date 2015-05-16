@@ -24,6 +24,5 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
     public void resize(int width, int height) {
         super.resize(width, height);
         viewport.update(width, height, true);
-        getScreen().resize(width, height);
     }
 }

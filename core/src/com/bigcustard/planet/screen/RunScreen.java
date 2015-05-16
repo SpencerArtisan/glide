@@ -16,6 +16,8 @@ import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class RunScreen {
@@ -58,7 +60,7 @@ public class RunScreen {
             System.err.println(e);
             e.printStackTrace();
             game.setRuntimeError(e);
-            exit.run();
+            Gdx.app.postRunnable(() -> exit.run());
         });
     }
 
