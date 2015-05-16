@@ -7,7 +7,7 @@
 import com.bigcustard.blurp.model.constants.*
 
 score=0
-text = blurp.createTextSprite("Score: -----").position(20, 440)
+text = blurp.createTextSprite("Score: -----").position(50, 440)
 blurp.createTextSprite("Press ESCAPE to play again").position(82, 13)
 
 collide= false
