@@ -19,3 +19,8 @@ To package up a linux version of the app
 
     Download the linux jdk from oracle and zip into jdk.zip in the root folder of this project
     java -jar packr.jar packr-linux.json
+
+Troubleshooting
+---------------
+DesktopLauncher not found - Means you did a gradle build without the dist
+

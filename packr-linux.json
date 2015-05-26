@@ -1,14 +1,15 @@
 {
     "platform": "linux64",
     "jdk": "jdk.zip",
-    "executable": "myapp",
+    "executable": "planet",
     "appjar": "desktop/build/libs/desktop-1.0.jar",
     "mainclass": "com/bigcustard/planet/desktop/DesktopLauncher",
     "vmargs": [
        "-Xmx1G"
     ],
     "resources": [
-      "android/assets"
+      "android/assets",
+      "android/assets/games"
     ],
     "minimizejre": "soft",
     "outdir": "Burpl-linux"

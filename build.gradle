@@ -2,13 +2,9 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-//        classpath 'com.android.tools.build:gradle:1.0.0'
-    }
 }
 
 allprojects {
-    apply plugin: "eclipse"
     apply plugin: "idea"
 
     version = '1.0'
@@ -31,7 +27,6 @@ allprojects {
 project(":desktop") {
     apply plugin: "java"
 
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -45,31 +40,8 @@ project(":desktop") {
     }
 }
 
-//project(":android") {
-//    apply language: "android"
-//
-//    configurations { natives }
-//
-//    dependencies {
-//        compile project(":core")
-//        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-//        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
-//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
-//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
-//        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-//        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-//        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-//        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-//    }
-//}
-
 project(":core") {
     apply plugin: "java"
-
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -77,9 +49,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "org.apache.commons:commons-lang3:3.1"
         compile "com.google.guava:guava:18.0"
-        compile "org.codehaus.groovy:groovy-all:2.3.9"
+        compile 'org.codehaus.groovy:groovy-all:2.4.3'
         compile 'org.jruby:jruby-complete:1.7.19'
-
         compile files("libs/core-1.0.jar")
         compile files("libs/model-1.0.jar")
         compile files("libs/tween-engine-api.jar")
@@ -88,8 +59,4 @@ project(":core") {
         testCompile 'org.assertj:assertj-core:1.7.1'
         testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }
