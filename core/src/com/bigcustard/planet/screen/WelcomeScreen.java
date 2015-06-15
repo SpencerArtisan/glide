@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Language;
 import com.bigcustard.planet.code.command.NewCommand;
@@ -39,13 +40,15 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextButton gameLibraryButton;
 	private TextButton quitButton;
 	private Consumer<Screen> setScreen;
+	private MouseWindowChecker mouseWindowChecker;
 	private Viewport viewport;
 	private Label title;
 	private Cell<Label> titleCell;
 
-	public WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen) {
+	public WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
 		super();
 		this.setScreen = setScreen;
+		this.mouseWindowChecker = mouseWindowChecker;
 		this.stage = new Stage(viewport);
 		this.viewport = viewport;
 		this.skin = skin;
@@ -202,7 +205,8 @@ public class WelcomeScreen extends ScreenAdapter {
 					viewport,
 					skin,
 					this::showWelcomeScreen,
-					setScreen
+					setScreen,
+					mouseWindowChecker
 			);
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {

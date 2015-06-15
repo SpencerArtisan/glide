@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.core.BlurpStore;
+import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 
@@ -28,23 +29,24 @@ public class RunScreen {
     private Game game;
     private Consumer<Screen> setScreen;
     private Runnable exit;
-    private FitViewport viewport;
+    private MouseWindowChecker mouseWindowChecker;
 
-    public RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit) {
+
+    public RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit, MouseWindowChecker mouseWindowChecker) {
         this.game = game;
         this.setScreen = setScreen;
         this.exit = exit;
         this.skin = skin;
+        this.mouseWindowChecker = mouseWindowChecker;
     }
 
     public void showScreen() {
-        viewport = new FitViewport(800, 480);
-        BlurpConfiguration config = new BlurpConfiguration(viewport);
+        BlurpConfiguration config = new BlurpConfiguration(800, 480);
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
-        blurpRuntime = BlurpRuntime.begin(config);
-        blurpRuntime.start(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
+        blurpRuntime = BlurpRuntime.begin(config, mouseWindowChecker);
+        blurpRuntime.startScript(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
         setScreen.accept(BlurpStore.blurpScreen);
         blurpRuntime.onRenderEvent(new RenderListener() {
             @Override
@@ -60,7 +62,7 @@ public class RunScreen {
             System.err.println(e);
             e.printStackTrace();
             game.setRuntimeError(e);
-            Gdx.app.postRunnable(() -> exit.run());
+            Gdx.app.postRunnable(this::exitGame);
         });
     }
 

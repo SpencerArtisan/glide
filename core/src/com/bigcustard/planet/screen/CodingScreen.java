@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
@@ -39,12 +40,14 @@ public class CodingScreen extends ScreenAdapter {
     private Game game;
     private Runnable exitToMainMenu;
     private Consumer<Screen> setScreen;
+    private MouseWindowChecker mouseWindowChecker;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.setScreen = setScreen;
+        this.mouseWindowChecker = mouseWindowChecker;
         this.stage = new Stage(viewport);
 		this.skin = skin;
 
@@ -97,7 +100,7 @@ public class CodingScreen extends ScreenAdapter {
         new RunScreen(skin, game, setScreen, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
-        }).showScreen();
+        }, mouseWindowChecker).showScreen();
     }
 
     private void createImageArea() {

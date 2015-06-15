@@ -4,17 +4,17 @@
 //   Use MOVETOWARDS to move your sprite    // 
 ////////////////////////////////////////////// 
 
-world = blurp.createImageSprite("world.png")
+world = resources.createImageSprite("world.png")
 targetX = 400
 targetY = 300
 speed = 500
 
 while (true) {
     world.moveTowards(targetX, targetY, speed)
-    blurp.blurpify()
+    screen.update()
     if (world.x == targetX && world.y == targetY) {
-        targetX = utils.random(150, 750)
-        targetY = utils.random(150, 450)
-        speed = utils.random(100, 1000)
+        targetX = utils.randomInRange(150, 750)
+        targetY = utils.randomInRange(150, 450)
+        speed = utils.randomInRange(100, 1000)
     }
 }

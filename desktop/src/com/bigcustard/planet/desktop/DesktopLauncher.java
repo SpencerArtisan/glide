@@ -10,6 +10,6 @@ public class DesktopLauncher {
         config.title = "Planet Burpl";
         config.width = 1024;
         config.height = 768;
-		new LwjglApplication(new PlanetApplication(), config);
+		new LwjglApplication(new PlanetApplication(new LwjglMouseWindowChecker()), config);
 	}
 }
