@@ -1,11 +1,17 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
+        maven { url "https://dl.bintray.com/bmuschko/gradle-plugins" }
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     }
 }
 
 allprojects {
     apply plugin: "idea"
+    apply plugin: "com.bmuschko.nexus"
 
     version = '1.0'
     ext {
