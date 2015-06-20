@@ -11,15 +11,16 @@ buildscript {
 
 allprojects {
     apply plugin: "idea"
-    apply plugin: "com.bmuschko.nexus"
 
+    apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = false
-        repositoryUrl = "leonandjosh.ddns.net"
-        configuration = "Snapshots"
+        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
+        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-    version = '1.0'
+
+    version = '0.1'
     ext {
         appName = 'planet'
         gdxVersion = '1.5.3'
@@ -54,6 +55,7 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java"
+
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

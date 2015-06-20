@@ -14,6 +14,13 @@ To run
 
     ./run.sh
  
+To upload jars to nexus you need to have nexusUsername and nexusPassword defined in ~/.gradle/gradle.properties, then
+
+    ./gradlew uploadArchive
+
+This uploads to the nexus repo here
+
+    http://leonandjosh.ddns.net:8081/nexus
 
 To package up a linux version of the app
 
