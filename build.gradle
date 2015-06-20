@@ -19,8 +19,7 @@ allprojects {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-
-    version = '0.1'
+    version = '0.2'
     ext {
         appName = 'planet'
         gdxVersion = '1.5.3'
@@ -56,7 +55,6 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
@@ -72,5 +70,22 @@ project(":core") {
         testCompile 'org.mockito:mockito-all:2.0.2-beta'
         testCompile 'org.assertj:assertj-core:1.7.1'
         testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
+    }
+}
+
+project(":installers") {
+
+    apply plugin: "com.bmuschko.nexus"
+    nexus {
+        sign = false
+        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
+        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
+    }
+
+    def someFile = file('README.md')
+    group = 'groovy-planet'
+
+    artifacts {
+        archives someFile
     }
 }
