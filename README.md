@@ -18,14 +18,21 @@ To upload jars to nexus you need to have nexusUsername and nexusPassword defined
 
     ./gradlew uploadArchive
 
-This uploads to the nexus repo here
+This uploads the jars to the nexus repo here
 
     http://leonandjosh.ddns.net:8081/nexus
 
-To package up a linux version of the app
+To build the executables you need to download jwrapper and the JRE-1.8 to this directory here - http://www.jwrapper.com/download.html.
 
-    Download the linux jdk from oracle and zip into jdk.zip in the root folder of this project
-    java -jar packr.jar packr-linux.json
+New release process:
+
+1. Update the version number in build.gradle
+2. ./gradlew clean build dist
+3. ./package.sh
+4. ./gradlew uploadArchives
+
+
+
 
 Troubleshooting
 ---------------

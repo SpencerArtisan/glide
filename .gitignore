@@ -4,6 +4,9 @@
 *.war
 *.ear
 hs_err_pid*
+JRE-1.8/
+jwrapper*
+wrappers/
 
 ## GWT
 war/

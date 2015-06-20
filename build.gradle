@@ -19,7 +19,7 @@ allprojects {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-    version = '0.2'
+    version = '0.3'
     ext {
         appName = 'planet'
         gdxVersion = '1.5.3'
