@@ -28,8 +28,8 @@ public class LanguageChoiceDialog extends Dialog {
         text("Which Language?");
         getButtonTable().padTop(20).padBottom(20);
 
-        ImageTextButton rubyButton = new ImageTextButton(" Ruby", skin, "ruby-button");
-        addButton(rubyButton, Language.JRuby);
+//        ImageTextButton rubyButton = new ImageTextButton(" Ruby", skin, "ruby-button");
+//        addButton(rubyButton, Language.JRuby);
 
         ImageTextButton groovyButton = new ImageTextButton(" Groovy", skin, "groovy-button");
         addButton(groovyButton, Language.Groovy);

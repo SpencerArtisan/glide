@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
+import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.blurp.ui.RenderListener;
@@ -93,6 +94,7 @@ public class RunScreen {
 
     private void exitGame() {
         blurpRuntime.end();
+        BlurpState.reset();
         exit.run();
     }
 

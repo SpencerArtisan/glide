@@ -259,36 +259,36 @@ public class SyntaxTest {
 		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
 	}
 
-	@Test
-	public void noErrorsInGoodRuby() {
-		useRubySyntax();
-		assertThat(syntax.errorLines("puts 'hi'")).isEmpty();
-	}
-
-	@Test
-	public void goodRubyCodeIsValid() {
-		useRubySyntax();
-		assertThat(syntax.isValid("puts 'hi'")).isTrue();
-	}
-
-	@Test
-	public void errorsInBadRuby() {
-		useRubySyntax();
-		assertThat(syntax.errorLines("puts 'unended string")).containsExactly(0);
-	}
-
-	@Test
-	public void badRubyCodeIsIsInvalid() {
-		useRubySyntax();
-		assertThat(syntax.isValid("puts 'unended string")).isFalse();
-	}
-
+//	@Test
+//	public void noErrorsInGoodRuby() {
+//		useRubySyntax();
+//		assertThat(syntax.errorLines("puts 'hi'")).isEmpty();
+//	}
+//
+//	@Test
+//	public void goodRubyCodeIsValid() {
+//		useRubySyntax();
+//		assertThat(syntax.isValid("puts 'hi'")).isTrue();
+//	}
+//
+//	@Test
+//	public void errorsInBadRuby() {
+//		useRubySyntax();
+//		assertThat(syntax.errorLines("puts 'unended string")).containsExactly(0);
+//	}
+//
+//	@Test
+//	public void badRubyCodeIsIsInvalid() {
+//		useRubySyntax();
+//		assertThat(syntax.isValid("puts 'unended string")).isFalse();
+//	}
+//
 	private void useGroovySyntax() {
 		syntax = Language.Groovy.syntax();
 	}
 
-	private void useRubySyntax() {
-		syntax = Language.JRuby.syntax();
-	}
+//	private void useRubySyntax() {
+//		syntax = Language.JRuby.syntax();
+//	}
 
 }

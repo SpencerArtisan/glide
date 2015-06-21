@@ -31,9 +31,9 @@ public class NewCommandTest {
 
     @Test
     public void executeWithLanguageChoice() {
-        command = spy(new NewCommand(() -> Futures.immediateFuture(Language.JRuby), runIDE, cancel));
+        command = spy(new NewCommand(() -> Futures.immediateFuture(Language.Groovy), runIDE, cancel));
         command.execute();
-        verify(runIDE).accept(Language.JRuby);
+        verify(runIDE).accept(Language.Groovy);
     }
 
     @Test

@@ -68,7 +68,6 @@ project(":core") {
         compile "org.apache.commons:commons-lang3:3.1"
         compile "com.google.guava:guava:18.0"
         compile 'org.codehaus.groovy:groovy-all:2.4.3'
-        compile 'org.jruby:jruby-complete:1.7.19'
         compile files("libs/core-1.0.jar")
         compile files("libs/model-1.0.jar")
         compile files("libs/tween-engine-api.jar")
@@ -88,10 +87,10 @@ project(":installers") {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-    def someFile = file('README.md')
+    def linuxInstaller = file('../build/Planet-linux64-offline.tar')
     group = 'groovy-planet'
 
     artifacts {
-        archives someFile
+        archives linuxInstaller
     }
 }

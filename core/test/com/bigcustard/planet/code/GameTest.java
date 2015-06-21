@@ -420,13 +420,13 @@ public class GameTest {
         assertThat(game.language()).isEqualTo(Language.Groovy);
     }
 
-    @Test
-    @Ignore
-    public void fromFileUsesRubySuffixToDetermineLanguage() {
-        Game game = fromGame();
-        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockJRubyCodeFile});
-        assertThat(game.language()).isEqualTo(Language.JRuby);
-    }
+//    @Test
+//    @Ignore
+//    public void fromFileUsesRubySuffixToDetermineLanguage() {
+//        Game game = fromGame();
+//        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockJRubyCodeFile});
+//        assertThat(game.language()).isEqualTo(Language.JRuby);
+//    }
 
     private Game newGame(Language language) {
         return Game.create(mockPreferences, mockParentFolder, mockImageModel, language);
