@@ -39,6 +39,9 @@ allprojects {
 project(":desktop") {
     apply plugin: "java"
 
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -54,6 +57,9 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java"
+
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

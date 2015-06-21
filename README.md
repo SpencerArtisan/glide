@@ -26,7 +26,7 @@ To build the executables you need to download jwrapper and the JRE-1.8 to this d
 
 New release process:
 
-1. Update the version number in build.gradle
+1. Update the version number in build.gradle and installers/jwrapper-groovy-planet.xml
 2. ./gradlew clean build dist
 3. ./package.sh
 4. ./gradlew uploadArchives
