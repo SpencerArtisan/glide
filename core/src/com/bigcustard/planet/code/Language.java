@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code;
 
 import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.planet.language.JavascriptKeywords;
 import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
@@ -68,6 +69,17 @@ public class Language {
                             }
                             return errorLines;
                         });
+    public static Language Javascript = new Language(new JavascriptKeywords(), "js", "javascript-button",
+                      "////////////////////////////////////////////// \n"
+                    + "//         Welcome to Planet Burpl!         // \n"
+                    + "//      Start writing your game below       // \n"
+                    + "// Look in the Game Library for inspiration // \n"
+                    + "////////////////////////////////////////////// \n\n",
+                    (program) -> {
+                            Set<Integer> errorLines = new HashSet<>();
+
+                            return errorLines;
+                        });
 
     private final Syntax syntax;
     private String scriptEngine;
@@ -111,7 +123,9 @@ public class Language {
     }
 
     public static Language from(String scriptEngine) {
-        if (scriptEngine.equals(Groovy.scriptEngine())) {
+        if (scriptEngine.equals(Javascript.scriptEngine())) {
+            return Javascript;
+        } else if (scriptEngine.equals(Groovy.scriptEngine())) {
             return Groovy;
         }
         throw new IllegalArgumentException("Unknown language " + scriptEngine);

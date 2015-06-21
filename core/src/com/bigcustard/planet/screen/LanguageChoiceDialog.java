@@ -28,10 +28,10 @@ public class LanguageChoiceDialog extends Dialog {
         text("Which Language?");
         getButtonTable().padTop(20).padBottom(20);
 
-//        ImageTextButton rubyButton = new ImageTextButton(" Ruby", skin, "ruby-button");
-//        addButton(rubyButton, Language.JRuby);
+        ImageTextButton javascriptButton = new ImageTextButton(" Javascript ", skin, "javascript-button");
+        addButton(javascriptButton, Language.Javascript);
 
-        ImageTextButton groovyButton = new ImageTextButton(" Groovy", skin, "groovy-button");
+        ImageTextButton groovyButton = new ImageTextButton(" Groovy ", skin, "groovy-button");
         addButton(groovyButton, Language.Groovy);
 
         getButtonTable().row();
@@ -45,7 +45,7 @@ public class LanguageChoiceDialog extends Dialog {
         button.add(new Spacer(3));
         button.add(button.getImage());
         button.add(button.getLabel());
-        getButtonTable().add(button).width(240).padLeft(10).padRight(10);
+        getButtonTable().add(button).width(280).padLeft(10).padRight(10);
         setObject(button, language);
     }
 }

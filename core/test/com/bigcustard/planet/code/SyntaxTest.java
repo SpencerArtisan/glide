@@ -259,6 +259,30 @@ public class SyntaxTest {
 		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
 	}
 
+//    @Test
+//    public void noErrorsInGoodJavascript() {
+//		useJavascriptSyntax();
+//        assertThat(syntax.errorLines("function hello() {\n}")).isEmpty();
+//    }
+//
+//    @Test
+//    public void goodJavascriptCodeIsValid() {
+//		useJavascriptSyntax();
+//        assertThat(syntax.isValid("function hello() {\n}")).isTrue();
+//    }
+//
+//    @Test
+//    public void errorsInBadJavascript() {
+//		useJavascriptSyntax();
+//        assertThat(syntax.errorLines("function hello() {\n\"unended string\n}")).containsExactly(1);
+//    }
+//
+//	@Test
+//	public void badJavascriptCodeIsIsInvalid() {
+//		useJavascriptSyntax();
+//		assertThat(syntax.isValid("function hello() {\n\"unended string\n}")).isFalse();
+//	}
+
 //	@Test
 //	public void noErrorsInGoodRuby() {
 //		useRubySyntax();
@@ -285,6 +309,10 @@ public class SyntaxTest {
 //
 	private void useGroovySyntax() {
 		syntax = Language.Groovy.syntax();
+	}
+
+	private void useJavascriptSyntax() {
+		syntax = Language.Javascript.syntax();
 	}
 
 //	private void useRubySyntax() {
