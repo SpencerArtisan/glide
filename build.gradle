@@ -88,9 +88,11 @@ project(":installers") {
     }
 
     def linuxInstaller = file('../build/Planet-linux64-offline.tar')
+    def macInstaller = file('../build/Planet-macos64-offline.dmg')
     group = 'groovy-planet'
 
     artifacts {
+        archives macInstaller
         archives linuxInstaller
     }
 }

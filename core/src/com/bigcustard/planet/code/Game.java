@@ -16,7 +16,8 @@ public class Game {
     private static String CODE_FILE_WITHOUT_SUFFIX = "code";
     public static final String DEFAULT_NAME = "Unnamed Game";
     private static final String RECENT_GAME = "MostRecentGameName";
-    private static String FOLDER = "games";
+    private static String USER_FOLDER = "mygames";
+    private static String SAMPLES_FOLDER = "samples";
 
     private Preferences preferences;
     private FileHandle gameFolder;
@@ -29,14 +30,19 @@ public class Game {
     private Language language;
 
     public static Game create(Language language) {
-        return create(preferences(), parentFolder(), new ImageAreaModel(), language);
+        return create(preferences(), userFolder(), new ImageAreaModel(), language);
     }
 
     public static Game mostRecent() {
-        return mostRecent(preferences(), parentFolder(), new ImageAreaModel());
+        return mostRecent(preferences(), userFolder(), new ImageAreaModel());
     }
 
     public static Game from(FileHandle gameFolder) {
+        if (gameFolder.parent().name().equals(samplesFolder().name())) {
+            FileHandle myGamesCopy = findUniqueName(userFolder());
+            gameFolder.copyTo(myGamesCopy);
+            gameFolder = myGamesCopy;
+        }
         return from(preferences(), gameFolder, new ImageAreaModel());
     }
 
@@ -84,8 +90,12 @@ public class Game {
         return commandHistory;
     }
 
-    public static FileHandle[] allGameFolders() {
-        return allGameFolders(parentFolder());
+    public static FileHandle[] allSampleGameFolders() {
+        return allGameFolders(samplesFolder());
+    }
+
+    public static FileHandle[] allUserGameFolders() {
+        return allGameFolders(userFolder());
     }
 
     @VisibleForTesting
@@ -154,7 +164,7 @@ public class Game {
     }
 
     public static boolean hasMostRecent() {
-        return hasMostRecent(preferences(), parentFolder());
+        return hasMostRecent(preferences(), userFolder());
     }
 
     public void setRuntimeError(RuntimeException runtimeError) {
@@ -198,11 +208,24 @@ public class Game {
         return Gdx.app.getPreferences(PREFERENCES_KEY);
     }
 
-    private static FileHandle parentFolder() {
-        return Gdx.files.local(FOLDER);
+    private static FileHandle samplesFolder() {
+        return Gdx.files.internal(SAMPLES_FOLDER);
+    }
+
+    private static FileHandle userFolder() {
+        return Gdx.files.local(USER_FOLDER);
     }
 
     private boolean isChangingName(String newName) {
         return !name().equals(newName);
+    }
+
+    public static Language language(FileHandle gameFolder) {
+        FileHandle[] codeFiles = gameFolder.list((dir, name) -> {
+            return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
+        });
+        FileHandle codeFile = codeFiles[0];
+        return Language.from(codeFile.extension());
+
     }
 }

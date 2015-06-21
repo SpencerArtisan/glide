@@ -22,14 +22,15 @@ This uploads the jars to the nexus repo here
 
     http://leonandjosh.ddns.net:8081/nexus
 
-To build the executables you need to download jwrapper and the JRE-1.8 to this directory here - http://www.jwrapper.com/download.html.
+To build the executables you need to download jwrapper and the JRE-1.8 to this directory from here - http://www.jwrapper.com/download.html.
 
 New release process:
 
 1. Update the version number in build.gradle and installers/jwrapper-groovy-planet.xml
 2. ./gradlew clean build dist
-3. ./package.sh
-4. ./gradlew uploadArchives
+3. ./run.sh and manually smoke test
+4. ./package.sh
+5. ./gradlew uploadArchives
 
 
 

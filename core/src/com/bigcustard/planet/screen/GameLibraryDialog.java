@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.bigcustard.planet.code.Game;
-import com.bigcustard.planet.code.Language;
 import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
@@ -13,9 +12,20 @@ public class GameLibraryDialog extends Dialog {
     private static int COLUMNS = 2;
     private SettableFuture<FileHandle> futureGame = SettableFuture.create();
 
-    public GameLibraryDialog(Skin skin) {
+    public static GameLibraryDialog userGames(Skin skin) {
+        GameLibraryDialog dialog = new GameLibraryDialog(skin);
+        dialog.layoutControls(skin, Game.allUserGameFolders(), true);
+        return dialog;
+    }
+
+    public static GameLibraryDialog sampleGames(Skin skin) {
+        GameLibraryDialog dialog = new GameLibraryDialog(skin);
+        dialog.layoutControls(skin, Game.allSampleGameFolders(), false);
+        return dialog;
+    }
+
+    private GameLibraryDialog(Skin skin) {
         super("", skin);
-        layoutControls(skin);
     }
 
     public SettableFuture<FileHandle> getFutureGame() {
@@ -27,18 +37,18 @@ public class GameLibraryDialog extends Dialog {
         futureGame.set((FileHandle) object);
     }
 
-    private void layoutControls(Skin skin) {
+    private void layoutControls(Skin skin, FileHandle[] gameFolders, boolean allowDelete) {
         getContentTable().clearChildren();
         getButtonTable().clearChildren();
         pad(20);
         text("Choose a game").padBottom(25);
         row();
         int i = 0;
-        for (FileHandle gameFolder : Game.allGameFolders()) {
+        for (FileHandle gameFolder : gameFolders) {
             ImageTextButton button = createButton(skin, gameFolder);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, gameFolder);
-            getButtonTable().add(createDeleteButton(gameFolder, skin)).padTop(2);
+            if (allowDelete) getButtonTable().add(createDeleteButton(gameFolder, skin)).padTop(2);
             if (++i%COLUMNS == 0) getButtonTable().row();
         }
         getButtonTable().row();
@@ -49,7 +59,7 @@ public class GameLibraryDialog extends Dialog {
     }
 
     private ImageTextButton createButton(Skin skin, FileHandle gameFolder) {
-        String buttonStyle = Game.from(gameFolder).language().buttonStyle();
+        String buttonStyle = Game.language(gameFolder).buttonStyle();
         ImageTextButton button = new ImageTextButton(gameFolder.name() + "  ", skin, buttonStyle);
         button.clearChildren();
         button.add(new Spacer(8));
@@ -65,7 +75,7 @@ public class GameLibraryDialog extends Dialog {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 gameFolder.deleteDirectory();
-                layoutControls(skin);
+                layoutControls(skin, Game.allUserGameFolders(), true);
             }
         });
         return button;

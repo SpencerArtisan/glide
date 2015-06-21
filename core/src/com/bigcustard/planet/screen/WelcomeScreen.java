@@ -37,7 +37,8 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Stage stage;
 	private TextButton newGameButton;
 	private TextButton continueGameButton;
-	private TextButton gameLibraryButton;
+	private TextButton samplesButton;
+	private TextButton myGamesButton;
 	private TextButton quitButton;
 	private Consumer<Screen> setScreen;
 	private MouseWindowChecker mouseWindowChecker;
@@ -56,7 +57,8 @@ public class WelcomeScreen extends ScreenAdapter {
 		createTitle();
 	    createNewGameButton();
 		createContinueGameButton();
-		createGameLibraryButton();
+		createSamplesButton();
+		createMyGamesButton();
 		createQuitButton();
 		refreshButtonEnabledStatuses();
 		layoutScreen(createBackground());
@@ -87,9 +89,9 @@ public class WelcomeScreen extends ScreenAdapter {
 		continueGameButton.setDisabled(!continueEnabled);
 		continueGameButton.setTouchable(continueEnabled ? Touchable.enabled : Touchable.disabled);
 
-		boolean libraryEnabled = Game.allGameFolders().length > 0;
-		gameLibraryButton.setDisabled(!libraryEnabled);
-		gameLibraryButton.setTouchable(libraryEnabled ? Touchable.enabled : Touchable.disabled);
+		boolean libraryEnabled = Game.allSampleGameFolders().length > 0;
+		samplesButton.setDisabled(!libraryEnabled);
+		samplesButton.setTouchable(libraryEnabled ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void createTitle() {
@@ -125,13 +127,22 @@ public class WelcomeScreen extends ScreenAdapter {
 		});
 	}
 
-	private void createGameLibraryButton() {
-		gameLibraryButton = new TextButton("   Game Library   ", skin, "big");
-		gameLibraryButton.addListener(new ClickListener() {
+	private void createSamplesButton() {
+		samplesButton = new TextButton("     Samples     ", skin, "big");
+		createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
+	}
+
+	private void createMyGamesButton() {
+		myGamesButton = new TextButton("    My Games    ", skin, "big");
+		createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin));
+	}
+
+	private void createGamesButton(TextButton button, Supplier<GameLibraryDialog> dialogSupplier) {
+		button.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				hideMainMenu();
-				final GameLibraryDialog dialog = new GameLibraryDialog(skin);
+				final GameLibraryDialog dialog = dialogSupplier.get();
 				dialog.show(stage);
 				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
 					@Override
@@ -178,7 +189,9 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.row();
 		table.add(continueGameButton).padTop(20f).colspan(2).fillX();
 		table.row();
-		table.add(gameLibraryButton).padTop(20f).colspan(2).fillX();
+		table.add(samplesButton).padTop(20f).colspan(2).fillX();
+		table.row();
+		table.add(myGamesButton).padTop(20f).colspan(2).fillX();
 		table.row();
 		table.add(quitButton).padTop(20f).colspan(2).fillX();
 		outerTable.background(backgroundRegion);
