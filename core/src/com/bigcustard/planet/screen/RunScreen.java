@@ -1,26 +1,15 @@
 package com.bigcustard.planet.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.bootstrap.ScriptCompletionHandler;
 import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
-import com.bigcustard.blurp.ui.RenderListener;
 import com.bigcustard.planet.code.Game;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class RunScreen {
@@ -59,7 +48,7 @@ public class RunScreen {
 //            game.setRuntimeError(e);
 //            exitGame();
 //        });
-        blurpRuntime.startScript(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
+        blurpRuntime.startScript(game.language().scriptEngine(), game.folder().path() + "/" + game.codeFilename());
         setScreen.accept(BlurpStore.blurpScreen);
     }
 

@@ -147,8 +147,12 @@ public class Game {
     }
 
     public void save() {
-        gameFolder.child(CODE_FILE_WITHOUT_SUFFIX + "." + language().scriptEngine()).writeString(code, false);
+        gameFolder.child(codeFilename()).writeString(code, false);
         imageModel.save();
+    }
+
+    public String codeFilename() {
+        return CODE_FILE_WITHOUT_SUFFIX + "." + language().scriptEngine();
     }
 
     public void delete() {
