@@ -37,17 +37,13 @@ public class CodingScreen extends ScreenAdapter {
     private ImageArea imageArea;
     private ButtonBar buttonBar;
     private Game game;
-    private Runnable exitToMainMenu;
     private Consumer<Screen> setScreen;
-    private MouseWindowChecker mouseWindowChecker;
     private ScreenFactory screenFactory;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory) {
         this.game = game;
-        this.exitToMainMenu = exitToMainMenu;
         this.setScreen = setScreen;
-        this.mouseWindowChecker = mouseWindowChecker;
         this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
 		this.skin = skin;
@@ -93,8 +89,12 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::showRunScreen));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, exitToMainMenu));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
+    }
+
+    private void exitToMainMenu() {
+        setScreen.accept(screenFactory.createWelcomeScreen());
     }
 
     private void showRunScreen(Game game) {

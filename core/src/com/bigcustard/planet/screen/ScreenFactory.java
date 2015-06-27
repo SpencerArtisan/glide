@@ -9,7 +9,6 @@ import com.bigcustard.planet.code.Game;
 import java.util.function.Consumer;
 
 public class ScreenFactory {
-
     private Skin skin;
     private Viewport viewport;
     private Consumer<Screen> setScreen;
@@ -30,7 +29,7 @@ public class ScreenFactory {
         return new WelcomeScreen(viewport, skin, setScreen, mouseWindowChecker, this);
     }
 
-    public CodingScreen createCodingScreen(Game game, Runnable exitToMainMenu) {
-        return new CodingScreen(game, viewport, skin, exitToMainMenu, setScreen, mouseWindowChecker, this);
+    public CodingScreen createCodingScreen(Game game) {
+        return new CodingScreen(game, viewport, skin, setScreen, this);
     }
 }

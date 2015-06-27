@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.screen.ResourceManager;
 import com.bigcustard.planet.screen.ScreenFactory;
+import com.bigcustard.planet.screen.WelcomeScreen;
 
 public class PlanetApplication extends com.badlogic.gdx.Game {
     private Viewport viewport;
@@ -23,7 +24,9 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
     }
 
     private void showWelcomeScreen() {
-        new ScreenFactory(resourceManager.getSkin(), viewport, this::setScreen, mouseWindowChecker).createWelcomeScreen().showWelcomeScreen();
+        ScreenFactory screenFactory = new ScreenFactory(resourceManager.getSkin(), viewport, this::setScreen, mouseWindowChecker);
+        WelcomeScreen welcomeScreen = screenFactory.createWelcomeScreen();
+        setScreen(welcomeScreen);
     }
 
     @Override

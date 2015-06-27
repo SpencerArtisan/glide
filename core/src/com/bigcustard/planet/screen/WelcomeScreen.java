@@ -64,9 +64,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		createQuitButton();
 		refreshButtonEnabledStatuses();
 		layoutScreen(createBackground());
-	}
 
-	public void showWelcomeScreen() {
 		refreshButtonEnabledStatuses();
 		animateTitle();
 		setScreen.accept(this);
@@ -217,8 +215,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		try {
 			showMainMenu();
 			CodingScreen codingScreen = screenFactory.createCodingScreen(
-					programSupplier.get(),
-					this::showWelcomeScreen
+					programSupplier.get()
 			);
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {
