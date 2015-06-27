@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
+import com.bigcustard.blurp.bootstrap.ScriptCompletionHandler;
 import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
@@ -23,10 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class RunScreen {
-    private Skin skin;
-    private Stage stage;
     private BlurpRuntime blurpRuntime;
-    private ImageButton closeButton;
     private Game game;
     private Consumer<Screen> setScreen;
     private Runnable exit;
@@ -37,74 +35,36 @@ public class RunScreen {
         this.game = game;
         this.setScreen = setScreen;
         this.exit = exit;
-        this.skin = skin;
         this.mouseWindowChecker = mouseWindowChecker;
     }
 
     public void showScreen() {
         BlurpConfiguration config = new BlurpConfiguration(800, 480);
+        ScriptCompletionHandler completionHandler = new ScriptCompletionHandler() {
+            @Override
+            public void onTerminate() {
+                exitGame();
+            }
+        };
+        config.setScriptCompletionHandler(completionHandler);
         String contentRoot = game.folder().path() + "/build";
         config.setContentRoot(contentRoot);
 
         blurpRuntime = BlurpRuntime.begin(config, mouseWindowChecker);
+//        blurpRuntime.onException(e -> {
+//            System.err.println(e);
+//            e.printStackTrace();
+//            game.setRuntimeError(e);
+//            exitGame();
+//        });
         blurpRuntime.startScript(game.language().scriptEngine(), game.code(), game.name().replace(" ", "_"));
         setScreen.accept(BlurpStore.blurpScreen);
-        blurpRuntime.onRenderEvent(new RenderListener() {
-            @Override
-            public void handlePreRenderEvent(float v) {
-            }
-
-            @Override
-            public void handlePostRenderEvent(Batch batch, float delta) {
-                renderStage(batch, delta);
-            }
-        });
-        blurpRuntime.onException(e -> {
-            System.err.println(e);
-            e.printStackTrace();
-            game.setRuntimeError(e);
-            Gdx.app.postRunnable(this::exitGame);
-        });
-    }
-
-    private void renderStage(Batch batch, float delta) {
-        if (batch.isDrawing()) batch.end();
-        getStage(batch).act(Math.min(delta, 1 / 60f));
-        getStage(batch).draw();
-    }
-
-    private Stage getStage(Batch batch) {
-        if (stage == null) {
-            stage = new Stage(new FitViewport(800, 480), batch);
-            createCloseButton();
-            layoutScreen();
-        }
-        return stage;
-    }
-
-    private void createCloseButton() {
-        closeButton = new ImageButton(skin, "close-button");
-        closeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                exitGame();
-            }
-        });
     }
 
     private void exitGame() {
+        BlurpStore.reset();
         blurpRuntime.end();
         BlurpState.reset();
         exit.run();
-    }
-
-    private void layoutScreen() {
-        Table table = new Table();
-        table.add(closeButton);
-        table.setFillParent(true);
-        table.pack();
-        table.right().top();
-        stage.addActor(table);
-        Gdx.input.setInputProcessor(stage);
     }
 }

@@ -17,9 +17,9 @@ public class CodeColorCoder implements ColorCoder {
 
     private static final Map<SyntaxPart.Type, String> DEFAULT_COLORS = ImmutableMap.<SyntaxPart.Type, String>builder().
             put(Keyword, "#b58900").
-            put(Operator, "WHITE").
+            put(Operator, "#ffffff").
             put(Quoted, "#2aa198").
-            put(UnclosedQuote, "RED").
+            put(UnclosedQuote, "#ff4444").
             put(Unclassified, "#839496").
             put(Comment, "#586e75").build();
     private static final String DEFAULT_ERROR = "dc322f88";
