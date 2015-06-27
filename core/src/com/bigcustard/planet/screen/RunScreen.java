@@ -9,27 +9,28 @@ import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 
 import java.util.function.Consumer;
 
 public class RunScreen {
     private BlurpRuntime blurpRuntime;
     private Game game;
+    private GameStore gameStore;
     private Consumer<Screen> setScreen;
     private Runnable exit;
     private MouseWindowChecker mouseWindowChecker;
-    private ScreenFactory screenFactory;
 
-
-    RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
+    RunScreen(Game game, GameStore gameStore, Consumer<Screen> setScreen, Runnable exit, MouseWindowChecker mouseWindowChecker) {
         this.game = game;
+        this.gameStore = gameStore;
         this.setScreen = setScreen;
         this.exit = exit;
         this.mouseWindowChecker = mouseWindowChecker;
-        this.screenFactory = screenFactory;
     }
 
     public void showScreen() {
+        gameStore.save(game);
         BlurpConfiguration config = new BlurpConfiguration(800, 480);
         ScriptCompletionHandler completionHandler = new ScriptCompletionHandler() {
             @Override
@@ -38,7 +39,7 @@ public class RunScreen {
             }
         };
         config.setScriptCompletionHandler(completionHandler);
-        String contentRoot = game.folder().path() + "/build";
+        String contentRoot = gameStore.buildFolder(game).path();
         config.setContentRoot(contentRoot);
 
         blurpRuntime = BlurpRuntime.begin(config, mouseWindowChecker);
@@ -48,7 +49,7 @@ public class RunScreen {
 //            game.setRuntimeError(e);
 //            exitGame();
 //        });
-        blurpRuntime.startScript(game.language().scriptEngine(), game.folder().path() + "/" + game.codeFilename());
+        blurpRuntime.startScript(game.language().scriptEngine(), new GameStore().codePathname(game));
         setScreen.accept(BlurpStore.blurpScreen);
     }
 

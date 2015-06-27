@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.code.command.ExitCommand;
 import com.bigcustard.planet.code.command.RunCommand;
 import com.bigcustard.scene2dplus.button.ButtonBar;
@@ -37,12 +37,14 @@ public class CodingScreen extends ScreenAdapter {
     private ImageArea imageArea;
     private ButtonBar buttonBar;
     private Game game;
+    private GameStore gameStore;
     private Consumer<Screen> setScreen;
     private ScreenFactory screenFactory;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory) {
+    public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory) {
         this.game = game;
+        this.gameStore = gameStore;
         this.setScreen = setScreen;
         this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
@@ -87,9 +89,9 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, this::showRunScreen));
+        buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, gameStore, this::showRunScreen));
         buttonBar.addSpacer(16);
-        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
+        buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
         game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
     }
 

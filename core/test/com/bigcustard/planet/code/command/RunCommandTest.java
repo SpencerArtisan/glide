@@ -2,6 +2,7 @@ package com.bigcustard.planet.code.command;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
@@ -20,6 +21,7 @@ public class RunCommandTest {
     private RunCommand command;
     @Mock private Syntax syntax;
     @Mock private FileHandle gameFolder;
+    @Mock private GameStore gameStore;
     @Mock private FileHandle buildFolder;
     @Mock private ImageAreaModel imageAreaModel;
     @Mock private ImageModel imageModel;
@@ -30,9 +32,8 @@ public class RunCommandTest {
     public void before() {
         initMocks(this);
         when(game.imageModel()).thenReturn(imageAreaModel);
-        when(game.folder()).thenReturn(gameFolder);
-        when(gameFolder.child("build")).thenReturn(buildFolder);
-        command = spy(new RunCommand(game, runGame));
+        when(gameStore.buildFolder(game)).thenReturn(buildFolder);
+        command = spy(new RunCommand(game, gameStore, runGame));
         doNothing().when(command).resize(any(ImageModel.class));
     }
 

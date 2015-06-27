@@ -2,6 +2,7 @@ package com.bigcustard.planet.code.command;
 
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameRenameException;
+import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.util.FutureSupplier;
 import com.bigcustard.util.FutureSuppliers;
@@ -10,17 +11,20 @@ import java.util.function.BiConsumer;
 
 public class ExitCommand extends AbstractCommand {
     private final Game game;
+    private GameStore gameStore;
     private final FutureSupplier<Boolean> saveChoiceSupplier;
     private final FutureSupplier<String> gameNameSupplier;
     private BiConsumer<Exception, Runnable> errorReporter;
     private final Runnable exitProcess;
 
     public ExitCommand(Game game,
+                       GameStore gameStore,
                        FutureSupplier<Boolean> saveChoiceSupplier,
                        FutureSupplier<String> gameNameSupplier,
                        BiConsumer<Exception, Runnable> errorReporter,
                        Runnable exitProcess) {
         this.game = game;
+        this.gameStore = gameStore;
         this.saveChoiceSupplier = saveChoiceSupplier;
         this.gameNameSupplier = gameNameSupplier;
         this.errorReporter = errorReporter;
@@ -41,7 +45,7 @@ public class ExitCommand extends AbstractCommand {
             if (save) {
                 saveGame();
             } else {
-                game.delete();
+                gameStore.delete(game);
                 exitProcess.run();
             }
         });
@@ -50,7 +54,7 @@ public class ExitCommand extends AbstractCommand {
     private void saveGame() {
         FutureSuppliers.onGet(gameNameSupplier, (newName) -> {
             try {
-                game.setName(newName);
+                gameStore.rename(game, newName);
                 exitProcess.run();
             } catch (GameRenameException e) {
                 errorReporter.accept(e, this::saveGame);

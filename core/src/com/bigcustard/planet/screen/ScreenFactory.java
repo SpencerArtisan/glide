@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 
 import java.util.function.Consumer;
 
@@ -13,23 +14,25 @@ public class ScreenFactory {
     private Viewport viewport;
     private Consumer<Screen> setScreen;
     private MouseWindowChecker mouseWindowChecker;
+    private GameStore gameStore;
 
     public ScreenFactory(Skin skin, Viewport viewport, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
         this.skin = skin;
         this.viewport = viewport;
         this.setScreen = setScreen;
         this.mouseWindowChecker = mouseWindowChecker;
+        this.gameStore = new GameStore();
     }
 
     public RunScreen createRunScreen(Game game, Runnable exit) {
-        return new RunScreen(skin, game, setScreen, exit, mouseWindowChecker, this);
+        return new RunScreen(game, gameStore, setScreen, exit, mouseWindowChecker);
     }
 
     public WelcomeScreen createWelcomeScreen() {
-        return new WelcomeScreen(viewport, skin, setScreen, mouseWindowChecker, this);
+        return new WelcomeScreen(viewport, skin, setScreen, this, gameStore);
     }
 
     public CodingScreen createCodingScreen(Game game) {
-        return new CodingScreen(game, viewport, skin, setScreen, this);
+        return new CodingScreen(game, gameStore, viewport, skin, setScreen, this);
     }
 }

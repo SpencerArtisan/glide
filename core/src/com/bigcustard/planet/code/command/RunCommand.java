@@ -2,6 +2,7 @@ package com.bigcustard.planet.code.command;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.image.ImageUtils;
@@ -13,10 +14,10 @@ public class RunCommand extends AbstractCommand {
     private final Game game;
     private final Consumer<Game> runGame;
 
-    public RunCommand(Game game, Consumer<Game> runGame) {
+    public RunCommand(Game game, GameStore gameStore, Consumer<Game> runGame) {
         this.game = game;
         this.runGame = runGame;
-        buildFolder = game.folder().child("build");
+        buildFolder = gameStore.buildFolder(game);
     }
 
     @Override

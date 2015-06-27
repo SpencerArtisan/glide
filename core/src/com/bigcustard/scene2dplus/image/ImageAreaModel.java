@@ -75,9 +75,10 @@ public class ImageAreaModel {
         return images.stream().map(ImageModel::validate).toArray(ValidationResult[]::new);
     }
 
-    public void loadFromFolder(FileHandle folder) {
+    public ImageAreaModel loadFromFolder(FileHandle folder) {
         this.folder = folder;
         readImages();
+        return this;
     }
 
     private void readImages() {

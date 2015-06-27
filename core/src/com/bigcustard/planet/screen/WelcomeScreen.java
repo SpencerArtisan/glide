@@ -3,7 +3,6 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -19,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
+import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.code.Language;
 import com.bigcustard.planet.code.command.NewCommand;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
@@ -41,19 +41,17 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextButton myGamesButton;
 	private TextButton quitButton;
 	private Consumer<Screen> setScreen;
-	private MouseWindowChecker mouseWindowChecker;
 	private ScreenFactory screenFactory;
-	private Viewport viewport;
+	private GameStore gameStore;
 	private Label title;
 	private Cell<Label> titleCell;
 
-	WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
+	WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory, GameStore gameStore) {
 		super();
 		this.setScreen = setScreen;
-		this.mouseWindowChecker = mouseWindowChecker;
 		this.screenFactory = screenFactory;
+		this.gameStore = gameStore;
 		this.stage = new Stage(viewport);
-		this.viewport = viewport;
 		this.skin = skin;
 
 		createTitle();
@@ -85,13 +83,13 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void refreshButtonEnabledStatuses() {
-		boolean continueEnabled = Game.hasMostRecent();
+		boolean continueEnabled = gameStore.hasMostRecent();
 		continueGameButton.setDisabled(!continueEnabled);
 		continueGameButton.setTouchable(continueEnabled ? Touchable.enabled : Touchable.disabled);
 
-		boolean libraryEnabled = Game.allSampleGameFolders().length > 0;
-		samplesButton.setDisabled(!libraryEnabled);
-		samplesButton.setTouchable(libraryEnabled ? Touchable.enabled : Touchable.disabled);
+		boolean samplesEnabled = gameStore.allSampleGames().size() > 0;
+		samplesButton.setDisabled(!samplesEnabled);
+		samplesButton.setTouchable(samplesEnabled ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void createTitle() {
@@ -105,7 +103,7 @@ public class WelcomeScreen extends ScreenAdapter {
 			public void clicked(InputEvent event, float x, float y) {
 				hideMainMenu();
 				NewCommand newCommand = new NewCommand(WelcomeScreen.this::saveGameChoice,
-						(language) -> showCodingScreen(() -> Game.create(language)), WelcomeScreen.this::showMainMenu);
+						(language) -> showCodingScreen(() -> gameStore.create(language)), WelcomeScreen.this::showMainMenu);
 				newCommand.execute();
 			}
 		});
@@ -122,7 +120,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		continueGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				showCodingScreen(Game::mostRecent);
+				showCodingScreen(gameStore::mostRecent);
 			}
 		});
 	}
@@ -144,14 +142,14 @@ public class WelcomeScreen extends ScreenAdapter {
 				hideMainMenu();
 				final GameLibraryDialog dialog = dialogSupplier.get();
 				dialog.show(stage);
-				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<FileHandle>() {
+				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<Game>() {
 					@Override
-					public void onSuccess(FileHandle gameFolder) {
+					public void onSuccess(Game game) {
 						showMainMenu();
 						refreshButtonEnabledStatuses();
-						if (gameFolder != null) {
+						if (game != null) {
 							dialog.remove();
-							showCodingScreen(() -> Game.from(gameFolder));
+							showCodingScreen(() -> game);
 						}
 					}
 
