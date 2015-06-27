@@ -29,13 +29,15 @@ public class RunScreen {
     private Consumer<Screen> setScreen;
     private Runnable exit;
     private MouseWindowChecker mouseWindowChecker;
+    private ScreenFactory screenFactory;
 
 
-    public RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit, MouseWindowChecker mouseWindowChecker) {
+    RunScreen(Skin skin, Game game, Consumer<Screen> setScreen, Runnable exit, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
         this.game = game;
         this.setScreen = setScreen;
         this.exit = exit;
         this.mouseWindowChecker = mouseWindowChecker;
+        this.screenFactory = screenFactory;
     }
 
     public void showScreen() {

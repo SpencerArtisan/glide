@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
@@ -41,13 +40,15 @@ public class CodingScreen extends ScreenAdapter {
     private Runnable exitToMainMenu;
     private Consumer<Screen> setScreen;
     private MouseWindowChecker mouseWindowChecker;
+    private ScreenFactory screenFactory;
     private Label errorLabel;
 
-    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
+    public CodingScreen(Game game, Viewport viewport, Skin skin, Runnable exitToMainMenu, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
         this.game = game;
         this.exitToMainMenu = exitToMainMenu;
         this.setScreen = setScreen;
         this.mouseWindowChecker = mouseWindowChecker;
+        this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
 		this.skin = skin;
 
@@ -97,10 +98,10 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void showRunScreen(Game game) {
-        new RunScreen(skin, game, setScreen, () -> {
+        screenFactory.createRunScreen(game, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
-        }, mouseWindowChecker).showScreen();
+        }).showScreen();
     }
 
     private void createImageArea() {

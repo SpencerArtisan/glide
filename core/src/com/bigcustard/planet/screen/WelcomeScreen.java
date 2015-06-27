@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.Language;
@@ -43,14 +42,16 @@ public class WelcomeScreen extends ScreenAdapter {
 	private TextButton quitButton;
 	private Consumer<Screen> setScreen;
 	private MouseWindowChecker mouseWindowChecker;
+	private ScreenFactory screenFactory;
 	private Viewport viewport;
 	private Label title;
 	private Cell<Label> titleCell;
 
-	public WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
+	WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, ScreenFactory screenFactory) {
 		super();
 		this.setScreen = setScreen;
 		this.mouseWindowChecker = mouseWindowChecker;
+		this.screenFactory = screenFactory;
 		this.stage = new Stage(viewport);
 		this.viewport = viewport;
 		this.skin = skin;
@@ -215,13 +216,9 @@ public class WelcomeScreen extends ScreenAdapter {
 	private void showCodingScreen(Supplier<Game> programSupplier) {
 		try {
 			showMainMenu();
-			CodingScreen codingScreen = new CodingScreen(
+			CodingScreen codingScreen = screenFactory.createCodingScreen(
 					programSupplier.get(),
-					viewport,
-					skin,
-					this::showWelcomeScreen,
-					setScreen,
-					mouseWindowChecker
+					this::showWelcomeScreen
 			);
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {
