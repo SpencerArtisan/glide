@@ -1,19 +1,9 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.language.GroovyKeywords;
-import com.bigcustard.planet.language.JavascriptKeywords;
 import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
-import com.google.common.base.Function;
-import groovy.lang.GroovyClassLoader;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-import org.codehaus.groovy.control.messages.Message;
-import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
-import org.codehaus.groovy.syntax.SyntaxException;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public abstract class Language {

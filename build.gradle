@@ -19,7 +19,7 @@ allprojects {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-    version = '0.3'
+    version = '0.4'
     ext {
         appName = 'planet'
         gdxVersion = '1.5.3'
@@ -87,14 +87,12 @@ project(":installers") {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
     }
 
-    def linuxInstaller = file('../build/Planet-linux64-offline.tar')
-    def macInstaller = file('../build/Planet-macos64-offline.dmg')
-    def windowsInstaller = file('../build/Planet-windows64-offline.exe')
     group = 'groovy-planet'
 
     artifacts {
-        archives windowsInstaller
-        archives macInstaller
-        archives linuxInstaller
+        archives file: file('../build/Planet-windows64-offline.exe'), classifier: 'windows installer'
+        archives file: file('../build/Planet-macos64-offline.dmg'), classifier: 'mac installer'
+        archives file: file('../build/Planet-linux64-offline.tar'), classifier: 'linux 64 installer'
+        archives file: file('../build/Planet-linux32-offline.tar'), classifier: 'linux 32 installer'
     }
 }
