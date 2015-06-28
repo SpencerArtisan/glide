@@ -127,15 +127,13 @@ public class ImageAreaModelTest {
 
     private ImageAreaModel newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
-        ImageAreaModel model = new ImageAreaModel();
-        model.loadFromFolder(mockImageFolder);
+        ImageAreaModel model = new ImageAreaModel(mockImageFolder);
         return model;
     }
 
     private ImageAreaModel existingModel() {
         when(mockManifestFile.exists()).thenReturn(true);
-        ImageAreaModel model = new ImageAreaModel();
-        model.loadFromFolder(mockImageFolder);
+        ImageAreaModel model = new ImageAreaModel(mockImageFolder);
         return model;
     }
 }

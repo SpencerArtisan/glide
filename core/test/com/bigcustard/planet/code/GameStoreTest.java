@@ -34,11 +34,11 @@ public class GameStoreTest {
         initMocks(this);
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockGameFolder.child("code.groovy")).thenReturn(mockGroovyCodeFile);
-        when(mockGameFolder.child("manifest.json")).thenReturn(mockManifestFile);
         when(mockGameFolder.name()).thenReturn("game");
+        when(mockGameFolder.child("manifest.json")).thenReturn(mockManifestFile);
+        when(mockManifestFile.exists()).thenReturn(false);
         when(mockGroovyCodeFile.extension()).thenReturn("groovy");
         when(mockGroovyCodeFile.readString()).thenReturn("code");
-        when(mockManifestFile.exists()).thenReturn(false);
         gameStore = new GameStore() {
             @Override
             protected FileHandle samplesFolder() {
@@ -84,7 +84,7 @@ public class GameStoreTest {
                         .toArray(FileHandle[]::new));
         when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
 
-        Game game = new Game("game", "code", Language.Groovy, new ImageAreaModel());
+        Game game = new Game("game", "code", Language.Groovy, new ImageAreaModel(mockGameFolder));
         assertThat(gameStore.allUserGames()).containsExactly(game);
     }
 
@@ -130,6 +130,7 @@ public class GameStoreTest {
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder2.exists()).thenReturn(false);
         when(mockGameFolder2.name()).thenReturn("Unnamed Game 2");
+        when(mockGameFolder2.child("manifest.json")).thenReturn(mockManifestFile);
         Game game = gameStore.create(mockLanguage);
         assertThat(game.name()).isEqualTo("Unnamed Game 2");
     }
@@ -147,6 +148,7 @@ public class GameStoreTest {
         when(mockGameFolder2.exists()).thenReturn(true);
         when(mockGameFolder3.exists()).thenReturn(false);
         when(mockGameFolder3.name()).thenReturn("Unnamed Game 3");
+        when(mockGameFolder3.child("manifest.json")).thenReturn(mockManifestFile);
         Game game = gameStore.create(mockLanguage);
         assertThat(game.name()).isEqualTo("Unnamed Game 3");
     }

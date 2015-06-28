@@ -38,6 +38,7 @@ public class AddImageCommand extends AbstractCommand {
             image = new ImageModel(mainImageFile, imageSize.x, imageSize.y);
             return model.addImage(image);
         } catch (IOException e) {
+            System.err.println("Error importing image: " + e);
             throw new InaccessibleUrlException(url, e);
         }
     }

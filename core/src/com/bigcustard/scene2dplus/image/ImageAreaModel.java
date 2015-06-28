@@ -18,6 +18,11 @@ public class ImageAreaModel {
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
 
+    public ImageAreaModel(FileHandle imageFolder) {
+        this.folder = imageFolder;
+        readImages();
+    }
+
     public void registerAddImageListener(Consumer<ImageModel> listener) {
         addImageNotifier.add(listener);
     }
@@ -73,12 +78,6 @@ public class ImageAreaModel {
 
     public ValidationResult[] validate() {
         return images.stream().map(ImageModel::validate).toArray(ValidationResult[]::new);
-    }
-
-    public ImageAreaModel loadFromFolder(FileHandle folder) {
-        this.folder = folder;
-        readImages();
-        return this;
     }
 
     private void readImages() {

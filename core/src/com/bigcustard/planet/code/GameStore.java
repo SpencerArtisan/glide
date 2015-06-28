@@ -46,7 +46,7 @@ public class GameStore {
 
     public Game create(Language language) {
         FileHandle gameFolder = findUniqueName(userFolder());
-        return new Game(gameFolder.name(), language.template(), language, new ImageAreaModel());
+        return new Game(gameFolder.name(), language.template(), language, new ImageAreaModel(gameFolder));
     }
 
     public boolean hasMostRecent() {
@@ -61,7 +61,7 @@ public class GameStore {
     public Game mostRecent() {
         FileHandle gameFolder = gameFolder(preferences().getString(RECENT_GAME));
         FileHandle codeFile = codeFile(gameFolder);
-        ImageAreaModel imageAreaModel = new ImageAreaModel().loadFromFolder(gameFolder);
+        ImageAreaModel imageAreaModel = new ImageAreaModel(gameFolder);
         Language language = Language.from(codeFile.extension());
         return new Game(gameFolder.name(), codeFile.readString(), language, imageAreaModel);
     }
@@ -123,7 +123,7 @@ public class GameStore {
     private Game fromFolder(FileHandle folder) {
         FileHandle codeFile = codeFile(folder);
         Language language = Language.from(codeFile.extension());
-        ImageAreaModel imageAreaModel = new ImageAreaModel().loadFromFolder(folder);
+        ImageAreaModel imageAreaModel = new ImageAreaModel(folder);
         return new Game(folder.name(), codeFile.readString(), language, imageAreaModel);
     }
 

@@ -73,6 +73,7 @@ public class ImageAreaController {
         try {
             commandHistory.execute(new AddImageCommand(model, getClipboard().getContents()));
         } catch (Exception e) {
+            System.err.println("Error adding image from clipboard: " + e);
             view.onImageImportFailure();
         }
     }
