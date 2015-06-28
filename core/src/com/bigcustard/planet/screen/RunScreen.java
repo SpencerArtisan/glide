@@ -42,12 +42,12 @@ public class RunScreen {
         config.setContentRoot(contentRoot);
 
         blurpRuntime = BlurpRuntime.begin(config, mouseWindowChecker);
-//        blurpRuntime.onException(e -> {
-//            System.err.println(e);
-//            e.printStackTrace();
-//            game.runtimeError(e);
+        blurpRuntime.onException(e -> {
+            System.err.println(e);
+            e.printStackTrace();
+            game.runtimeError(e);
 //            exitGame();
-//        });
+        });
         blurpRuntime.startScript(game.language().scriptEngine(), new GameStore().codePathname(game));
         setScreen.accept(BlurpStore.blurpScreen);
     }
