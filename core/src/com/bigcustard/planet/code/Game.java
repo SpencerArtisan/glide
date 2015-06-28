@@ -29,7 +29,7 @@ public class Game {
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
     }
 
-    public void setName(String newName) {
+    public void name(String newName) {
         name = newName;
     }
 
@@ -41,7 +41,7 @@ public class Game {
         return language;
     }
 
-    public CommandHistory getCommandHistory() {
+    public CommandHistory commandHistory() {
         return commandHistory;
     }
 
@@ -53,7 +53,7 @@ public class Game {
         return code;
     }
 
-    public void setCode(String code) {
+    public void code(String code) {
         this.code = code;
         changeNotifier.notify(this);
     }
@@ -66,7 +66,7 @@ public class Game {
         return language.isValid(code) && imageModel.isValid();
     }
 
-    public void setRuntimeError(RuntimeException runtimeError) {
+    public void runtimeError(RuntimeException runtimeError) {
         this.runtimeError = runtimeError;
         changeNotifier.notify(this);
     }

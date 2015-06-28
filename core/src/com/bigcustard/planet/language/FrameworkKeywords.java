@@ -1,9 +1,5 @@
 package com.bigcustard.planet.language;
 
-import com.google.common.collect.ImmutableSet;
-
-import java.util.Set;
-
 public class FrameworkKeywords implements Keywords {
     @Override
     public String[] get() {

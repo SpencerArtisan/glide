@@ -42,7 +42,7 @@ public class CodingScreen extends ScreenAdapter {
     private ScreenFactory screenFactory;
     private Label errorLabel;
 
-    public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory) {
+    public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
         this.gameStore = gameStore;
         this.setScreen = setScreen;
@@ -81,9 +81,9 @@ public class CodingScreen extends ScreenAdapter {
     private void createButtonBar() {
         buttonBar = new ButtonBar(skin);
         buttonBar.addSpacer(1);
-        buttonBar.addTextButton("Past <", () -> new UndoCommand(game.getCommandHistory()));
+        buttonBar.addTextButton("Past <", () -> new UndoCommand(game.commandHistory()));
         buttonBar.addImage("tardis2");
-        buttonBar.addTextButton("> Future", () -> new RedoCommand(game.getCommandHistory()));
+        buttonBar.addTextButton("> Future", () -> new RedoCommand(game.commandHistory()));
         buttonBar.addSpacer(16);
         buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
         buttonBar.addImage("copy");
@@ -112,13 +112,13 @@ public class CodingScreen extends ScreenAdapter {
     private void createImageArea() {
         ImageAreaModel imageAreaModel = game.imageModel();
         imageArea = new ImageArea(imageAreaModel, skin);
-        new ImageAreaController(imageArea, imageAreaModel, game.getCommandHistory()).init();
+        new ImageAreaController(imageArea, imageAreaModel, game.commandHistory()).init();
     }
 
     private void createTextArea(Game game) {
         model = new TextAreaModel(game.code(), game.language().codeColorCoder());
-        model.addChangeListener((m) -> game.setCode(model.text()));
-        textArea = new ScrollableTextArea(model, skin, game.getCommandHistory());
+        model.addChangeListener((m) -> game.code(model.text()));
+        textArea = new ScrollableTextArea(model, skin, game.commandHistory());
     }
 
     private void createErrorLabel(Game game) {
@@ -147,7 +147,7 @@ public class CodingScreen extends ScreenAdapter {
 	}
 
     private void errorReporter(Exception e, Runnable onClosed) {
-        ErrorDialog errorDialog = new ErrorDialog(skin, e, onClosed);
+        ErrorDialog errorDialog = new ErrorDialog(e, onClosed, skin);
         errorDialog.show(stage);
     }
 

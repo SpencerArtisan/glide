@@ -8,7 +8,7 @@ public class ErrorDialog extends Dialog {
     private Throwable exception;
     private Runnable onClosed;
 
-    public ErrorDialog(Skin skin, Throwable exception, Runnable onClosed) {
+    public ErrorDialog(Throwable exception, Runnable onClosed, Skin skin) {
         super("", skin);
         this.exception = exception;
         this.onClosed = onClosed;

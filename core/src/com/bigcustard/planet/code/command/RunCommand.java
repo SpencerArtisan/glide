@@ -17,14 +17,14 @@ public class RunCommand extends AbstractCommand {
     public RunCommand(Game game, GameStore gameStore, Consumer<Game> runGame) {
         this.game = game;
         this.runGame = runGame;
-        buildFolder = gameStore.buildFolder(game);
+        this.buildFolder = gameStore.buildFolder(game);
     }
 
     @Override
     public void execute() {
         buildFolder.mkdirs();
         game.imageModel().images().forEach(this::resize);
-        game.setRuntimeError(null);
+        game.runtimeError(null);
         runGame.accept(game);
     }
 

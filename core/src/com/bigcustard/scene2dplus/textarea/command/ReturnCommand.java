@@ -1,7 +1,6 @@
 package com.bigcustard.scene2dplus.textarea.command;
 
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
-import com.google.common.base.Strings;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

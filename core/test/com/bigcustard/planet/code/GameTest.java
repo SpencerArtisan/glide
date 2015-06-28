@@ -37,7 +37,7 @@ public class GameTest {
     @Test
     public void isValidIfCodeAndImagesValid() {
         Game game = newGame(mockLanguage);
-        game.setCode("code");
+        game.code("code");
         when(mockLanguage.isValid("code")).thenReturn(true);
         when(mockImageModel.isValid()).thenReturn(true);
         assertThat(game.isValid()).isTrue();
@@ -46,7 +46,7 @@ public class GameTest {
     @Test
     public void isInvalidIfCodeInvalid() {
         Game game = newGame(mockLanguage);
-        game.setCode("code");
+        game.code("code");
         when(mockLanguage.isValid("code")).thenReturn(false);
         when(mockImageModel.isValid()).thenReturn(true);
         assertThat(game.isValid()).isFalse();
@@ -55,7 +55,7 @@ public class GameTest {
     @Test
     public void isInvalidIfImagesInvalid() {
         Game game = newGame(mockLanguage);
-        game.setCode("code");
+        game.code("code");
         when(mockLanguage.isValid("code")).thenReturn(true);
         when(mockImageModel.isValid()).thenReturn(false);
         assertThat(game.isValid()).isFalse();
@@ -91,7 +91,7 @@ public class GameTest {
     public void notifiesOfCodeChange() {
         Game game = newGame(mockLanguage);
         game.registerChangeListener(mockChangeListener);
-        game.setCode("change");
+        game.code("change");
         verify(mockChangeListener).accept(game);
     }
 
@@ -123,7 +123,7 @@ public class GameTest {
     public void notifiesOfRuntimeError() {
         Game game = newGame(mockLanguage);
         game.registerChangeListener(mockChangeListener);
-        game.setRuntimeError(new RuntimeException("Bad stuff"));
+        game.runtimeError(new RuntimeException("Bad stuff"));
         verify(mockChangeListener).accept(game);
     }
 
@@ -136,14 +136,14 @@ public class GameTest {
     @Test
     public void extractRuntimeErrorMessage() {
         Game game = newGame(mockLanguage);
-        game.setRuntimeError(new RuntimeException(new RuntimeException(new RuntimeException(new ScriptException("Bad stuff")))));
+        game.runtimeError(new RuntimeException(new RuntimeException(new RuntimeException(new ScriptException("Bad stuff")))));
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 
     @Test
     public void unexpectedRuntimeErrorMessage() {
         Game game = newGame(mockLanguage);
-        game.setRuntimeError(new RuntimeException("Bad stuff"));
+        game.runtimeError(new RuntimeException("Bad stuff"));
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 

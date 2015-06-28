@@ -12,13 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameStore {
-    public static final String PREFERENCES_KEY = "Game";
-    public static final String BUILD_FOLDER = "build";
+    private static final String PREFERENCES_KEY = "Game";
+    private static final String BUILD_FOLDER = "build";
     private static String CODE_FILE_WITHOUT_SUFFIX = "code";
     private static String USER_FOLDER = "mygames";
     private static String SAMPLES_FOLDER = "samples";
     private static final String RECENT_GAME = "MostRecentGameName";
-    public static final String DEFAULT_NAME = "Unnamed Game";
 
     public void rename(Game game, String newName) throws GameRenameException {
         if (!newName.equals(game.name())) {
@@ -31,7 +30,7 @@ public class GameStore {
                 save(game);
             }
             source.moveTo(target);
-            game.setName(newName);
+            game.name(newName);
             storeMostRecentGameName(game);
         }
     }
@@ -41,7 +40,7 @@ public class GameStore {
     }
 
     public void save(Game game) {
-        getCodeFile(game).writeString(game.code(), false);
+        codeFile(game).writeString(game.code(), false);
         storeMostRecentGameName(game);
     }
 
@@ -61,7 +60,7 @@ public class GameStore {
 
     public Game mostRecent() {
         FileHandle gameFolder = gameFolder(preferences().getString(RECENT_GAME));
-        FileHandle codeFile = getCodeFile(gameFolder);
+        FileHandle codeFile = codeFile(gameFolder);
         ImageAreaModel imageAreaModel = new ImageAreaModel().loadFromFolder(gameFolder);
         Language language = Language.from(codeFile.extension());
         return new Game(gameFolder.name(), codeFile.readString(), language, imageAreaModel);
@@ -83,11 +82,11 @@ public class GameStore {
         return userFolder().child(gameName);
     }
 
-    private FileHandle getCodeFile(Game game) {
+    private FileHandle codeFile(Game game) {
         return gameFolder(game.name()).child(codeFilename(game));
     }
 
-    private FileHandle getCodeFile(FileHandle gameFolder) {
+    private FileHandle codeFile(FileHandle gameFolder) {
         FileHandle[] codeFiles = gameFolder.list((dir, name) -> {
             return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
         });
@@ -103,10 +102,10 @@ public class GameStore {
     }
 
     private FileHandle findUniqueName(FileHandle parentFolder) {
-        FileHandle candidate = parentFolder.child(DEFAULT_NAME);
+        FileHandle candidate = parentFolder.child(Game.DEFAULT_NAME);
         int suffix = 2;
         while (candidate.exists()) {
-            candidate = parentFolder.child(DEFAULT_NAME + " " + suffix++);
+            candidate = parentFolder.child(Game.DEFAULT_NAME + " " + suffix++);
         }
         return candidate;
     }
@@ -122,12 +121,7 @@ public class GameStore {
     }
 
     private Game fromFolder(FileHandle folder) {
-//        if (gameFolder.parent().name().equals(GameStore.samplesFolder().name())) {
-//            FileHandle myGamesCopy = GameStore.findUniqueName(GameStore.userFolder());
-//            gameFolder.copyTo(myGamesCopy);
-//            gameFolder = myGamesCopy;
-//        }
-        FileHandle codeFile = getCodeFile(folder);
+        FileHandle codeFile = codeFile(folder);
         Language language = Language.from(codeFile.extension());
         ImageAreaModel imageAreaModel = new ImageAreaModel().loadFromFolder(folder);
         return new Game(folder.name(), codeFile.readString(), language, imageAreaModel);

@@ -18,7 +18,7 @@ public class SyntaxPart {
         return text;
     }
 
-    public void setType(Type type) {
+    public void type(Type type) {
         this.type = type;
     }
 

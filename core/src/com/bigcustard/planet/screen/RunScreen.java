@@ -1,7 +1,6 @@
 package com.bigcustard.planet.screen;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.bootstrap.ScriptCompletionHandler;
@@ -46,7 +45,7 @@ public class RunScreen {
 //        blurpRuntime.onException(e -> {
 //            System.err.println(e);
 //            e.printStackTrace();
-//            game.setRuntimeError(e);
+//            game.runtimeError(e);
 //            exitGame();
 //        });
         blurpRuntime.startScript(game.language().scriptEngine(), new GameStore().codePathname(game));
@@ -54,6 +53,7 @@ public class RunScreen {
     }
 
     private void exitGame() {
+        // TODO - Work with Phil to sort this out!
         BlurpStore.reset();
         blurpRuntime.end();
         BlurpState.reset();

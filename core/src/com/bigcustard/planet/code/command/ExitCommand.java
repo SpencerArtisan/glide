@@ -11,10 +11,10 @@ import java.util.function.BiConsumer;
 
 public class ExitCommand extends AbstractCommand {
     private final Game game;
-    private GameStore gameStore;
+    private final GameStore gameStore;
     private final FutureSupplier<Boolean> saveChoiceSupplier;
     private final FutureSupplier<String> gameNameSupplier;
-    private BiConsumer<Exception, Runnable> errorReporter;
+    private final BiConsumer<Exception, Runnable> errorReporter;
     private final Runnable exitProcess;
 
     public ExitCommand(Game game,

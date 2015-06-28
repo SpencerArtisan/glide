@@ -16,7 +16,7 @@ public class ScreenFactory {
     private MouseWindowChecker mouseWindowChecker;
     private GameStore gameStore;
 
-    public ScreenFactory(Skin skin, Viewport viewport, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker) {
+    public ScreenFactory(Viewport viewport, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, Skin skin) {
         this.skin = skin;
         this.viewport = viewport;
         this.setScreen = setScreen;
@@ -29,10 +29,10 @@ public class ScreenFactory {
     }
 
     public WelcomeScreen createWelcomeScreen() {
-        return new WelcomeScreen(viewport, skin, setScreen, this, gameStore);
+        return new WelcomeScreen(gameStore, viewport, setScreen, this, skin);
     }
 
     public CodingScreen createCodingScreen(Game game) {
-        return new CodingScreen(game, gameStore, viewport, skin, setScreen, this);
+        return new CodingScreen(game, gameStore, viewport, setScreen, this, skin);
     }
 }

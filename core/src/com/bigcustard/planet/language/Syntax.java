@@ -55,14 +55,14 @@ public class Syntax {
             if (!collapsed.isEmpty()) {
                 SyntaxPart lastElement = collapsed.get(collapsed.size() - 1);
                 if (lastElement.type() == Comment && !newElement.text().contains("\n")) {
-                    newElement.setType(Comment);
+                    newElement.type(Comment);
                 }
                 if (lastElement.type() == UnclosedQuote) {
                     if (newElement.type() == UnclosedQuote) {
-                        lastElement.setType(Quoted);
-                        newElement.setType(Quoted);
+                        lastElement.type(Quoted);
+                        newElement.type(Quoted);
                     } else {
-                        newElement.setType(UnclosedQuote);
+                        newElement.type(UnclosedQuote);
                     }
                 }
 

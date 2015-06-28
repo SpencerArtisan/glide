@@ -24,7 +24,7 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
     }
 
     private void showWelcomeScreen() {
-        ScreenFactory screenFactory = new ScreenFactory(resourceManager.getSkin(), viewport, this::setScreen, mouseWindowChecker);
+        ScreenFactory screenFactory = new ScreenFactory(viewport, this::setScreen, mouseWindowChecker, resourceManager.getSkin());
         WelcomeScreen welcomeScreen = screenFactory.createWelcomeScreen();
         setScreen(welcomeScreen);
     }

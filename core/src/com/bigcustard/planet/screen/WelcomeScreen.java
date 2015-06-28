@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.code.Language;
@@ -46,7 +45,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Label title;
 	private Cell<Label> titleCell;
 
-	WelcomeScreen(Viewport viewport, Skin skin, Consumer<Screen> setScreen, ScreenFactory screenFactory, GameStore gameStore) {
+	WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
 		super();
 		this.setScreen = setScreen;
 		this.screenFactory = screenFactory;
@@ -102,8 +101,10 @@ public class WelcomeScreen extends ScreenAdapter {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				hideMainMenu();
-				NewCommand newCommand = new NewCommand(WelcomeScreen.this::saveGameChoice,
-						(language) -> showCodingScreen(() -> gameStore.create(language)), WelcomeScreen.this::showMainMenu);
+				NewCommand newCommand = new NewCommand(
+						WelcomeScreen.this::saveGameChoice,
+						(language) -> showCodingScreen(() -> gameStore.create(language)),
+						WelcomeScreen.this::showMainMenu);
 				newCommand.execute();
 			}
 		});
@@ -167,7 +168,6 @@ public class WelcomeScreen extends ScreenAdapter {
 		quitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-//				BlurpRuntime.
 				Gdx.app.exit();
 			}
 		});
@@ -212,9 +212,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private void showCodingScreen(Supplier<Game> programSupplier) {
 		try {
 			showMainMenu();
-			CodingScreen codingScreen = screenFactory.createCodingScreen(
-					programSupplier.get()
-			);
+			CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
 			setScreen.accept(codingScreen);
 		} catch (Exception e) {
 			showError(e);
@@ -222,7 +220,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void showError(Throwable e) {
-		new ErrorDialog(skin, e, this::showMainMenu).show(stage);
+		new ErrorDialog(e, this::showMainMenu, skin).show(stage);
 	}
 
 	private void showMainMenu() {
