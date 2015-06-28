@@ -31,8 +31,8 @@ public class GameStore {
                 save(game);
             }
             source.moveTo(target);
-            preferences().putString(RECENT_GAME, newName);
-            preferences().flush();
+            game.setName(newName);
+            storeMostRecentGameName(game);
         }
     }
 
@@ -42,6 +42,7 @@ public class GameStore {
 
     public void save(Game game) {
         getCodeFile(game).writeString(game.code(), false);
+        storeMostRecentGameName(game);
     }
 
     public Game create(Language language) {
@@ -134,6 +135,11 @@ public class GameStore {
 
     private FileHandle[] allGameFolders(FileHandle parentFolder) {
         return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
+    }
+
+    private void storeMostRecentGameName(Game game) {
+        preferences().putString(RECENT_GAME, game.name());
+        preferences().flush();
     }
 
     protected FileHandle samplesFolder() {

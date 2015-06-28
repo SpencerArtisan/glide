@@ -92,7 +92,10 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, gameStore, this::showRunScreen));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
-        game.registerChangeListener((game) -> buttonBar.refreshEnabledStatuses());
+        game.registerChangeListener((game) -> {
+            buttonBar.refreshEnabledStatuses();
+            gameStore.save(game);
+        });
     }
 
     private void exitToMainMenu() {

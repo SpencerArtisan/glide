@@ -29,6 +29,10 @@ public class Game {
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
     }
 
+    public void setName(String newName) {
+        name = newName;
+    }
+
     public String name() {
         return name;
     }
