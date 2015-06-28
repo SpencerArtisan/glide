@@ -16,82 +16,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Language {
-//    public static Language JRuby = new Language(new RubyKeywords(), "jruby", "ruby-button",
-//                      "############################################## \n"
-//                    + "##         Welcome to Planet Burpl!         ## \n"
-//                    + "##      Start writing your game below       ## \n"
-//                    + "## Look in the Game Library for inspiration ## \n"
-//                    + "############################################## \n\n",
-//            (program) -> {
-//                Set<Integer> errorLines = new HashSet<>();
-//
-//                try {
-//                    RubyParser parser = new Ruby20Parser();
-//                    parser.setWarnings(new NullWarnings(null));
-//                    Ruby runtime = Ruby.getGlobalRuntime();
-//                    RubyInstanceConfig rconfig = new RubyInstanceConfig();
-//                    ParserConfiguration config = new ParserConfiguration(runtime, 0, false, false, true, rconfig);
-//                    LexerSource lexer = LexerSource.getSource("code", new StringBufferInputStream(program), null, config);
-//                    parser.parse(config, lexer);
-//                } catch (org.jruby.lexer.yacc.SyntaxException e) {
-//                    errorLines.add(e.getPosition().getLine());
-//                } catch (Exception e) {
-//                    System.out.println("Failed to parse code: " + e);
-//                }
-//
-//
-//                return errorLines;
-//            });
-    public static Language Groovy = new Language(new GroovyKeywords(), "groovy", "groovy-button",
-                      "////////////////////////////////////////////// \n"
-                    + "//         Welcome to Planet Burpl!         // \n"
-                    + "//      Start writing your game below       // \n"
-                    + "// Look in the Game Library for inspiration // \n"
-                    + "////////////////////////////////////////////// \n\n",
-                    (program) -> {
-                            Set<Integer> errorLines = new HashSet<>();
-                            try {
-                                new GroovyClassLoader().parseClass(program);
-                            } catch (MultipleCompilationErrorsException e) {
-                                List<Message> errors = e.getErrorCollector().getErrors();
-                                for (Message error : errors) {
-                                    if (error instanceof SyntaxErrorMessage) {
-                                        SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
-                                        int errorLine = cause.getLine();
-                                        errorLines.add(errorLine - 1);
-                                    } else {
-                                        throw e;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Failed to parse code: " + e);
-                            }
-                            return errorLines;
-                        });
-    public static Language Javascript = new Language(new JavascriptKeywords(), "js", "javascript-button",
-                      "////////////////////////////////////////////// \n"
-                    + "//         Welcome to Planet Burpl!         // \n"
-                    + "//      Start writing your game below       // \n"
-                    + "// Look in the Game Library for inspiration // \n"
-                    + "////////////////////////////////////////////// \n\n",
-                    (program) -> {
-                            Set<Integer> errorLines = new HashSet<>();
-
-                            return errorLines;
-                        });
+public abstract class Language {
+    public static Language Groovy = new Groovy();
+    public static Language Javascript = new Javascript();
 
     private final Syntax syntax;
     private String scriptEngine;
     private String buttonStyle;
     private String template;
 
-    public Language(Keywords keywords, String scriptEngine, String buttonStyle, String template, Function<String, Set<Integer>> errorLineChecker) {
+    Language(Keywords keywords, String scriptEngine, String buttonStyle, String template) {
         this.scriptEngine = scriptEngine;
         this.buttonStyle = buttonStyle;
         this.template = template;
-        this.syntax = new Syntax(keywords, errorLineChecker);
+        this.syntax = new Syntax(keywords, this::errorLineChecker);
     }
+
+    public abstract Set<Integer> errorLineChecker(String code);
 
     public boolean isValid(String code) {
         return syntax.isValid(code);
