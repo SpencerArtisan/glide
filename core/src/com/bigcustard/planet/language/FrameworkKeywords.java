@@ -27,7 +27,9 @@ public class FrameworkKeywords implements Keywords {
                 "isRunningAnEffect", "console", "keyboard", "clear", "fontSize", "Colours", "values", "Right", "Left", "Center",
                 "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
                 "position", "println", "Rectangle", "randomInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
-                "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo" };
+                "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo",
+                "elapsedTime", "sequence", "style", "image", "scaleBy", "duration", "layer", "ScreenLayer", "Background", "Main", "Overlay", "onPressed", "onReleased"
+        };
     }
 
     @Override
