@@ -4,11 +4,30 @@ public class FrameworkKeywords implements Keywords {
     @Override
     public String[] get() {
         return new String[] {
-                "keyboard", "isKeyPressed", "Key", "blurp", "blurpify", "createTextSprite",
-                "createImageSprite", "utils", "random", "scale", "Key_Left", "Key_Down", "Key_Up", "Key_Right",
-                "Key_Space", "rotateBy", "colour", "setPosition", "moveTowards", "scale", "flipX", "flipY",
-                "position", "x", "y", "add", "Colours", "text", "rotation", "camera", "isRunningEffect",
-                "effects", "rotateTo", "moveTo", "zoom", "combine", "delayBeforeStart", "runEffect", "scaleX", "scaleY"};
+                "AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue",
+                "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "CornSilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan",
+                "DarkGoldenrod", "DarkGrey", "DarkGray", "DarkSlateGray", "DarkSlateGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon",
+                "DarkSeaGreen", "DarkSlateBlue", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "Gray", "Grey", "DodgerBlue", "FireBrick", "FloralWhite",
+                "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "Goldenrod", "Green", "GreenYellow", "Honeydew", "HotPink", "IndianRed", "Indigo", "Ivory",
+                "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenrodYellow", "LightGray", "LightGrey", "LightSlateGray", "LightSlateGrey",
+                "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquamarine",
+                "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin",
+                "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenrod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip",
+                "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen",
+                "Seashell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle",
+                "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen",
+                "AtEndRemoveSprite", "transparency", "waveValue", "combine", "Up", "Down", "isPressed", "mouse", "hidden", "timer", "stopwatch", "start", "stop", "reset", "every", "text",
+                "wasJustPressed", "wasJustReleased", "wasKeyTyped", "Enter", "typedCharacter", "isRightButtonPressed", "isLeftButtonPressed", "isHolding", "isOver",
+                "dragX", "dragY", "wasDragReleased", "wasClicked", "isDragging", "onMouseEnter", "onMouseExit", "SpriteEventHandler", "handle", "onClick", "Runnable",
+                "Linear", "SmoothStop", "SmoothStart", "SmoothStartStop", "FastThenSlow", "SlowThenFast", "SlowFastSlow", "BackStop", "BackStart", "BackStartStop", "BounceStop",
+                "BounceStart", "BounceStartStop", "ElasticStop", "ElasticStart", "ElasticStartStop",
+                "Justification", "AlignLeft", "AlignCenter", "AlignRight", "multiplyBy",
+                "resources", "Image", "loadImage", "Sprite", "createImageSprite", "ImageSprite", "createTextSprite", "handle", "timesToRun", "yoyoMode",
+                "Circle", "angle", "camera", "delayBeforeStart", "delayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
+                "isRunningAnEffect", "console", "keyboard", "clear", "fontSize", "Colours", "values", "Right", "Left", "Center",
+                "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
+                "position", "println", "Rectangle", "randomInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
+                "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo" };
     }
 
     @Override
