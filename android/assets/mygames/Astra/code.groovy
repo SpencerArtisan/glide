@@ -1,92 +1,92 @@
-////////////////////////////////////////////// 
-//         Welcome to Planet Burpl!         // 
-//      Start writing your game below       // 
-// Look in the Game Library for inspiration // 
-////////////////////////////////////////////// 
+//////////////////////////////////////////////
+//         Welcome to Planet Burpl!         //
+//      Start writing your game below       //
+// Look in the Game Library for inspiration //
+//////////////////////////////////////////////
 
 // Constants
 BOOST = 0.1
 G = 0.01
-PLANET_MASS = 100
 SHIP_MASS = 1
-PLANETS = 1
-TOP = 455
-RIGHT = 780
-BOTTOM = 28
-LEFT = 20
+TOP = 510
+RIGHT = 772
+BOTTOM = -40
+LEFT = 28
 BUBBLE_CAPTURE = 10
 
 // Variables
 direction = 0
 
 // Images
-resources.createImageSprite("bubble").x(60).y(233).transparency(0.8)
+resources.createImageSprite("bubble").setX(60).setY(233).setTransparency(0.8)
 targetBubble = resources.createImageSprite("bubble")
-resources.createImageSprite("stars").layer(Background)
-ship = resources.createImageSprite("ship").targetStyle(Circle)
-planet = resources.createImageSprite("planet").targetStyle(Circle).x(9999)
+resources.createImageSprite("stars").setScale(1.2).setLayer(Background)
+ship = resources.createImageSprite("ship").setTargetStyle(Circle)
+planet = resources.createImageSprite("planet").setTargetStyle(Circle).setX(9999)
+
+screen.viewport.setSize(800, 600)
 
 replayLoop:
 while (true) {
 
-level = 1
+    level = 1
 
-mainLoop:
-while (true) {
-  showPlanets()
-  velocityX = 0
-  velocityY = 0
-  ship.x(60).y(233).scale(1).transparency(1)
-  targetBubble.x(RIGHT - 40).y(233).colour(Orange).scale(1).transparency(1)
-    
-  levelStart()
+    mainLoop:
+    while (true) {
+        showPlanets()
+        velocityX = 0
+        velocityY = 0
+        ship.setX(60).setY(233).setScale(1).setTransparency(1)
+        targetBubble.setX(RIGHT - 40).setY(233).setColour(Orange).setScale(1).setTransparency(1)
 
-  // Wait for key press to start
-  while (!keyboard.Space.isPressed()) {
-    controlShip()
-    screen.update()
-  }
+        levelStart()
 
-  // Main game loop
-  levelLoop: 
-  while (true) {
-    controlShip()
-    for (planet in planets) {
-        gravity(planet)
-        if (planet.overlaps(ship)) {
-            break mainLoop
+        // Wait for key press to start
+        while (!keyboard.Space.isPressed()) {
+            controlShip()
+            screen.update()
+        }
+
+        // Main game loop
+        levelLoop:
+        while (true) {
+            controlShip()
+            for (planet in planets) {
+                gravity(planet)
+                if (planet.overlaps(ship)) {
+                    break mainLoop
+                }
+            }
+            bounce()
+            moveShip()
+            if (inTargetBubble()) {
+                break levelLoop
+            }
+
+            screen.update()
+        }
+
+        // Level complete
+        goWhite = effects.colour(White)
+        shrink = effects.scaleTo(0.01).withStyle(SmoothStartStop)
+        targetBubble.runEffect(effects.combine(goWhite, shrink))
+        ship.runEffect(effects.transparency(0))
+        delay(1000)
+        level = level + 1
+        for (planet in planets) {
+            planet.hidden = true
         }
     }
-    bounce()
-    moveShip()
-    if (inTargetBubble()) {
-        break levelLoop
-    }
-    
-    screen.update()
-  }
-  
-  // Level complete
-  goWhite = effects.colour(White)
-  shrink = effects.scaleTo(0.01).style(SmoothStartStop)
-  targetBubble.runEffect(effects.combine(goWhite, shrink))
-  ship.runEffect(effects.transparency(0))
-  delay(1000) 
-  level = level + 1
-  for (planet in planets) {
-    planet.hidden = true
-  }
-}
 
 // Death  effect
-shimmer = effects.scaleBy(2).duration(50).timesToRun(20).yoyoMode(true)
-shimmerAndFade = effects.combine(shimmer, effects.transparency(0).duration(1000))
-ship.scale(0.5).image(resources.loadImage("explosion")).runEffect(shimmerAndFade)
-delay(1000)
-ship.transparency(1).image(resources.loadImage("ship"))
-for (planet in planets) {
-    planet.hidden = true
-}
+    shimmer = effects.scaleBy(2).withDuration(50).withTimesToRun(20).withYoyoMode(true)
+    shimmerAndFade = effects.combine(shimmer, effects.transparency(0).withDuration(1000))
+    ship.setScale(0.5).setImage(resources.loadImage("explosion")).runEffect(shimmerAndFade)
+    delay(1000)
+    ship.setTransparency(1).setImage(resources.loadImage("ship"))
+    for (planet in planets) {
+        planet.hidden = true
+    }
 
 }
 
@@ -94,46 +94,46 @@ for (planet in planets) {
 
 void showPlanets() {
     if (level == 1) {
-        planets = planet.hidden(false).multiplyBy(1)
-        planets[0].x(400).y(233).scale(1)
+        planets = planet.setHidden(false).multiplyBy(1)
+        planets[0].setX(400).setY(233).setScale(1)
     } else if (level == 2) {
-        planets = planet.hidden(false).multiplyBy(2)
-        planets[0].x(300).y(363).scale(1)
-        planets[1].x(600).y(133).scale(0.7)
+        planets = planet.setHidden(false).multiplyBy(2)
+        planets[0].setX(300).setY(363).setScale(1)
+        planets[1].setX(600).setY(133).setScale(0.7)
     } else if (level == 3) {
-        planets = planet.hidden(false).multiplyBy(3)
-        
-        planets[1].x(550).y(373).scale(0.8)
-        planets[2].x(300).y(100).scale(1.1)
-        planets[0].x(150).y(380).scale(0.5)
+        planets = planet.setHidden(false).multiplyBy(3)
+
+        planets[1].setX(550).setY(373).setScale(0.8)
+        planets[2].setX(300).setY(100).setScale(1.1)
+        planets[0].setX(150).setY(380).setScale(0.5)
     } else if (level == 4) {
-        planets = planet.hidden(false).multiplyBy(1)
-        planets[0].x(400).y(-100).scale(2)
+        planets = planet.setHidden(false).multiplyBy(1)
+        planets[0].setX(400).setY(-100).setScale(2)
     } else {
-        resources.createTextSprite("YOU WIN!").fontSize(120)
+        resources.createTextSprite("YOU WIN!").setFontSize(120)
         delay(999999)
     }
 }
 
 void delay(ms) {
-  timer.stopwatch.reset()
-  timer.stopwatch.start()
-  while (timer.stopwatch.elapsedTime() < ms) {
-      screen.update()
-  }
+    timer.stopwatch.reset()
+    timer.stopwatch.start()
+    while (timer.stopwatch.elapsedTime() < ms) {
+        screen.update()
+    }
 }
 
 void levelStart() {
-    levelText = resources.createTextSprite("LEVEL " + level).fontSize(80).x(900).y(233)
-    comeIn = effects.moveTo(400, 233).style(ElasticStop)
-    delay = effects.transparency(1).duration(300)
-    fade = effects.transparency(0).duration(1500)
-    levelText.runEffect(effects.sequence(comeIn, delay, fade)) 
+    levelText = resources.createTextSprite("LEVEL " + level).setFontSize(80).setX(900).setY(233)
+    comeIn = effects.moveTo(400, 233).withStyle(ElasticStop)
+    delay = effects.transparency(1).withDuration(300)
+    fade = effects.transparency(0).withDuration(1500)
+    levelText.runEffect(effects.sequence(comeIn, delay, fade))
 }
 
 boolean inTargetBubble() {
     return Math.abs(ship.x - targetBubble.x) < BUBBLE_CAPTURE &&
-           Math.abs(ship.y - targetBubble.y) < BUBBLE_CAPTURE
+            Math.abs(ship.y - targetBubble.y) < BUBBLE_CAPTURE
 }
 
 void bounce() {
@@ -154,26 +154,26 @@ void bounce() {
 void gravity(planet) {
     // F = GMm/r*r and F=m*a where r is distance between bodies
     distance = Math.sqrt((planet.x - ship.x) * (planet.x - ship.x) +
-                         (planet.y - ship.y) * (planet.y - ship.y))
+            (planet.y - ship.y) * (planet.y - ship.y))
     planetMass = planet.scaleX * planet.scaleX * planet.scaleX
     force = G * planetMass * SHIP_MASS / distance * distance
     acceleration = force / SHIP_MASS
-    
+
     // Accelerate in direction of planet
     accelAngle = Math.toDegrees(Math.atan2(ship.y - planet.y, planet.x - ship.x))
-    
+
     accelerateShip(accelAngle, acceleration)
 }
 
 void controlShip() {
-    if (keyboard.Space.isPressed()) { 
+    if (keyboard.Space.isPressed()) {
         accelerateShip(ship.angle, BOOST)
     }
     if (keyboard.Left.isPressed()) {
-        turnShip(-10)                   
+        turnShip(-10)
     }
     if (keyboard.Right.isPressed()) {
-        turnShip(10)                  
+        turnShip(10)
     }
 }
 
@@ -188,5 +188,5 @@ void moveShip() {
 }
 
 void turnShip(amount) {
-    ship.runEffect(effects.rotateBy(amount).duration(50).style(SmoothStartStop))
+    ship.runEffect(effects.rotateBy(amount).withDuration(50).withStyle(SmoothStartStop))
 }

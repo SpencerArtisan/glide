@@ -28,7 +28,11 @@ public class FrameworkKeywords implements Keywords {
                 "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
                 "position", "println", "Rectangle", "randomInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
                 "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo",
-                "elapsedTime", "sequence", "style", "image", "scaleBy", "duration", "layer", "ScreenLayer", "Background", "Main", "Overlay", "onPressed", "onReleased"
+                "elapsedTime", "sequence", "style", "image", "scaleBy", "duration", "layer", "ScreenLayer", "Background", "Main", "Overlay", "onPressed", "onReleased",
+                "setX", "setY", "setScaleX", "setScaleY", "setAngle", "setColour", "setTransparency", "setHidden", "setTargetStyle", "setLayer", "setMouse",
+                "setPosition", "setScale", "setHeight", "setWidth", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
+                "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
+                "Math", "abs", "cos", "sin"
         };
     }
 

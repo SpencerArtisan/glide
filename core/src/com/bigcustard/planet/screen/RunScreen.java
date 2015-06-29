@@ -4,6 +4,8 @@ import com.badlogic.gdx.Screen;
 import com.bigcustard.blurp.bootstrap.BlurpConfiguration;
 import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.bootstrap.ScriptCompletionHandler;
+import com.bigcustard.blurp.bootstrap.languages.SupportedLanguage;
+import com.bigcustard.blurp.bootstrap.languages.SupportedLanguages;
 import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
@@ -48,7 +50,9 @@ public class RunScreen {
             game.runtimeError(e);
 //            exitGame();
         });
-        blurpRuntime.startScript(game.language().scriptEngine(), new GameStore().codePathname(game));
+        String fileName = new GameStore().codePathname(game);
+        SupportedLanguage language = SupportedLanguages.forFile(fileName);
+        blurpRuntime.startScriptFile(language, fileName);
         setScreen.accept(BlurpStore.blurpScreen);
     }
 
