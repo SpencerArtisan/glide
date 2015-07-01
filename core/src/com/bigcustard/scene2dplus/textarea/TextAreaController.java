@@ -40,6 +40,8 @@ public class TextAreaController extends ClickListener {
         if (isPaste(keycode)) {
             commandHistory.execute(new PasteCommand(model));
         }
+
+        event.getCharacter();
         return true;
     }
 

@@ -3,9 +3,15 @@
 //      Start writing your game below       // 
 // Look in the Game Library for inspiration // 
 ////////////////////////////////////////////// 
+hel
 
-resources.createImageSprite("Spaceship")
 
-while (true) {
-    screen.update()
-}
+
+
+
+edahelo
+
+
+dhello worldd
+
+qwwwwwwwwwwwwwww
