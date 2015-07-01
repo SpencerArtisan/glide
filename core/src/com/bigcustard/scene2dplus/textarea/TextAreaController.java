@@ -19,6 +19,7 @@ public class TextAreaController extends ClickListener {
     private CommandHistory commandHistory;
     private XY touchDownLocation;
     private boolean dragging;
+    private Character lastCharacterTyped;
 
     public TextAreaController(TextAreaModel model, ScrollableTextArea view, CommandHistory commandHistory) {
         this.model = model;
@@ -43,6 +44,12 @@ public class TextAreaController extends ClickListener {
 
         event.getCharacter();
         return true;
+    }
+
+    @Override
+    public boolean keyUp(InputEvent event, int keycode) {
+        lastCharacterTyped = null;
+        return false;
     }
 
     @Override
@@ -117,7 +124,10 @@ public class TextAreaController extends ClickListener {
         } else if (Key.Tab.is(character)) {
             return new TabCommand(model);
         } else if (isPrintableChar(character)) {
-            return new TypeCommand(model, Character.toString(character));
+            if (lastCharacterTyped == null || lastCharacterTyped != character) {
+                lastCharacterTyped = character;
+                return new TypeCommand(model, Character.toString(character));
+            }
         }
         return null;
     }

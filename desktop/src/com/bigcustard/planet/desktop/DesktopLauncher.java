@@ -7,7 +7,6 @@ import com.bigcustard.planet.PlanetApplication;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglInput.keyRepeatInitialTime = 999;
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Planet Burpl";
         config.width = 1024;
