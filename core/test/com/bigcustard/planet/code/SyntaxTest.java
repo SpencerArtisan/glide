@@ -240,23 +240,35 @@ public class SyntaxTest {
 	}
 
     @Test
-    public void noErrorsInGoodGroovy() {
-        assertThat(syntax.errorLines("public void hello() {\n}")).isEmpty();
+    public void noErrorsInGoodGroovy() throws InterruptedException {
+		String program = "public void hello() {\n}";
+		syntax.isValid(program);
+		Thread.sleep(500);
+		assertThat(syntax.errorLines(program)).isEmpty();
     }
 
     @Test
-    public void goodGroovyCodeIsValid() {
-        assertThat(syntax.isValid("public void hello() {\n}")).isTrue();
+    public void goodGroovyCodeIsValid() throws InterruptedException {
+		String program = "public void hello() {\n}";
+		syntax.isValid(program);
+		Thread.sleep(500);
+		assertThat(syntax.isValid(program)).isTrue();
     }
 
     @Test
-    public void errorsInBadGroovy() {
-        assertThat(syntax.errorLines("public void hello() {\n\"unended string\n}")).containsExactly(1);
+    public void errorsInBadGroovy() throws InterruptedException {
+		String program = "public void hello() {\n\"unended string\n}";
+		syntax.isValid(program);
+		Thread.sleep(500);
+		assertThat(syntax.errorLines(program)).containsExactly(1);
     }
 
 	@Test
-	public void badGroovyCodeIsIsInvalid() {
-		assertThat(syntax.isValid("public void hello() {\n\"unended string\n}")).isFalse();
+	public void badGroovyCodeIsIsInvalid() throws InterruptedException {
+		String program = "public void hello() {\n\"unended string\n}";
+		syntax.isValid(program);
+		Thread.sleep(500);
+		assertThat(syntax.isValid(program)).isFalse();
 	}
 
 //    @Test

@@ -31,22 +31,23 @@ public class Groovy extends Language {
     @Override
     public Set<Integer> errorLineChecker(String code) {
         Set<Integer> errorLines = new HashSet<>();
-//        try {
-//            new GroovyClassLoader().parseClass(code);
-//        } catch (MultipleCompilationErrorsException e) {
-//            List<Message> errors = e.getErrorCollector().getErrors();
-//            for (Message error : errors) {
-//                if (error instanceof SyntaxErrorMessage) {
-//                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
-//                    int errorLine = cause.getLine();
-//                    errorLines.add(errorLine - 1);
-//                } else {
-//                    throw e;
-//                }
-//            }
-//        } catch (Throwable e) {
-//            System.out.println("Failed to parse code: " + e);
-//        }
+        try {
+            new GroovyClassLoader().parseClass(code);
+        } catch (MultipleCompilationErrorsException e) {
+            List<Message> errors = e.getErrorCollector().getErrors();
+            for (Message error : errors) {
+                if (error instanceof SyntaxErrorMessage) {
+                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
+                    int errorLine = cause.getLine();
+                    errorLines.add(errorLine - 1);
+                } else {
+                    throw e;
+                }
+            }
+//        } catch (InterruptedException e) {
+        } catch (Throwable e) {
+            System.out.println("Failed to parse code: " + e);
+        }
         return errorLines;
     }
 }

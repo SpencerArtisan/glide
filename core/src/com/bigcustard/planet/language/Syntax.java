@@ -1,5 +1,6 @@
 package com.bigcustard.planet.language;
 
+import com.badlogic.gdx.graphics.Color;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.util.Tokenizer;
 import com.google.common.base.Function;
@@ -7,10 +8,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Sets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
 
@@ -20,6 +22,10 @@ public class Syntax {
             "!=", "=", "++", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";"};
     private Keywords languageKeywords;
     private Function<String, Set<Integer>> errorLineChecker;
+
+    private AtomicReference<Set<Integer>> lastKnownResult = new AtomicReference<>(new HashSet<>());
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private Future<?> futureSyntaxCheck;
 
     public Syntax(Keywords languageKeywords, Function<String, Set<Integer>> errorLineChecker) {
         this.languageKeywords = languageKeywords;
@@ -36,7 +42,12 @@ public class Syntax {
     }
 
     public Set<Integer> errorLines(String program) {
-        return errorLineChecker.apply(program);
+        if (futureSyntaxCheck == null || futureSyntaxCheck.isDone()) {
+            futureSyntaxCheck = executorService.submit(() -> {
+                lastKnownResult.set(errorLineChecker.apply(program));
+            });
+        }
+        return lastKnownResult.get();
     }
 
     @SuppressWarnings("unchecked")
