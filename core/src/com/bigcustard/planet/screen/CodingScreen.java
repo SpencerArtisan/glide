@@ -103,10 +103,10 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void showRunScreen(Game game) {
-        screenFactory.createRunScreen(game, () -> {
+        RuntimeFacade.INSTANCE.run(game, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
-        }).showScreen();
+        });
     }
 
     private void createImageArea() {

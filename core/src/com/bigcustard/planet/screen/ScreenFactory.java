@@ -13,19 +13,13 @@ public class ScreenFactory {
     private Skin skin;
     private Viewport viewport;
     private Consumer<Screen> setScreen;
-    private MouseWindowChecker mouseWindowChecker;
     private GameStore gameStore;
 
-    public ScreenFactory(Viewport viewport, Consumer<Screen> setScreen, MouseWindowChecker mouseWindowChecker, Skin skin) {
+    public ScreenFactory(Viewport viewport, Consumer<Screen> setScreen, Skin skin) {
         this.skin = skin;
         this.viewport = viewport;
         this.setScreen = setScreen;
-        this.mouseWindowChecker = mouseWindowChecker;
         this.gameStore = new GameStore();
-    }
-
-    public RunScreen createRunScreen(Game game, Runnable exit) {
-        return new RunScreen(game, gameStore, setScreen, exit, mouseWindowChecker);
     }
 
     public WelcomeScreen createWelcomeScreen() {
