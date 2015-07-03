@@ -36,6 +36,6 @@ public class PlanetApplication extends com.badlogic.gdx.Game {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        viewport.update(width, height, true);
+        if (!RuntimeFacade.INSTANCE.isRuntimeActive()) viewport.update(width, height, true);
     }
 }

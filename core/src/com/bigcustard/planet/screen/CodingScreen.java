@@ -26,6 +26,8 @@ import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
 import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class CodingScreen extends ScreenAdapter {
@@ -92,10 +94,11 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImageButton(" Run", "run-button", () -> new RunCommand(game, gameStore, this::showRunScreen));
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
-        game.registerChangeListener((game) -> {
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
-        });
+        }, 1, 1, TimeUnit.SECONDS);
     }
 
     private void exitToMainMenu() {

@@ -6,7 +6,6 @@ import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.bootstrap.ScriptCompletionHandler;
 import com.bigcustard.blurp.bootstrap.languages.SupportedLanguage;
 import com.bigcustard.blurp.bootstrap.languages.SupportedLanguages;
-import com.bigcustard.blurp.core.BlurpState;
 import com.bigcustard.blurp.core.BlurpStore;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
@@ -19,6 +18,8 @@ public class RuntimeFacade {
     private GameStore gameStore;
     private Consumer<Screen> setScreen;
     private BlurpRuntime blurpRuntime;
+    private BlurpConfiguration config;
+    private boolean runtimeActive;
 
     private RuntimeFacade() {
     }
@@ -26,10 +27,13 @@ public class RuntimeFacade {
     public void initialise(GameStore gameStore, MouseWindowChecker mouseWindowChecker, Consumer<Screen> setScreen) {
         this.gameStore = gameStore;
         this.setScreen = setScreen;
-        BlurpConfiguration config = new BlurpConfiguration(800, 480);
+        config = new BlurpConfiguration(800, 600);
         blurpRuntime = BlurpRuntime.begin(config, mouseWindowChecker);
     }
 
+    public boolean isRuntimeActive() {
+        return runtimeActive;
+    }
 
     public void run(Game game, Runnable onExit) {
         saveGame(game);
@@ -37,6 +41,7 @@ public class RuntimeFacade {
         updateBlurpExceptionHandler(game);
         startScript(game);
         showBlurpScreen();
+        runtimeActive = true;
     }
 
     private void saveGame(Game game) {
@@ -44,12 +49,13 @@ public class RuntimeFacade {
     }
 
     private void updateBlurpConfig(Game game, final Runnable onExit) {
-        BlurpConfiguration config = BlurpStore.configuration;
         config.setContentRoot(gameStore.buildFolder(game).path());
         config.setScriptCompletionHandler(new ScriptCompletionHandler() {
             public void onTerminate() {
+                // todo - phil to add delegating call on runtime
                 BlurpStore.reset();
                 onExit.run();
+                runtimeActive = false;
             }
         });
     }
@@ -63,6 +69,7 @@ public class RuntimeFacade {
     }
 
     private void startScript(Game game) {
+        // todo (low priority) - use Phil's latest code which doesn't need language extension
         String fileName = gameStore.codePathname(game);
         SupportedLanguage language = SupportedLanguages.forFile(fileName);
         blurpRuntime.startScriptFile(language, fileName);
