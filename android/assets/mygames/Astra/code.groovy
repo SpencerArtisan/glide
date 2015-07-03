@@ -9,14 +9,12 @@ screen.viewport.setSize(800, 600)
 // Constants
 BOOST = 0.1
 G = 0.01
-PLANET_MASS = 100
 SHIP_MASS = 1
-PLANETS = 1
 TOP = 572
 RIGHT = 772
 BOTTOM = 28
 LEFT = 28
-BUBBLE_CAPTURE = 15
+BUBBLE_CAPTURE = 12
 
 // Sprites
 resources.createImageSprite("stars").setScale(1.2).setLayer(Background)
@@ -27,7 +25,6 @@ planets = []
 
 replayLoop:
 while (true) {
-
     level = 1
 
     mainLoop:
@@ -36,7 +33,7 @@ while (true) {
         velocityX = 0
         velocityY = 0
         ship.setPosition(60, 300).setScale(1).setTransparency(1)
-        targetBubble.setX(732).setY(300).setColour(Orange).setScale(1).setTransparency(1)
+        targetBubble.setPosition(732, 300).setColour(Orange).setScale(1).setTransparency(1)
 
         levelStart()
 
@@ -69,7 +66,7 @@ while (true) {
         targetBubble.runEffect(effects.combine(goWhite, shrink))
         ship.runEffect(effects.transparency(0))
 
-        system.wait(1000)
+        system.wait(1500)
         level = level + 1
     }
 
@@ -77,14 +74,13 @@ while (true) {
     shimmer = effects.scaleBy(2).withDuration(50).withTimesToRun(20).withYoyoMode(true)
     shimmerAndFade = effects.combine(shimmer, effects.transparency(0).withDuration(1000))
     ship.setScale(0.5).setImage("explosion").runEffect(shimmerAndFade)
-    system.wait(1000)
+    system.wait(1500)
     ship.setTransparency(1).setImage("ship")
 }
 
 //-----------------------------------------------------------------------
 
 void showPlanets() {
-
     planets.each { it.remove() }
     planet = resources.createImageSprite("planet").setX(9999)
 
@@ -142,7 +138,7 @@ void gravity(planet) {
     acceleration = force / SHIP_MASS
 
     // Accelerate in direction of planet
-    accelAngle = ship.angleTo(planet);
+    accelAngle = ship.angleTo(planet)
     accelerateShip(accelAngle, acceleration)
 }
 
@@ -154,16 +150,16 @@ void controlShip() {
         ship.angle -= 5
     }
     if (keyboard.Right.isPressed()) {
-        ship.angle += 5 
+        ship.angle += 5
     }
 }
 
 void accelerateShip(accelAngle, amount) {
-    velocityX = velocityX + amount * utils.cos(accelAngle)
-    velocityY = velocityY - amount * utils.sin(accelAngle)
+    velocityX += amount * utils.cos(accelAngle)
+    velocityY -= amount * utils.sin(accelAngle)
 }
 
 void moveShip() {
-    ship.x = ship.x + velocityX
-    ship.y = ship.y + velocityY
+    ship.x += velocityX
+    ship.y += velocityY
 }
