@@ -23,7 +23,7 @@ public class FrameworkKeywords implements Keywords {
                 "BounceStart", "BounceStartStop", "ElasticStop", "ElasticStart", "ElasticStartStop",
                 "Justification", "AlignLeft", "AlignCenter", "AlignRight", "multiplyBy",
                 "resources", "Image", "loadImage", "Sprite", "createImageSprite", "ImageSprite", "createTextSprite", "handle", "timesToRun", "yoyoMode",
-                "Circle", "angle", "camera", "delayBeforeStart", "delayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
+                "Circle", "angle", "camera", "withDelayBeforeStart", "withDelayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
                 "isRunningAnEffect", "console", "keyboard", "clear", "fontSize", "Colours", "values", "Right", "Left", "Center",
                 "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
                 "position", "println", "Rectangle", "randomInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
@@ -32,7 +32,7 @@ public class FrameworkKeywords implements Keywords {
                 "setX", "setY", "setScaleX", "setScaleY", "setAngle", "setColour", "setTransparency", "setHidden", "setTargetStyle", "setLayer", "setMouse",
                 "setPosition", "setScale", "setHeight", "setWidth", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
                 "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
-                "Math", "abs", "cos", "sin"
+                "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour"
         };
     }
 
