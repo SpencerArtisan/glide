@@ -1,41 +1,43 @@
 ///////////////////////////////////////// 
 //             Console Race            // 
-//                                     // 
-//         Spencer Ward (2015)         // 
+//         Spencer Ward (2015)         //
 ///////////////////////////////////////// 
 
 screen.backgroundColour = LightGreen
-roadLeft = 50
-roadWidth = 30
-pixelsPerChar = 5.4
-previousLefts = []
-verticalChars = 66
-carStartX = (roadLeft + roadWidth / 2) * pixelsPerChar
-
-car = resources.createImageSprite("car").setPosition(carStartX, 560)
-explosion = resources.createImageSprite("explosion").setHidden(true)
-scoreText = resources.createTextSprite("0").setPosition(750, 580).setFontSize(20).setColour(DarkBlue)
+roadLeft = 250
+roadWidth = 250
+carStartX = (roadLeft + roadWidth / 2)
 score = 0
+walls = []
+
+car = resources.createImageSprite("car").setPosition(carStartX, 20)
+explosion = resources.createImageSprite("explosion").setHidden(true)
+wall = resources.createImageSprite("wall").setScale(0.2).setX(9999)
+scoreText = resources.createTextSprite("").setPosition(750, 580).setFontSize(20).setColour(DarkBlue)
 
 while (screen.update()) {
     moveRoad()  
     controlCar()
-   
     if (hitWall()) {
         deathAnimation()
         system.wait(1800)
-        system.restart()
+        break
     }
     scoreText.setText("Score: " + score++)
+    roadWidth -= 0.1
 }
 
 void moveRoad() {
-    roadLeft += utils.randomInRange(-2, 2)
-    if (roadLeft < 0) roadLeft = 0
-    if (roadLeft > 100) roadLeft = 100
-    roadLine = " " * roadLeft + "**" + " " * roadWidth + "**"
-    previousLefts.add(roadLeft)
-    console.println(roadLine)  
+    wallLeft = wall.copy().setPosition(roadLeft, 600)
+    wallRight = wall.copy().setPosition(roadLeft + roadWidth, 600)
+    wallLeft.runEffect(effects.move(180, 600).withStyle(Linear), AtEndRemoveSprite)
+    wallRight.runEffect(effects.move(180, 600).withStyle(Linear), AtEndRemoveSprite)
+    walls.add(wallLeft)
+    walls.add(wallRight)
+
+    roadLeft += utils.randomInRange(-11, 11)
+    if (roadLeft < 20) roadLeft = 20
+    if (roadLeft > 720) roadLeft = 720
 }
 
 void controlCar() {
@@ -44,27 +46,16 @@ void controlCar() {
 }
 
 boolean hitWall() {
-    if (previousLefts.size() > verticalChars) {
-        carCharX = car.x / pixelsPerChar
-        left = previousLefts[previousLefts.size() - verticalChars]
-        return carCharX - 1 <= left || carCharX + 3 >= left + roadWidth
+    for (wall in walls) {
+      if (wall.overlaps(car)) return true
     }
     return false
 }
 
 void deathAnimation(){
-    car.runEffect(effects.rotateBy(5000))
     explosion.setScale(0.1).setPosition(car.x, car.y).setHidden(false)
-    explosion.runEffect(effects.sequence(effects.scaleBy(20), effects.scaleTo(0.1)))
+    explosion.runEffect(effects.sequence(effects.scaleBy(300)))
+    scoreText.runEffect(effects.combine(effects.rotateBy(360), 
+                                        effects.scaleBy(9),
+                                        effects.moveTo(400, 300)))
 }
-
-
-
-
-
-
-
-
-
-
-

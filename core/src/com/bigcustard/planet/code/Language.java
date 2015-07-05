@@ -7,6 +7,7 @@ import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import java.util.Set;
 
 public abstract class Language {
+    public static Language Ruby = new Ruby();
     public static Language Groovy = new Groovy();
     public static Language Javascript = new Javascript();
 
@@ -58,6 +59,8 @@ public abstract class Language {
             return Javascript;
         } else if (scriptEngine.equals(Groovy.scriptEngine())) {
             return Groovy;
+        } else if (scriptEngine.equals(Ruby.scriptEngine())) {
+            return Ruby;
         }
         throw new IllegalArgumentException("Unknown language " + scriptEngine);
     }

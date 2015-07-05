@@ -38,7 +38,7 @@ public class ImageUtils {
             g.dispose();
 
             ImageIO.write(outputImage, "png", target.file());
-        } catch (IOException e) {
+        } catch (Exception e) {
             Gdx.app.error("tag", "Failed to resize image", e);
         }
     }
