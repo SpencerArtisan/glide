@@ -20,7 +20,7 @@ BUBBLE_CAPTURE = 15
 
 // Sprites
 resources.createImageSprite("stars").setScale(1.2).setLayer(Background)
-resources.createImageSprite("bubble").setPosition(60, 300).setTransparency(0.8)
+resources.createImageSprite("bubble").setPosition(60, 233).setTransparency(0.8)
 targetBubble = resources.createImageSprite("bubble")
 ship = resources.createImageSprite("ship")
 planets = []
@@ -35,8 +35,8 @@ while (true) {
         showPlanets()
         velocityX = 0
         velocityY = 0
-        ship.setPosition(60, 300).setScale(1).setTransparency(1)
-        targetBubble.setX(732).setY(300).setColour(Orange).setScale(1).setTransparency(1)
+        ship.setPosition(60, 233).setScale(1).setTransparency(1)
+        targetBubble.setX(732).setY(233).setColour(Orange).setScale(1).setTransparency(1)
 
         levelStart()
 
@@ -90,7 +90,7 @@ void showPlanets() {
 
     if (level == 1) {
         planets = [planet]
-        planets[0].setPosition(400, 300)
+        planets[0].setPosition(400,233)
     } else if (level == 2) {
         planets = planet.multiplyBy(2)
         planets[0].setPosition(300, 363)
