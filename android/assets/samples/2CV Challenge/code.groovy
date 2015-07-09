@@ -72,7 +72,7 @@ void drawRoad() {
         roadXProj = projectCoord(roadDist, carX + roadXs[carZ + (int) roadDist])
         roads[spriteIndex++].setScale(roadWidthProj / 80)
                 .setPosition(400 + roadXProj, EYE_LEVEL - roadYProj)
-git s
+
         if (carZ + roadDist < nextTreeZ) {
             treeXProj = projectCoord(roadDist, carX + roadXs[carZ + (int) roadDist] - ROAD_WIDTH/2)
             treeXProj2 = projectCoord(roadDist, carX + roadXs[carZ + (int) roadDist] + ROAD_WIDTH/2)
