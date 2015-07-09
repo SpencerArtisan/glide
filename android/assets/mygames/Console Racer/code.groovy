@@ -1,7 +1,7 @@
-///////////////////////////////////////// 
-//             Console Race            // 
+/////////////////////////////////////////
+//             Console Race            //
 //         Spencer Ward (2015)         //
-///////////////////////////////////////// 
+/////////////////////////////////////////
 
 screen.backgroundColour = LightGreen
 roadLeft = 250
@@ -16,11 +16,11 @@ wall = resources.createImageSprite("wall").setScale(0.2).setX(9999)
 scoreText = resources.createTextSprite("").setPosition(750, 580).setFontSize(20).setColour(DarkBlue)
 
 while (screen.update()) {
-    moveRoad()  
+    moveRoad()
     controlCar()
     if (hitWall()) {
         deathAnimation()
-        system.wait(1800)
+        system.sleep(1800)
         break
     }
     scoreText.setText("Score: " + score++)
@@ -47,7 +47,7 @@ void controlCar() {
 
 boolean hitWall() {
     for (wall in walls) {
-      if (wall.overlaps(car)) return true
+        if (wall.overlaps(car)) return true
     }
     return false
 }
@@ -55,7 +55,7 @@ boolean hitWall() {
 void deathAnimation(){
     explosion.setScale(0.1).setPosition(car.x, car.y).setHidden(false)
     explosion.runEffect(effects.sequence(effects.scaleBy(300)))
-    scoreText.runEffect(effects.combine(effects.rotateBy(360), 
-                                        effects.scaleBy(9),
-                                        effects.moveTo(400, 300)))
+    scoreText.runEffect(effects.combine(effects.rotateBy(360),
+            effects.scaleBy(9),
+            effects.moveTo(400, 300)))
 }
