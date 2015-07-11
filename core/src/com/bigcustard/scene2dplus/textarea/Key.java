@@ -1,11 +1,7 @@
 package com.bigcustard.scene2dplus.textarea;
 
 public enum Key {
-	Up(63232), 
-	Down(63233), 
-	Left(63234), 
-	Right(63235), 
-	Delete('\b'), 
+	Delete('\b'),
 	Shift('\u007F'),
 	Return('\r'),
 	Tab('\t');

@@ -54,7 +54,7 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyTyped(InputEvent event, char character) {
-        commandHistory.execute(getKeyTypedCommand(character));
+        commandHistory.execute(getKeyTypedCommand(character, event.getKeyCode()));
         view.onModelChange(model);
         return true;
     }
@@ -108,22 +108,22 @@ public class TextAreaController extends ClickListener {
         return isControlDown() && keycode == Input.Keys.Z && isShiftDown();
     }
 
-    private Command getKeyTypedCommand(char character) {
+    private Command getKeyTypedCommand(char character, int keyCode) {
         if (Key.Delete.is(character)) {
             return new DeleteCommand(model);
-        } else if (Key.Up.is(character)) {
+        } else if (keyCode == Input.Keys.UP) {
             return new MoveUpCommand(model);
-        } else if (Key.Down.is(character)) {
+        } else if (keyCode == Input.Keys.DOWN) {
             return new MoveDownCommand(model);
-        } else if (Key.Right.is(character)) {
+        } else if (keyCode == Input.Keys.RIGHT) {
             return new MoveRightCommand(model);
-        } else if (Key.Left.is(character)) {
+        } else if (keyCode == Input.Keys.LEFT) {
             return new MoveLeftCommand(model);
         } else if (Key.Return.is(character)) {
             return new ReturnCommand(model);
         } else if (Key.Tab.is(character)) {
             return new TabCommand(model);
-        } else if (isPrintableChar(character)) {
+        } else if (isPrintableChar(character, keyCode)) {
             if (lastCharacterTyped == null || lastCharacterTyped != character) {
                 lastCharacterTyped = character;
                 return new TypeCommand(model, Character.toString(character));
@@ -132,16 +132,16 @@ public class TextAreaController extends ClickListener {
         return null;
     }
 
-    private boolean isPrintableChar(char character) {
+    private boolean isPrintableChar(char character, int keyCode) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
         return (!Character.isISOControl(character)) &&
                 character != KeyEvent.CHAR_UNDEFINED &&
                 block != null &&
                 block != Character.UnicodeBlock.SPECIALS &&
-                !Key.Down.is(character) &&
-                !Key.Up.is(character) &&
-                !Key.Left.is(character) &&
-                !Key.Right.is(character);
+                keyCode != Input.Keys.DOWN &&
+                keyCode != Input.Keys.UP &&
+                keyCode != Input.Keys.LEFT &&
+                keyCode != Input.Keys.RIGHT;
     }
 
     @VisibleForTesting
