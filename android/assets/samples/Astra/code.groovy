@@ -66,7 +66,7 @@ while (true) {
         targetBubble.runEffect(effects.combine(goWhite, shrink))
         ship.runEffect(effects.transparency(0))
 
-        system.wait(1500)
+        system.sleep(1500)
         level = level + 1
     }
 
@@ -74,7 +74,7 @@ while (true) {
     shimmer = effects.scaleBy(2).withDuration(50).withTimesToRun(20).withYoyoMode(true)
     shimmerAndFade = effects.combine(shimmer, effects.transparency(0).withDuration(1000))
     ship.setScale(0.5).setImage("explosion").runEffect(shimmerAndFade)
-    system.wait(1500)
+    system.sleep(1500)
     ship.setTransparency(1).setImage("ship")
 }
 
@@ -145,6 +145,9 @@ void gravity(planet) {
 void controlShip() {
     if (keyboard.Space.isPressed()) {
         accelerateShip(ship.angle, BOOST)
+        ship.setImage("shipwithflames")
+    } else {
+        ship.setImage("ship")
     }
     if (keyboard.Left.isPressed()) {
         ship.angle -= 5
