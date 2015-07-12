@@ -22,7 +22,7 @@ resources.createImageSprite("bubble").setPosition(60, 300).setTransparency(0.8)
 targetBubble = resources.createImageSprite("bubble")
 ship = resources.createImageSprite("ship")
 planets = []
-
+ 
 replayLoop:
 while (true) {
     level = 1
@@ -110,8 +110,8 @@ void showPlanets() {
 }
 
 void levelStart() {
-    levelText = resources.createTextSprite("LEVEL " + level).setFontSize(80).setPosition(900, 300)
-    comeIn = effects.moveTo(400, 300).withStyle(ElasticStop)
+    levelText = resources.createTextSprite("LEVEL " + level).setFontSize(80).setPosition(900, 233)
+    comeIn = effects.moveTo(400, 233).withStyle(ElasticStop)
     fade = effects.transparency(0).withDuration(1500)
     levelText.runEffect(effects.sequence(comeIn, fade.withDelayBeforeStart(300)))
 }

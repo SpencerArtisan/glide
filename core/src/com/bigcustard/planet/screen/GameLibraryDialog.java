@@ -11,16 +11,17 @@ import com.google.common.util.concurrent.SettableFuture;
 public class GameLibraryDialog extends Dialog {
     private static int COLUMNS = 2;
     private SettableFuture<Game> futureGame = SettableFuture.create();
+    private boolean readOnly;
 
     public static GameLibraryDialog userGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
-        dialog.layoutControls(skin, new GameStore().allUserGames(), true);
+        dialog.layoutControls(skin, new GameStore().allUserGames(), false);
         return dialog;
     }
 
     public static GameLibraryDialog sampleGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
-        dialog.layoutControls(skin, new GameStore().allSampleGames(), false);
+        dialog.layoutControls(skin, new GameStore().allSampleGames(), true);
         return dialog;
     }
 
@@ -34,10 +35,16 @@ public class GameLibraryDialog extends Dialog {
 
     @Override
     protected void result(Object object) {
-        futureGame.set((Game) object);
+        Game selected = (Game) object;
+        if (readOnly) {
+            GameStore gameStore = new GameStore();
+            gameStore.rename(selected, gameStore.findUniqueName().name());
+        }
+        futureGame.set(selected);
     }
 
-    private void layoutControls(Skin skin, java.util.List<Game> gameFolders, boolean allowDelete) {
+    private void layoutControls(Skin skin, java.util.List<Game> gameFolders, boolean readOnly) {
+        this.readOnly = readOnly;
         getContentTable().clearChildren();
         getButtonTable().clearChildren();
         pad(20);
@@ -48,7 +55,7 @@ public class GameLibraryDialog extends Dialog {
             ImageTextButton button = createButton(skin, game);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, game);
-            if (allowDelete) getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
+            if (!readOnly) getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
             if (++i%COLUMNS == 0) getButtonTable().row();
         }
         getButtonTable().row();
@@ -75,7 +82,7 @@ public class GameLibraryDialog extends Dialog {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 new GameStore().delete(game);;
-                layoutControls(skin, new GameStore().allUserGames(), true);
+                layoutControls(skin, new GameStore().allUserGames(), readOnly);
             }
         });
         return button;

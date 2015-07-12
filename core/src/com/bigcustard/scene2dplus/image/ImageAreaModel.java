@@ -43,6 +43,10 @@ public class ImageAreaModel {
         return folder;
     }
 
+    public void folder(FileHandle newFolder) {
+        folder = newFolder;
+    }
+
     public List<ImageModel> images() {
         return images;
     }

@@ -27,6 +27,7 @@ import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -43,6 +44,7 @@ public class CodingScreen extends ScreenAdapter {
     private Consumer<Screen> setScreen;
     private ScreenFactory screenFactory;
     private Label errorLabel;
+    private ScheduledFuture<?> gameSavingProcess;
 
     public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -95,7 +97,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
 
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+        gameSavingProcess = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
         }, 1, 1, TimeUnit.SECONDS);
@@ -162,6 +164,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private ListenableFuture<Boolean> saveGameChoice() {
+        gameSavingProcess.cancel(true);
         SaveChoiceDialog saveGameDialog = new SaveChoiceDialog(skin);
         saveGameDialog.show(stage);
         return saveGameDialog.getFutureSaveChoice();

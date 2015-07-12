@@ -31,6 +31,7 @@ public class GameStore {
             }
             source.moveTo(target);
             game.name(newName);
+            game.imageModel().folder(target);
             storeMostRecentGameName(game);
         }
     }
@@ -45,7 +46,7 @@ public class GameStore {
     }
 
     public Game create(Language language) {
-        FileHandle gameFolder = findUniqueName(userFolder());
+        FileHandle gameFolder = findUniqueName();
         return new Game(gameFolder.name(), language.template(), language, new ImageAreaModel(gameFolder));
     }
 
@@ -101,23 +102,18 @@ public class GameStore {
         return CODE_FILE_WITHOUT_SUFFIX + "." + game.language().scriptEngine();
     }
 
-    private FileHandle findUniqueName(FileHandle parentFolder) {
-        FileHandle candidate = parentFolder.child(Game.DEFAULT_NAME);
+    public FileHandle findUniqueName() {
+        FileHandle candidate = userFolder().child(Game.DEFAULT_NAME);
         int suffix = 2;
         while (candidate.exists()) {
-            candidate = parentFolder.child(Game.DEFAULT_NAME + " " + suffix++);
+            candidate = userFolder().child(Game.DEFAULT_NAME + " " + suffix++);
         }
         return candidate;
     }
 
     private List<Game> allGames(FileHandle gameFolder) {
-        List<FileHandle> userGameFolder = Arrays.asList(allGameFolders(gameFolder));
-        return Lists.transform(userGameFolder, new Function<FileHandle, Game>() {
-            @Override
-            public Game apply(FileHandle folder) {
-                return fromFolder(folder);
-            }
-        });
+        List<FileHandle> gameFolders = Arrays.asList(allGameFolders(gameFolder));
+        return Lists.transform(gameFolders, this::fromFolder);
     }
 
     private Game fromFolder(FileHandle folder) {
