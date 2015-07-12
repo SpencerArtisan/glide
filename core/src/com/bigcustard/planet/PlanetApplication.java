@@ -2,7 +2,6 @@ package com.bigcustard.planet;
 
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.bootstrap.BlurpRuntime;
 import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.screen.ResourceManager;

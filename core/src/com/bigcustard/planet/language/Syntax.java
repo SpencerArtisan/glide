@@ -1,6 +1,5 @@
 package com.bigcustard.planet.language;
 
-import com.badlogic.gdx.graphics.Color;
 import com.bigcustard.planet.code.SyntaxPart;
 import com.bigcustard.util.Tokenizer;
 import com.google.common.base.Function;

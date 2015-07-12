@@ -3,14 +3,10 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.files.FileHandle;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 
-import java.util.function.Consumer;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ImageModelTest {

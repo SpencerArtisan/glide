@@ -4,7 +4,6 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.XYAssert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

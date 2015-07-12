@@ -3,7 +3,6 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bigcustard.blurp.ui.MouseWindowChecker;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
 

@@ -1,6 +1,5 @@
 package com.bigcustard.planet.code.language;
 
-import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.language.JavascriptKeywords;
 
 import java.util.HashSet;

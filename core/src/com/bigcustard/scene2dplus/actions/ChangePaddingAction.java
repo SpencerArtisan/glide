@@ -3,7 +3,6 @@ package com.bigcustard.scene2dplus.actions;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class ChangePaddingAction extends TemporalAction {
     private Cell<?> cell;
