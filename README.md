@@ -1,39 +1,28 @@
-Planet IDE
-==========
+![GLIDE](./installers/glide-logo.png)
 
-An Integrated Development Environment for kids.
+The General Language Integrated Development Environment...for kids
+==================================================================
 
 The aim of this project is to give children (aged 10 and upwards) a tool to write code.
-It is language agnostic, but as a first pass will only support groovy.
+It is language agnostic and currently supports Groovy, Ruby and Javascript.
 
-To build
+Setting up a Development Environment
+------------------------------------
 
-    ./gradlew clean build dist
+To upload jars to [nexus](http://leonandjosh.ddns.net:8081/nexus) you need to have nexusUsername and nexusPassword defined in ~/.gradle/gradle.properties.
 
-To run 
+To build the executables you need to download jwrapper and the JRE-1.8 to the root directory from [here] (http://www.jwrapper.com/download.html).
 
-    ./run.sh
- 
-To upload jars to nexus you need to have nexusUsername and nexusPassword defined in ~/.gradle/gradle.properties, then
+The sister runtime project can be found [here](https://github.com/phil-anderson/blurp).  This project manages the program execution environment.  It has a separate versioning strategy.  
 
-    ./gradlew uploadArchive
+Release Process
+---------------
 
-This uploads the jars to the nexus repo here
-
-    http://leonandjosh.ddns.net:8081/nexus
-
-To build the executables you need to download jwrapper and the JRE-1.8 to this directory from here - http://www.jwrapper.com/download.html.
-
-New release process:
-
-1. Update the version number in build.gradle and installers/jwrapper-groovy-planet.xml
-2. ./gradlew clean build dist
-3. ./run.sh and manually smoke test
-4. ./package.sh
-5. ./gradlew uploadArchives
-
-
-
+1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-groovy-planet.xml`` and ``run.sh``
+2. `./gradlew clean build dist`
+3. `./run.sh` and manually smoke test
+4. `./package.sh`
+5. `./gradlew uploadArchives`
 
 Troubleshooting
 ---------------
