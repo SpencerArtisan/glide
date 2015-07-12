@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class ChangePaddingAction extends TemporalAction {
-    private Cell<Label> cell;
+    private Cell<?> cell;
     private float startX;
     private final float end;
 
-    public ChangePaddingAction(Cell<Label> cell, float end, float duration, Interpolation interpolation) {
+    public ChangePaddingAction(Cell<?> cell, float end, float duration, Interpolation interpolation) {
         this.cell = cell;
         this.end = end;
         setDuration(duration);

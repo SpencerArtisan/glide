@@ -3,16 +3,20 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,6 +30,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -42,8 +47,8 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Consumer<Screen> setScreen;
 	private ScreenFactory screenFactory;
 	private GameStore gameStore;
-	private Label title;
-	private Cell<Label> titleCell;
+	private Image title;
+	private Cell<Image> titleCell;
 
 	WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
 		super();
@@ -74,7 +79,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.act(Math.min(delta, 1 / 60f));
@@ -92,7 +97,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void createTitle() {
-		title = new Label("Welcome to Planet Burpl", skin);
+		title = new Image(skin, "glide-logo");
 	}
 
 	private void createNewGameButton() {
@@ -174,16 +179,23 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void animateTitle() {
+        table.getColor().a = 0f;
         outerTable.getColor().a = 0f;
-		outerTable.addAction(Actions.fadeIn(1.3f));
-		titleCell.padLeft(-400);
-		outerTable.addAction(new ChangePaddingAction(this.titleCell, 50, 1, Interpolation.pow2));
+		outerTable.addAction(Actions.fadeIn(1.9f));
+		titleCell.padLeft(1400);
+		outerTable.addAction(Actions.sequence(
+				Actions.delay(1),
+				new ChangePaddingAction(this.titleCell, 50, 1f, Interpolation.pow2Out)));
+		this.title.addAction(Actions.sequence(
+				Actions.delay(1),
+				Actions.scaleTo(1.2f, 1, 0.5f, Interpolation.pow2),
+				Actions.scaleTo(1, 1, 0.5f, Interpolation.pow2)));
+		this.table.addAction(Actions.sequence(Actions.delay(1f), Actions.fadeIn(1)));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
         outerTable = new Table();
 		table = new Table();
-		table.row();
 		table.add(newGameButton).colspan(2).fillX();
 		table.row();
 		table.add(continueGameButton).padTop(20f).colspan(2).fillX();
@@ -195,7 +207,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		table.add(quitButton).padTop(20f).colspan(2).fillX();
 		outerTable.background(backgroundRegion);
 		title.setX(-55);
-		titleCell = outerTable.add(title).expand().padTop(40).padLeft(50).top().left();
+		titleCell = outerTable.add(title).expand().padTop(40).padBottom(-100).padLeft(50).top().left();
 		outerTable.row();
 		outerTable.add(table).expandY().top();
 		outerTable.setFillParent(true);
@@ -204,7 +216,8 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private TextureRegionDrawable createBackground() {
-		Texture backgroundTexture = new Texture(Gdx.files.internal("images/WelcomeBackground.png"));
+		int backgroundSketch = 1 + Math.abs(new Random().nextInt()) % 5;
+		Texture backgroundTexture = new Texture(Gdx.files.internal("bigimages/sketch" + backgroundSketch + ".png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 	}
