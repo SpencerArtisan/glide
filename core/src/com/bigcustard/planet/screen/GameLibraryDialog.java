@@ -36,7 +36,7 @@ public class GameLibraryDialog extends Dialog {
     @Override
     protected void result(Object object) {
         Game selected = (Game) object;
-        if (readOnly) {
+        if (object != null && readOnly) {
             GameStore gameStore = new GameStore();
             gameStore.rename(selected, gameStore.findUniqueName().name());
         }

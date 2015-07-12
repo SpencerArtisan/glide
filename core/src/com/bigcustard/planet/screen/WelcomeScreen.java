@@ -182,9 +182,9 @@ public class WelcomeScreen extends ScreenAdapter {
         table.getColor().a = 0f;
         outerTable.getColor().a = 0f;
 		outerTable.addAction(Actions.fadeIn(1.9f));
-		titleCell.padLeft(1400);
+		titleCell.padLeft(1800);
 		outerTable.addAction(Actions.sequence(
-				Actions.delay(0.6f),
+				Actions.delay(0.5f),
 				new ChangePaddingAction(this.titleCell, 50, 0.6f, Interpolation.pow2Out)));
 		this.title.setScaleX(1.3f);
 		this.title.addAction(Actions.sequence(

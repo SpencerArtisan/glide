@@ -1,5 +1,5 @@
 /////////////////////////////////////////
-//             Console Race            //
+//            Console Racer            //
 //         Spencer Ward (2015)         //
 /////////////////////////////////////////
 
@@ -46,10 +46,7 @@ void controlCar() {
 }
 
 boolean hitWall() {
-    for (wall in walls) {
-        if (wall.overlaps(car)) return true
-    }
-    return false
+    return walls.any{it.overlaps(car)}
 }
 
 void deathAnimation(){
