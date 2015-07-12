@@ -97,7 +97,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	}
 
 	private void createTitle() {
-		title = new Image(skin, "glide-logo");
+		title = new Image(skin, "glide");
 	}
 
 	private void createNewGameButton() {
@@ -184,13 +184,13 @@ public class WelcomeScreen extends ScreenAdapter {
 		outerTable.addAction(Actions.fadeIn(1.9f));
 		titleCell.padLeft(1400);
 		outerTable.addAction(Actions.sequence(
-				Actions.delay(1),
-				new ChangePaddingAction(this.titleCell, 50, 1f, Interpolation.pow2Out)));
+				Actions.delay(0.6f),
+				new ChangePaddingAction(this.titleCell, 50, 0.6f, Interpolation.pow2Out)));
+		this.title.setScaleX(1.3f);
 		this.title.addAction(Actions.sequence(
-				Actions.delay(1),
-				Actions.scaleTo(1.2f, 1, 0.5f, Interpolation.pow2),
-				Actions.scaleTo(1, 1, 0.5f, Interpolation.pow2)));
-		this.table.addAction(Actions.sequence(Actions.delay(1f), Actions.fadeIn(1)));
+				Actions.delay(0.6f),
+				Actions.scaleTo(1, 1, 0.6f, Interpolation.pow2)));
+		this.table.addAction(Actions.sequence(Actions.delay(0.4f), Actions.fadeIn(0.4f)));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
