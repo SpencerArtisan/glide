@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
-import com.bigcustard.planet.code.Language;
+import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.code.command.NewCommand;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;

@@ -1,11 +1,7 @@
-package com.bigcustard.planet.code;
+package com.bigcustard.planet.code.language;
 
+import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.language.GroovyKeywords;
-import com.bigcustard.planet.language.JavascriptKeywords;
-import com.bigcustard.planet.language.Keywords;
-import com.bigcustard.planet.language.Syntax;
-import com.bigcustard.scene2dplus.textarea.ColorCoder;
-import com.google.common.base.Function;
 import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
@@ -18,11 +14,11 @@ import java.util.Set;
 
 public class Groovy extends Language {
     public static final String TEMPLATE =
-              "////////////////////////////////////////////// \n"
-            + "//         Welcome to Planet Burpl!         // \n"
-            + "//      Start writing your game below       // \n"
-            + "// Look in the Game Library for inspiration // \n"
-            + "////////////////////////////////////////////// \n\n";
+                      "///////////////////////////////////// \n"
+                    + "//       Welcome to GLIDE!         // \n"
+                    + "//  Start writing your game below  // \n"
+                    + "// Look at Samples for inspiration // \n"
+                    + "///////////////////////////////////// \n\n";
 
     public Groovy() {
         super(new GroovyKeywords(), "groovy", "groovy-button", TEMPLATE);

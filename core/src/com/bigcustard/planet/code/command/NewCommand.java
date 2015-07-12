@@ -1,6 +1,6 @@
 package com.bigcustard.planet.code.command;
 
-import com.bigcustard.planet.code.Language;
+import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.util.FutureSupplier;
 import com.bigcustard.util.FutureSuppliers;

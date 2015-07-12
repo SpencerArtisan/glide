@@ -1,6 +1,6 @@
 package com.bigcustard.planet.code;
 
-import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.language.Syntax;
 import org.junit.Before;
 import org.junit.Test;

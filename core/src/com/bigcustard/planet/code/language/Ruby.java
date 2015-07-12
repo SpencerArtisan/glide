@@ -1,25 +1,18 @@
-package com.bigcustard.planet.code;
+package com.bigcustard.planet.code.language;
 
-import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.language.RubyKeywords;
-import groovy.lang.GroovyClassLoader;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-import org.codehaus.groovy.control.messages.Message;
-import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
-import org.codehaus.groovy.syntax.SyntaxException;
 
-import java.io.StringBufferInputStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Ruby extends Language {
     public static final String TEMPLATE =
-                      "############################################## \n"
-                    + "##         Welcome to Planet Burpl!         ## \n"
-                    + "##      Start writing your game below       ## \n"
-                    + "## Look in the Game Library for inspiration ## \n"
-                    + "############################################## \n\n";
+                      "##################################### \n"
+                    + "##       Welcome to GLIDE!         ## \n"
+                    + "##  Start writing your game below  ## \n"
+                    + "## Look at Samples for inspiration ## \n"
+                    + "##################################### \n\n";
 
     public Ruby() {
         super(new RubyKeywords(), "ruby", "ruby-button", TEMPLATE);

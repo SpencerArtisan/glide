@@ -1,5 +1,6 @@
-package com.bigcustard.planet.code;
+package com.bigcustard.planet.code.language;
 
+import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
