@@ -3,20 +3,16 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -94,6 +90,10 @@ public class WelcomeScreen extends ScreenAdapter {
 		boolean samplesEnabled = gameStore.allSampleGames().size() > 0;
 		samplesButton.setDisabled(!samplesEnabled);
 		samplesButton.setTouchable(samplesEnabled ? Touchable.enabled : Touchable.disabled);
+
+		boolean myGamesEnabled = gameStore.allUserGames().size() > 0;
+		myGamesButton.setDisabled(!myGamesEnabled);
+		myGamesButton.setTouchable(myGamesEnabled ? Touchable.enabled : Touchable.disabled);
 	}
 
 	private void createTitle() {
@@ -190,7 +190,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		this.title.addAction(Actions.sequence(
 				Actions.delay(0.6f),
 				Actions.scaleTo(1, 1, 0.6f, Interpolation.pow2)));
-		this.table.addAction(Actions.sequence(Actions.delay(0.4f), Actions.fadeIn(0.4f)));
+		this.table.addAction(Actions.sequence(Actions.delay(0.4f), Actions.fadeIn(0.2f)));
 	}
 
 	private void layoutScreen(TextureRegionDrawable backgroundRegion) {
