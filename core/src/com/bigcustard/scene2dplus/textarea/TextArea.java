@@ -101,6 +101,7 @@ public class TextArea extends Actor {
             XY textStart = caretLocationToPosition(new XY(0, 0));
             BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
             setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
+            setWidth(Math.max(LEFT_MARGIN + textBounds.width, getParent().getWidth()));
             ((Layout) getParent()).invalidate();
         } catch (Exception e) {
             System.out.println("Failed to draw text: " + model.coloredText());
