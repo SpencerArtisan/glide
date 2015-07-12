@@ -1,0 +1,40 @@
+<JWrapper>
+	
+	<!-- The name of the app bundle -->
+	<BundleName>Glide</BundleName>
+	
+	<!-- The specification for one app within the bundle -->
+	<App>
+	  <Name>Glide</Name>
+	  <LogoPNG>installers/logo.png</LogoPNG>
+	  <MainClass>com.bigcustard.planet.desktop.DesktopLauncher</MainClass>
+	</App>
+	
+	<SupportedLanguages>en</SupportedLanguages>
+	
+	<!-- App is a per-user app, it won't elevate and install for all users and the shared config folder will be per-user -->
+	<InstallType>CurrentUser</InstallType>
+	
+	<!-- Splash and Logo -->
+	<SplashPNG>installers/glide-logo.png</SplashPNG>
+	<BundleLogoPNG>installers/scar.png</BundleLogoPNG>
+	
+	<!-- JVM options (e.g. extra memory) -->
+	<JvmOptions>
+	 <JvmOption>-Xmx256m</JvmOption>
+	</JvmOptions>
+	
+	<!-- The JREs JWrapper should use for Windows, Linux32, Linux64... -->
+	<Windows32JRE>JRE-1.8/win32/jre1.8.0_40</Windows32JRE>
+	<Windows64JRE>JRE-1.8/win32/jre1.8.0_40</Windows64JRE>
+	<Linux32JRE>JRE-1.8/linux/jre1.8.0_40</Linux32JRE>
+	<Linux64JRE>JRE-1.8/linuxx64/jre1.8.0_40</Linux64JRE>
+	<Mac64JRE>JRE-1.8/macos64/jre1.8.0_40.jre</Mac64JRE> 
+
+	<!-- The files that the app wants to bundle, here we have just one which is a JAR file and we specify that it should be on the launch classpath -->
+    <File classpath='yes'>desktop/build/libs/desktop-0.0.2.jar</File>
+    <File classpath='no'>android/assets/samples</File>
+
+    <Pack200Effort>0</Pack200Effort>
+	
+</JWrapper>
