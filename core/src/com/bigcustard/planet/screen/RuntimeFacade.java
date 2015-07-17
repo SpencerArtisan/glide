@@ -52,8 +52,7 @@ public class RuntimeFacade {
         config.setContentRoot(gameStore.buildFolder(game).path());
         config.setScriptCompletionHandler(new ScriptCompletionHandler() {
             public void onTerminate() {
-                // todo - phil to add delegating call on runtime
-                BlurpStore.reset();
+                blurpRuntime.reset();
                 onExit.run();
                 runtimeActive = false;
             }
@@ -69,10 +68,9 @@ public class RuntimeFacade {
     }
 
     private void startScript(Game game) {
-        // todo (low priority) - use Phil's latest code which doesn't need language extension
         String fileName = gameStore.codePathname(game);
         SupportedLanguage language = SupportedLanguages.forFile(fileName);
-        blurpRuntime.startScriptFile(language, fileName);
+        blurpRuntime.start(language, fileName);
     }
 
     private void showBlurpScreen() {

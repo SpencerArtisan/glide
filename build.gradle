@@ -68,8 +68,8 @@ project(":core") {
         compile "org.apache.commons:commons-lang3:3.1"
         compile "com.google.guava:guava:18.0"
         compile 'org.codehaus.groovy:groovy-all:2.4.3'
-        compile files("libs/core-1.0.jar")
-        compile files("libs/model-1.0.jar")
+        compile files("libs/core-0.1.1.jar")
+        compile files("libs/model-0.1.1.jar")
         compile files("libs/tween-engine-api.jar")
         compile 'org.jruby:jruby-complete:1.7.19'
         testCompile "junit:junit:4.12"
