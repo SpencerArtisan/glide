@@ -1,5 +1,5 @@
 ///////////////////////////////////// 
-//            DebugIt 1            // 
+//           Debug It 1            //
 //  Can you get the game working?  // 
 ///////////////////////////////////// 
 
@@ -8,7 +8,7 @@ player1 = resource.createImageSprite("swimmer").setPosition(630, 44).setColour(P
 player2 = resource.createImageSprite("swimmer").setPosition(680, 120).setScale(0.8)
 
 if (keyboard.Z.wasJustPressed()) player1.moveTowards(22, 245, 20)
-if (keyboard.M.wasJustPressed()) player2.moveTowards(110, 250, 18)
+if (keyboard.M) player2.moveTowards(110, 250, 18)
 
 while (screen.update()) {
 }

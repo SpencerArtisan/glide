@@ -2,6 +2,7 @@ package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.bigcustard.scene2dplus.XY;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,14 +88,34 @@ public class ImageAreaModel {
     private void readImages() {
         FileHandle imageDetails = folder.child(IMAGE_DETAIL_FILE);
         if (imageDetails.exists()) {
-            String manifest = imageDetails.readString();
-            ImageListDetails imageListDetails = new Json().fromJson(ImageListDetails.class, manifest);
-            for (ImageDetails image : imageListDetails.images) {
+            readImagesFromDetailFile(imageDetails);
+        } else {
+            FileHandle[] imageFiles = folder.list((dir, name) -> !name.startsWith("code"));
+            for (FileHandle imageFile : imageFiles) {
                 try {
-                    addImage(image.toImage(folder));
+                    XY imageSize = imageSize(imageFile);
+                    ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
+                    imageModel.setName(imageFile.name());
+                    addImage(imageModel);
                 } catch (Exception e) {
-                    System.out.println("Failed to add game image: " + e);
+                    System.out.println("Ignoring non image file: " + imageFile.name());
                 }
+            }
+        }
+    }
+
+    protected XY imageSize(FileHandle imageFile) {
+        return ImageUtils.imageSize(imageFile);
+    }
+
+    private void readImagesFromDetailFile(FileHandle imageDetails) {
+        String manifest = imageDetails.readString();
+        ImageListDetails imageListDetails = new Json().fromJson(ImageListDetails.class, manifest);
+        for (ImageDetails image : imageListDetails.images) {
+            try {
+                addImage(image.toImage(folder));
+            } catch (Exception e) {
+                System.out.println("Failed to add game image: " + e);
             }
         }
     }

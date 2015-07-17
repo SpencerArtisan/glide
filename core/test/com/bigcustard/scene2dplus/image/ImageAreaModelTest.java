@@ -1,12 +1,15 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.bigcustard.scene2dplus.XY;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import java.io.FilenameFilter;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,8 +128,24 @@ public class ImageAreaModelTest {
         assertThat(model.images()).extracting("name").containsExactly("image");
     }
 
+    @Test
+    public void fromFolderWithMissingManifest() {
+        when(mockManifestFile.exists()).thenReturn(false);
+        when(mockImageFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[]{mockImageFile});
+        ImageAreaModel model = new ImageAreaModel(mockImageFolder) {
+            @Override
+            protected XY imageSize(FileHandle imageFile) {
+                return new XY(100, 200);
+            }
+        };
+        assertThat(model.images()).extracting("name").containsExactly("image.png");
+        assertThat(model.images()).extracting("width").containsExactly(100);
+        assertThat(model.images()).extracting("height").containsExactly(200);
+    }
+
     private ImageAreaModel newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
+        when(mockImageFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
         ImageAreaModel model = new ImageAreaModel(mockImageFolder);
         return model;
     }

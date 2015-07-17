@@ -14,7 +14,7 @@ public class Ruby extends Language {
                     + "##################################### \n\n";
 
     public Ruby() {
-        super(new RubyKeywords(), "ruby", "ruby-button", TEMPLATE);
+        super(new RubyKeywords(), "rb", "ruby-button", TEMPLATE);
     }
 
     @Override

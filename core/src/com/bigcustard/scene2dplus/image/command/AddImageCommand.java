@@ -68,8 +68,7 @@ public class AddImageCommand extends AbstractCommand {
     }
 
     protected XY imageSize(FileHandle mainImageFile) {
-        Image image = ImageUtils.asImage(mainImageFile);
-        return new XY((int) image.getWidth(), (int) image.getHeight());
+        return ImageUtils.imageSize(mainImageFile);
     }
 
     protected InputStream inputStream(String url) {

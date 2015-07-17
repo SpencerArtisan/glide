@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.bigcustard.scene2dplus.XY;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,6 +19,11 @@ public class ImageUtils {
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         TextureRegion textureRegion = new TextureRegion(texture);
         return new Image(textureRegion);
+    }
+
+    public static XY imageSize(FileHandle mainImageFile) {
+        Image image = asImage(mainImageFile);
+        return new XY((int) image.getWidth(), (int) image.getHeight());
     }
 
     public static void resize(FileHandle source, FileHandle target, Integer width, Integer height) {

@@ -9,7 +9,7 @@ import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class GameLibraryDialog extends Dialog {
-    private static int COLUMNS = 2;
+    private static int COLUMNS = 3;
     private SettableFuture<Game> futureGame = SettableFuture.create();
     private boolean readOnly;
 
@@ -67,11 +67,11 @@ public class GameLibraryDialog extends Dialog {
 
     private ImageTextButton createButton(Skin skin, Game gameFolder) {
         String buttonStyle = gameFolder.language().buttonStyle();
-        ImageTextButton button = new ImageTextButton(gameFolder.name() + "  ", skin, buttonStyle);
+        ImageTextButton button = new ImageTextButton(gameFolder.name() + " ", skin, buttonStyle);
         button.clearChildren();
-        button.add(new Spacer(8));
-        button.add(button.getImage());
         button.add(new Spacer(4));
+        button.add(button.getImage());
+        button.add(new Spacer(2));
         button.add(button.getLabel());
         return button;
     }
