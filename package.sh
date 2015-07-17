@@ -1,1 +1,1 @@
-java -jar jwrapper-00036138363.jar installers/jwrapper-groovy-planet.xml
+java -jar jwrapper-00036138363.jar installers/jwrapper-glide.xml

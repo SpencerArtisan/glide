@@ -18,7 +18,7 @@ The sister runtime project can be found [here](https://github.com/phil-anderson/
 Release Process
 ---------------
 
-1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-groovy-planet.xml`` and ``run.sh``
+1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-glide.xml`` and ``run.sh``
 2. `./gradlew clean build dist`
 3. `./run.sh` and manually smoke test
 4. `./package.sh`

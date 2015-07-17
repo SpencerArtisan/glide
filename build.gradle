@@ -15,13 +15,13 @@ allprojects {
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = false
-        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
-        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
+        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
+        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
     }
 
-    version = '0.0.2'
+    version = '0.0.3'
     ext {
-        appName = 'planet'
+        appName = 'glide'
         gdxVersion = '1.5.3'
         roboVMVersion = '1.0.0-beta-03'
         box2DLightsVersion = '1.3'
@@ -83,16 +83,16 @@ project(":installers") {
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = false
-        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
-        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/planet"
+        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
+        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
     }
 
-    group = 'groovy-planet'
+    group = 'glide'
 
     artifacts {
-        archives file: file('../build/Planet-windows64-offline.exe'), classifier: 'windows installer'
-        archives file: file('../build/Planet-macos64-offline.dmg'), classifier: 'mac installer'
-        archives file: file('../build/Planet-linux64-offline.tar'), classifier: 'linux 64 installer'
-        archives file: file('../build/Planet-linux32-offline.tar'), classifier: 'linux 32 installer'
+        archives file: file('../build/Glide-windows64-offline.exe'), classifier: 'windows installer'
+        archives file: file('../build/Glide-macos64-offline.dmg'), classifier: 'mac installer'
+        archives file: file('../build/Glide-linux64-offline.tar'), classifier: 'linux 64 installer'
+        archives file: file('../build/Glide-linux32-offline.tar'), classifier: 'linux 32 installer'
     }
 }
