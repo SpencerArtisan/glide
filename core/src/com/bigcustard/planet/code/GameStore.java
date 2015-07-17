@@ -128,8 +128,10 @@ public class GameStore {
     }
 
     private void storeMostRecentGameName(Game game) {
-        preferences().putString(RECENT_GAME, game.name());
-        preferences().flush();
+        if (game.isNamed()) {
+            preferences().putString(RECENT_GAME, game.name());
+            preferences().flush();
+        }
     }
 
     protected FileHandle samplesFolder() {
