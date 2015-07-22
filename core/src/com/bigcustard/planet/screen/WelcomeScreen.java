@@ -228,6 +228,7 @@ public class WelcomeScreen extends ScreenAdapter {
 			showMainMenu();
 			CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
 			setScreen.accept(codingScreen);
+			dispose();
 		} catch (Exception e) {
 			showError(e);
 		}
@@ -243,5 +244,11 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void hideMainMenu() {
 		getTable().setVisible(false);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		stage.dispose();
 	}
 }
