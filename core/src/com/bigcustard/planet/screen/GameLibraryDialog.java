@@ -3,25 +3,33 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
-public class GameLibraryDialog extends Dialog {
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+public class GameLibraryDialog extends Dialog implements Disposable {
     private static int COLUMNS = 3;
+    private static List<Game> games;
     private SettableFuture<Game> futureGame = SettableFuture.create();
     private boolean readOnly;
 
     public static GameLibraryDialog userGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
-        dialog.layoutControls(skin, new GameStore().allUserGames(), false);
+        games = new GameStore().allUserGames();
+        dialog.layoutControls(skin, false);
         return dialog;
     }
 
     public static GameLibraryDialog sampleGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
-        dialog.layoutControls(skin, new GameStore().allSampleGames(), true);
+        games = new GameStore().allSampleGames();
+        dialog.layoutControls(skin, true);
         return dialog;
     }
 
@@ -43,7 +51,7 @@ public class GameLibraryDialog extends Dialog {
         futureGame.set(selected);
     }
 
-    private void layoutControls(Skin skin, java.util.List<Game> gameFolders, boolean readOnly) {
+    private void layoutControls(Skin skin, boolean readOnly) {
         this.readOnly = readOnly;
         getContentTable().clearChildren();
         getButtonTable().clearChildren();
@@ -51,7 +59,7 @@ public class GameLibraryDialog extends Dialog {
         text("Choose a game").padBottom(25);
         row();
         int i = 0;
-        for (Game game : gameFolders) {
+        for (Game game : games) {
             ImageTextButton button = createButton(skin, game);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, game);
@@ -81,10 +89,24 @@ public class GameLibraryDialog extends Dialog {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                new GameStore().delete(game);;
-                layoutControls(skin, new GameStore().allUserGames(), readOnly);
+                new GameStore().delete(game);
+                games.remove(game);
+                layoutControls(skin, readOnly);
             }
         });
         return button;
+    }
+
+    @Override
+    public void dispose() {
+        for (Game game : games) {
+            try {
+                if (futureGame.isDone() && game != futureGame.get()) {
+                    game.dispose();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

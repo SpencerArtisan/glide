@@ -155,6 +155,7 @@ public class WelcomeScreen extends ScreenAdapter {
 						refreshButtonEnabledStatuses();
 						if (game != null) {
 							dialog.remove();
+							dialog.dispose();
 							showCodingScreen(() -> game);
 						}
 					}

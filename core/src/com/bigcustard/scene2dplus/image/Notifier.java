@@ -1,10 +1,12 @@
 package com.bigcustard.scene2dplus.image;
 
+import com.badlogic.gdx.utils.Disposable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Notifier<T> {
+public class Notifier<T> implements Disposable {
     private List<Consumer<T>> listeners = new ArrayList<>();
 
     public void add(Consumer<T> listener) {
@@ -13,5 +15,10 @@ public class Notifier<T> {
 
     public void notify(T object) {
         listeners.forEach((l) -> l.accept(object));
+    }
+
+    @Override
+    public void dispose() {
+        listeners.clear();
     }
 }

@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
@@ -8,7 +9,7 @@ import com.google.common.base.Objects;
 
 import java.util.function.Consumer;
 
-public class Game {
+public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
 
     private Notifier<Game> changeNotifier = new Notifier<>();
@@ -111,5 +112,11 @@ public class Game {
                 ", code='" + code + '\'' +
                 ", language=" + language +
                 '}';
+    }
+
+    @Override
+    public void dispose() {
+        imageModel.dispose();
+        changeNotifier.dispose();
     }
 }

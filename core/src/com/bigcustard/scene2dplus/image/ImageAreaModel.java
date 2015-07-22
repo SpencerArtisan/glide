@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.XY;
 
@@ -9,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ImageAreaModel {
+public class ImageAreaModel implements Disposable {
     private static String IMAGE_DETAIL_FILE = "manifest.json";
 
     private Notifier<ImageModel> addImageNotifier = new Notifier<>();
@@ -118,6 +119,14 @@ public class ImageAreaModel {
                 System.out.println("Failed to add game image: " + e);
             }
         }
+    }
+
+    @Override
+    public void dispose() {
+        addImageNotifier.dispose();
+        removeImageNotifier.dispose();
+        changeImageNotifier.dispose();
+        validationNotifier.dispose();
     }
 
     private static class ImageListDetails {

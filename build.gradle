@@ -19,7 +19,7 @@ allprojects {
         snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
     }
 
-    version = '0.1.0'
+    version = '0.1.1'
     ext {
         appName = 'glide'
         gdxVersion = '1.5.3'

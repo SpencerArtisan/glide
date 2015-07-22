@@ -100,10 +100,11 @@ public class CodingScreen extends ScreenAdapter {
         gameSavingProcess = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
-        }, 1, 1, TimeUnit.SECONDS);
+        }, 4, 4, TimeUnit.SECONDS);
     }
 
     private void exitToMainMenu() {
+        gameSavingProcess.cancel(true);
         setScreen.accept(screenFactory.createWelcomeScreen());
     }
 
