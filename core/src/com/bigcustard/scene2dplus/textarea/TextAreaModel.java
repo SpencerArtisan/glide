@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.textarea;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.image.Notifier;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 
-public class TextAreaModel {
+public class TextAreaModel implements Disposable {
 	private String text;
 	private Caret caret;
 	private ColorCoder colorCoder;
@@ -164,7 +165,12 @@ public class TextAreaModel {
 		return StringUtils.countMatches(text, "\n");
 	}
 
-    public class Caret {
+	@Override
+	public void dispose() {
+		changeNotifier.dispose();
+	}
+
+	public class Caret {
 		private XY location;
         private Pair<XY, XY> selection;
 		

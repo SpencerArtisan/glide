@@ -5,13 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ImageArea extends ScrollPane {
+public class ImageArea extends ScrollPane implements Disposable {
     public static final int WIDTH = 250;
     private Skin skin;
     private ImageAreaModel model;
@@ -109,5 +110,12 @@ public class ImageArea extends ScrollPane {
         ImageControls imageControls = imageControlMap.remove(image);
         removeImageControlsNotifier.notify(imageControls);
         layoutControls();
+    }
+
+    @Override
+    public void dispose() {
+        model.dispose();
+        addImageControlsNotifier.dispose();
+        removeImageControlsNotifier.dispose();
     }
 }

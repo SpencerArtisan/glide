@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
@@ -106,6 +107,7 @@ public class CodingScreen extends ScreenAdapter {
     private void exitToMainMenu() {
         gameSavingProcess.cancel(true);
         setScreen.accept(screenFactory.createWelcomeScreen());
+        dispose();
     }
 
     private void showRunScreen(Game game) {
@@ -169,5 +171,14 @@ public class CodingScreen extends ScreenAdapter {
         SaveChoiceDialog saveGameDialog = new SaveChoiceDialog(skin);
         saveGameDialog.show(stage);
         return saveGameDialog.getFutureSaveChoice();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        stage.dispose();
+        model.dispose();
+        imageArea.dispose();
+        game.dispose();
     }
 }
