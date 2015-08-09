@@ -41,19 +41,19 @@ public class SoundControls {
 
     void addTo(Table table, int width, Skin skin) {
         table.row();
-        Actor sound = getSoundControl(width);
-        table.add(sound).width(sound.getWidth()).height(sound.getHeight()).padTop(20);
+        Actor sound = getSoundControl(width, skin);
+        table.add(sound).width(sound.getWidth()).height(sound.getHeight()).padTop(20).padBottom(10);
         table.row();
         table.add(nameField).width(width);
     }
 
-    private Actor getSoundControl(float width) {
+    private Actor getSoundControl(float width, Skin skin) {
         WidgetGroup group = new WidgetGroup();
-//        Sound uiSound = SoundUtils.asSound(sound.file());
-//        uiSound.setFillParent(true);
-//        group.addActor(uiSound);
-//        group.setHeight(uiSound.getHeight() * width / uiSound.getWidth());
-//        group.setWidth(width);
+        Image uiSound = new Image(skin, "sound");
+        uiSound.setFillParent(true);
+        group.addActor(uiSound);
+        group.setHeight(uiSound.getHeight() * width / uiSound.getWidth());
+        group.setWidth(width);
 
         deleteButton.setPosition(width - 34, group.getHeight() - 34);
         group.addActor(deleteButton);
