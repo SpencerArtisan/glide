@@ -35,8 +35,11 @@ public class ExitCommand extends AbstractCommand {
     public void execute() {
         if (game.isNamed()) {
             exitProcess.run();
-        } else {
+        } else if (game.isModified()){
             nameOrDeleteGame();
+        } else {
+            gameStore.delete(game);
+            exitProcess.run();
         }
     }
 

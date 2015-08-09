@@ -148,6 +148,26 @@ public class GameTest {
         assertThat(game.runtimeError()).isEqualTo("Bad stuff");
     }
 
+    @Test
+    public void itShould_NotBeModifiedInitially() {
+        Game game = newGame(mockLanguage);
+        assertThat(game.isModified()).isFalse();
+    }
+
+    @Test
+    public void itShould_BeModifiedWhenTheCodeChanges() {
+        Game game = newGame(mockLanguage);
+        game.code("new code");
+        assertThat(game.isModified()).isTrue();
+    }
+
+    @Test
+    public void itShould_BeModifiedWhenImagesChange() {
+        Game game = newGame(mockLanguage);
+        addImageListenerCaptor.getValue().accept(mockImage);
+        assertThat(game.isModified()).isTrue();
+    }
+
     private Game newGame(Language language) {
         return new Game("name", "code", language, mockImageModel);
     }

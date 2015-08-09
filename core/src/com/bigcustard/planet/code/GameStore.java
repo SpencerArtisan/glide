@@ -8,6 +8,7 @@ import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -113,7 +114,7 @@ public class GameStore {
 
     private List<Game> allGames(FileHandle gameFolder) {
         List<FileHandle> gameFolders = Arrays.asList(allGameFolders(gameFolder));
-        return Lists.transform(gameFolders, this::fromFolder);
+        return new ArrayList<>(Lists.transform(gameFolders, this::fromFolder));
     }
 
     private Game fromFolder(FileHandle folder) {

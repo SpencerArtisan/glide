@@ -20,6 +20,7 @@ public class ExitCommandTest {
     @Mock private Runnable exitProcess;
     @Mock private BiConsumer<Exception, Runnable> mockErrorReporter;
     @Mock private FutureSupplier<String> mockSupplier;
+    @Mock private FutureSupplier<Boolean> mockChoiceSupplier;
 
     @Before
     public void before() {
@@ -27,10 +28,20 @@ public class ExitCommandTest {
     }
 
     @Test
+    public void executeWithUnnamedUnmodifiedGameDeletes() {
+        when(game.isNamed()).thenReturn(false);
+        when(game.isModified()).thenReturn(false);
+        command = new ExitCommand(game, gameStore, mockChoiceSupplier, mockSupplier, mockErrorReporter, exitProcess);
+        command.execute();
+        verify(gameStore).delete(game);
+    }
+
+    @Test
     public void executeWithUnnamedGameThenSave() {
         FutureSupplier<String> nameSupplier = () -> Futures.immediateFuture("name") ;
         FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(true);
         when(game.isNamed()).thenReturn(false);
+        when(game.isModified()).thenReturn(true);
         command = new ExitCommand(game, gameStore, saveChoiceSupplier, nameSupplier, mockErrorReporter, exitProcess);
         command.execute();
         verify(gameStore).rename(game, "name");
@@ -40,6 +51,7 @@ public class ExitCommandTest {
     public void executeWithUnnamedGameThenDelete() {
         FutureSupplier<Boolean> saveChoiceSupplier = () -> Futures.immediateFuture(false);
         when(game.isNamed()).thenReturn(false);
+        when(game.isModified()).thenReturn(true);
         command = new ExitCommand(game, gameStore, saveChoiceSupplier, mockSupplier, mockErrorReporter, exitProcess);
         command.execute();
         verifyZeroInteractions(mockSupplier);
@@ -47,8 +59,9 @@ public class ExitCommandTest {
     }
 
     @Test
-    public void executeWithNamedGameSavesAutomatically() {
+    public void executeWithNamedGameExitsWithoutAskingQuestions() {
         when(game.isNamed()).thenReturn(true);
+        when(game.isModified()).thenReturn(true);
         command = new ExitCommand(game, gameStore, null, mockSupplier, mockErrorReporter, exitProcess);
         command.execute();
         verifyZeroInteractions(mockSupplier);

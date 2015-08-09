@@ -19,6 +19,7 @@ public class Game implements Disposable {
     private CommandHistory commandHistory;
     private RuntimeException runtimeError;
     private Language language;
+    private boolean isModified;
 
     public Game(String name, String code, Language language, ImageAreaModel imageAreaModel) {
         this.commandHistory = new CommandHistory();
@@ -29,6 +30,10 @@ public class Game implements Disposable {
         this.imageModel.registerAddImageListener((image) -> onImageChange());
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
+    }
+
+    public boolean isModified() {
+        return isModified;
     }
 
     public void name(String newName) {
@@ -58,6 +63,7 @@ public class Game implements Disposable {
     public void code(String code) {
         this.code = code;
         changeNotifier.notify(this);
+        isModified = true;
     }
 
     public boolean isNamed() {
@@ -88,6 +94,7 @@ public class Game implements Disposable {
     private void onImageChange() {
         imageModel.save();
         changeNotifier.notify(this);
+        isModified = true;
     }
 
     @Override
