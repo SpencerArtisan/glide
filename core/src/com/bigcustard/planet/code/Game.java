@@ -14,18 +14,23 @@ import java.util.function.Consumer;
 public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
-
     private Notifier<Game> changeNotifier = new Notifier<>();
+
     private String code;
     private ImageAreaModel imageModel;
+    private final SoundAreaModel soundModel;
     private CommandHistory commandHistory;
     private RuntimeException runtimeError;
     private boolean isModified;
 
-    public Game(Token token, String code, ImageAreaModel imageAreaModel) {
+    public Game(Token token, String code, ImageAreaModel imageAreaModel, SoundAreaModel soundAreaModel) {
         this.token = token;
         this.commandHistory = new CommandHistory();
         this.code = code;
+        this.soundModel = soundAreaModel;
+        this.soundModel.registerAddSoundListener((image) -> onSoundChange());
+        this.soundModel.registerRemoveSoundListener((image) -> onSoundChange());
+        this.soundModel.registerChangeSoundListener((image) -> onSoundChange());
         this.imageModel = imageAreaModel;
         this.imageModel.registerAddImageListener((image) -> onImageChange());
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
@@ -57,8 +62,7 @@ public class Game implements Disposable {
     }
 
     public SoundAreaModel soundModel() {
-        // todo
-        return new SoundAreaModel(token.gameFolder);
+        return soundModel;
     }
 
     public String code() {
@@ -98,6 +102,12 @@ public class Game implements Disposable {
 
     private void onImageChange() {
         imageModel.save();
+        changeNotifier.notify(this);
+        isModified = true;
+    }
+
+    private void onSoundChange() {
+        soundModel.save();
         changeNotifier.notify(this);
         isModified = true;
     }

@@ -73,7 +73,7 @@ public class SoundAreaModel implements Disposable {
         if (soundDetails.exists()) {
             readSoundsFromDetailFile(soundDetails);
         } else {
-            FileHandle[] soundFiles = folder.list((dir, name) -> !name.startsWith("code"));
+            FileHandle[] soundFiles = folder.list((dir, name) -> name.endsWith("wav"));
             for (FileHandle file : soundFiles) {
                 try {
                     if (!file.isDirectory()) {

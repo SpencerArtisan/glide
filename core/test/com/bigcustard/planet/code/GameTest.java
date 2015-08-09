@@ -4,6 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
+import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
@@ -20,13 +22,18 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GameTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageAreaModel mockImageModel;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private SoundAreaModel mockSoundModel;
     @Mock private ImageModel mockImage;
+    @Mock private SoundModel mockSound;
     @Mock private Consumer<Game> mockChangeListener;
     @Mock private Language mockLanguage;
     @Mock private FileHandle mockFolder;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> changeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<SoundModel>> addSoundListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<SoundModel>> removeSoundListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<SoundModel>> changeSoundListenerCaptor;
 
     @Before
     public void before() {
@@ -35,6 +42,9 @@ public class GameTest {
         doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerRemoveImageListener(removeImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
+        doNothing().when(mockSoundModel).registerAddSoundListener(addSoundListenerCaptor.capture());
+        doNothing().when(mockSoundModel).registerRemoveSoundListener(removeSoundListenerCaptor.capture());
+        doNothing().when(mockSoundModel).registerChangeSoundListener(changeSoundListenerCaptor.capture());
     }
 
     @Test
@@ -123,6 +133,56 @@ public class GameTest {
     }
 
     @Test
+    public void addSoundStoresSoundModel() {
+        newGame(mockLanguage);
+        addSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockSoundModel, times(1)).save();
+    }
+
+    @Test
+    public void removeSoundStoresSoundModel() {
+        newGame(mockLanguage);
+        removeSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockSoundModel, times(1)).save();
+    }
+
+    @Test
+    public void changeSoundStoresSoundModel() {
+        newGame(mockLanguage);
+        changeSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockSoundModel, times(1)).save();
+    }
+
+    @Test
+    public void providesAccessToTheSoundModel() {
+        assertThat(newGame(mockLanguage).soundModel()).isSameAs(mockSoundModel);
+    }
+
+    @Test
+    public void notifiesOfSoundAdd() {
+        Game game = newGame(mockLanguage);
+        game.registerChangeListener(mockChangeListener);
+        addSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void notifiesOfSoundRemove() {
+        Game game = newGame(mockLanguage);
+        game.registerChangeListener(mockChangeListener);
+        removeSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
+    public void notifiesOfSoundChange() {
+        Game game = newGame(mockLanguage);
+        game.registerChangeListener(mockChangeListener);
+        changeSoundListenerCaptor.getValue().accept(mockSound);
+        verify(mockChangeListener).accept(game);
+    }
+
+    @Test
     public void notifiesOfRuntimeError() {
         Game game = newGame(mockLanguage);
         game.registerChangeListener(mockChangeListener);
@@ -186,6 +246,6 @@ public class GameTest {
     }
 
     private Game newGame(Language language) {
-        return new Game(new Game.Token("name", language, mockFolder), "code", mockImageModel);
+        return new Game(new Game.Token("name", language, mockFolder), "code", mockImageModel, mockSoundModel);
     }
 }

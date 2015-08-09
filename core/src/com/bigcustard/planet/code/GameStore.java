@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundAreaModel;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -50,7 +51,7 @@ public class GameStore {
     public Game create(Language language) {
         FileHandle gameFolder = findUniqueName();
         Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
-        return new Game(token, language.template(), new ImageAreaModel(gameFolder));
+        return new Game(token, language.template(), new ImageAreaModel(gameFolder), new SoundAreaModel(gameFolder));
     }
 
     public boolean hasMostRecent() {
@@ -66,9 +67,10 @@ public class GameStore {
         FileHandle gameFolder = gameFolder(preferences().getString(RECENT_GAME));
         FileHandle codeFile = codeFile(gameFolder);
         ImageAreaModel imageAreaModel = new ImageAreaModel(gameFolder);
+        SoundAreaModel soundAreaModel = new SoundAreaModel(gameFolder);
         Language language = Language.from(codeFile.extension());
         Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
-        return new Game(token, codeFile.readString(), imageAreaModel);
+        return new Game(token, codeFile.readString(), imageAreaModel, soundAreaModel);
     }
 
     public List<Game.Token> allUserGames() {
@@ -152,6 +154,7 @@ public class GameStore {
     public Game load(Game.Token token) {
         FileHandle codeFile = codeFile(token.gameFolder());
         ImageAreaModel imageAreaModel = new ImageAreaModel(token.gameFolder());
-        return new Game(token, codeFile.readString(), imageAreaModel);
+        SoundAreaModel soundAreaModel = new SoundAreaModel(token.gameFolder());
+        return new Game(token, codeFile.readString(), imageAreaModel, soundAreaModel);
     }
 }
