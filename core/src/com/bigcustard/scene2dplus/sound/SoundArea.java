@@ -1,4 +1,4 @@
-package com.bigcustard.scene2dplus.image;
+package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,21 +13,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ImageArea extends ScrollPane implements Disposable {
+public class SoundArea extends ScrollPane implements Disposable {
     public static final int WIDTH = 250;
     private Skin skin;
-    private ImageAreaModel model;
+    private SoundAreaModel model;
     private TextButton importButton;
-    private Map<ImageModel, ImageControls> imageControlMap = new HashMap<>();
-    private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
-    private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
+    private Map<SoundModel, SoundControls> SoundControlMap = new HashMap<>();
+    private Notifier<SoundControls> addSoundControlsNotifier = new Notifier<>();
+    private Notifier<SoundControls> removeSoundControlsNotifier = new Notifier<>();
 
-    public ImageArea(ImageAreaModel model, Skin skin) {
+    public SoundArea(SoundAreaModel model, Skin skin) {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
         createImportButton(skin);
-        createAllImageControls();
+        createAllSoundControls();
         layoutControls();
         addModelChangeBehaviour(model);
     }
@@ -40,20 +40,20 @@ public class ImageArea extends ScrollPane implements Disposable {
         });
     }
 
-    void registerAddImageControlsListener(Consumer<ImageControls> onChanged) {
-        addImageControlsNotifier.add(onChanged);
+    void registerAddSoundControlsListener(Consumer<SoundControls> onChanged) {
+        addSoundControlsNotifier.add(onChanged);
     }
 
-    void registerRemoveImageControlsListener(Consumer<ImageControls> onChanged) {
-        removeImageControlsNotifier.add(onChanged);
+    void registerRemoveSoundControlsListener(Consumer<SoundControls> onChanged) {
+        removeSoundControlsNotifier.add(onChanged);
     }
 
-    Collection<ImageControls> getAllImageControls() {
-        return imageControlMap.values();
+    Collection<SoundControls> getAllSoundControls() {
+        return SoundControlMap.values();
     }
 
-    void onImageImportFailure() {
-        importButton.setText("Dodgy image!");
+    void onSoundImportFailure() {
+        importButton.setText("Dodgy Sound!");
         importButton.addAction(
                 Actions.sequence(
                         Actions.repeat(10,
@@ -68,7 +68,7 @@ public class ImageArea extends ScrollPane implements Disposable {
         layoutTable.clearChildren();
         addHeader(layoutTable);
         addImportButton(layoutTable);
-        getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
+        getAllSoundControls().forEach((SoundControls) -> SoundControls.addTo(layoutTable, WIDTH, skin));
     }
 
     private void createImportButton(Skin skin) {
@@ -78,7 +78,7 @@ public class ImageArea extends ScrollPane implements Disposable {
     private void addHeader(Table table) {
         table.top();
         table.row();
-        table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
+        table.add(new Label("Game sounds", skin)).padTop(20).padBottom(20);
     }
 
     private void addImportButton(Table table) {
@@ -86,37 +86,37 @@ public class ImageArea extends ScrollPane implements Disposable {
         table.add(importButton).width(WIDTH);
     }
 
-    private void createAllImageControls() {
-        model.images().forEach(this::createImageControls);
+    private void createAllSoundControls() {
+        model.sounds().forEach(this::createSoundControls);
     }
 
-    private ImageControls createImageControls(ImageModel image) {
-        ImageControls imageControls = new ImageControls(image, skin);
-        imageControlMap.put(image, imageControls);
-        return imageControls;
+    private SoundControls createSoundControls(SoundModel sound) {
+        SoundControls SoundControls = new SoundControls(sound, skin);
+        SoundControlMap.put(sound, SoundControls);
+        return SoundControls;
     }
 
-    private void addModelChangeBehaviour(ImageAreaModel model) {
-        model.registerAddImageListener(this::onAddImage);
-        model.registerRemoveImageListener(this::onRemoveImage);
+    private void addModelChangeBehaviour(SoundAreaModel model) {
+        model.registerAddSoundListener(this::onAddSound);
+        model.registerRemoveSoundListener(this::onRemoveSound);
     }
 
-    private void onAddImage(ImageModel image) {
-        ImageControls imageControls = createImageControls(image);
-        addImageControlsNotifier.notify(imageControls);
+    private void onAddSound(SoundModel Sound) {
+        SoundControls SoundControls = createSoundControls(Sound);
+        addSoundControlsNotifier.notify(SoundControls);
         layoutControls();
     }
 
-    private void onRemoveImage(ImageModel image) {
-        ImageControls imageControls = imageControlMap.remove(image);
-        removeImageControlsNotifier.notify(imageControls);
+    private void onRemoveSound(SoundModel Sound) {
+        SoundControls SoundControls = SoundControlMap.remove(Sound);
+        removeSoundControlsNotifier.notify(SoundControls);
         layoutControls();
     }
 
     @Override
     public void dispose() {
         model.dispose();
-        addImageControlsNotifier.dispose();
-        removeImageControlsNotifier.dispose();
+        addSoundControlsNotifier.dispose();
+        removeSoundControlsNotifier.dispose();
     }
 }

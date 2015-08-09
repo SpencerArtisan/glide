@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.util.Notifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +95,7 @@ public class ImageAreaModel implements Disposable {
             FileHandle[] imageFiles = folder.list((dir, name) -> !name.startsWith("code"));
             for (FileHandle imageFile : imageFiles) {
                 try {
-                    if (!imageDetails.isDirectory()) {
+                    if (!imageFile.isDirectory()) {
                         XY imageSize = imageSize(imageFile);
                         ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
                         imageModel.setName(imageFile.name());

@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.bigcustard.util.Notifier;
 import com.google.common.base.Strings;
 
 import java.util.function.Consumer;

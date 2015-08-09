@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
@@ -22,6 +23,7 @@ public class GameTest {
     @Mock private ImageModel mockImage;
     @Mock private Consumer<Game> mockChangeListener;
     @Mock private Language mockLanguage;
+    @Mock private FileHandle mockFolder;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> changeImageListenerCaptor;
@@ -184,6 +186,6 @@ public class GameTest {
     }
 
     private Game newGame(Language language) {
-        return new Game("name", "code", language, mockImageModel);
+        return new Game(new Game.Token("name", language, mockFolder), "code", mockImageModel);
     }
 }

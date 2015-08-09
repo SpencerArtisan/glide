@@ -17,6 +17,7 @@ public class ExitCommandTest {
     private ExitCommand command;
     @Mock private GameStore gameStore;
     @Mock private Game game;
+    @Mock private Game.Token token;
     @Mock private Runnable exitProcess;
     @Mock private BiConsumer<Exception, Runnable> mockErrorReporter;
     @Mock private FutureSupplier<String> mockSupplier;
@@ -25,6 +26,7 @@ public class ExitCommandTest {
     @Before
     public void before() {
         initMocks(this);
+        when(game.token()).thenReturn(token);
     }
 
     @Test
@@ -33,7 +35,7 @@ public class ExitCommandTest {
         when(game.isModified()).thenReturn(false);
         command = new ExitCommand(game, gameStore, mockChoiceSupplier, mockSupplier, mockErrorReporter, exitProcess);
         command.execute();
-        verify(gameStore).delete(game);
+        verify(gameStore).delete(token);
     }
 
     @Test
@@ -44,7 +46,7 @@ public class ExitCommandTest {
         when(game.isModified()).thenReturn(true);
         command = new ExitCommand(game, gameStore, saveChoiceSupplier, nameSupplier, mockErrorReporter, exitProcess);
         command.execute();
-        verify(gameStore).rename(game, "name");
+        verify(gameStore).rename(token, "name");
     }
 
     @Test
@@ -55,7 +57,7 @@ public class ExitCommandTest {
         command = new ExitCommand(game, gameStore, saveChoiceSupplier, mockSupplier, mockErrorReporter, exitProcess);
         command.execute();
         verifyZeroInteractions(mockSupplier);
-        verify(gameStore).delete(game);
+        verify(gameStore).delete(token);
     }
 
     @Test

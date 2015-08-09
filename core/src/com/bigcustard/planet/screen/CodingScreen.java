@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
@@ -21,6 +20,9 @@ import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.bigcustard.scene2dplus.image.ImageArea;
 import com.bigcustard.scene2dplus.image.ImageAreaController;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundArea;
+import com.bigcustard.scene2dplus.sound.SoundAreaController;
+import com.bigcustard.scene2dplus.sound.SoundAreaModel;
 import com.bigcustard.scene2dplus.textarea.ScrollableTextArea;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
@@ -39,6 +41,7 @@ public class CodingScreen extends ScreenAdapter {
     private TextAreaModel model;
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
+    private SoundArea soundArea;
     private ButtonBar buttonBar;
     private Game game;
     private GameStore gameStore;
@@ -59,6 +62,7 @@ public class CodingScreen extends ScreenAdapter {
         createErrorLabel(game);
         createButtonBar();
         createImageArea();
+        createSoundArea();
         layoutScreen();
 
 		stage.addActor(layoutTable);
@@ -76,7 +80,7 @@ public class CodingScreen extends ScreenAdapter {
         layoutTable.background(skin.getDrawable("solarizedLine"));
         layoutTable.row();
         layoutTable.add(textAreaTable).expand().fill();
-        layoutTable.add(imageArea).width(280).expandY().fillY();
+        layoutTable.add(soundArea).width(280).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
         layoutTable.setFillParent(true);
@@ -121,6 +125,12 @@ public class CodingScreen extends ScreenAdapter {
         ImageAreaModel imageAreaModel = game.imageModel();
         imageArea = new ImageArea(imageAreaModel, skin);
         new ImageAreaController(imageArea, imageAreaModel, game.commandHistory()).init();
+    }
+
+    private void createSoundArea() {
+        SoundAreaModel soundAreaModel = game.soundModel();
+        soundArea = new SoundArea(soundAreaModel, skin);
+        new SoundAreaController(soundArea, soundAreaModel, game.commandHistory()).init();
     }
 
     private void createTextArea(Game game) {

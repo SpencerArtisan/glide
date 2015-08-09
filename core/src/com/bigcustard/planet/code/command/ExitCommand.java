@@ -38,7 +38,7 @@ public class ExitCommand extends AbstractCommand {
         } else if (game.isModified()){
             nameOrDeleteGame();
         } else {
-            gameStore.delete(game);
+            gameStore.delete(game.token());
             exitProcess.run();
         }
     }
@@ -48,7 +48,7 @@ public class ExitCommand extends AbstractCommand {
             if (save) {
                 saveGame();
             } else {
-                gameStore.delete(game);
+                gameStore.delete(game.token());
                 exitProcess.run();
             }
         });
@@ -57,7 +57,7 @@ public class ExitCommand extends AbstractCommand {
     private void saveGame() {
         FutureSuppliers.onGet(gameNameSupplier, (newName) -> {
             try {
-                gameStore.rename(game, newName);
+                gameStore.rename(game.token(), newName);
                 exitProcess.run();
             } catch (GameRenameException e) {
                 errorReporter.accept(e, this::saveGame);

@@ -16,7 +16,7 @@ public class FrameworkKeywords implements Keywords {
                 "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen",
                 "Seashell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle",
                 "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen",
-                "AtEndRemoveSprite", "transparency", "waveValue", "combine", "Up", "Down", "isPressed", "mouse", "hidden", "timer", "stopwatch", "start", "stop", "reset", "every", "text",
+                "AtEndRemoveSprite", "transparency", "waveValue", "combine", "Up", "Down", "isPressed", "mouse", "hidden", "timer", "stopwatch", "start", "stop", "reset", "after", "every", "text",
                 "wasJustPressed", "wasJustReleased", "wasKeyTyped", "Enter", "typedCharacter", "isRightButtonPressed", "isLeftButtonPressed", "isHolding", "isOver",
                 "dragX", "dragY", "wasDragReleased", "wasClicked", "isDragging", "onMouseEnter", "onMouseExit", "SpriteEventHandler", "handle", "onClick", "Runnable",
                 "Linear", "SmoothStop", "SmoothStart", "SmoothStartStop", "FastThenSlow", "SlowThenFast", "SlowFastSlow", "BackStop", "BackStart", "BackStartStop", "BounceStop",

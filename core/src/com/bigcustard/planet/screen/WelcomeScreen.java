@@ -148,15 +148,15 @@ public class WelcomeScreen extends ScreenAdapter {
 				hideMainMenu();
 				final GameLibraryDialog dialog = dialogSupplier.get();
 				dialog.show(stage);
-				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<Game>() {
+				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<Game.Token>() {
 					@Override
-					public void onSuccess(Game game) {
+					public void onSuccess(Game.Token game) {
 						showMainMenu();
 						refreshButtonEnabledStatuses();
 						if (game != null) {
 							dialog.remove();
 							dialog.dispose();
-							showCodingScreen(() -> game);
+							showCodingScreen(() -> gameStore.load(game));
 						}
 					}
 

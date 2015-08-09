@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
@@ -20,24 +21,24 @@ public class GameStore {
     private static String SAMPLES_FOLDER = "samples";
     private static final String RECENT_GAME = "MostRecentGameName";
 
-    public void rename(Game game, String newName) throws GameRenameException {
+    public Game.Token rename(Game.Token game, String newName) throws GameRenameException {
         if (!newName.equals(game.name())) {
-            FileHandle source = gameFolder(game.name());
+            FileHandle source = game.gameFolder();
             FileHandle target = gameFolder(newName);
             if (target.exists()) {
                 throw new GameRenameException(newName);
             }
-            if (!source.exists()) {
-                save(game);
+            if (source.type() == Files.FileType.Local) {
+                source.moveTo(target);
+            } else {
+                source.copyTo(target);
             }
-            source.moveTo(target);
-            game.name(newName);
-            game.imageModel().folder(target);
-            storeMostRecentGameName(game);
+            return new Game.Token(newName, game.language(), target);
         }
+        return game;
     }
 
-    public void delete(Game game) {
+    public void delete(Game.Token game) {
         gameFolder(game.name()).deleteDirectory();
     }
 
@@ -48,7 +49,8 @@ public class GameStore {
 
     public Game create(Language language) {
         FileHandle gameFolder = findUniqueName();
-        return new Game(gameFolder.name(), language.template(), language, new ImageAreaModel(gameFolder));
+        Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
+        return new Game(token, language.template(), new ImageAreaModel(gameFolder));
     }
 
     public boolean hasMostRecent() {
@@ -65,14 +67,15 @@ public class GameStore {
         FileHandle codeFile = codeFile(gameFolder);
         ImageAreaModel imageAreaModel = new ImageAreaModel(gameFolder);
         Language language = Language.from(codeFile.extension());
-        return new Game(gameFolder.name(), codeFile.readString(), language, imageAreaModel);
+        Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
+        return new Game(token, codeFile.readString(), imageAreaModel);
     }
 
-    public List<Game> allUserGames() {
+    public List<Game.Token> allUserGames() {
         return allGames(userFolder());
     }
 
-    public List<Game> allSampleGames() {
+    public List<Game.Token> allSampleGames() {
         return allGames(samplesFolder());
     }
 
@@ -112,16 +115,15 @@ public class GameStore {
         return candidate;
     }
 
-    private List<Game> allGames(FileHandle gameFolder) {
+    private List<Game.Token> allGames(FileHandle gameFolder) {
         List<FileHandle> gameFolders = Arrays.asList(allGameFolders(gameFolder));
         return new ArrayList<>(Lists.transform(gameFolders, this::fromFolder));
     }
 
-    private Game fromFolder(FileHandle folder) {
+    private Game.Token fromFolder(FileHandle folder) {
         FileHandle codeFile = codeFile(folder);
         Language language = Language.from(codeFile.extension());
-        ImageAreaModel imageAreaModel = new ImageAreaModel(folder);
-        return new Game(folder.name(), codeFile.readString(), language, imageAreaModel);
+        return new Game.Token(folder.name(), language, folder);
     }
 
     private FileHandle[] allGameFolders(FileHandle parentFolder) {
@@ -145,5 +147,11 @@ public class GameStore {
 
     protected Preferences preferences() {
         return Gdx.app.getPreferences(PREFERENCES_KEY);
+    }
+
+    public Game load(Game.Token token) {
+        FileHandle codeFile = codeFile(token.gameFolder());
+        ImageAreaModel imageAreaModel = new ImageAreaModel(token.gameFolder());
+        return new Game(token, codeFile.readString(), imageAreaModel);
     }
 }

@@ -1,5 +1,6 @@
 package com.bigcustard.planet.code;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.language.Language;
@@ -89,7 +90,7 @@ public class GameStoreTest {
         when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
         when(mockGroovyCodeFile.name()).thenReturn("code.groovy");
 
-        Game game = new Game("game", "code", Language.Groovy, new ImageAreaModel(mockGameFolder));
+        Game.Token game = new Game.Token("game", Language.Groovy, mockGameFolder);
         assertThat(gameStore.allUserGames()).containsExactly(game);
     }
 
@@ -198,16 +199,31 @@ public class GameStoreTest {
     }
 
     @Test
-    public void changingGameNameRenamesDirectory() {
-        when(mockUserGamesFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        Game game = gameStore.create(mockLanguage);
+    public void changingGameNameOfUserGameMovesDirectory() {
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
+        Game.Token token = new Game.Token("old name", mockLanguage, mockGameFolder);
+        Game game = gameStore.load(token);
+        when(mockGameFolder.type()).thenReturn(Files.FileType.Local);
         when(mockGameFolder.exists()).thenReturn(true);
         FileHandle mockNewGameFolder = mock(FileHandle.class);
-        when(mockUserGamesFolder.child("name")).thenReturn(mockNewGameFolder);
+        when(mockUserGamesFolder.child("new name")).thenReturn(mockNewGameFolder);
         when(mockNewGameFolder.exists()).thenReturn(false);
-        gameStore.rename(game, "name");
+        gameStore.rename(game.token(), "new name");
         verify(mockGameFolder).moveTo(mockNewGameFolder);
+    }
+
+    @Test
+    public void changingGameNameOfSampleGameCopiesDirectory() {
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
+        Game.Token token = new Game.Token("old name", mockLanguage, mockGameFolder);
+        Game game = gameStore.load(token);
+        when(mockGameFolder.type()).thenReturn(Files.FileType.Internal);
+        when(mockGameFolder.exists()).thenReturn(true);
+        FileHandle mockNewGameFolder = mock(FileHandle.class);
+        when(mockUserGamesFolder.child("new name")).thenReturn(mockNewGameFolder);
+        when(mockNewGameFolder.exists()).thenReturn(false);
+        gameStore.rename(game.token(), "new name");
+        verify(mockGameFolder).copyTo(mockNewGameFolder);
     }
 
     @Test(expected = GameRenameException.class)
@@ -219,7 +235,7 @@ public class GameStoreTest {
         when(mockNewGameFolder.exists()).thenReturn(true);
         Game game = gameStore.create(mockLanguage);
         when(mockGameFolder.exists()).thenReturn(true);
-        gameStore.rename(game, "name");
+        gameStore.rename(game.token(), "name");
     }
 
     @Test
@@ -227,7 +243,7 @@ public class GameStoreTest {
         when(mockUserGamesFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
         Game game = gameStore.create(mockLanguage);
-        gameStore.delete(game);
+        gameStore.delete(game.token());
         verify(mockGameFolder).deleteDirectory();
     }
 
@@ -244,7 +260,7 @@ public class GameStoreTest {
         when(mockGameFolder.name()).thenReturn("Unnamed Game");
         when(mockGameFolder.name()).thenReturn("name");
         Game game = gameStore.create(mockLanguage);
-        gameStore.rename(game, "name");
+        gameStore.rename(game.token(), "name");
         assertThat(game.isNamed()).isTrue();
     }
 }

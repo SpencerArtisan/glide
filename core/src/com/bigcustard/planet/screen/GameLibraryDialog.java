@@ -15,8 +15,8 @@ import java.util.concurrent.ExecutionException;
 
 public class GameLibraryDialog extends Dialog implements Disposable {
     private static int COLUMNS = 3;
-    private static List<Game> games;
-    private SettableFuture<Game> futureGame = SettableFuture.create();
+    private static List<Game.Token> games;
+    private SettableFuture<Game.Token> futureGame = SettableFuture.create();
     private boolean readOnly;
 
     public static GameLibraryDialog userGames(Skin skin) {
@@ -37,16 +37,16 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         super("", skin);
     }
 
-    public SettableFuture<Game> getFutureGame() {
+    public SettableFuture<Game.Token> getFutureGame() {
         return futureGame;
     }
 
     @Override
     protected void result(Object object) {
-        Game selected = (Game) object;
+        Game.Token selected = (Game.Token) object;
         if (object != null && readOnly) {
             GameStore gameStore = new GameStore();
-            gameStore.rename(selected, gameStore.findUniqueName().name());
+            selected = gameStore.rename(selected, gameStore.findUniqueName().name());
         }
         futureGame.set(selected);
     }
@@ -59,7 +59,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         text("Choose a game").padBottom(25);
         row();
         int i = 0;
-        for (Game game : games) {
+        for (Game.Token game : games) {
             ImageTextButton button = createButton(skin, game);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, game);
@@ -73,9 +73,9 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
     }
 
-    private ImageTextButton createButton(Skin skin, Game gameFolder) {
-        String buttonStyle = gameFolder.language().buttonStyle();
-        ImageTextButton button = new ImageTextButton(gameFolder.name() + " ", skin, buttonStyle);
+    private ImageTextButton createButton(Skin skin, Game.Token game) {
+        String buttonStyle = game.language().buttonStyle();
+        ImageTextButton button = new ImageTextButton(game.name() + " ", skin, buttonStyle);
         button.clearChildren();
         button.add(new Spacer(4));
         button.add(button.getImage());
@@ -84,7 +84,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         return button;
     }
 
-    private Button createDeleteButton(Skin skin, Game game) {
+    private Button createDeleteButton(Skin skin, Game.Token game) {
         ImageButton button = new ImageButton(skin, "trash-button");
         button.addListener(new ChangeListener() {
             @Override
@@ -99,14 +99,5 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     @Override
     public void dispose() {
-        for (Game game : games) {
-            try {
-                if (futureGame.isDone() && game != futureGame.get()) {
-                    game.dispose();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

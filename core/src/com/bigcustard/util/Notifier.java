@@ -1,4 +1,4 @@
-package com.bigcustard.scene2dplus.image;
+package com.bigcustard.util;
 
 import com.badlogic.gdx.utils.Disposable;
 

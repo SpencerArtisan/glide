@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.textarea;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.scene2dplus.image.Notifier;
+import com.bigcustard.util.Notifier;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
