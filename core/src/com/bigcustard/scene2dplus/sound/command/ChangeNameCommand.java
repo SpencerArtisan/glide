@@ -1,0 +1,31 @@
+package com.bigcustard.scene2dplus.sound.command;
+
+import com.bigcustard.scene2dplus.command.Command;
+import com.bigcustard.scene2dplus.sound.SoundModel;
+
+public class ChangeNameCommand implements Command {
+    private final String oldName;
+    private final String newName;
+    private final SoundModel sound;
+
+    public ChangeNameCommand(SoundModel sound, String name) {
+        this.sound = sound;
+        this.newName = name;
+        this.oldName = sound.name();
+    }
+
+    @Override
+    public void execute() {
+        sound.setName(newName);
+    }
+
+    @Override
+    public void undo() {
+        sound.setName(oldName);
+    }
+
+    @Override
+    public boolean canExecute() {
+        return true;
+    }
+}
