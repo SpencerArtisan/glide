@@ -6,7 +6,7 @@ import com.bigcustard.util.Notifier;
 import java.util.function.Consumer;
 
 public class SoundModel {
-    private static int MAX_NAME_LENGTH = 17;
+    private static int MAX_NAME_LENGTH = 13;
 
     private FileHandle file;
     private String name;
@@ -56,6 +56,6 @@ public class SoundModel {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');
         int nameLength = Math.min(MAX_NAME_LENGTH, dotIndex);
-        return filename.substring(0, nameLength);
+        return filename.substring(0, nameLength) + "." + file.extension();
     }
 }

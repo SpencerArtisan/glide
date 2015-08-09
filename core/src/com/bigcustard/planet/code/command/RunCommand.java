@@ -6,7 +6,9 @@ import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.image.ImageUtils;
+import com.bigcustard.scene2dplus.sound.SoundModel;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class RunCommand extends AbstractCommand {
@@ -23,9 +25,21 @@ public class RunCommand extends AbstractCommand {
     @Override
     public void execute() {
         buildFolder.mkdirs();
-        game.imageModel().images().forEach(this::resize);
+        compileImages();
+        compileSounds();
         game.runtimeError(null);
         runGame.accept(game);
+    }
+
+    private void compileImages() {
+        game.imageModel().images().forEach(this::resize);
+    }
+
+    private void compileSounds() {
+        List<SoundModel> sounds = game.soundModel().sounds();
+        for (SoundModel sound : sounds) {
+            sound.file().copyTo(buildFolder.child(sound.filename()));
+        }
     }
 
     @Override

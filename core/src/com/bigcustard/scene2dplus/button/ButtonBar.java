@@ -19,7 +19,7 @@ public class ButtonBar extends HorizontalGroup {
 
     public ButtonBar(Skin skin) {
         this.skin = skin;
-        pad(18);
+        pad(8);
         space(7);
     }
 

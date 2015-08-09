@@ -32,7 +32,8 @@ public class FrameworkKeywords implements Keywords {
                 "setX", "setY", "setScaleX", "setScaleY", "setAngle", "setColour", "setTransparency", "setHidden", "setTargetStyle", "setLayer", "setMouse",
                 "setPosition", "setScale", "setHeight", "setWidth", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
                 "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
-                "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour", "sleep", "moveBy"
+                "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour", "sleep", "moveBy",
+                "loadSoundEffect", "play"
         };
     }
 
