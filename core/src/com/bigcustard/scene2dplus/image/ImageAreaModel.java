@@ -94,10 +94,12 @@ public class ImageAreaModel implements Disposable {
             FileHandle[] imageFiles = folder.list((dir, name) -> !name.startsWith("code"));
             for (FileHandle imageFile : imageFiles) {
                 try {
-                    XY imageSize = imageSize(imageFile);
-                    ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
-                    imageModel.setName(imageFile.name());
-                    addImage(imageModel);
+                    if (!imageDetails.isDirectory()) {
+                        XY imageSize = imageSize(imageFile);
+                        ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
+                        imageModel.setName(imageFile.name());
+                        addImage(imageModel);
+                    }
                 } catch (Exception e) {
                     System.out.println("Ignoring non image file: " + imageFile.name());
                 }

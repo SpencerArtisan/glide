@@ -155,10 +155,25 @@ public class GameTest {
     }
 
     @Test
-    public void itShould_BeModifiedWhenTheCodeChanges() {
+    public void itShould_BeModifiedWhenTheCodeChangesToSomethingDifferent() {
         Game game = newGame(mockLanguage);
         game.code("new code");
         assertThat(game.isModified()).isTrue();
+    }
+
+    @Test
+    public void itShould_BeModifiedWhenTheCodeChangesToSomethingDifferentThenTheSameCode() {
+        Game game = newGame(mockLanguage);
+        game.code("new code");
+        game.code("new code");
+        assertThat(game.isModified()).isTrue();
+    }
+
+    @Test
+    public void itShould_NotBeModifiedWhenTheCodeChangesToTheSameCode() {
+        Game game = newGame(mockLanguage);
+        game.code(game.code());
+        assertThat(game.isModified()).isFalse();
     }
 
     @Test

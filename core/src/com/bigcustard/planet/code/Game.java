@@ -61,9 +61,9 @@ public class Game implements Disposable {
     }
 
     public void code(String code) {
+        isModified = isModified || !this.code.equals(code);
         this.code = code;
         changeNotifier.notify(this);
-        isModified = true;
     }
 
     public boolean isNamed() {
