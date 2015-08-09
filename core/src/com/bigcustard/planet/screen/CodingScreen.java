@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
@@ -42,6 +42,7 @@ public class CodingScreen extends ScreenAdapter {
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
     private SoundArea soundArea;
+    private Table resourceArea;
     private ButtonBar buttonBar;
     private Game game;
     private GameStore gameStore;
@@ -61,8 +62,7 @@ public class CodingScreen extends ScreenAdapter {
         createTextArea(game);
         createErrorLabel(game);
         createButtonBar();
-        createImageArea();
-        createSoundArea();
+        createResourceArea();
         layoutScreen();
 
 		stage.addActor(layoutTable);
@@ -77,10 +77,10 @@ public class CodingScreen extends ScreenAdapter {
         textAreaTable.add(errorLabel).fillX();
 
         layoutTable = new Table();
-        layoutTable.background(skin.getDrawable("solarizedLine"));
+        layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.row();
         layoutTable.add(textAreaTable).expand().fill();
-        layoutTable.add(soundArea).width(280).expandY().fillY();
+        layoutTable.add(resourceArea).width(280).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
         layoutTable.setFillParent(true);
@@ -118,6 +118,47 @@ public class CodingScreen extends ScreenAdapter {
         RuntimeFacade.INSTANCE.run(game, () -> {
             setScreen.accept(this);
             Gdx.input.setInputProcessor(stage);
+        });
+    }
+
+    private void createResourceArea() {
+        createImageArea();
+        createSoundArea();
+
+        resourceArea = new Table();
+        resourceArea.background(skin.getDrawable("solarizedBackground"));
+        TextButton imageButton = new TextButton("Images  ", skin, "tab");
+        TextButton soundButton = new TextButton("Sounds  ", skin, "tab");
+        imageButton.setChecked(true);
+        soundButton.setChecked(false);
+
+        resourceArea.add(imageButton).padTop(10);
+        resourceArea.add(soundButton).padTop(10);
+        resourceArea.row();
+        resourceArea.add(imageArea).colspan(2).fill().expand();
+
+        soundButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                if (soundButton.isChecked()) {
+                    imageButton.setChecked(false);
+                    Cell<?> cell = resourceArea.getCell(imageArea);
+                    if (cell != null) {
+                        cell.setActor(soundArea);
+                    }
+                }
+            }
+        });
+
+        imageButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                if (imageButton.isChecked()) {
+                    soundButton.setChecked(false);
+                    Cell<?> cell = resourceArea.getCell(soundArea);
+                    if (cell != null) {
+                        cell.setActor(imageArea);
+                    }
+                }
+            }
         });
     }
 

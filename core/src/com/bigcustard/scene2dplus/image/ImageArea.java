@@ -65,8 +65,8 @@ public class ImageArea extends ScrollPane implements Disposable {
 
     private void layoutControls() {
         Table layoutTable = (Table) getWidget();
+        layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.clearChildren();
-        addHeader(layoutTable);
         addImportButton(layoutTable);
         getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
     }
@@ -75,15 +75,10 @@ public class ImageArea extends ScrollPane implements Disposable {
         importButton = new TextButton("Add from clipboard", skin);
     }
 
-    private void addHeader(Table table) {
+    private void addImportButton(Table table) {
         table.top();
         table.row();
-        table.add(new Label("Game images", skin)).padTop(20).padBottom(20);
-    }
-
-    private void addImportButton(Table table) {
-        table.row();
-        table.add(importButton).width(WIDTH);
+        table.add(importButton).width(WIDTH).padTop(20);
     }
 
     private void createAllImageControls() {
