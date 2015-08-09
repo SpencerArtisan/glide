@@ -56,7 +56,7 @@ public class TextArea extends Actor {
         return style.font.getLineHeight();
     }
 
-    private float getColumnWidth() {
+    float getColumnWidth() {
         return COLUMN_WIDTH;
     }
 
