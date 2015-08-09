@@ -38,7 +38,7 @@ public class RunCommand extends AbstractCommand {
     private void compileSounds() {
         List<SoundModel> sounds = game.soundModel().sounds();
         for (SoundModel sound : sounds) {
-            sound.file().copyTo(buildFolder.child(sound.filename()));
+            sound.file().copyTo(buildFolder.child(sound.name()));
         }
     }
 
