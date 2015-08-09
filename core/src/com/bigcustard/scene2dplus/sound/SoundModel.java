@@ -48,6 +48,7 @@ public class SoundModel {
     }
 
     private void changeAttribute(Runnable doChange) {
+        doChange.run();
         changeNotifier.notify(this);
     }
 

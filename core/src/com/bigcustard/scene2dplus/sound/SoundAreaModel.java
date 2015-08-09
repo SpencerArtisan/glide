@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class SoundAreaModel implements Disposable {
-    private static String Sound_DETAIL_FILE = "manifest.json";
+    private static String SOUND_DETAIL_FILE = "sounds.json";
 
     private Notifier<SoundModel> addSoundNotifier = new Notifier<>();
     private Notifier<SoundModel> removeSoundNotifier = new Notifier<>();
@@ -60,7 +60,7 @@ public class SoundAreaModel implements Disposable {
     }
 
     public void save() {
-        folder.child(Sound_DETAIL_FILE).writeString(new Json().toJson(new SoundListDetails(this)), false);
+        folder.child(SOUND_DETAIL_FILE).writeString(new Json().toJson(new SoundListDetails(this)), false);
     }
 
     public void removeSound(SoundModel Sound) {
@@ -69,9 +69,9 @@ public class SoundAreaModel implements Disposable {
     }
 
     private void readSounds() {
-        FileHandle SoundDetails = folder.child(Sound_DETAIL_FILE);
-        if (SoundDetails.exists()) {
-            readSoundsFromDetailFile(SoundDetails);
+        FileHandle soundDetails = folder.child(SOUND_DETAIL_FILE);
+        if (soundDetails.exists()) {
+            readSoundsFromDetailFile(soundDetails);
         } else {
             FileHandle[] soundFiles = folder.list((dir, name) -> !name.startsWith("code"));
             for (FileHandle file : soundFiles) {

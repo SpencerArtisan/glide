@@ -24,37 +24,18 @@ public class SoundAreaModelTest {
     @Mock private FileHandle mockSoundFile2;
     @Mock private SoundModel mockSound;
     @Mock private SoundModel mockSound2;
-    @Mock private Consumer<SoundModel> mockValidationListener;
     @Mock private Consumer<SoundModel> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<SoundModel>> soundValidationListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundModel>> soundChangeListenerCaptor;
 
     @Before
     public void before() {
         initMocks(this);
-        when(mockSoundFolder.child("sound.png")).thenReturn(mockSoundFile);
-        when(mockSoundFolder.child("sound2.png")).thenReturn(mockSoundFile2);
-        when(mockSoundFolder.child("manifest.json")).thenReturn(mockManifestFile);
-        when(mockSoundFile.name()).thenReturn("sound.png");
-        when(mockSoundFile2.name()).thenReturn("sound2.png");
+        when(mockSoundFolder.child("sound.wav")).thenReturn(mockSoundFile);
+        when(mockSoundFolder.child("sound2.wav")).thenReturn(mockSoundFile2);
+        when(mockSoundFolder.child("sounds.json")).thenReturn(mockManifestFile);
+        when(mockSoundFile.name()).thenReturn("sound.wav");
+        when(mockSoundFile2.name()).thenReturn("sound2.wav");
         doNothing().when(mockSound).registerChangeListener(soundChangeListenerCaptor.capture());
-    }
-
-    @Test
-    public void sendValidationEventWhenAddInvalidSound() {
-        SoundAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        model.addSound(mockSound);
-        verify(mockValidationListener).accept(mockSound);
-    }
-
-    @Test
-    public void sendValidationEventWhenSoundSendsValidationEvent() {
-        SoundAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        model.addSound(mockSound);
-        soundValidationListenerCaptor.getValue().accept(mockSound);
-        verify(mockValidationListener).accept(mockSound);
     }
 
     @Test
@@ -67,37 +48,13 @@ public class SoundAreaModelTest {
     }
 
     @Test
-    public void doesNotSendSecondValidationEventWhenAddSecondInvalidSound() {
-        SoundAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        model.addSound(mockSound);
-        model.addSound(mockSound2);
-        verify(mockValidationListener, times(1)).accept(mockSound);
-    }
-
-    @Test
-    public void doesNotSendValidationEventWhenAddValidSound() {
-        SoundAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        model.addSound(mockSound);
-        verify(mockValidationListener, never()).accept(any(SoundModel.class));
-    }
-
-    @Test
-    public void returnsValidationResultsForAllSounds() {
-        SoundAreaModel model = newModel();
-        model.addSound(mockSound);
-        model.addSound(mockSound2);
-    }
-
-    @Test
     public void saveStoresSoundDetails() {
         SoundAreaModel model = newModel();
-        when(mockSound.filename()).thenReturn("sound.png");
+        when(mockSound.filename()).thenReturn("sound.wav");
         when(mockSound.name()).thenReturn("sound");
         model.addSound(mockSound);
         model.save();
-        verify(mockManifestFile).writeString("{sounds:[{filename:sound.png,name:sound,width:100,height:50}]}", false);
+        verify(mockManifestFile).writeString("{sounds:[{filename:sound.wav,name:sound}]}", false);
     }
 
     @Test
@@ -111,7 +68,7 @@ public class SoundAreaModelTest {
 
     @Test
     public void fromFolder() {
-        when(mockManifestFile.readString()).thenReturn("{sounds:[{filename:sound.png,name:sound,width:100,height:50}]}");
+        when(mockManifestFile.readString()).thenReturn("{sounds:[{filename:sound.wav,name:sound}]}");
         SoundAreaModel model = existingModel();
         assertThat(model.sounds()).extracting("name").containsExactly("sound");
     }
@@ -121,9 +78,7 @@ public class SoundAreaModelTest {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockSoundFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[]{mockSoundFile});
         SoundAreaModel model = new SoundAreaModel(mockSoundFolder);
-        assertThat(model.sounds()).extracting("name").containsExactly("sound.png");
-        assertThat(model.sounds()).extracting("width").containsExactly(100);
-        assertThat(model.sounds()).extracting("height").containsExactly(200);
+        assertThat(model.sounds()).extracting("name").containsExactly("sound.wav");
     }
 
     private SoundAreaModel newModel() {

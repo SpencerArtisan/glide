@@ -3,6 +3,9 @@ package com.bigcustard.scene2dplus.sound;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.sound.command.AddSoundCommand;
+import com.bigcustard.scene2dplus.sound.command.ChangeNameCommand;
+import com.bigcustard.scene2dplus.sound.command.RemoveSoundCommand;
 import com.google.common.annotations.VisibleForTesting;
 
 public class SoundAreaController {
@@ -47,21 +50,18 @@ public class SoundAreaController {
     }
 
     private void addRenameBehaviour(SoundControls soundControls) {
-// todo
-//        soundControls.registerNameFieldListener((text) ->
-//                commandHistory.execute(new ChangeNameCommand(soundControls.getSound(), text)));
+        soundControls.registerNameFieldListener((text) ->
+                commandHistory.execute(new ChangeNameCommand(soundControls.getSound(), text)));
     }
 
     private void addDeleteBehaviour(SoundControls soundControls) {
-// todo
-//        soundControls.registerDeleteButtonListener(() ->
-//                commandHistory.execute(new RemoveSoundCommand(model, soundControls.getSound())));
+        soundControls.registerDeleteButtonListener(() ->
+                commandHistory.execute(new RemoveSoundCommand(model, soundControls.getSound())));
     }
 
     private void addSoundFromClipboardUrl() {
         try {
-// todo
-//            commandHistory.execute(new AddSoundCommand(model, getClipboard().getContents()));
+            commandHistory.execute(new AddSoundCommand(model, getClipboard().getContents()));
         } catch (Exception e) {
             System.err.println("Error adding sound from clipboard: " + e);
             view.onSoundImportFailure();

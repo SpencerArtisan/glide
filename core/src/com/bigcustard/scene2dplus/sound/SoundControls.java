@@ -60,10 +60,6 @@ public class SoundControls {
         return group;
     }
 
-    private Integer textToInteger(TextField field) {
-        return Strings.isNullOrEmpty(field.getText()) ? null : Integer.parseInt(field.getText());
-    }
-
     private static TextFieldPlus createNameField(SoundModel sound, Skin skin) {
         TextFieldPlus textField = new TextFieldPlus(sound.name(), skin);
         textField.setAlignment(Align.center);

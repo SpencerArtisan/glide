@@ -26,8 +26,6 @@ public class SoundAreaControllerTest {
     @Mock private SoundControls soundControls;
     @Captor private ArgumentCaptor<Runnable> removeButtonListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<String>> nameListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<Integer>> widthListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<Integer>> heightListenerCaptor;
     @Captor private ArgumentCaptor<Runnable> importButtonListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundControls>> addSoundControlsListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundControls>> removeSoundControlsListenerCaptor;
