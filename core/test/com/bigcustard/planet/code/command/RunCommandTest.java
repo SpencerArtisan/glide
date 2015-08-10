@@ -6,6 +6,7 @@ import com.bigcustard.planet.code.GameStore;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
+import com.bigcustard.scene2dplus.sound.SoundAreaModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,6 +25,7 @@ public class RunCommandTest {
     @Mock private GameStore gameStore;
     @Mock private FileHandle buildFolder;
     @Mock private ImageAreaModel imageAreaModel;
+    @Mock private SoundAreaModel soundAreaModel;
     @Mock private ImageModel imageModel;
     @Mock private Game game;
     @Mock private Consumer<Game> runGame;
@@ -32,6 +34,7 @@ public class RunCommandTest {
     public void before() {
         initMocks(this);
         when(game.imageModel()).thenReturn(imageAreaModel);
+        when(game.soundModel()).thenReturn(soundAreaModel);
         when(gameStore.buildFolder(game)).thenReturn(buildFolder);
         command = spy(new RunCommand(game, gameStore, runGame));
         doNothing().when(command).resize(any(ImageModel.class));

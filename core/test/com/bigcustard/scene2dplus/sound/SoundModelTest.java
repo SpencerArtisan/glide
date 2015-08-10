@@ -23,28 +23,32 @@ public class SoundModelTest {
     @Test
     public void soundName() {
         when(mockSoundFile.name()).thenReturn("file.png");
+        when(mockSoundFile.extension()).thenReturn("png");
         subject = new SoundModel(mockSoundFile);
-        assertThat(subject.name()).isEqualTo("file");
+        assertThat(subject.name()).isEqualTo("file.png");
     }
 
     @Test
     public void longSoundName() {
         when(mockSoundFile.name()).thenReturn("a_long_sound_file_name.png");
+        when(mockSoundFile.extension()).thenReturn("png");
         subject = new SoundModel(mockSoundFile);
-        assertThat(subject.name()).isEqualTo("a_long_sound_file");
+        assertThat(subject.name()).isEqualTo("a_long_sound_.png");
     }
 
     @Test
     public void soundNameWithDots() {
         when(mockSoundFile.name()).thenReturn("sound.file.png");
+        when(mockSoundFile.extension()).thenReturn("png");
         subject = new SoundModel(mockSoundFile);
-        assertThat(subject.name()).isEqualTo("sound.file");
+        assertThat(subject.name()).isEqualTo("sound.file.png");
     }
 
     @Test
     public void soundNameWithSpaces() {
         when(mockSoundFile.name()).thenReturn("sound file.png");
+        when(mockSoundFile.extension()).thenReturn("png");
         subject = new SoundModel(mockSoundFile);
-        assertThat(subject.name()).isEqualTo("sound file");
+        assertThat(subject.name()).isEqualTo("sound file.png");
     }
 }
