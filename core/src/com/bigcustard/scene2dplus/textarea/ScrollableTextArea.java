@@ -48,7 +48,8 @@ public class ScrollableTextArea extends ScrollPane {
 
     private void scrollHorizontallyToShowCaret(TextAreaModel model, XY caretPosition) {
         if (isOffRight(caretPosition)) {
-            float newScrollX = (model.caret().location().x + 2) * textArea().getColumnWidth() - getWidth();
+            textArea().setWidth(textArea().getWidth() + textArea().getColumnWidth() * 2);
+            float newScrollX = (model.caret().location().x + 4) * textArea().getColumnWidth() - getWidth();
             setScrollX(newScrollX);
         } else if (isOffLeft(caretPosition)) {
             float newScrollX = (model.caret().location().x - 2) * textArea().getColumnWidth();
@@ -57,7 +58,7 @@ public class ScrollableTextArea extends ScrollPane {
     }
 
     private boolean isOffRight(XY location) {
-        return location.x + textArea().getColumnWidth() > getWidth();
+        return location.x + textArea().getColumnWidth() * 3 > getWidth();
     }
 
     private boolean isOffLeft(XY location) {
