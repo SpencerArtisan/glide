@@ -131,7 +131,6 @@ public class CodingScreen extends ScreenAdapter {
         resourceArea.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
         resourceArea.background(skin.getDrawable("solarizedBackground"));
         resourceArea.init();
-
     }
 
     private void createImageArea() {
@@ -202,6 +201,7 @@ public class CodingScreen extends ScreenAdapter {
         stage.dispose();
         model.dispose();
         imageArea.dispose();
+        soundArea.dispose();
         game.dispose();
     }
 }

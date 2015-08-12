@@ -1,9 +1,10 @@
 package com.bigcustard.scene2dplus.tab;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.bigcustard.scene2dplus.image.ImageArea;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
