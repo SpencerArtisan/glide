@@ -23,6 +23,7 @@ import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.sound.SoundArea;
 import com.bigcustard.scene2dplus.sound.SoundAreaController;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.tab.TabControl;
 import com.bigcustard.scene2dplus.textarea.ScrollableTextArea;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
@@ -42,7 +43,7 @@ public class CodingScreen extends ScreenAdapter {
     private ScrollableTextArea textArea;
     private ImageArea imageArea;
     private SoundArea soundArea;
-    private Table resourceArea;
+    private TabControl resourceArea;
     private ButtonBar buttonBar;
     private Game game;
     private GameStore gameStore;
@@ -125,41 +126,12 @@ public class CodingScreen extends ScreenAdapter {
         createImageArea();
         createSoundArea();
 
-        resourceArea = new Table();
+        resourceArea = new TabControl();
+        resourceArea.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
+        resourceArea.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
         resourceArea.background(skin.getDrawable("solarizedBackground"));
-        TextButton imageButton = new TextButton("Images  ", skin, "tab");
-        TextButton soundButton = new TextButton("Sounds  ", skin, "tab");
-        imageButton.setChecked(true);
-        soundButton.setChecked(false);
+        resourceArea.init();
 
-        resourceArea.add(imageButton).padTop(10);
-        resourceArea.add(soundButton).padTop(10);
-        resourceArea.row();
-        resourceArea.add(imageArea).colspan(2).fill().expand();
-
-        soundButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                if (soundButton.isChecked()) {
-                    imageButton.setChecked(false);
-                    Cell<?> cell = resourceArea.getCell(imageArea);
-                    if (cell != null) {
-                        cell.setActor(soundArea);
-                    }
-                }
-            }
-        });
-
-        imageButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                if (imageButton.isChecked()) {
-                    soundButton.setChecked(false);
-                    Cell<?> cell = resourceArea.getCell(soundArea);
-                    if (cell != null) {
-                        cell.setActor(imageArea);
-                    }
-                }
-            }
-        });
     }
 
     private void createImageArea() {
