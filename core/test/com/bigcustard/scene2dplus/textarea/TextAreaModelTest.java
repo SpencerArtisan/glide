@@ -22,6 +22,27 @@ public class TextAreaModelTest {
 		model.clear();
 	}
 
+    @Test
+    public void insertText() {
+        model.insert("hello");
+        XYAssert.assertThat(model.caret().location()).at(5, 0);
+        assertThat(model.text()).isEqualTo("hello");
+    }
+
+    @Test
+    public void insertWithNewline() {
+        model.insert("hello\n");
+        XYAssert.assertThat(model.caret().location()).at(0, 1);
+        assertThat(model.text()).isEqualTo("hello\n");
+    }
+
+    @Test
+    public void insertWithEndIndicator() {
+        model.insert("he$END$llo");
+        XYAssert.assertThat(model.caret().location()).at(2, 0);
+        assertThat(model.text()).isEqualTo("hello");
+    }
+
 	@Test
 	public void textColorCoded() throws Exception {
 		model.setText("text");

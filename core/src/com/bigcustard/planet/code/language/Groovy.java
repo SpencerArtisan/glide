@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code.language;
 
 import com.bigcustard.planet.language.GroovyKeywords;
+import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
@@ -24,6 +25,7 @@ public class Groovy extends Language {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<Integer> errorLineChecker(String code) {
         Set<Integer> errorLines = new HashSet<>();
         try {
@@ -39,10 +41,21 @@ public class Groovy extends Language {
                     throw e;
                 }
             }
-//        } catch (InterruptedException e) {
         } catch (Throwable e) {
             System.out.println("Failed to parse code: " + e);
         }
         return errorLines;
+    }
+
+    @Override
+    public String vetoPreInsert(String characters, TextAreaModel textAreaModel) {
+        if (currentLineEndsInOpeningBrace(textAreaModel) && characters.matches("\n\\s*")) {
+            characters = characters + "    $END$" + characters + "}";
+        }
+        return characters;
+    }
+
+    private boolean currentLineEndsInOpeningBrace(TextAreaModel textAreaModel) {
+        return textAreaModel.getCurrentLine().endsWith("{");
     }
 }

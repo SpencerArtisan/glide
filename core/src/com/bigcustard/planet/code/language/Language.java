@@ -4,8 +4,10 @@ import com.bigcustard.planet.code.CodeColorCoder;
 import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
+import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 public abstract class Language {
     public static Language Ruby = new Ruby();
@@ -48,6 +50,10 @@ public abstract class Language {
 
     public String template() {
         return template;
+    }
+
+    public String vetoPreInsert(String characters, TextAreaModel textAreaModel) {
+        return characters;
     }
 
     @Override

@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
@@ -146,6 +144,7 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createTextArea(Game game) {
         model = new TextAreaModel(game.code(), game.language().codeColorCoder());
+        model.preInsertVetoer(game.language()::vetoPreInsert);
         model.addChangeListener((m) -> game.code(model.text()));
         textArea = new ScrollableTextArea(model, skin, game.commandHistory());
     }

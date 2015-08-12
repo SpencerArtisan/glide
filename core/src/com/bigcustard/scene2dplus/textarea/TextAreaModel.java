@@ -9,14 +9,18 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class TextAreaModel implements Disposable {
+	private static final String END = "$END$";
 	private String text;
 	private Caret caret;
 	private ColorCoder colorCoder;
-    private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
+	private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
+	private BiFunction<String, TextAreaModel, String> preInsertVetoer;
 
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
@@ -31,6 +35,10 @@ public class TextAreaModel implements Disposable {
 
 	public void addChangeListener(Consumer<TextAreaModel> listener) {
 		changeNotifier.add(listener);
+	}
+
+	public void preInsertVetoer(BiFunction<String, TextAreaModel, String> preInsertVetoer) {
+		this.preInsertVetoer = preInsertVetoer;
 	}
 
 	public Caret caret() {
@@ -72,7 +80,12 @@ public class TextAreaModel implements Disposable {
     }
 
 	public String insert(String characters) {
-        int fromIndex, toIndex;
+		if (preInsertVetoer != null) characters = preInsertVetoer.apply(characters, this);
+
+		int indexfOfEnd = characters.contains(END) ? characters.indexOf(END) : characters.length();
+		characters = characters.replace(END, "");
+
+		int fromIndex, toIndex;
         if (caret().isAreaSelected()) {
             fromIndex = getIndex(caret().selection().getLeft());
             toIndex = getIndex(caret().selection().getRight());
@@ -83,7 +96,7 @@ public class TextAreaModel implements Disposable {
         }
         String deleted = text.substring(fromIndex, toIndex);
         setText(text.substring(0, fromIndex) + characters + text.substring(toIndex, text.length()));
-        positionCaret(fromIndex + characters.length());
+        positionCaret(fromIndex + indexfOfEnd);
         return deleted;
 	}
 

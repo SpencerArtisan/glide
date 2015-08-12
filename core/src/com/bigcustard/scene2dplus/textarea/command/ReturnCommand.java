@@ -13,9 +13,10 @@ public class ReturnCommand extends AbstractTextAreaCommand {
     @Override
     public void execute() {
         Matcher matcher = Pattern.compile("(\\s*)\\S.*").matcher(model.getCurrentLine());
-        model.insert("\n");
+        String characters = "\n";
         if (matcher.matches()) {
-            model.insert(matcher.group(1));
+            characters += matcher.group(1);
         }
+        model.insert(characters);
     }
 }
