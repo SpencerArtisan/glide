@@ -40,7 +40,7 @@ public class GameStoreTest {
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockGameFolder.child("code.groovy")).thenReturn(mockGroovyCodeFile);
         when(mockGameFolder.name()).thenReturn("game");
-        when(mockGameFolder.child("manifest.json")).thenReturn(mockManifestFile);
+        when(mockGameFolder.child("images.json")).thenReturn(mockManifestFile);
         when(mockGameFolder.child("sounds.json")).thenReturn(mockSoundsFile);
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockGroovyCodeFile.extension()).thenReturn("groovy");
@@ -138,7 +138,7 @@ public class GameStoreTest {
         when(mockGameFolder.exists()).thenReturn(true);
         when(mockGameFolder2.exists()).thenReturn(false);
         when(mockGameFolder2.name()).thenReturn("Unnamed Game 2");
-        when(mockGameFolder2.child("manifest.json")).thenReturn(mockManifestFile);
+        when(mockGameFolder2.child("images.json")).thenReturn(mockManifestFile);
         when(mockGameFolder2.child("sounds.json")).thenReturn(mockSoundsFile);
         when(mockGameFolder2.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
         Game game = gameStore.create(mockLanguage);
@@ -158,7 +158,7 @@ public class GameStoreTest {
         when(mockGameFolder2.exists()).thenReturn(true);
         when(mockGameFolder3.exists()).thenReturn(false);
         when(mockGameFolder3.name()).thenReturn("Unnamed Game 3");
-        when(mockGameFolder3.child("manifest.json")).thenReturn(mockManifestFile);
+        when(mockGameFolder3.child("images.json")).thenReturn(mockManifestFile);
         when(mockGameFolder3.child("sounds.json")).thenReturn(mockSoundsFile);
         when(mockGameFolder3.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
         Game game = gameStore.create(mockLanguage);

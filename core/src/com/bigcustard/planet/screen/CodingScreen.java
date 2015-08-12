@@ -125,7 +125,6 @@ public class CodingScreen extends ScreenAdapter {
     private void createResourceArea() {
         createImageArea();
         createSoundArea();
-
         resourceArea = new TabControl();
         resourceArea.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
         resourceArea.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
@@ -165,7 +164,6 @@ public class CodingScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         stage.act(Math.min(delta, 1 / 60f));
         stage.draw();
     }

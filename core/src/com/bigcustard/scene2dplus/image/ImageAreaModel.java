@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ImageAreaModel implements Disposable {
-    private static String IMAGE_DETAIL_FILE = "manifest.json";
+    private static String IMAGE_DETAIL_FILE = "images.json";
 
     private Notifier<ImageModel> addImageNotifier = new Notifier<>();
     private Notifier<ImageModel> removeImageNotifier = new Notifier<>();

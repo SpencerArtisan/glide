@@ -35,7 +35,7 @@ public class ImageAreaModelTest {
         initMocks(this);
         when(mockImageFolder.child("image.png")).thenReturn(mockImageFile);
         when(mockImageFolder.child("image2.png")).thenReturn(mockImageFile2);
-        when(mockImageFolder.child("manifest.json")).thenReturn(mockManifestFile);
+        when(mockImageFolder.child("images.json")).thenReturn(mockManifestFile);
         when(mockImageFile.name()).thenReturn("image.png");
         when(mockImageFile2.name()).thenReturn("image2.png");
         when(mockImage.validate()).thenReturn(mockValidationResult1);
