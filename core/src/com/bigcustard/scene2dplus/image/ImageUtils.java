@@ -13,12 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ImageUtils {
-    public static Image asImage(FileHandle file) {
+    public static DisposableImage asImage(FileHandle file) {
         if (!file.exists()) throw new NoImageFileException(file);
-        Texture texture = new Texture(file);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        TextureRegion textureRegion = new TextureRegion(texture);
-        return new Image(textureRegion);
+        return new DisposableImage(new Texture(file));
     }
 
     public static XY imageSize(FileHandle mainImageFile) {

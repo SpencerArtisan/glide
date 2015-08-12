@@ -4,32 +4,34 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.function.Consumer;
 
-public class ImageControls {
-    private final ImageModel image;
+public class ImageControls implements Disposable {
+    private final ImageModel imageModel;
     private final TextFieldPlus nameField;
     private final TextFieldPlus widthField;
     private final TextFieldPlus heightField;
     private final Button deleteButton;
+    private DisposableImage image;
 
-    public ImageControls(ImageModel image, Skin skin) {
-        this.image = image;
-        this.nameField = createNameField(image, skin);
-        this.widthField = createSizeField(image.width(), skin);
-        this.heightField = createSizeField(image.height(), skin);
+    public ImageControls(ImageModel imageModel, Skin skin) {
+        this.imageModel = imageModel;
+        this.nameField = createNameField(imageModel, skin);
+        this.widthField = createSizeField(imageModel.width(), skin);
+        this.heightField = createSizeField(imageModel.height(), skin);
         this.deleteButton = createDeleteButton(skin);
         addModelChangeBehaviour();
         addValidationBehaviour();
         setValidState();
     }
 
-    ImageModel getImage() {
-        return image;
+    ImageModel getImageModel() {
+        return imageModel;
     }
 
     void registerNameFieldListener(Consumer<String> onChange) {
@@ -64,10 +66,10 @@ public class ImageControls {
 
     private Actor getImageControl(float width) {
         WidgetGroup group = new WidgetGroup();
-        Image uiImage = ImageUtils.asImage(image.file());
-        uiImage.setFillParent(true);
-        group.addActor(uiImage);
-        group.setHeight(uiImage.getHeight() * width / uiImage.getWidth());
+        image = ImageUtils.asImage(imageModel.file());
+        image.setFillParent(true);
+        group.addActor(image);
+        group.setHeight(image.getHeight() * width / image.getWidth());
         group.setWidth(width);
 
         deleteButton.setPosition(width - 34, group.getHeight() - 34);
@@ -106,7 +108,7 @@ public class ImageControls {
     }
 
     private void addModelChangeBehaviour() {
-        image.registerChangeListener((image) -> {
+        imageModel.registerChangeListener((image) -> {
             widthField.setText(ObjectUtils.toString(image.width()));
             heightField.setText(ObjectUtils.toString(image.height()));
             nameField.setText(image.name());
@@ -114,13 +116,18 @@ public class ImageControls {
     }
 
     private void addValidationBehaviour() {
-        image.registerValidationListener((image) -> setValidState());
+        imageModel.registerValidationListener((image) -> setValidState());
     }
 
     private void setValidState() {
-        ValidationResult result = image.validate();
+        ValidationResult result = imageModel.validate();
         nameField.setValid(result.isNameValid());
         widthField.setValid(result.isWidthValid());
         heightField.setValid(result.isHeightValid());
+    }
+
+    @Override
+    public void dispose() {
+        image.dispose();
     }
 }

@@ -44,7 +44,7 @@ public class ImageAreaControllerTest {
 //        when(model.addImage(anyString())).thenReturn(image);
         when(model.images()).thenReturn(Arrays.asList(image));
         when(view.getAllImageControls()).thenReturn(Arrays.asList(imageControls));
-        when(imageControls.getImage()).thenReturn(image);
+        when(imageControls.getImageModel()).thenReturn(image);
 
         doNothing().when(view).registerImportButtonListener(importButtonListenerCaptor.capture());
         doNothing().when(view).registerAddImageControlsListener(addImageControlsListenerCaptor.capture());

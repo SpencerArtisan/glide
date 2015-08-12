@@ -51,22 +51,22 @@ public class ImageAreaController {
 
     private void addRenameBehaviour(ImageControls imageControls) {
         imageControls.registerNameFieldListener((text) ->
-                commandHistory.execute(new ChangeNameCommand(imageControls.getImage(), text)));
+                commandHistory.execute(new ChangeNameCommand(imageControls.getImageModel(), text)));
     }
 
     private void addWidthChangeBehaviour(ImageControls imageControls) {
         imageControls.registerWidthFieldListener((value) ->
-                commandHistory.execute(new ChangeWidthCommand(imageControls.getImage(), value)));
+                commandHistory.execute(new ChangeWidthCommand(imageControls.getImageModel(), value)));
     }
 
     private void addHeightChangeBehaviour(ImageControls imageControls) {
         imageControls.registerHeightFieldListener((value) ->
-                commandHistory.execute(new ChangeHeightCommand(imageControls.getImage(), value)));
+                commandHistory.execute(new ChangeHeightCommand(imageControls.getImageModel(), value)));
     }
 
     private void addDeleteBehaviour(ImageControls imageControls) {
         imageControls.registerDeleteButtonListener(() ->
-                commandHistory.execute(new RemoveImageCommand(model, imageControls.getImage())));
+                commandHistory.execute(new RemoveImageCommand(model, imageControls.getImageModel())));
     }
 
     private void addImageFromClipboardUrl() {

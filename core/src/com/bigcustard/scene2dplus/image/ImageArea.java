@@ -113,5 +113,8 @@ public class ImageArea extends ScrollPane implements Disposable {
         model.dispose();
         addImageControlsNotifier.dispose();
         removeImageControlsNotifier.dispose();
+        for (ImageControls imageControls : imageControlMap.values()) {
+            imageControls.dispose();
+        }
     }
 }
