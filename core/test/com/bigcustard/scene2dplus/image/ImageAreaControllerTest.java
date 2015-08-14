@@ -136,7 +136,7 @@ public class ImageAreaControllerTest {
 
         @Test
         public void it_ChangesTheImageWidth() {
-            verify(image).setWidth(100);
+            verify(image).width(100);
         }
 
         public class ThenEnteringANewWidthAndUndoing {
@@ -148,7 +148,7 @@ public class ImageAreaControllerTest {
 
             @Test
             public void it_RestoresTheOldWidth() {
-                verify(image).setWidth(100);
+                verify(image).width(100);
             }
         }
     }
@@ -161,7 +161,7 @@ public class ImageAreaControllerTest {
 
         @Test
         public void it_ChangesTheImageWidthToNull() {
-            verify(image).setWidth(null);
+            verify(image).width(null);
         }
     }
 
@@ -173,7 +173,7 @@ public class ImageAreaControllerTest {
 
         @Test
         public void it_ChangesTheImageHeight() {
-            verify(image).setHeight(100);
+            verify(image).height(100);
         }
 
         public class ThenEnteringANewHeightAndUndoing {
@@ -185,7 +185,7 @@ public class ImageAreaControllerTest {
 
             @Test
             public void it_RestoresTheOldHeight() {
-                verify(image).setHeight(100);
+                verify(image).height(100);
             }
         }
     }
@@ -198,7 +198,7 @@ public class ImageAreaControllerTest {
 
         @Test
         public void it_ChangesTheImageHeightToNull() {
-            verify(image).setHeight(null);
+            verify(image).height(null);
         }
     }
 
@@ -210,7 +210,7 @@ public class ImageAreaControllerTest {
 
         @Test
         public void it_ChangesTheImageName() {
-            verify(image).setName("name");
+            verify(image).name("name");
         }
 
         public class ThenEnteringANewNameAndUndoing {
@@ -222,7 +222,7 @@ public class ImageAreaControllerTest {
 
             @Test
             public void it_RestoresTheOldName() {
-                verify(image).setName("name");
+                verify(image).name("name");
             }
         }
     }

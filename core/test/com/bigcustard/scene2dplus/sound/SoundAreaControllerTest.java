@@ -2,7 +2,6 @@ package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.sound.*;
 import com.bigcustard.scene2dplus.textarea.command.TestClipboard;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.Before;
@@ -133,7 +132,7 @@ public class SoundAreaControllerTest {
 
         @Test
         public void it_ChangesTheSoundName() {
-            verify(sound).setName("name");
+            verify(sound).name("name");
         }
 
         public class ThenEnteringANewNameAndUndoing {
@@ -145,7 +144,7 @@ public class SoundAreaControllerTest {
 
             @Test
             public void it_RestoresTheOldName() {
-                verify(sound).setName("name");
+                verify(sound).name("name");
             }
         }
     }

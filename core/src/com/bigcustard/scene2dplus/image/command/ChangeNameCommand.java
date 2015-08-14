@@ -16,12 +16,12 @@ public class ChangeNameCommand implements Command {
 
     @Override
     public void execute() {
-        image.setName(newName);
+        image.name(newName);
     }
 
     @Override
     public void undo() {
-        image.setName(oldName);
+        image.name(oldName);
     }
 
     @Override

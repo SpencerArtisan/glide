@@ -23,14 +23,14 @@ public class ChangeWidthCommandTest {
     @Test
     public void itChangesTheWidth() {
         command.execute();
-        verify(image).setWidth(200);
+        verify(image).width(200);
     }
 
     @Test
     public void undoRestoresTheWidth() {
         command.execute();
         command.undo();
-        verify(image).setWidth(100);
+        verify(image).width(100);
     }
 
 }

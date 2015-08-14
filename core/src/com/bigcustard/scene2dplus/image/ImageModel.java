@@ -43,7 +43,7 @@ public class ImageModel {
         return name;
     }
 
-    public void setName(String name) {
+    public void name(String name) {
         changeAttribute(() -> this.name = name);
     }
 
@@ -67,7 +67,7 @@ public class ImageModel {
         return height;
     }
 
-    public void setWidth(Integer newWidth) {
+    public void width(Integer newWidth) {
         changeAttribute(() -> {
             if (newWidth != null) {
                 height = newWidth * originalHeight / originalWidth;
@@ -79,7 +79,7 @@ public class ImageModel {
         });
     }
 
-    public void setHeight(Integer newHeight) {
+    public void height(Integer newHeight) {
         changeAttribute(() -> {
             if (newHeight != null) {
                 width = newHeight * originalWidth / originalHeight;

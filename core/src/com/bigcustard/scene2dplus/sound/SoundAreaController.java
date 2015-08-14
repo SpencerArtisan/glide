@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.sound.command.AddSoundCommand;
@@ -47,6 +48,7 @@ public class SoundAreaController {
     private void addSoundAdjustmentBehaviour(SoundControls soundControls) {
         addRenameBehaviour(soundControls);
         addDeleteBehaviour(soundControls);
+        addPlaySoundBehaviour(soundControls);
     }
 
     private void addRenameBehaviour(SoundControls soundControls) {
@@ -57,6 +59,12 @@ public class SoundAreaController {
     private void addDeleteBehaviour(SoundControls soundControls) {
         soundControls.registerDeleteButtonListener(() ->
                 commandHistory.execute(new RemoveSoundCommand(model, soundControls.getSound())));
+    }
+
+    private void addPlaySoundBehaviour(SoundControls soundControls) {
+        soundControls.registerImageClickListener(() -> {
+            soundControls.getSound().sound().play();
+        });
     }
 
     private void addSoundFromClipboardUrl() {

@@ -2,9 +2,11 @@ package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.ObjectUtils;
@@ -15,6 +17,7 @@ public class SoundControls {
     private final SoundModel sound;
     private final TextFieldPlus nameField;
     private final Button deleteButton;
+    private Image uiSound;
 
     public SoundControls(SoundModel sound, Skin skin) {
         this.sound = sound;
@@ -39,6 +42,14 @@ public class SoundControls {
         });
     }
 
+    void registerImageClickListener(Runnable onClicked) {
+        uiSound.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                onClicked.run();
+            }
+        });
+    }
+
     void addTo(Table table, int width, Skin skin) {
         table.row();
         Actor sound = getSoundControl(width, skin);
@@ -49,7 +60,7 @@ public class SoundControls {
 
     private Actor getSoundControl(float width, Skin skin) {
         WidgetGroup group = new WidgetGroup();
-        Image uiSound = new Image(skin, "sound");
+        uiSound = new Image(skin, "sound");
         uiSound.setFillParent(true);
         group.addActor(uiSound);
         group.setHeight(uiSound.getHeight() * width / uiSound.getWidth());

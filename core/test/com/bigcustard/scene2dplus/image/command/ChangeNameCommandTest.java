@@ -23,14 +23,14 @@ public class ChangeNameCommandTest {
     @Test
     public void itChangesTheWidth() {
         command.execute();
-        verify(image).setName("new name");
+        verify(image).name("new name");
     }
 
     @Test
     public void undoRestoresTheWidth() {
         command.execute();
         command.undo();
-        verify(image).setName("old name");
+        verify(image).name("old name");
     }
 
 }

@@ -16,12 +16,12 @@ public class ChangeWidthCommand implements Command {
 
     @Override
     public void execute() {
-        image.setWidth(newWidth);
+        image.width(newWidth);
     }
 
     @Override
     public void undo() {
-        image.setWidth(oldWidth);
+        image.width(oldWidth);
     }
 
     @Override

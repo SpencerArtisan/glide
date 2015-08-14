@@ -16,12 +16,12 @@ public class ChangeNameCommand implements Command {
 
     @Override
     public void execute() {
-        sound.setName(newName);
+        sound.name(newName);
     }
 
     @Override
     public void undo() {
-        sound.setName(oldName);
+        sound.name(oldName);
     }
 
     @Override

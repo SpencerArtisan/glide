@@ -98,7 +98,7 @@ public class ImageAreaModel implements Disposable {
                     if (!imageFile.isDirectory()) {
                         XY imageSize = imageSize(imageFile);
                         ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
-                        imageModel.setName(imageFile.name());
+                        imageModel.name(imageFile.name());
                         addImage(imageModel);
                     }
                 } catch (Exception e) {

@@ -1,7 +1,6 @@
 package com.bigcustard.scene2dplus.sound.command;
 
 import com.bigcustard.scene2dplus.sound.SoundModel;
-import com.bigcustard.scene2dplus.sound.command.ChangeNameCommand;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,14 +23,14 @@ public class ChangeNameCommandTest {
     @Test
     public void itChangesTheWidth() {
         command.execute();
-        verify(sound).setName("new name");
+        verify(sound).name("new name");
     }
 
     @Test
     public void undoRestoresTheWidth() {
         command.execute();
         command.undo();
-        verify(sound).setName("old name");
+        verify(sound).name("old name");
     }
 
 }

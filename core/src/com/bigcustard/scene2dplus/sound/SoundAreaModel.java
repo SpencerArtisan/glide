@@ -16,7 +16,7 @@ public class SoundAreaModel implements Disposable {
     private Notifier<SoundModel> removeSoundNotifier = new Notifier<>();
     private Notifier<SoundModel> changeSoundNotifier = new Notifier<>();
     private Notifier<SoundModel> validationNotifier = new Notifier<>();
-    private List<SoundModel> Sounds = new ArrayList<>();
+    private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
 
     public SoundAreaModel(FileHandle SoundFolder) {
@@ -49,11 +49,11 @@ public class SoundAreaModel implements Disposable {
     }
 
     public List<SoundModel> sounds() {
-        return Sounds;
+        return sounds;
     }
 
     public SoundModel addSound(SoundModel Sound) {
-        Sounds.add(0, Sound);
+        sounds.add(0, Sound);
         addSoundNotifier.notify(Sound);
         Sound.registerChangeListener(changeSoundNotifier::notify);
         return Sound;
@@ -64,7 +64,7 @@ public class SoundAreaModel implements Disposable {
     }
 
     public void removeSound(SoundModel Sound) {
-        Sounds.remove(Sound);
+        sounds.remove(Sound);
         removeSoundNotifier.notify(Sound);
     }
 
@@ -78,7 +78,7 @@ public class SoundAreaModel implements Disposable {
                 try {
                     if (!file.isDirectory()) {
                         SoundModel SoundModel = new SoundModel(file);
-                        SoundModel.setName(file.name());
+                        SoundModel.name(file.name());
                         addSound(SoundModel);
                     }
                 } catch (Exception e) {
@@ -106,6 +106,7 @@ public class SoundAreaModel implements Disposable {
         removeSoundNotifier.dispose();
         changeSoundNotifier.dispose();
         validationNotifier.dispose();
+        sounds.forEach(SoundModel::dispose);
     }
 
     private static class SoundListDetails {

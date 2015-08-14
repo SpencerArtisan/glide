@@ -30,7 +30,7 @@ public class FrameworkKeywords implements Keywords {
                 "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo",
                 "elapsedTime", "sequence", "style", "image", "scaleBy", "duration", "layer", "ScreenLayer", "Background", "Main", "Overlay", "onPressed", "onReleased",
                 "setX", "setY", "setScaleX", "setScaleY", "setAngle", "setColour", "setTransparency", "setHidden", "setTargetStyle", "setLayer", "setMouse",
-                "setPosition", "setScale", "setHeight", "setWidth", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
+                "setPosition", "setScale", "height", "width", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
                 "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
                 "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour", "sleep", "moveBy",
                 "loadSoundEffect", "play", "pause", "stop", "setVolume", "loadMusic", "createAnimationSprite", "isPlaying", "step", "reverse"

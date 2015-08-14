@@ -23,14 +23,14 @@ public class ChangeHeightCommandTest {
     @Test
     public void itChangesTheHeight() {
         command.execute();
-        verify(image).setHeight(200);
+        verify(image).height(200);
     }
 
     @Test
     public void undoRestoresTheHeight() {
         command.execute();
         command.undo();
-        verify(image).setHeight(100);
+        verify(image).height(100);
     }
 
 }

@@ -16,12 +16,12 @@ public class ChangeHeightCommand implements Command {
 
     @Override
     public void execute() {
-        image.setHeight(newHeight);
+        image.height(newHeight);
     }
 
     @Override
     public void undo() {
-        image.setHeight(oldHeight);
+        image.height(oldHeight);
     }
 
     @Override
