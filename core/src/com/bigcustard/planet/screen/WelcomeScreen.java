@@ -3,6 +3,7 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -45,9 +46,11 @@ public class WelcomeScreen extends ScreenAdapter {
 	private GameStore gameStore;
 	private Image title;
 	private Cell<Image> titleCell;
+	private Image blurpLogo;
+	private Cell<Image> blurpLogoCell;
+	private Image poweredBy;
 
 	WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
-		super();
 		this.setScreen = setScreen;
 		this.screenFactory = screenFactory;
 		this.gameStore = gameStore;
@@ -55,6 +58,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		this.skin = skin;
 
 		createTitle();
+		createBlurpLogo();
 	    createNewGameButton();
 		createContinueGameButton();
 		createSamplesButton();
@@ -65,6 +69,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
 		refreshButtonEnabledStatuses();
 		animateTitle();
+		animateBlurp();
 		setScreen.accept(this);
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -100,10 +105,13 @@ public class WelcomeScreen extends ScreenAdapter {
 		title = new Image(skin, "glide");
 	}
 
+	private void createBlurpLogo() {
+		blurpLogo = new Image(skin, "Blurp");
+	}
+
 	private void createNewGameButton() {
 		newGameButton = new TextButton("    New Game    ", skin, "big");
 		newGameButton.addListener(new ClickListener() {
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				hideMainMenu();
 				NewCommand newCommand = new NewCommand(
@@ -124,7 +132,6 @@ public class WelcomeScreen extends ScreenAdapter {
 	private void createContinueGameButton() {
 		continueGameButton = new TextButton("  Continue Game  ", skin, "big");
 		continueGameButton.addListener(new ClickListener() {
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				showCodingScreen(gameStore::mostRecent);
 			}
@@ -143,13 +150,11 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void createGamesButton(TextButton button, Supplier<GameLibraryDialog> dialogSupplier) {
 		button.addListener(new ClickListener() {
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				hideMainMenu();
 				final GameLibraryDialog dialog = dialogSupplier.get();
 				dialog.show(stage);
 				Futures.addCallback(dialog.getFutureGame(), new FutureCallback<Game.Token>() {
-					@Override
 					public void onSuccess(Game.Token game) {
 						showMainMenu();
 						refreshButtonEnabledStatuses();
@@ -160,7 +165,6 @@ public class WelcomeScreen extends ScreenAdapter {
 						}
 					}
 
-					@Override
 					public void onFailure(Throwable t) {
 						showError(t);
 					}
@@ -172,11 +176,29 @@ public class WelcomeScreen extends ScreenAdapter {
 	private void createQuitButton() {
 		quitButton = new TextButton("       Quit       ", skin, "big");
 		quitButton.addListener(new ClickListener() {
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.app.exit();
 			}
 		});
+	}
+
+	private void animateBlurp() {
+		blurpLogo.setScale(0.4f);
+		blurpLogo.setOrigin(blurpLogo.getWidth()/2, blurpLogo.getHeight()/2);
+		blurpLogo.setPosition(stage.getWidth() - 450, -50);
+		stage.addActor(blurpLogo);
+
+		poweredBy = new Image(skin, "powered_by");
+		poweredBy.setOrigin(poweredBy.getWidth() / 2, poweredBy.getHeight() / 2);
+		poweredBy.setPosition(-999, 0);
+		stage.addActor(poweredBy);
+
+		poweredBy.addAction(Actions.sequence(
+				Actions.delay(0.6f),
+				Actions.scaleBy(20f, 20f),
+				Actions.moveTo(stage.getWidth() - 330, 10),
+				Actions.scaleTo(1f, 1f, 0.25f, Interpolation.pow2Out)
+		));
 	}
 
 	private void animateTitle() {
@@ -244,6 +266,13 @@ public class WelcomeScreen extends ScreenAdapter {
 
 	private void hideMainMenu() {
 		getTable().setVisible(false);
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		poweredBy.setX(width - 330);
+		blurpLogo.setX(width - 450);
 	}
 
 	@Override
