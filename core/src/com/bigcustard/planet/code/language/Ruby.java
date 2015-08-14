@@ -1,6 +1,7 @@
 package com.bigcustard.planet.code.language;
 
 import com.bigcustard.planet.language.RubyKeywords;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class Ruby extends Language {
     }
 
     @Override
-    public Set<Integer> errorLineChecker(String code) {
+    public Pair<Integer, String> errorChecker(String code) {
         Set<Integer> errorLines = new HashSet<>();
 //        try {
 //            RubyParser parser = new Ruby20Parser();
@@ -29,10 +30,10 @@ public class Ruby extends Language {
 //            LexerSource lexer = LexerSource.getSource("code", new StringBufferInputStream(program), null, config);
 //            parser.parse(config, lexer);
 //        } catch (org.jruby.lexer.yacc.SyntaxException e) {
-//            errorLines.add(e.getPosition().getLine());
+//            error.add(e.getPosition().getLine());
 //        } catch (Exception e) {
 //            System.out.println("Failed to parse code: " + e);
 //        }
-        return errorLines;
+        return null;
     }
 }

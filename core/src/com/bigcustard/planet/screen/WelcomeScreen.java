@@ -197,7 +197,7 @@ public class WelcomeScreen extends ScreenAdapter {
 				Actions.delay(0.6f),
 				Actions.scaleBy(20f, 20f),
 				Actions.moveTo(stage.getWidth() - 330, 10),
-				Actions.scaleTo(1f, 1f, 0.25f, Interpolation.pow2Out)
+				Actions.scaleTo(1f, 1f, 0.4f, Interpolation.pow2Out)
 		));
 	}
 

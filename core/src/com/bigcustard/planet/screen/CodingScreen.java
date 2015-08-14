@@ -154,8 +154,9 @@ public class CodingScreen extends ScreenAdapter {
         errorLabel.setVisible(false);
         errorLabel.setWrap(true);
         game.registerChangeListener((g) -> {
-            errorLabel.setVisible(game.runtimeError() != null);
-            errorLabel.setText("Runtime error: " + game.runtimeError());
+            String error = game.runtimeError();
+            errorLabel.setVisible(error != null);
+            errorLabel.setText(error == null ? null : "Runtime error: " + error);
         });
     }
 

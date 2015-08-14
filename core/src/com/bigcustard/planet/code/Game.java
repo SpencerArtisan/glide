@@ -8,7 +8,10 @@ import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
 import com.bigcustard.util.Notifier;
 import com.google.common.base.Objects;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Game implements Disposable {
@@ -35,6 +38,14 @@ public class Game implements Disposable {
         this.imageModel.registerAddImageListener((image) -> onImageChange());
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            Pair<Integer, String> error = language().syntax().error(code());
+            if ((error == null && runtimeError() != null) ||
+                    (error != null && !error.getRight().equals(runtimeError()))) {
+                runtimeError(error == null ? null : new RuntimeException(error.getRight()));
+            }
+        }, 1, 1, TimeUnit.SECONDS);
     }
 
     public Token token() {

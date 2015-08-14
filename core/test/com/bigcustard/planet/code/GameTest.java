@@ -2,6 +2,7 @@ package com.bigcustard.planet.code;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.planet.code.language.Language;
+import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
@@ -28,6 +29,7 @@ public class GameTest {
     @Mock private Consumer<Game> mockChangeListener;
     @Mock private Language mockLanguage;
     @Mock private FileHandle mockFolder;
+    @Mock private Syntax mockSyntax;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> changeImageListenerCaptor;
@@ -39,6 +41,7 @@ public class GameTest {
     public void before() {
         initMocks(this);
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
+        when(mockLanguage.syntax()).thenReturn(mockSyntax);
         doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerRemoveImageListener(removeImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
@@ -50,9 +53,9 @@ public class GameTest {
     @Test
     public void isValidIfCodeAndImagesValid() {
         Game game = newGame(mockLanguage);
-        game.code("code");
         when(mockLanguage.isValid("code")).thenReturn(true);
         when(mockImageModel.isValid()).thenReturn(true);
+        game.code("code");
         assertThat(game.isValid()).isTrue();
     }
 

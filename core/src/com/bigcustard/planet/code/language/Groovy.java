@@ -3,6 +3,7 @@ package com.bigcustard.planet.code.language;
 import com.bigcustard.planet.language.GroovyKeywords;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import groovy.lang.GroovyClassLoader;
+import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
@@ -26,7 +27,7 @@ public class Groovy extends Language {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Integer> errorLineChecker(String code) {
+    public Pair<Integer, String> errorChecker(String code) {
         Set<Integer> errorLines = new HashSet<>();
         try {
             new GroovyClassLoader().parseClass(code);
@@ -36,7 +37,7 @@ public class Groovy extends Language {
                 if (error instanceof SyntaxErrorMessage) {
                     SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
                     int errorLine = cause.getLine();
-                    errorLines.add(errorLine - 1);
+                    return Pair.of(errorLine - 1, cause.getOriginalMessage());
                 } else {
                     throw e;
                 }
@@ -44,7 +45,7 @@ public class Groovy extends Language {
         } catch (Throwable e) {
             System.out.println("Failed to parse code: " + e);
         }
-        return errorLines;
+        return null;
     }
 
     @Override

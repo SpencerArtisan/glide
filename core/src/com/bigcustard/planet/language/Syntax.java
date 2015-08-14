@@ -6,6 +6,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -20,15 +21,15 @@ public class Syntax {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
             "!", "!=", "=", "++", "*=", "/=", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";"};
     private Keywords languageKeywords;
-    private Function<String, Set<Integer>> errorLineChecker;
+    private Function<String, Pair<Integer, String>> errorChecker;
 
-    private AtomicReference<Set<Integer>> lastKnownResult = new AtomicReference<>(new HashSet<>());
+    private AtomicReference<Pair<Integer, String>> lastKnownResult = new AtomicReference<>();
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
     private Future<?> futureSyntaxCheck;
 
-    public Syntax(Keywords languageKeywords, Function<String, Set<Integer>> errorLineChecker) {
+    public Syntax(Keywords languageKeywords, Function<String, Pair<Integer, String>> errorChecker) {
         this.languageKeywords = languageKeywords;
-        this.errorLineChecker = errorLineChecker;
+        this.errorChecker = errorChecker;
     }
 
     public List<SyntaxPart> parse(String program) {
@@ -37,13 +38,14 @@ public class Syntax {
     }
 
     public boolean isValid(String program) {
-        return errorLines(program).isEmpty();
+        return error(program) == null;
     }
 
-    public Set<Integer> errorLines(String program) {
+    public Pair<Integer, String> error(String program) {
         if (futureSyntaxCheck == null || futureSyntaxCheck.isDone()) {
             futureSyntaxCheck = executorService.submit(() -> {
-                lastKnownResult.set(errorLineChecker.apply(program));
+                Pair<Integer, String> error = errorChecker.apply(program);
+                lastKnownResult.set(error);
             });
         }
         return lastKnownResult.get();
@@ -52,11 +54,7 @@ public class Syntax {
     @SuppressWarnings("unchecked")
     private List<SyntaxPart> categoriseWordsIntoTypes(String program) {
         List<String> wordsAndSpaces = new Tokenizer(program, TOKENS).run();
-        return Lists.transform(wordsAndSpaces, new Function<String, SyntaxPart>() {
-            public SyntaxPart apply(String word) {
-                return new SyntaxPart(word, getType(word));
-            }
-        });
+        return Lists.transform(wordsAndSpaces, word -> new SyntaxPart(word, getType(word)));
     }
 
     private List<SyntaxPart> collapseAdjacentPartsWithSameType(List<SyntaxPart> classifiedWordsAndSpaces) {

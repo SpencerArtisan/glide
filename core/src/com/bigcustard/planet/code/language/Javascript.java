@@ -1,9 +1,9 @@
 package com.bigcustard.planet.code.language;
 
 import com.bigcustard.planet.language.JavascriptKeywords;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class Javascript extends Language {
     public static final String TEMPLATE =
@@ -18,7 +18,7 @@ public class Javascript extends Language {
     }
 
     @Override
-    public Set<Integer> errorLineChecker(String code) {
-        return new HashSet<>();
+    public Pair<Integer, String> errorChecker(String code) {
+        return null;
     }
 }

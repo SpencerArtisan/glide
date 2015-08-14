@@ -7,8 +7,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.bigcustard.planet.code.SyntaxPart.Type.*;
@@ -49,7 +50,13 @@ public class CodeColorCoder implements ColorCoder {
 
     @Override
     public Map<Integer, Color> colorLines(String program) {
-        return Maps.asMap(syntax.errorLines(program), input -> errorColor);
+        Pair<Integer, String> error = syntax.error(program);
+        if (error == null) {
+            return new HashMap<>();
+        }
+        else {
+            return ImmutableMap.of(error.getLeft(), errorColor);
+        }
     }
 
     private String encodeSpecialCharacters(String program) {

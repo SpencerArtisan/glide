@@ -2,6 +2,7 @@ package com.bigcustard.planet.code;
 
 import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.planet.language.Syntax;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -244,7 +245,7 @@ public class SyntaxTest {
 		String program = "public void hello() {\n}";
 		syntax.isValid(program);
 		Thread.sleep(500);
-		assertThat(syntax.errorLines(program)).isEmpty();
+		assertThat(syntax.error(program)).isNull();
     }
 
     @Test
@@ -260,7 +261,7 @@ public class SyntaxTest {
 		String program = "public void hello() {\n\"unended string\n}";
 		syntax.isValid(program);
 		Thread.sleep(500);
-		assertThat(syntax.errorLines(program)).containsExactly(1);
+		assertThat(syntax.error(program)).isEqualTo(Pair.of(1, "expecting anything but ''\\n''; got it anyway"));
     }
 
 	@Test
@@ -274,7 +275,7 @@ public class SyntaxTest {
 //    @Test
 //    public void noErrorsInGoodJavascript() {
 //		useJavascriptSyntax();
-//        assertThat(syntax.errorLines("function hello() {\n}")).isEmpty();
+//        assertThat(syntax.error("function hello() {\n}")).isEmpty();
 //    }
 //
 //    @Test
@@ -286,7 +287,7 @@ public class SyntaxTest {
 //    @Test
 //    public void errorsInBadJavascript() {
 //		useJavascriptSyntax();
-//        assertThat(syntax.errorLines("function hello() {\n\"unended string\n}")).containsExactly(1);
+//        assertThat(syntax.error("function hello() {\n\"unended string\n}")).containsExactly(1);
 //    }
 //
 //	@Test
@@ -298,7 +299,7 @@ public class SyntaxTest {
 //	@Test
 //	public void noErrorsInGoodRuby() {
 //		useRubySyntax();
-//		assertThat(syntax.errorLines("puts 'hi'")).isEmpty();
+//		assertThat(syntax.error("puts 'hi'")).isEmpty();
 //	}
 //
 //	@Test
@@ -310,7 +311,7 @@ public class SyntaxTest {
 //	@Test
 //	public void errorsInBadRuby() {
 //		useRubySyntax();
-//		assertThat(syntax.errorLines("puts 'unended string")).containsExactly(0);
+//		assertThat(syntax.error("puts 'unended string")).containsExactly(0);
 //	}
 //
 //	@Test

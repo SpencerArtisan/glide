@@ -44,9 +44,7 @@ public class ImageModel {
     }
 
     public void setName(String name) {
-        changeAttribute(() -> {
-            this.name = name;
-        });
+        changeAttribute(() -> this.name = name);
     }
 
     public String filename() {

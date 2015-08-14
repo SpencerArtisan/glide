@@ -5,9 +5,9 @@ import com.bigcustard.planet.language.Keywords;
 import com.bigcustard.planet.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
-import java.util.function.Consumer;
 
 public abstract class Language {
     public static Language Ruby = new Ruby();
@@ -23,10 +23,10 @@ public abstract class Language {
         this.scriptEngine = scriptEngine;
         this.buttonStyle = buttonStyle;
         this.template = template;
-        this.syntax = new Syntax(keywords, this::errorLineChecker);
+        this.syntax = new Syntax(keywords, this::errorChecker);
     }
 
-    public abstract Set<Integer> errorLineChecker(String code);
+    public abstract Pair<Integer, String> errorChecker(String code);
 
     public boolean isValid(String code) {
         return syntax.isValid(code);
