@@ -1,11 +1,14 @@
 package com.bigcustard.scene2dplus.image;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.bigcustard.util.Notifier;
 
 import java.util.Collection;
@@ -17,7 +20,8 @@ public class ImageArea extends ScrollPane implements Disposable {
     public static final int WIDTH = 250;
     private Skin skin;
     private ImageAreaModel model;
-    private TextButton importButton;
+    private TextButton clipboardButton;
+    private TextButton fileButton;
     private Map<ImageModel, ImageControls> imageControlMap = new HashMap<>();
     private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
     private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
@@ -26,14 +30,23 @@ public class ImageArea extends ScrollPane implements Disposable {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
-        createImportButton(skin);
+        createClipboardButton(skin);
+        createFileButton(skin);
         createAllImageControls();
         layoutControls();
         addModelChangeBehaviour(model);
     }
 
-    void registerImportButtonListener(Runnable onClicked) {
-        importButton.addListener(new ChangeListener() {
+    void registerClipboardButtonListener(Runnable onClicked) {
+        clipboardButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                onClicked.run();
+            }
+        });
+    }
+
+    void registerFileButtonListener(Runnable onClicked) {
+        fileButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 onClicked.run();
             }
@@ -52,33 +65,48 @@ public class ImageArea extends ScrollPane implements Disposable {
         return imageControlMap.values();
     }
 
-    void onImageImportFailure() {
-        importButton.setText("Dodgy image!");
-        importButton.addAction(
+    void onImageFromClipboardFailure() {
+        dodgyWiggle(clipboardButton);
+    }
+
+    void onImageFromFileFailure() {
+        dodgyWiggle(fileButton);
+    }
+
+    private void dodgyWiggle(TextButton button) {
+        String originalText = button.getText().toString();
+        button.setText("Dodgy image!");
+        button.addAction(
                 Actions.sequence(
                         Actions.repeat(10,
                                 Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
                                         Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                         Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
-                        Actions.run(() -> importButton.setText("Add from clipboard"))));
+                        Actions.run(() -> button.setText(originalText))));
     }
 
     private void layoutControls() {
         Table layoutTable = (Table) getWidget();
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.clearChildren();
-        addImportButton(layoutTable);
+        addButtons(layoutTable);
         getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
     }
 
-    private void createImportButton(Skin skin) {
-        importButton = new TextButton("Add from clipboard", skin);
+    private void createClipboardButton(Skin skin) {
+        clipboardButton = new TextButton("Add from clipboard", skin);
     }
 
-    private void addImportButton(Table table) {
+    private void createFileButton(Skin skin) {
+        fileButton = new TextButton("Add from file", skin);
+    }
+
+    private void addButtons(Table table) {
         table.top();
         table.row();
-        table.add(importButton).width(WIDTH).padTop(20);
+        table.add(clipboardButton).width(WIDTH).padTop(15);
+        table.row();
+        table.add(fileButton).width(WIDTH).padTop(8);
     }
 
     private void createAllImageControls() {
@@ -116,5 +144,13 @@ public class ImageArea extends ScrollPane implements Disposable {
         for (ImageControls imageControls : imageControlMap.values()) {
             imageControls.dispose();
         }
+    }
+
+
+    public void chooseFile() {
+        FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external("."));
+//        files.setDirectory(Gdx.files.external("levels"));
+        files.show(getStage());
+
     }
 }

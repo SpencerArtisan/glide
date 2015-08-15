@@ -1,0 +1,6 @@
+///////////////////////////////////// 
+//       Welcome to GLIDE!         // 
+//  Start writing your game below  // 
+// Look at Samples for inspiration // 
+///////////////////////////////////// 
+

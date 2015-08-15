@@ -58,5 +58,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { font: code-font, fontColor: white, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground }
     code: { font: code-font, fontColor: white, cursor: cursor, background: solarizedBackground, focusedBackground: solarizedLine, selection: solarizedSelection }
+},
+com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+    default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }
 }
 }

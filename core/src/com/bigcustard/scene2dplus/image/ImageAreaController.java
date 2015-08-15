@@ -1,8 +1,10 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.bigcustard.scene2dplus.image.command.*;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -29,7 +31,8 @@ public class ImageAreaController {
     }
 
     private void addImportBehaviour() {
-        view.registerImportButtonListener(this::addImageFromClipboardUrl);
+        view.registerClipboardButtonListener(this::addImageFromClipboardUrl);
+        view.registerFileButtonListener(this::addImageFromFile);
     }
 
     private void addAllImageAdjustmentBehaviour() {
@@ -74,7 +77,17 @@ public class ImageAreaController {
             commandHistory.execute(new AddImageCommand(model, getClipboard().getContents()));
         } catch (Exception e) {
             System.err.println("Error adding image from clipboard: " + e);
-            view.onImageImportFailure();
+            view.onImageFromClipboardFailure();
+        }
+    }
+
+    private void addImageFromFile() {
+        try {
+            view.chooseFile();
+            //            commandHistory.execute(new AddImageCommand(model, getClipboard().getContents()));
+        } catch (Exception e) {
+            System.err.println("Error adding image from file: " + e);
+            view.onImageFromFileFailure();
         }
     }
 }
