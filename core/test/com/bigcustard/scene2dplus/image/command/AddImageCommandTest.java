@@ -20,6 +20,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class AddImageCommandTest {
     @Mock private ImageAreaModel model;
     @Mock private FileHandle imageFolder;
+    @Mock private FileHandle importImageFile;
     @Mock private FileHandle imageFile;
     @Mock private FileHandle imageFile2;
     @Mock private InputStream mockImageStream;
@@ -29,20 +30,20 @@ public class AddImageCommandTest {
     public void before() {
         initMocks(this);
 
-        command = new AddImageCommand(model, "http://url/image.png?queryparams") {
-            @Override
+        when(importImageFile.path()).thenReturn("/Users/image.png");
+        when(model.folder()).thenReturn(imageFolder);
+        when(imageFolder.child("image.png")).thenReturn(imageFile);
+        when(imageFile.name()).thenReturn("image.png");
+
+        command = new AddImageCommand(model, importImageFile) {
             protected XY imageSize(FileHandle mainImageFile) {
                 return new XY(1, 2);
             }
 
-            @Override
             protected InputStream getInputStream() throws IOException {
                 return mockImageStream;
             }
         };
-        when(model.folder()).thenReturn(imageFolder);
-        when(imageFolder.child("image.png")).thenReturn(imageFile);
-        when(imageFile.name()).thenReturn("image.png");
     }
 
     @Test

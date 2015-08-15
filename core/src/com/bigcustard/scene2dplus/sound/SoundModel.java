@@ -1,5 +1,6 @@
 package com.bigcustard.scene2dplus.sound;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
@@ -12,7 +13,7 @@ public class SoundModel implements Disposable {
     private static int MAX_NAME_LENGTH = 13;
 
     private final FileHandle file;
-    private final Sound sound;
+    private Sound sound;
     private String name;
     private Notifier<SoundModel> changeNotifier = new Notifier<>();
 
@@ -22,7 +23,6 @@ public class SoundModel implements Disposable {
 
     public SoundModel(FileHandle file, String name) {
         this.file = file;
-        this.sound = Gdx.audio.newSound(file);
         this.name = name;
     }
 
@@ -35,6 +35,9 @@ public class SoundModel implements Disposable {
     }
 
     public Sound sound() {
+        if (sound == null) {
+            sound = audio().newSound(file);
+        }
         return sound;
     }
 
@@ -54,6 +57,10 @@ public class SoundModel implements Disposable {
 
     public int maxNameLength() {
         return MAX_NAME_LENGTH;
+    }
+
+    protected Audio audio() {
+        return Gdx.audio;
     }
 
     private void changeAttribute(Runnable doChange) {
