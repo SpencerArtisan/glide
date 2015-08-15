@@ -82,12 +82,13 @@ public class ImageAreaController {
     }
 
     private void addImageFromFile() {
-        try {
-            view.chooseFile();
-            //            commandHistory.execute(new AddImageCommand(model, getClipboard().getContents()));
-        } catch (Exception e) {
-            System.err.println("Error adding image from file: " + e);
-            view.onImageFromFileFailure();
-        }
+        view.chooseFile((file) -> {
+            try {
+                commandHistory.execute(new AddImageCommand(model, file));
+            } catch (Exception e) {
+                System.err.println("Error adding image from file: " + e);
+                view.onImageFromFileFailure();
+            }
+        });
     }
 }

@@ -8,7 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -34,7 +36,7 @@ public class AddImageCommandTest {
             }
 
             @Override
-            protected InputStream inputStream(String url) {
+            protected InputStream getInputStream() throws IOException {
                 return mockImageStream;
             }
         };

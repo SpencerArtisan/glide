@@ -146,11 +146,12 @@ public class ImageArea extends ScrollPane implements Disposable {
         }
     }
 
-
-    public void chooseFile() {
+    public void chooseFile(Consumer<FileHandle> fileConsumer) {
         FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external("."));
-//        files.setDirectory(Gdx.files.external("levels"));
+        files.setResultListener((success, result) -> {
+            fileConsumer.accept(result);
+            return true;
+        });
         files.show(getStage());
-
     }
 }
