@@ -52,11 +52,11 @@ public class SoundAreaModel implements Disposable {
         return sounds;
     }
 
-    public SoundModel addSound(SoundModel Sound) {
-        sounds.add(0, Sound);
-        addSoundNotifier.notify(Sound);
-        Sound.registerChangeListener(changeSoundNotifier::notify);
-        return Sound;
+    public SoundModel addSound(SoundModel sound) {
+        sounds.add(0, sound);
+        addSoundNotifier.notify(sound);
+        sound.registerChangeListener(changeSoundNotifier::notify);
+        return sound;
     }
 
     public void save() {

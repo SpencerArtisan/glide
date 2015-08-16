@@ -1,11 +1,14 @@
 package com.bigcustard.scene2dplus.sound;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.bigcustard.util.Notifier;
 
 import java.util.Collection;
@@ -17,8 +20,9 @@ public class SoundArea extends ScrollPane implements Disposable {
     public static final int WIDTH = 250;
     private Skin skin;
     private SoundAreaModel model;
-    private TextButton importButton;
-    private Map<SoundModel, SoundControls> SoundControlMap = new HashMap<>();
+    private TextButton clipboardButton;
+    private TextButton fileButton;
+    private Map<SoundModel, SoundControls> soundControlMap = new HashMap<>();
     private Notifier<SoundControls> addSoundControlsNotifier = new Notifier<>();
     private Notifier<SoundControls> removeSoundControlsNotifier = new Notifier<>();
 
@@ -26,14 +30,23 @@ public class SoundArea extends ScrollPane implements Disposable {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
-        createImportButton(skin);
+        createClipboardButton(skin);
+        createFileButton(skin);
         createAllSoundControls();
         layoutControls();
         addModelChangeBehaviour(model);
     }
 
-    void registerImportButtonListener(Runnable onClicked) {
-        importButton.addListener(new ChangeListener() {
+    void registerClipboardButtonListener(Runnable onClicked) {
+        clipboardButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                onClicked.run();
+            }
+        });
+    }
+
+    void registerFileButtonListener(Runnable onClicked) {
+        fileButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 onClicked.run();
             }
@@ -49,36 +62,51 @@ public class SoundArea extends ScrollPane implements Disposable {
     }
 
     Collection<SoundControls> getAllSoundControls() {
-        return SoundControlMap.values();
+        return soundControlMap.values();
     }
 
-    void onSoundImportFailure() {
-        importButton.setText("Dodgy Sound!");
-        importButton.addAction(
+    void onSoundFromClipboardFailure() {
+        dodgyWiggle(clipboardButton);
+    }
+
+    void onSoundFromFileFailure() {
+        dodgyWiggle(fileButton);
+    }
+
+    private void dodgyWiggle(TextButton button) {
+        String originalText = button.getText().toString();
+        button.setText("Dodgy sound!");
+        button.addAction(
                 Actions.sequence(
                         Actions.repeat(10,
                                 Actions.sequence(Actions.moveBy(-3, 0, 0.02f, Interpolation.sineOut),
                                         Actions.moveBy(6, 0, 0.04f, Interpolation.sine),
                                         Actions.moveBy(-3, 0, 0.02f, Interpolation.sineIn))),
-                        Actions.run(() -> importButton.setText("Add from clipboard"))));
+                        Actions.run(() -> button.setText(originalText))));
     }
 
     private void layoutControls() {
         Table layoutTable = (Table) getWidget();
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.clearChildren();
-        addImportButton(layoutTable);
-        getAllSoundControls().forEach((SoundControls) -> SoundControls.addTo(layoutTable, WIDTH, skin));
+        addButtons(layoutTable);
+        getAllSoundControls().forEach((soundControls) -> soundControls.addTo(layoutTable, WIDTH, skin));
     }
 
-    private void createImportButton(Skin skin) {
-        importButton = new TextButton("Add from clipboard", skin);
+    private void createClipboardButton(Skin skin) {
+        clipboardButton = new TextButton("Add from clipboard", skin);
     }
 
-    private void addImportButton(Table table) {
+    private void createFileButton(Skin skin) {
+        fileButton = new TextButton("Add from file", skin);
+    }
+
+    private void addButtons(Table table) {
         table.top();
         table.row();
-        table.add(importButton).width(WIDTH).padTop(20);
+        table.add(clipboardButton).width(WIDTH).padTop(15);
+        table.row();
+        table.add(fileButton).width(WIDTH).padTop(8);
     }
 
     private void createAllSoundControls() {
@@ -86,9 +114,9 @@ public class SoundArea extends ScrollPane implements Disposable {
     }
 
     private SoundControls createSoundControls(SoundModel sound) {
-        SoundControls SoundControls = new SoundControls(sound, skin);
-        SoundControlMap.put(sound, SoundControls);
-        return SoundControls;
+        SoundControls soundControls = new SoundControls(sound, skin);
+        soundControlMap.put(sound, soundControls);
+        return soundControls;
     }
 
     private void addModelChangeBehaviour(SoundAreaModel model) {
@@ -96,15 +124,15 @@ public class SoundArea extends ScrollPane implements Disposable {
         model.registerRemoveSoundListener(this::onRemoveSound);
     }
 
-    private void onAddSound(SoundModel Sound) {
-        SoundControls SoundControls = createSoundControls(Sound);
-        addSoundControlsNotifier.notify(SoundControls);
+    private void onAddSound(SoundModel sound) {
+        SoundControls soundControls = createSoundControls(sound);
+        addSoundControlsNotifier.notify(soundControls);
         layoutControls();
     }
 
-    private void onRemoveSound(SoundModel Sound) {
-        SoundControls SoundControls = SoundControlMap.remove(Sound);
-        removeSoundControlsNotifier.notify(SoundControls);
+    private void onRemoveSound(SoundModel sound) {
+        SoundControls soundControls = soundControlMap.remove(sound);
+        removeSoundControlsNotifier.notify(soundControls);
         layoutControls();
     }
 
@@ -113,5 +141,17 @@ public class SoundArea extends ScrollPane implements Disposable {
         model.dispose();
         addSoundControlsNotifier.dispose();
         removeSoundControlsNotifier.dispose();
+        for (SoundControls soundControls : soundControlMap.values()) {
+            soundControls.dispose();
+        }
+    }
+
+    public void chooseFile(Consumer<FileHandle> fileConsumer) {
+        FileDialog files = FileDialog.createLoadDialog("Pick your sound", skin, Gdx.files.external("."));
+        files.setResultListener((success, result) -> {
+            fileConsumer.accept(result);
+            return true;
+        });
+        files.show(getStage());
     }
 }

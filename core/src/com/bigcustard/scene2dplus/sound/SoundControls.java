@@ -1,33 +1,33 @@
 package com.bigcustard.scene2dplus.sound;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
-import com.google.common.base.Strings;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.function.Consumer;
 
-public class SoundControls {
-    private final SoundModel sound;
+public class SoundControls implements Disposable {
+    private final SoundModel soundModel;
     private final TextFieldPlus nameField;
     private final Button deleteButton;
     private Image uiSound;
 
-    public SoundControls(SoundModel sound, Skin skin) {
-        this.sound = sound;
-        this.nameField = createNameField(sound, skin);
+    public SoundControls(SoundModel soundModel, Skin skin) {
+        this.soundModel = soundModel;
+        this.nameField = createNameField(soundModel, skin);
         this.deleteButton = createDeleteButton(skin);
+        uiSound = new Image(skin, "soundModel");
+        uiSound.setFillParent(true);
         addModelChangeBehaviour();
     }
 
-    SoundModel getSound() {
-        return sound;
+    SoundModel getSoundModel() {
+        return soundModel;
     }
 
     void registerNameFieldListener(Consumer<String> onChange) {
@@ -60,8 +60,6 @@ public class SoundControls {
 
     private Actor getSoundControl(float width, Skin skin) {
         WidgetGroup group = new WidgetGroup();
-        uiSound = new Image(skin, "sound");
-        uiSound.setFillParent(true);
         group.addActor(uiSound);
         group.setHeight(uiSound.getHeight() * width / uiSound.getWidth());
         group.setWidth(width);
@@ -83,8 +81,13 @@ public class SoundControls {
     }
 
     private void addModelChangeBehaviour() {
-        sound.registerChangeListener((sound) -> {
+        soundModel.registerChangeListener((sound) -> {
             nameField.setText(sound.name());
         });
+    }
+
+    @Override
+    public void dispose() {
+        if (soundModel != null) soundModel.dispose();
     }
 }

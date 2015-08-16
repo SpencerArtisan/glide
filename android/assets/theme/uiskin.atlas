@@ -396,7 +396,7 @@ slider_background
   orig: 316, 8
   offset: 0, 0
   index: -1
-sound
+soundModel
   rotate: false
   xy: 2, 384
   size: 400, 203

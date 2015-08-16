@@ -6,6 +6,8 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.command.AbstractCommand;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
 import com.bigcustard.scene2dplus.sound.SoundModel;
+import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundModel;
 import com.bigcustard.scene2dplus.sound.SoundUtils;
 
 import java.io.IOException;
@@ -16,10 +18,22 @@ public class AddSoundCommand extends AbstractCommand {
     private SoundAreaModel model;
     private String url;
     private SoundModel sound;
+    private InputStream inputStream;
+
+    public AddSoundCommand(SoundAreaModel model, FileHandle fileHandle) {
+        this.model = model;
+        this.inputStream = fileHandle.read();
+        this.url = fileHandle.path();
+    }
 
     public AddSoundCommand(SoundAreaModel model, String url) {
         this.model = model;
         this.url = url;
+        try {
+            this.inputStream = new URL(url).openStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -28,8 +42,8 @@ public class AddSoundCommand extends AbstractCommand {
     }
 
     public SoundModel addSound(String url) {
-        InputStream soundStream = inputStream(url);
         try {
+            InputStream soundStream = getInputStream();
             FileHandle mainSoundFile = generateSoundFileHandle(url);
             mainSoundFile.write(soundStream, false);
             soundStream.close();
@@ -65,11 +79,7 @@ public class AddSoundCommand extends AbstractCommand {
         return candidate;
     }
 
-    protected InputStream inputStream(String url) {
-        try {
-            return new URL(url).openStream();
-        } catch (IOException e) {
-            throw new InaccessibleUrlException(url, e);
-        }
+    protected InputStream getInputStream() throws IOException {
+        return inputStream;
     }
 }

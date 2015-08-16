@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.mockito.Matchers.any;
@@ -19,6 +20,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class AddSoundCommandTest {
     @Mock private SoundAreaModel model;
     @Mock private FileHandle soundFolder;
+    @Mock private FileHandle importSoundFile;
     @Mock private FileHandle soundFile;
     @Mock private FileHandle soundFile2;
     @Mock private InputStream mockSoundStream;
@@ -28,15 +30,16 @@ public class AddSoundCommandTest {
     public void before() {
         initMocks(this);
 
-        command = new AddSoundCommand(model, "http://url/sound.png?queryparams") {
-            @Override
-            protected InputStream inputStream(String url) {
+        when(importSoundFile.path()).thenReturn("/Users/sound.wav");
+        when(model.folder()).thenReturn(soundFolder);
+        when(soundFolder.child("sound.wav")).thenReturn(soundFile);
+        when(soundFile.name()).thenReturn("sound.wav");
+
+        command = new AddSoundCommand(model, importSoundFile) {
+            protected InputStream getInputStream() throws IOException {
                 return mockSoundStream;
             }
         };
-        when(model.folder()).thenReturn(soundFolder);
-        when(soundFolder.child("sound.png")).thenReturn(soundFile);
-        when(soundFile.name()).thenReturn("sound.png");
     }
 
     @Test
@@ -49,8 +52,8 @@ public class AddSoundCommandTest {
     @Test
     public void addSoundFromUrlDuplicateName() {
         when(soundFile.exists()).thenReturn(true);
-        when(soundFolder.child("sound2.png")).thenReturn(soundFile2);
-        when(soundFile2.name()).thenReturn("sound2.png");
+        when(soundFolder.child("sound2.wav")).thenReturn(soundFile2);
+        when(soundFile2.name()).thenReturn("sound2.wav");
         command.execute();
         verify(soundFile2).write(mockSoundStream, false);
         verify(model).addSound(any(SoundModel.class));

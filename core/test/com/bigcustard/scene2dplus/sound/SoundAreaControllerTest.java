@@ -42,9 +42,9 @@ public class SoundAreaControllerTest {
 //        when(model.addSound(anyString())).thenReturn(sound);
         when(model.sounds()).thenReturn(Arrays.asList(sound));
         when(view.getAllSoundControls()).thenReturn(Arrays.asList(soundControls));
-        when(soundControls.getSound()).thenReturn(sound);
+        when(soundControls.getSoundModel()).thenReturn(sound);
 
-        doNothing().when(view).registerImportButtonListener(importButtonListenerCaptor.capture());
+        doNothing().when(view).registerClipboardButtonListener(importButtonListenerCaptor.capture());
         doNothing().when(view).registerAddSoundControlsListener(addSoundControlsListenerCaptor.capture());
         doNothing().when(view).registerRemoveSoundControlsListener(removeSoundControlsListenerCaptor.capture());
         doNothing().when(model).registerAddSoundListener(addSoundListenerCaptor.capture());

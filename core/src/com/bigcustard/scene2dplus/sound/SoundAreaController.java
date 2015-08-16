@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.sound.command.AddSoundCommand;
-import com.bigcustard.scene2dplus.sound.command.ChangeNameCommand;
-import com.bigcustard.scene2dplus.sound.command.RemoveSoundCommand;
+import com.bigcustard.scene2dplus.dialog.FileDialog;
+import com.bigcustard.scene2dplus.sound.command.*;
 import com.google.common.annotations.VisibleForTesting;
 
 public class SoundAreaController {
@@ -32,13 +31,12 @@ public class SoundAreaController {
     }
 
     private void addImportBehaviour() {
-        view.registerImportButtonListener(this::addSoundFromClipboardUrl);
+        view.registerClipboardButtonListener(this::addSoundFromClipboardUrl);
+        view.registerFileButtonListener(this::addSoundFromFile);
     }
 
     private void addAllSoundAdjustmentBehaviour() {
-        for (SoundControls soundControls : view.getAllSoundControls()) {
-            addSoundAdjustmentBehaviour(soundControls);
-        }
+        view.getAllSoundControls().forEach(this::addSoundAdjustmentBehaviour);
     }
 
     private void addSoundListChangeBehaviour() {
@@ -53,17 +51,17 @@ public class SoundAreaController {
 
     private void addRenameBehaviour(SoundControls soundControls) {
         soundControls.registerNameFieldListener((text) ->
-                commandHistory.execute(new ChangeNameCommand(soundControls.getSound(), text)));
+                commandHistory.execute(new ChangeNameCommand(soundControls.getSoundModel(), text)));
     }
 
     private void addDeleteBehaviour(SoundControls soundControls) {
         soundControls.registerDeleteButtonListener(() ->
-                commandHistory.execute(new RemoveSoundCommand(model, soundControls.getSound())));
+                commandHistory.execute(new RemoveSoundCommand(model, soundControls.getSoundModel())));
     }
 
     private void addPlaySoundBehaviour(SoundControls soundControls) {
         soundControls.registerImageClickListener(() -> {
-            soundControls.getSound().sound().play();
+            soundControls.getSoundModel().sound().play();
         });
     }
 
@@ -72,7 +70,18 @@ public class SoundAreaController {
             commandHistory.execute(new AddSoundCommand(model, getClipboard().getContents()));
         } catch (Exception e) {
             System.err.println("Error adding sound from clipboard: " + e);
-            view.onSoundImportFailure();
+            view.onSoundFromClipboardFailure();
         }
+    }
+
+    private void addSoundFromFile() {
+        view.chooseFile((file) -> {
+            try {
+                commandHistory.execute(new AddSoundCommand(model, file));
+            } catch (Exception e) {
+                System.err.println("Error adding sound from file: " + e);
+                view.onSoundFromFileFailure();
+            }
+        });
     }
 }
