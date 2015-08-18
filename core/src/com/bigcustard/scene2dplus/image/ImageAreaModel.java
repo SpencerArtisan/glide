@@ -49,10 +49,6 @@ public class ImageAreaModel implements Disposable {
         return folder;
     }
 
-    public void folder(FileHandle newFolder) {
-        folder = newFolder;
-    }
-
     public List<ImageModel> images() {
         return images;
     }
@@ -64,9 +60,13 @@ public class ImageAreaModel implements Disposable {
         if (initialValidState != isValid()) {
             validationNotifier.notify(image);
         }
+        addListeners(image);
+        return image;
+    }
+
+    private void addListeners(ImageModel image) {
         image.registerValidationListener(validationNotifier::notify);
         image.registerChangeListener(changeImageNotifier::notify);
-        return image;
     }
 
     public void save() {
@@ -120,7 +120,9 @@ public class ImageAreaModel implements Disposable {
         ImageListDetails imageListDetails = new Json().fromJson(ImageListDetails.class, manifest);
         for (ImageDetails image : imageListDetails.images) {
             try {
-                addImage(image.toImage(folder));
+                ImageModel imageModel = image.toImage(folder);
+                images.add(imageModel);
+                addListeners(imageModel);
             } catch (Exception e) {
                 System.out.println("Failed to add game image: " + e);
             }

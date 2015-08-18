@@ -5,15 +5,16 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.bigcustard.util.Notifier;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ImageArea extends ScrollPane implements Disposable {
@@ -22,6 +23,7 @@ public class ImageArea extends ScrollPane implements Disposable {
     private ImageAreaModel model;
     private TextButton clipboardButton;
     private TextButton fileButton;
+    private List<ImageControls> imageControlsList = new ArrayList<>();
     private Map<ImageModel, ImageControls> imageControlMap = new HashMap<>();
     private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
     private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
@@ -63,8 +65,8 @@ public class ImageArea extends ScrollPane implements Disposable {
         removeImageControlsNotifier.add(onChanged);
     }
 
-    Collection<ImageControls> getAllImageControls() {
-        return imageControlMap.values();
+    List<ImageControls> getAllImageControls() {
+        return imageControlsList;
     }
 
     void onImageFromClipboardFailure() {
@@ -118,6 +120,7 @@ public class ImageArea extends ScrollPane implements Disposable {
     private ImageControls createImageControls(ImageModel image) {
         ImageControls imageControls = new ImageControls(image, skin);
         imageControlMap.put(image, imageControls);
+        imageControlsList.add(imageControls);
         return imageControls;
     }
 
@@ -127,7 +130,9 @@ public class ImageArea extends ScrollPane implements Disposable {
     }
 
     private void onAddImage(ImageModel image) {
-        ImageControls imageControls = createImageControls(image);
+        ImageControls imageControls = new ImageControls(image, skin);
+        imageControlMap.put(image, imageControls);
+        imageControlsList.add(0, imageControls);
         addImageControlsNotifier.notify(imageControls);
         layoutControls();
     }

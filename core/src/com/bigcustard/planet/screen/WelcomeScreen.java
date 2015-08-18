@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class WelcomeScreen extends ScreenAdapter {
+	private static boolean welcomed = false;
 	private final Skin skin;
 	private Table table;
 	private Table outerTable;
@@ -73,6 +74,7 @@ public class WelcomeScreen extends ScreenAdapter {
 		refreshButtonEnabledStatuses();
 		animateTitle();
 		animateBlurp();
+
 		setScreen.accept(this);
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -193,24 +195,27 @@ public class WelcomeScreen extends ScreenAdapter {
 
 		poweredBy = new Image(skin, "powered_by");
 		poweredBy.setOrigin(poweredBy.getWidth() / 2, poweredBy.getHeight() / 2);
-		poweredBy.setPosition(-999, 0);
 		stage.addActor(poweredBy);
 
-		poweredBy.addAction(Actions.sequence(
-				Actions.delay(0.6f),
-				Actions.scaleBy(20f, 20f),
-				Actions.moveTo(stage.getWidth() - 330, 10),
-				Actions.scaleTo(1f, 1f, 0.4f, Interpolation.pow2Out)
-		));
+		if (!welcomed) {
+			poweredBy.setPosition(-999, 0);
+			poweredBy.addAction(Actions.sequence(
+					Actions.delay(0.6f),
+					Actions.scaleBy(20f, 20f),
+					Actions.moveTo(stage.getWidth() - 330, 10),
+					Actions.scaleTo(1f, 1f, 0.4f, Interpolation.pow2Out)
+			));
 
-		stage.addAction(Actions.sequence(
-				Actions.scaleTo(1.03f, 1.03f),
-				Actions.delay(0.9f),
-				Actions.scaleTo(1f, 1f, 0.5f, Interpolation.bounceOut)
-		));
-		Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-			Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play();
-		}, 980, TimeUnit.MILLISECONDS);
+			stage.addAction(Actions.sequence(
+					Actions.scaleTo(1.03f, 1.03f),
+					Actions.delay(0.9f),
+					Actions.scaleTo(1f, 1f, 0.5f, Interpolation.bounceOut)
+			));
+			Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+				Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play();
+			}, 980, TimeUnit.MILLISECONDS);
+		}
+		welcomed = true;
 	}
 
 	private void animateTitle() {
@@ -283,7 +288,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		if (poweredBy.getX() > 0) poweredBy.setX(width - 330);
+		if (poweredBy.getX() > -900) poweredBy.setX(width - 330);
 		blurpLogo.setX(width - 450);
 	}
 
