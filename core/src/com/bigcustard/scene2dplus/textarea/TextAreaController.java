@@ -29,6 +29,7 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
+        System.out.print("!");
         if (isRedo(keycode)) {
             commandHistory.redo();
         }
@@ -54,6 +55,7 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyTyped(InputEvent event, char character) {
+        System.out.print(":");
         commandHistory.execute(getKeyTypedCommand(character, event.getKeyCode()));
         view.onModelChange(model);
         return true;
@@ -147,12 +149,12 @@ public class TextAreaController extends ClickListener {
     @VisibleForTesting
     protected boolean isControlDown() {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
-                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+               Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
     }
 
     @VisibleForTesting
     protected boolean isShiftDown() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ||
-                Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+               Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 }

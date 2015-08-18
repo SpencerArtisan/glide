@@ -105,7 +105,7 @@ public class CodingScreen extends ScreenAdapter {
             System.out.print(".");
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
-        }, 4, 4, TimeUnit.SECONDS);
+        }, 0, 4, TimeUnit.SECONDS);
     }
 
     private void exitToMainMenu() {
