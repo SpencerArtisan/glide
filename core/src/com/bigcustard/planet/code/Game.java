@@ -11,12 +11,14 @@ import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
+    private final ScheduledFuture<?> errorChecker;
     private Notifier<Game> changeNotifier = new Notifier<>();
 
     private String code;
@@ -25,6 +27,8 @@ public class Game implements Disposable {
     private CommandHistory commandHistory;
     private RuntimeException runtimeError;
     private boolean isModified;
+
+    private static int count;
 
     public Game(Token token, String code, ImageAreaModel imageAreaModel, SoundAreaModel soundAreaModel) {
         this.token = token;
@@ -39,13 +43,16 @@ public class Game implements Disposable {
         this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
 
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+        errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            System.out.print("+");
             Pair<Integer, String> error = language().syntax().error(code());
             if ((error == null && runtimeError() != null) ||
                     (error != null && !error.getRight().equals(runtimeError()))) {
                 runtimeError(error == null ? null : new RuntimeException(error.getRight()));
             }
         }, 1, 1, TimeUnit.SECONDS);
+
+        System.out.println("Games: " + ++count);
     }
 
     public Token token() {
@@ -101,7 +108,9 @@ public class Game implements Disposable {
 
     public String runtimeError() {
         try {
-            return runtimeError == null ? null : runtimeError.getCause().getCause().getCause().getMessage();
+            return runtimeError == null ? null :
+                    (runtimeError.getCause() == null) ? runtimeError.getMessage() :
+                            runtimeError.getCause().getCause().getCause().getMessage();
         } catch (Exception e) {
             return runtimeError.getMessage();
         }
@@ -147,8 +156,9 @@ public class Game implements Disposable {
 
     @Override
     public void dispose() {
-        imageModel.dispose();
         changeNotifier.dispose();
+        errorChecker.cancel(true);
+        count--;
     }
 
     public static class Token {

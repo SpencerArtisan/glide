@@ -18,10 +18,12 @@ public class SoundAreaModel implements Disposable {
     private Notifier<SoundModel> validationNotifier = new Notifier<>();
     private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
+    private static int count;
 
     public SoundAreaModel(FileHandle SoundFolder) {
         this.folder = SoundFolder;
         readSounds();
+        System.out.println("SoundAreaModels: " + ++count);
     }
 
     public void registerAddSoundListener(Consumer<SoundModel> listener) {
@@ -107,6 +109,7 @@ public class SoundAreaModel implements Disposable {
         changeSoundNotifier.dispose();
         validationNotifier.dispose();
         sounds.forEach(SoundModel::dispose);
+        count--;
     }
 
     private static class SoundListDetails {

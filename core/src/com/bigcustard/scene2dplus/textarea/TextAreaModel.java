@@ -21,12 +21,14 @@ public class TextAreaModel implements Disposable {
 	private ColorCoder colorCoder;
 	private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
 	private BiFunction<String, TextAreaModel, String> preInsertVetoer;
+	private static int count;
 
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
 		this.colorCoder = colorCoder;
 		caret = new Caret();
         caret.moveToBottom();
+		System.out.println("TextAreaModels: " + ++count);
     }
 
 	public TextAreaModel(ColorCoder colorCoder) {
@@ -181,6 +183,7 @@ public class TextAreaModel implements Disposable {
 	@Override
 	public void dispose() {
 		changeNotifier.dispose();
+		count--;
 	}
 
 	public class Caret {

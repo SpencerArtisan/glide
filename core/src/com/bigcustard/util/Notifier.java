@@ -9,6 +9,12 @@ import java.util.function.Consumer;
 public class Notifier<T> implements Disposable {
     private List<Consumer<T>> listeners = new ArrayList<>();
 
+    private static int count;
+
+    public Notifier() {
+        System.out.println("notifiers = " + ++count);
+    }
+
     public void add(Consumer<T> listener) {
         listeners.add(listener);
     }
@@ -20,5 +26,6 @@ public class Notifier<T> implements Disposable {
     @Override
     public void dispose() {
         listeners.clear();
+        System.out.println("notifiers = " + --count);
     }
 }

@@ -16,6 +16,7 @@ public class SoundModel implements Disposable {
     private Sound sound;
     private String name;
     private Notifier<SoundModel> changeNotifier = new Notifier<>();
+    private static int count;
 
     public SoundModel(FileHandle file) {
         this(file, generateName(file));
@@ -24,6 +25,7 @@ public class SoundModel implements Disposable {
     public SoundModel(FileHandle file, String name) {
         this.file = file;
         this.name = name;
+        System.out.println("SoundModels: " + ++count);
     }
 
     public void registerChangeListener(Consumer<SoundModel> listener) {
@@ -77,6 +79,8 @@ public class SoundModel implements Disposable {
 
     @Override
     public void dispose() {
+        changeNotifier.dispose();
         sound.dispose();
+        count--;
     }
 }

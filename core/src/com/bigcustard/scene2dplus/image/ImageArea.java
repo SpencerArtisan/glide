@@ -25,6 +25,7 @@ public class ImageArea extends ScrollPane implements Disposable {
     private Map<ImageModel, ImageControls> imageControlMap = new HashMap<>();
     private Notifier<ImageControls> addImageControlsNotifier = new Notifier<>();
     private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
+    private static int count;
 
     public ImageArea(ImageAreaModel model, Skin skin) {
         super(new Table(), skin);
@@ -35,6 +36,7 @@ public class ImageArea extends ScrollPane implements Disposable {
         createAllImageControls();
         layoutControls();
         addModelChangeBehaviour(model);
+        System.out.println("Image areas: " + ++count);
     }
 
     void registerClipboardButtonListener(Runnable onClicked) {
@@ -144,6 +146,7 @@ public class ImageArea extends ScrollPane implements Disposable {
         for (ImageControls imageControls : imageControlMap.values()) {
             imageControls.dispose();
         }
+        count--;
     }
 
     public void chooseFile(Consumer<FileHandle> fileConsumer) {

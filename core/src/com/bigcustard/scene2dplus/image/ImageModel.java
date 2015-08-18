@@ -1,12 +1,13 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.util.Notifier;
 import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
 
-public class ImageModel {
+public class ImageModel implements Disposable {
     private static int MAX_NAME_LENGTH = 17;
 
     private FileHandle file;
@@ -113,5 +114,11 @@ public class ImageModel {
                 width() != null,
                 height() != null,
                 !Strings.isNullOrEmpty(name()));
+    }
+
+    @Override
+    public void dispose() {
+        changeNotifier.dispose();
+        validationNotifier.dispose();
     }
 }

@@ -16,6 +16,7 @@ public class SoundControls implements Disposable {
     private final TextFieldPlus nameField;
     private final Button deleteButton;
     private Image uiSound;
+    private static int count;
 
     public SoundControls(SoundModel soundModel, Skin skin) {
         this.soundModel = soundModel;
@@ -24,6 +25,7 @@ public class SoundControls implements Disposable {
         uiSound = new Image(skin, "soundModel");
         uiSound.setFillParent(true);
         addModelChangeBehaviour();
+        System.out.println("SoundControls: " + ++count);
     }
 
     SoundModel getSoundModel() {
@@ -88,6 +90,7 @@ public class SoundControls implements Disposable {
 
     @Override
     public void dispose() {
+        count--;
         if (soundModel != null) soundModel.dispose();
     }
 }

@@ -6,14 +6,17 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class DisposableImage extends Image implements Disposable {
     private final Texture texture;
+    private static int count;
 
     public DisposableImage(Texture texture) {
         super(texture);
         this.texture = texture;
+        System.out.println("Images: " + ++count);
     }
 
     @Override
     public void dispose() {
         texture.dispose();
+        count--;
     }
 }

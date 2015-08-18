@@ -102,6 +102,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
 
         gameSavingProcess = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            System.out.print(".");
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
         }, 4, 4, TimeUnit.SECONDS);

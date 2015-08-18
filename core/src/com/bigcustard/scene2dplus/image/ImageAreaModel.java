@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.scene2dplus.sound.SoundModel;
 import com.bigcustard.util.Notifier;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class ImageAreaModel implements Disposable {
     private Notifier<ImageModel> validationNotifier = new Notifier<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
+    private static int count;
 
     public ImageAreaModel(FileHandle imageFolder) {
         this.folder = imageFolder;
         readImages();
+        System.out.println("ImageAreaModels: " + ++count);
     }
 
     public void registerAddImageListener(Consumer<ImageModel> listener) {
@@ -130,6 +133,8 @@ public class ImageAreaModel implements Disposable {
         removeImageNotifier.dispose();
         changeImageNotifier.dispose();
         validationNotifier.dispose();
+        images.forEach(ImageModel::dispose);
+        count--;
     }
 
     private static class ImageListDetails {

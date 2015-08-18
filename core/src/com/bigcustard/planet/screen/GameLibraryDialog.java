@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GameLibraryDialog extends Dialog implements Disposable {
+    private static int count;
     private static int COLUMNS = 3;
     private static List<Game.Token> games;
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
@@ -35,6 +36,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     private GameLibraryDialog(Skin skin) {
         super("", skin);
+        System.out.println("Game dialogs: " + ++count);
     }
 
     public SettableFuture<Game.Token> getFutureGame() {
@@ -99,5 +101,6 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     @Override
     public void dispose() {
+        count--;
     }
 }

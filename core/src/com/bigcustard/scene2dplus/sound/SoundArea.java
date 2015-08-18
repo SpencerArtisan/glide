@@ -25,6 +25,7 @@ public class SoundArea extends ScrollPane implements Disposable {
     private Map<SoundModel, SoundControls> soundControlMap = new HashMap<>();
     private Notifier<SoundControls> addSoundControlsNotifier = new Notifier<>();
     private Notifier<SoundControls> removeSoundControlsNotifier = new Notifier<>();
+    private static int count;
 
     public SoundArea(SoundAreaModel model, Skin skin) {
         super(new Table(), skin);
@@ -35,6 +36,7 @@ public class SoundArea extends ScrollPane implements Disposable {
         createAllSoundControls();
         layoutControls();
         addModelChangeBehaviour(model);
+        System.out.println("SoundAreas: " + ++count);
     }
 
     void registerClipboardButtonListener(Runnable onClicked) {
@@ -144,6 +146,7 @@ public class SoundArea extends ScrollPane implements Disposable {
         for (SoundControls soundControls : soundControlMap.values()) {
             soundControls.dispose();
         }
+        count--;
     }
 
     public void chooseFile(Consumer<FileHandle> fileConsumer) {

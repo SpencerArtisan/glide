@@ -18,6 +18,7 @@ public class ImageControls implements Disposable {
     private final TextFieldPlus heightField;
     private final Button deleteButton;
     private DisposableImage image;
+    private static int count;
 
     public ImageControls(ImageModel imageModel, Skin skin) {
         this.imageModel = imageModel;
@@ -28,6 +29,7 @@ public class ImageControls implements Disposable {
         addModelChangeBehaviour();
         addValidationBehaviour();
         setValidState();
+        System.out.println("ImageControls: " + ++count);
     }
 
     ImageModel getImageModel() {
@@ -129,5 +131,6 @@ public class ImageControls implements Disposable {
     @Override
     public void dispose() {
         image.dispose();
+        count--;
     }
 }
