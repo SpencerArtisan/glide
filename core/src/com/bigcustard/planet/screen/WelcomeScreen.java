@@ -3,6 +3,7 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -204,11 +207,10 @@ public class WelcomeScreen extends ScreenAdapter {
 				Actions.scaleTo(1.03f, 1.03f),
 				Actions.delay(0.9f),
 				Actions.scaleTo(1f, 1f, 0.5f, Interpolation.bounceOut)
-//				Actions.repeat(4,
-//						Actions.sequence(
-//								Actions.scaleTo(0.9f, 0.9f, 1.06f, Interpolation.bounceOut),
-//								Actions.scaleTo(1.0f, 1.0f, 1.06f)))
 		));
+		Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+			Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play();
+		}, 980, TimeUnit.MILLISECONDS);
 	}
 
 	private void animateTitle() {
@@ -281,7 +283,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		poweredBy.setX(width - 330);
+		if (poweredBy.getX() > 0) poweredBy.setX(width - 330);
 		blurpLogo.setX(width - 450);
 	}
 
