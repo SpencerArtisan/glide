@@ -6,8 +6,8 @@ import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.google.common.annotations.VisibleForTesting;
 
-public class CopyCommand extends AbstractTextAreaCommand {
-    public CopyCommand(TextAreaModel model) {
+public class CutCommand extends AbstractTextAreaCommand {
+    public CutCommand(TextAreaModel model) {
         super(model);
     }
 
@@ -23,7 +23,9 @@ public class CopyCommand extends AbstractTextAreaCommand {
             int y = caret.location().y;
             caret.setSelection(new XY(0, y), new XY(0, y + 1));
         }
+
         getClipboard().setContents(model.getSelection());
+        model.deleteCharacter();
     }
 
     @VisibleForTesting

@@ -134,6 +134,15 @@ public class TextAreaModel implements Disposable {
         return text.substring(fromIndex, toIndex);
     }
 
+	private int currentLineLength() {
+		int startRowIndex = getIndexForRow(caret.y());
+		int endOfRowIndex = text.indexOf('\n', startRowIndex);
+		if (endOfRowIndex == -1) {
+			endOfRowIndex = text.length();
+		}
+		return endOfRowIndex - startRowIndex;
+	}
+
     private void positionCaret(int textIndex) {
 		int row = 0;
 		int index = 0;
@@ -148,13 +157,7 @@ public class TextAreaModel implements Disposable {
 		caret.setLocation(textIndex - index, row);
 	}
 
-    private int getIndex(XY location) {
-        int index = getIndexForRow(location.y);
-        index += location.x;
-        return Math.min(index, text.length());
-    }
-
-    private int getIndexForRow(int row) {
+	private int getIndexForRow(int row) {
 		int index = 0;
 		for (int y = 0; y < row; y++) {
 			index = text.indexOf('\n', index);
@@ -167,15 +170,12 @@ public class TextAreaModel implements Disposable {
 		return index;
 	}
 
-	private int currentLineLength() {
-		int startRowIndex = getIndexForRow(caret.y());
-		int endOfRowIndex = text.indexOf('\n', startRowIndex);
-		if (endOfRowIndex == -1) {
-			endOfRowIndex = text.length();
-		}
-		return endOfRowIndex - startRowIndex;
-	}
-	
+    private int getIndex(XY location) {
+        int index = getIndexForRow(location.y);
+        index += location.x;
+        return Math.min(index, text.length());
+    }
+
 	private int numberOfRows() {
 		return StringUtils.countMatches(text, "\n");
 	}

@@ -10,16 +10,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-public class CopyCommandTest {
+public class CutCommandTest {
     private TextAreaModel model;
     private Clipboard clipboard;
-    private CopyCommand command;
+    private CutCommand command;
 
     @Before
     public void before() {
         clipboard = new TestClipboard();
         model = new TextAreaModel("", null);
-        command = spy(new CopyCommand(model));
+        command = spy(new CutCommand(model));
         doReturn(clipboard).when(command).getClipboard();
     }
 
@@ -41,7 +41,7 @@ public class CopyCommandTest {
         model.caret().setSelection(new XY(3, 0), new XY(2, 1));
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("lo\nth");
-        assertThat(model.text()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("helere");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CopyCommandTest {
         model.setText("hello\nthere");
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("hello\n");
-        assertThat(model.text()).isEqualTo("hello\nthere");
+        assertThat(model.text()).isEqualTo("there");
     }
 
     @Test
@@ -58,6 +58,6 @@ public class CopyCommandTest {
         model.caret().moveDown();
         command.execute();
         assertThat(clipboard.getContents()).isEqualTo("there\n");
-        assertThat(model.text()).isEqualTo("hello\nthere\n");
+        assertThat(model.text()).isEqualTo("hello\n");
     }
 }

@@ -39,6 +39,9 @@ public class TextAreaController extends ClickListener {
         if (isCopy(keycode)) {
             commandHistory.execute(new CopyCommand(model));
         }
+        if (isCut(keycode)) {
+            commandHistory.execute(new CutCommand(model));
+        }
         if (isPaste(keycode)) {
             commandHistory.execute(new PasteCommand(model));
         }
@@ -96,6 +99,10 @@ public class TextAreaController extends ClickListener {
 
     private boolean isCopy(int keycode) {
         return isControlDown() && keycode == Input.Keys.C;
+    }
+
+    private boolean isCut(int keycode) {
+        return isControlDown() && keycode == Input.Keys.X;
     }
 
     private boolean isPaste(int keycode) {
