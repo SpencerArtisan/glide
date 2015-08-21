@@ -15,9 +15,8 @@ import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
-import com.bigcustard.scene2dplus.image.ImageArea;
-import com.bigcustard.scene2dplus.image.ImageAreaController;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.image.*;
+import com.bigcustard.scene2dplus.resource.ResourceArea;
 import com.bigcustard.scene2dplus.sound.SoundArea;
 import com.bigcustard.scene2dplus.sound.SoundAreaController;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
@@ -28,10 +27,15 @@ import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
 import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
@@ -39,7 +43,7 @@ public class CodingScreen extends ScreenAdapter {
     private Table layoutTable;
     private TextAreaModel model;
     private ScrollableTextArea textArea;
-    private ImageArea imageArea;
+    private ResourceArea imageArea;
     private SoundArea soundArea;
     private TabControl resourceArea;
     private ButtonBar buttonBar;
@@ -132,9 +136,9 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        ImageAreaModel imageAreaModel = game.imageModel();
-        imageArea = new ImageArea(imageAreaModel, skin, game.commandHistory());
-        new ImageAreaController(imageArea, imageAreaModel, game.commandHistory()).init();
+        java.util.List<ImageModel> imageModels = game.imageModel().images();
+        EditableImage[] editableImages = imageModels.stream().map(EditableImage::new).toArray(EditableImage[]::new);
+        imageArea = new ResourceArea(skin, editableImages, game.commandHistory());
     }
 
     private void createSoundArea() {

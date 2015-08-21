@@ -3,14 +3,16 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
 
-public class EditableImage {
+public class EditableImage implements Resource {
     private static final int MAX_NAME_LENGTH = 18;
-    private final Image image;
+    private Image image;
     private Watchable<String> name;
     private Watchable<Integer> width;
     private Watchable<Integer> height;
@@ -24,6 +26,10 @@ public class EditableImage {
         this.height = new Watchable<>(height);
         originalHeight = height;
         originalWidth = width;
+    }
+
+    public EditableImage(ImageModel model) {
+        this(ImageUtils.asImage(model.file()), model.name(), model.width(), model.height());
     }
 
     private void width(Integer newWidth) {
@@ -52,6 +58,7 @@ public class EditableImage {
         return image;
     }
 
+    @Override
     public Actor editor(Skin skin, CommandHistory commandHistory) {
         Editor editor = new Editor(skin);
         editor.new Controller(commandHistory);
@@ -94,7 +101,7 @@ public class EditableImage {
 
         void layoutControls() {
             row();
-            add(getImageControl()).colspan(3);
+            add(getImageControl()).minSize(100).maxHeight(200).fill().colspan(3).padBottom(10);
             row();
             add(nameField).colspan(3).fillX();
             row();
@@ -108,6 +115,7 @@ public class EditableImage {
             buttonTable.setFillParent(true);
             buttonTable.add(deleteButton).expand().top().right();
 
+            image.setScaling(Scaling.fit);
             Stack group = new Stack();
             group.addActor(image);
             group.addActor(buttonTable);
