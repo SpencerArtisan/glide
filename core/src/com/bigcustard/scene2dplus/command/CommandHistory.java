@@ -40,6 +40,25 @@ public class CommandHistory {
         }
     }
 
+    public void execute(Runnable command, Runnable undo) {
+        execute(new Command() {
+            @Override
+            public void execute() {
+                command.run();
+            }
+
+            @Override
+            public void undo() {
+                undo.run();
+            }
+
+            @Override
+            public boolean canExecute() {
+                return true;
+            }
+        });
+    }
+
     private void clearRedoChain() {
         executedCommands = lastCommandIndex == -1 ? new LinkedList<>() : executedCommands.subList(0, lastCommandIndex + 1);
     }

@@ -133,7 +133,7 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createImageArea() {
         ImageAreaModel imageAreaModel = game.imageModel();
-        imageArea = new ImageArea(imageAreaModel, skin);
+        imageArea = new ImageArea(imageAreaModel, skin, game.commandHistory());
         new ImageAreaController(imageArea, imageAreaModel, game.commandHistory()).init();
     }
 

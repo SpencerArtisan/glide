@@ -5,22 +5,21 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.bigcustard.util.Notifier;
 
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ImageArea extends ScrollPane implements Disposable {
-    public static final int WIDTH = 250;
     private Skin skin;
     private ImageAreaModel model;
+    private final CommandHistory commandHistory;
     private TextButton clipboardButton;
     private TextButton fileButton;
     private List<ImageControls> imageControlsList = new ArrayList<>();
@@ -29,16 +28,19 @@ public class ImageArea extends ScrollPane implements Disposable {
     private Notifier<ImageControls> removeImageControlsNotifier = new Notifier<>();
     private static int count;
 
-    public ImageArea(ImageAreaModel model, Skin skin) {
+    public ImageArea(ImageAreaModel model, Skin skin, CommandHistory commandHistory) {
         super(new Table(), skin);
         this.skin = skin;
         this.model = model;
+        this.commandHistory = commandHistory;
+        this.setScrollingDisabled(true, false);
         createClipboardButton(skin);
         createFileButton(skin);
         createAllImageControls();
         layoutControls();
         addModelChangeBehaviour(model);
         System.out.println("Image areas: " + ++count);
+        pack();
     }
 
     void registerClipboardButtonListener(Runnable onClicked) {
@@ -93,8 +95,12 @@ public class ImageArea extends ScrollPane implements Disposable {
         Table layoutTable = (Table) getWidget();
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.clearChildren();
+        layoutTable.top();
         addButtons(layoutTable);
-        getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
+//        getAllImageControls().forEach((imageControls) -> imageControls.addTo(layoutTable, WIDTH, skin));
+//        layoutTable.setFillParent(true);
+        layoutTable.pack();
+
     }
 
     private void createClipboardButton(Skin skin) {
@@ -106,11 +112,18 @@ public class ImageArea extends ScrollPane implements Disposable {
     }
 
     private void addButtons(Table table) {
-        table.top();
+//        table.top();
+//        table.row();
+
+        // TEMP
+//        table.row();
+//
+        table.defaults().pad(12);
+        table.add(clipboardButton).fillX();
         table.row();
-        table.add(clipboardButton).width(WIDTH).padTop(15);
+        table.add(fileButton).fillX();
         table.row();
-        table.add(fileButton).width(WIDTH).padTop(8);
+        table.add(new EditableImage(new Image(skin, "powered_by"), "power", 100, 40).editor(skin, commandHistory));
     }
 
     private void createAllImageControls() {
@@ -162,4 +175,6 @@ public class ImageArea extends ScrollPane implements Disposable {
         });
         files.show(getStage());
     }
+
+
 }

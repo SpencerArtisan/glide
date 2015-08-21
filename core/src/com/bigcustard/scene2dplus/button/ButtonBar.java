@@ -54,6 +54,7 @@ public class ButtonBar extends HorizontalGroup {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 commandFactory.get().execute();
+                refreshEnabledStatuses();
             }
 
             public boolean handle(Event event) {
