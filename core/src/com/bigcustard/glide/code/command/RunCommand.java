@@ -8,7 +8,6 @@ import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.image.ImageUtils;
 import com.bigcustard.scene2dplus.sound.SoundModel;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 public class RunCommand extends AbstractCommand {
@@ -25,21 +24,10 @@ public class RunCommand extends AbstractCommand {
     @Override
     public void execute() {
         buildFolder.mkdirs();
-        compileImages();
-        compileSounds();
+        resizeImages();
+        copySounds();
         game.runtimeError(null);
         runGame.accept(game);
-    }
-
-    private void compileImages() {
-        game.imageModel().images().forEach(this::resize);
-    }
-
-    private void compileSounds() {
-        List<SoundModel> sounds = game.soundModel().sounds();
-        for (SoundModel sound : sounds) {
-            sound.file().copyTo(buildFolder.child(sound.name().get()));
-        }
     }
 
     @Override
@@ -47,8 +35,20 @@ public class RunCommand extends AbstractCommand {
         return game.isValid();
     }
 
-    protected void resize(ImageModel imageModel) {
-        FileHandle target = buildFolder.child(imageModel.name().get());
-        ImageUtils.resize(imageModel.file(), target, imageModel.width().get(), imageModel.height().get());
+    private void resizeImages() {
+        game.imageGroup().images().forEach(this::resize);
+    }
+
+    protected void resize(ImageModel image) {
+        FileHandle target = buildFolder.child(image.name().get());
+        ImageUtils.resize(image.file(), target, image.width().get(), image.height().get());
+    }
+
+    private void copySounds() {
+        game.soundGroup().sounds().forEach(this::copy);
+    }
+
+    private void copy(SoundModel sound) {
+        sound.file().copyTo(buildFolder.child(sound.name().get()));
     }
 }

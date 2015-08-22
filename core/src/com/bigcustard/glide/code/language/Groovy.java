@@ -28,14 +28,13 @@ public class Groovy extends Language {
     @Override
     @SuppressWarnings("unchecked")
     public Pair<Integer, String> errorChecker(String code) {
-        Set<Integer> errorLines = new HashSet<>();
         try {
             new GroovyClassLoader().parseClass(code);
         } catch (MultipleCompilationErrorsException e) {
             List<Message> errors = e.getErrorCollector().getErrors();
-            for (Message error : errors) {
-                if (error instanceof SyntaxErrorMessage) {
-                    SyntaxException cause = ((SyntaxErrorMessage) error).getCause();
+            if (errors.size() > 0) {
+                if (errors.get(0) instanceof SyntaxErrorMessage) {
+                    SyntaxException cause = ((SyntaxErrorMessage) errors.get(0)).getCause();
                     int errorLine = cause.getLine();
                     return Pair.of(errorLine - 1, cause.getOriginalMessage());
                 } else {

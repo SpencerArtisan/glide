@@ -74,7 +74,7 @@ public class EditableSound implements Resource<SoundModel> {
             buttonTable.setFillParent(true);
             buttonTable.add(deleteButton).expand().top().right();
 
-            soundGlyph = new Image(skin, "soundModel");
+            soundGlyph = new Image(skin, "soundGroup");
             soundGlyph.setScaling(Scaling.fit);
             Stack group = new Stack();
             group.addActor(soundGlyph);

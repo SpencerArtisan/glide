@@ -140,7 +140,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        List<ImageModel> imageModels = game.imageModel().images();
+        List<ImageModel> imageModels = game.imageGroup().images();
         List<Resource<ImageModel>> editableImages = imageModels
                 .stream()
                 .map((model) -> new EditableImage(model, skin, game.commandHistory()))
@@ -148,16 +148,16 @@ public class CodingScreen extends ScreenAdapter {
         ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editableImages, game.commandHistory());
         resourceSet.resources().watch((images) -> {
             List<ImageModel> models = images.stream().map(Resource::model).collect(Collectors.toList());
-            game.imageModel().images(models);
+            game.imageGroup().images(models);
         });
         imageArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
-            ImageModel model = ImageUtils.importImage(stream, url, game.imageModel().folder());
+            ImageModel model = ImageUtils.importImage(stream, url, game.imageGroup().folder());
             return new EditableImage(model, skin, game.commandHistory());
         });
     }
 
     private void createSoundArea() {
-        List<SoundModel> soundModels = game.soundModel().sounds();
+        List<SoundModel> soundModels = game.soundGroup().sounds();
         List<Resource<SoundModel>> editableSounds = soundModels
                 .stream()
                 .map((model) -> new EditableSound(model, skin, game.commandHistory()))
@@ -165,10 +165,10 @@ public class CodingScreen extends ScreenAdapter {
         ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editableSounds, game.commandHistory());
         resourceSet.resources().watch((sounds) -> {
             List<SoundModel> models = sounds.stream().map(Resource::model).collect(Collectors.toList());
-            game.soundModel().sounds(models);
+            game.soundGroup().sounds(models);
         });
         soundArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
-            SoundModel model = SoundUtils.importSound(stream, url, game.soundModel().folder());
+            SoundModel model = SoundUtils.importSound(stream, url, game.soundGroup().folder());
             return new EditableSound(model, skin, game.commandHistory());
         });
     }

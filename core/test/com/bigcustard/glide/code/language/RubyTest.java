@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GroovyTest {
+public class RubyTest {
     private TextAreaModel model = new TextAreaModel(new NullColorCoder());
-    private Groovy subject = new Groovy();
+    private Ruby subject = new Ruby();
 
     @Test
     public void enterOnNormalLine() {
@@ -19,28 +19,28 @@ public class GroovyTest {
     }
 
     @Test
-    public void enterOnLineEndingInBraceAddsClosingBracesAutomatically() {
-        model.insert("hello {");
+    public void enterOnLineEndingInDoAddsClosingEndAutomatically() {
+        model.insert("hello do");
         String veto = subject.vetoPreInsert("\n", model);
-        assertThat(veto).isEqualTo("\n    $END$\n}");
+        assertThat(veto).isEqualTo("\n    $END$\nend");
     }
 
     @Test
     public void enterOnLineEndingInBraceAddsClosingBracesInCorrectColumn() {
-        model.insert("  hello {");
+        model.insert("  hello do");
         String veto = subject.vetoPreInsert("\n  ", model);
-        assertThat(veto).isEqualTo("\n      $END$\n  }");
+        assertThat(veto).isEqualTo("\n      $END$\n  end");
     }
 
     @Test
     public void itShould_NotHaveErrorsInValidGroovy() {
-        Pair<Integer, String> errors = subject.errorChecker("if (true) { System.out.println(42); }");
+        Pair<Integer, String> errors = subject.errorChecker("if True\nputs 42\nend");
         assertThat(errors).isNull();
     }
 
     @Test
     public void itShould_HaveErrorsInInvalidGroovy() {
-        Pair<Integer, String> errors = subject.errorChecker("}");
-        assertThat(errors).isEqualTo(Pair.of(0, "unexpected token: }"));
+        Pair<Integer, String> errors = subject.errorChecker("puts \"hello");
+        assertThat(errors).isEqualTo(Pair.of(0, "unterminated string meets end of file"));
     }
 }

@@ -33,8 +33,8 @@ public class RunCommandTest {
     @Before
     public void before() {
         initMocks(this);
-        when(game.imageModel()).thenReturn(imageAreaModel);
-        when(game.soundModel()).thenReturn(soundAreaModel);
+        when(game.imageGroup()).thenReturn(imageAreaModel);
+        when(game.soundGroup()).thenReturn(soundAreaModel);
         when(gameStore.buildFolder(game)).thenReturn(buildFolder);
         command = spy(new RunCommand(game, gameStore, runGame));
         doNothing().when(command).resize(any(ImageModel.class));

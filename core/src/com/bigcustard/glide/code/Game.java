@@ -71,11 +71,11 @@ public class Game implements Disposable {
         return commandHistory;
     }
 
-    public ImageAreaModel imageModel() {
+    public ImageAreaModel imageGroup() {
         return imageModel;
     }
 
-    public SoundAreaModel soundModel() {
+    public SoundAreaModel soundGroup() {
         return soundModel;
     }
 

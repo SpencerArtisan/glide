@@ -78,7 +78,7 @@ public class GameTest {
 
     @Test
     public void providesAccessToTheImageModel() {
-        assertThat(newGame(mockLanguage).imageModel()).isSameAs(mockImageModel);
+        assertThat(newGame(mockLanguage).imageGroup()).isSameAs(mockImageModel);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class GameTest {
 
     @Test
     public void providesAccessToTheSoundModel() {
-        assertThat(newGame(mockLanguage).soundModel()).isSameAs(mockSoundModel);
+        assertThat(newGame(mockLanguage).soundGroup()).isSameAs(mockSoundModel);
     }
 
     @Test
