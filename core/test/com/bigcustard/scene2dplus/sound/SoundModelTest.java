@@ -2,7 +2,6 @@ package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.files.FileHandle;
-import com.bigcustard.scene2dplus.sound.SoundModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

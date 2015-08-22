@@ -48,7 +48,7 @@ public class RunCommand extends AbstractCommand {
     }
 
     protected void resize(ImageModel imageModel) {
-        FileHandle target = buildFolder.child(imageModel.name());
-        ImageUtils.resize(imageModel.file(), target, imageModel.width(), imageModel.height());
+        FileHandle target = buildFolder.child(imageModel.name().get());
+        ImageUtils.resize(imageModel.file(), target, imageModel.width().get(), imageModel.height().get());
     }
 }

@@ -2,6 +2,7 @@ package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.util.Watchable;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,9 +55,9 @@ public class ImageAreaModelTest {
     public void saveStoresImageDetails() {
         ImageAreaModel model = newModel();
         when(mockImage.filename()).thenReturn("image.png");
-        when(mockImage.name()).thenReturn("image");
-        when(mockImage.width()).thenReturn(100);
-        when(mockImage.height()).thenReturn(50);
+        when(mockImage.name()).thenReturn(new Watchable<>("image"));
+        when(mockImage.width()).thenReturn(new Watchable<>(100));
+        when(mockImage.height()).thenReturn(new Watchable<>(50));
         model.images(ImmutableList.of(mockImage));
         model.save();
         verify(mockManifestFile).writeString("{images:[{filename:image.png,name:image,width:100,height:50}]}", false);
@@ -75,7 +76,7 @@ public class ImageAreaModelTest {
     public void fromFolder() {
         when(mockManifestFile.readString()).thenReturn("{images:[{filename:image.png,name:image,width:100,height:50}]}");
         ImageAreaModel model = existingModel();
-        assertThat(model.images()).extracting("name").containsExactly("image");
+        assertThat(model.images()).extracting("name").containsExactly(new Watchable<>("image"));
     }
 
     @Test
@@ -88,9 +89,9 @@ public class ImageAreaModelTest {
                 return new XY(100, 200);
             }
         };
-        assertThat(model.images()).extracting("name").containsExactly("image.png");
-        assertThat(model.images()).extracting("width").containsExactly(100);
-        assertThat(model.images()).extracting("height").containsExactly(200);
+        assertThat(model.images()).extracting("name").containsExactly(new Watchable<>("image.png"));
+        assertThat(model.images()).extracting("width").containsExactly(new Watchable<>(100));
+        assertThat(model.images()).extracting("height").containsExactly(new Watchable<>(200));
     }
 
     private ImageAreaModel newModel() {

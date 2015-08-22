@@ -1,11 +1,11 @@
 package com.bigcustard.scene2dplus.sound;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Clipboard;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.dialog.FileDialog;
-import com.bigcustard.scene2dplus.sound.command.*;
+import com.bigcustard.scene2dplus.sound.command.AddSoundCommand;
+import com.bigcustard.scene2dplus.sound.command.ChangeNameCommand;
+import com.bigcustard.scene2dplus.sound.command.RemoveSoundCommand;
 import com.google.common.annotations.VisibleForTesting;
 
 public class SoundAreaController {

@@ -8,24 +8,18 @@ import com.badlogic.gdx.utils.Scaling;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
-import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
 
 public class EditableImage implements Resource<ImageModel> {
     private static final int MAX_NAME_LENGTH = 18;
     private DisposableImage image;
-    private Watchable<String> name;
-    private Watchable<Integer> width;
-    private Watchable<Integer> height;
+
     private ImageModel model;
     private Editor editor;
     private Editor.Controller controller;
 
     public EditableImage(ImageModel model, Skin skin, CommandHistory commandHistory) {
         this.image = ImageUtils.asImage(model.file());
-        this.name = new Watchable<>(model.name());
-        this.width = new Watchable<>(model.width());
-        this.height = new Watchable<>(model.height());
         this.model = model;
         editor = new Editor(skin);
         controller = editor.new Controller(commandHistory);
@@ -46,30 +40,8 @@ public class EditableImage implements Resource<ImageModel> {
     }
 
     @Override
-    public ImageModel toModel() {
-        return new ImageModel(model.file(), name.get(), width.get(), height.get(), model.originalWidth(), model.originalHeight());
-    }
-
-    private void width(Integer newWidth) {
-        width.set(newWidth);
-        if (newWidth != null) {
-            height.set(newWidth * model.originalHeight() / model.originalWidth());
-        } else {
-            height.set(null);
-        }
-    }
-
-    private void height(Integer newHeight) {
-        height.set(newHeight);
-        if (newHeight != null) {
-            width.set(newHeight * model.originalWidth() / model.originalHeight());
-        } else {
-            width.set(null);
-        }
-    }
-
-    private void name(String newName) {
-        this.name.set(newName);
+    public ImageModel model() {
+        return model;
     }
 
     private class Editor extends Table {
@@ -140,19 +112,19 @@ public class EditableImage implements Resource<ImageModel> {
 
             private void viewToModel() {
                 widthField.setTextFieldListener((text, ignored) -> {
-                    Integer oldWidth = width.get();
+                    Integer oldWidth = model.width().get();
                     Integer newWidth = toInt(text);
-                    commandHistory.execute(() -> width(newWidth), () -> width(oldWidth));
+                    commandHistory.execute(() -> model.width(newWidth), () -> model.width(oldWidth));
                 });
                 heightField.setTextFieldListener((text, ignored) -> {
-                    Integer oldHeight = height.get();
+                    Integer oldHeight = model.height().get();
                     Integer newHeight = toInt(text);
-                    commandHistory.execute(() -> height(newHeight), () -> height(oldHeight));
+                    commandHistory.execute(() -> model.height(newHeight), () -> model.height(oldHeight));
                 });
                 nameField.setTextFieldListener((text, ignored) -> {
-                    String oldName = name.get();
+                    String oldName = model.name().get();
                     String newName = text.getText();
-                    commandHistory.execute(() -> name(newName), () -> name(oldName));
+                    commandHistory.execute(() -> model.name(newName), () -> model.name(oldName));
                 });
             }
 
@@ -166,9 +138,9 @@ public class EditableImage implements Resource<ImageModel> {
             }
 
             private void modelToView() {
-                width.watch((value) -> widthField.setText(String.valueOf(value)));
-                height.watch((value) -> heightField.setText(String.valueOf(value)));
-                name.watch(nameField::setText);
+                model.width().watch((value) -> widthField.setText(String.valueOf(value)));
+                model.height().watch((value) -> heightField.setText(String.valueOf(value)));
+                model.name().watch(nameField::setText);
             }
 
             private Integer toInt(TextField field) {

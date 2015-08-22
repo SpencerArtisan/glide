@@ -3,6 +3,7 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
@@ -11,11 +12,11 @@ public class ImageModel implements Disposable {
     private static int MAX_NAME_LENGTH = 17;
 
     private FileHandle file;
-    private String name;
     private int originalWidth;
     private int originalHeight;
-    private Integer width;
-    private Integer height;
+    private Watchable<String> name;
+    private Watchable<Integer> width;
+    private Watchable<Integer> height;
     private Notifier<ImageModel> changeNotifier = new Notifier<>();
     private Notifier<ImageModel> validationNotifier = new Notifier<>();
 
@@ -29,9 +30,9 @@ public class ImageModel implements Disposable {
 
     public ImageModel(FileHandle file, String name, Integer width, Integer height, Integer originalWidth, Integer originalHeight) {
         this.file = file;
-        this.name = name;
-        this.width = width;
-        this.height = height;
+        this.name = new Watchable<>(name);
+        this.width = new Watchable<>(width);
+        this.height = new Watchable<>(height);
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
     }
@@ -44,12 +45,12 @@ public class ImageModel implements Disposable {
         changeNotifier.watch(listener);
     }
 
-    public String name() {
+    public Watchable<String> name() {
         return name;
     }
 
     public void name(String name) {
-        changeAttribute(() -> this.name = name);
+        changeAttribute(() -> this.name.set(name));
     }
 
     public String filename() {
@@ -64,22 +65,22 @@ public class ImageModel implements Disposable {
         return MAX_NAME_LENGTH;
     }
 
-    public Integer width() {
+    public Watchable<Integer> width() {
         return width;
     }
 
-    public Integer height() {
+    public Watchable<Integer> height() {
         return height;
     }
 
     public void width(Integer newWidth) {
         changeAttribute(() -> {
             if (newWidth != null) {
-                height = newWidth * originalHeight / originalWidth;
-                width = newWidth;
+                height.set(newWidth * originalHeight / originalWidth);
+                width.set(newWidth);
             } else {
-                height = null;
-                width = null;
+                height.set(null);
+                width.set(null);
             }
         });
     }
@@ -87,11 +88,11 @@ public class ImageModel implements Disposable {
     public void height(Integer newHeight) {
         changeAttribute(() -> {
             if (newHeight != null) {
-                width = newHeight * originalWidth / originalHeight;
-                height = newHeight;
+                width.set(newHeight * originalWidth / originalHeight);
+                height.set(newHeight);
             } else {
-                height = null;
-                width = null;
+                height.set(null);
+                width.set(null);
             }
         });
     }
@@ -125,7 +126,7 @@ public class ImageModel implements Disposable {
                 this,
                 width() != null,
                 height() != null,
-                !Strings.isNullOrEmpty(name()));
+                !Strings.isNullOrEmpty(name().get()));
     }
 
     @Override

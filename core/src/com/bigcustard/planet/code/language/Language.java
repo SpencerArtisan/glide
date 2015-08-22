@@ -7,8 +7,6 @@ import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Set;
-
 public abstract class Language {
     public static Language Ruby = new Ruby();
     public static Language Groovy = new Groovy();

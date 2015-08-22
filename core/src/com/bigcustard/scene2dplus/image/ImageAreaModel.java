@@ -127,10 +127,10 @@ public class ImageAreaModel implements Disposable {
         }
 
         public ImageDetails(ImageModel image) {
-            name = image.name();
+            name = image.name().get();
             filename = image.filename();
-            width = image.width();
-            height = image.height();
+            width = image.width().get();
+            height = image.height().get();
         }
 
         public ImageModel toImage(FileHandle parentFolder) {

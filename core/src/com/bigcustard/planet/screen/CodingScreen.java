@@ -3,10 +3,12 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.planet.code.Game;
 import com.bigcustard.planet.code.GameStore;
@@ -16,7 +18,9 @@ import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
-import com.bigcustard.scene2dplus.image.*;
+import com.bigcustard.scene2dplus.image.EditableImage;
+import com.bigcustard.scene2dplus.image.ImageModel;
+import com.bigcustard.scene2dplus.image.ImageUtils;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.resource.ResourceArea;
 import com.bigcustard.scene2dplus.resource.ResourceSet;
@@ -30,16 +34,12 @@ import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
 import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.util.*;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
@@ -147,7 +147,7 @@ public class CodingScreen extends ScreenAdapter {
                 .collect(Collectors.toList());
         ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editableImages, game.commandHistory());
         resourceSet.resources().watch((images) -> {
-            List<ImageModel> models = images.stream().map(Resource::toModel).collect(Collectors.toList());
+            List<ImageModel> models = images.stream().map(Resource::model).collect(Collectors.toList());
             game.imageModel().images(models);
         });
         imageArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {

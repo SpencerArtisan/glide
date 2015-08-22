@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     private Skin skin;

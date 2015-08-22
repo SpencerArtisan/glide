@@ -23,27 +23,27 @@ public class ImageModelTest {
     public void imageName() {
         when(mockImageFile.name()).thenReturn("file.png");
         subject = new ImageModel(mockImageFile, 100, 50);
-        assertThat(subject.name()).isEqualTo("file");
+        assertThat(subject.name().get()).isEqualTo("file");
     }
 
     @Test
     public void longImageName() {
         when(mockImageFile.name()).thenReturn("a_long_image_file_name.png");
         subject = new ImageModel(mockImageFile, 100, 50);
-        assertThat(subject.name()).isEqualTo("a_long_image_file");
+        assertThat(subject.name().get()).isEqualTo("a_long_image_file");
     }
 
     @Test
     public void imageNameWithDots() {
         when(mockImageFile.name()).thenReturn("image.file.png");
         subject = new ImageModel(mockImageFile, 100, 50);
-        assertThat(subject.name()).isEqualTo("image.file");
+        assertThat(subject.name().get()).isEqualTo("image.file");
     }
 
     @Test
     public void imageNameWithSpaces() {
         when(mockImageFile.name()).thenReturn("image file.png");
         subject = new ImageModel(mockImageFile, 100, 50);
-        assertThat(subject.name()).isEqualTo("image file");
+        assertThat(subject.name().get()).isEqualTo("image file");
     }
 }
