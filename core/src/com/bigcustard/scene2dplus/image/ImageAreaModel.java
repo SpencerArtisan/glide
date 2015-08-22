@@ -4,7 +4,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.scene2dplus.sound.SoundModel;
 import com.bigcustard.util.Notifier;
 
 import java.util.ArrayList;
@@ -30,19 +29,19 @@ public class ImageAreaModel implements Disposable {
     }
 
     public void registerAddImageListener(Consumer<ImageModel> listener) {
-        addImageNotifier.add(listener);
+        addImageNotifier.watch(listener);
     }
 
     public void registerRemoveImageListener(Consumer<ImageModel> listener) {
-        removeImageNotifier.add(listener);
+        removeImageNotifier.watch(listener);
     }
 
     public void registerChangeImageListener(Consumer<ImageModel> listener) {
-        changeImageNotifier.add(listener);
+        changeImageNotifier.watch(listener);
     }
 
     public void registerValidationListener(Consumer<ImageModel> listener) {
-        validationNotifier.add(listener);
+        validationNotifier.watch(listener);
     }
 
     public FileHandle folder() {
@@ -124,7 +123,7 @@ public class ImageAreaModel implements Disposable {
                 images.add(imageModel);
                 addListeners(imageModel);
             } catch (Exception e) {
-                System.out.println("Failed to add game image: " + e);
+                System.out.println("Failed to watch game image: " + e);
             }
         }
     }

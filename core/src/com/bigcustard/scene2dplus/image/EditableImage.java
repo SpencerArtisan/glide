@@ -6,12 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.image.command.RemoveImageCommand;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class EditableImage implements Resource {
     private static final int MAX_NAME_LENGTH = 18;
@@ -21,18 +19,36 @@ public class EditableImage implements Resource {
     private Watchable<Integer> height;
     private Integer originalHeight;
     private Integer originalWidth;
+    private Editor editor;
+    private Editor.Controller controller;
 
-    public EditableImage(Image image, String name, int width, int height) {
+    public EditableImage(Image image, String name, int width, int height, Skin skin, CommandHistory commandHistory) {
         this.image = image;
         this.name = new Watchable<>(name);
         this.width = new Watchable<>(width);
         this.height = new Watchable<>(height);
         originalHeight = height;
         originalWidth = width;
+        editor = new Editor(skin);
+        controller = editor.new Controller(commandHistory);
     }
 
-    public EditableImage(ImageModel model) {
-        this(ImageUtils.asImage(model.file()), model.name(), model.width(), model.height());
+    public EditableImage(ImageModel model, Skin skin, CommandHistory commandHistory) {
+        this(ImageUtils.asImage(model.file()), model.name(), model.width(), model.height(), skin, commandHistory);
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    @Override
+    public Actor editor() {
+        return editor;
+    }
+
+    @Override
+    public Controller controller() {
+        return controller;
     }
 
     private void width(Integer newWidth) {
@@ -55,17 +71,6 @@ public class EditableImage implements Resource {
 
     private void name(String newName) {
         this.name.set(newName);
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    @Override
-    public Pair<Actor, Controller> editor(Skin skin, CommandHistory commandHistory) {
-        Editor editor = new Editor(skin);
-        Editor.Controller controller = editor.new Controller(commandHistory);
-        return Pair.of(editor, controller);
     }
 
     private class Editor extends Table {
@@ -162,9 +167,9 @@ public class EditableImage implements Resource {
             }
 
             private void modelToView() {
-                width.add((value) -> widthField.setText(String.valueOf(value)));
-                height.add((value) -> heightField.setText(String.valueOf(value)));
-                name.add(nameField::setText);
+                width.watch((value) -> widthField.setText(String.valueOf(value)));
+                height.watch((value) -> heightField.setText(String.valueOf(value)));
+                name.watch(nameField::setText);
             }
 
             private Integer toInt(TextField field) {

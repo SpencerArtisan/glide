@@ -117,7 +117,7 @@ public class Game implements Disposable {
     }
 
     public void registerChangeListener(Consumer<Game> listener) {
-        changeNotifier.add(listener);
+        changeNotifier.watch(listener);
     }
 
     private void onImageChange() {

@@ -6,7 +6,8 @@ import com.bigcustard.scene2dplus.command.CommandHistory;
 import org.apache.commons.lang3.tuple.Pair;
 
 public interface Resource {
-    Pair<Actor, Controller> editor(Skin skin, CommandHistory commandHistory);
+    Actor editor();
+    Controller controller();
 
     interface Controller {
         void registerRemoveListener(Runnable onRemove);

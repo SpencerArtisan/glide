@@ -27,19 +27,19 @@ public class SoundAreaModel implements Disposable {
     }
 
     public void registerAddSoundListener(Consumer<SoundModel> listener) {
-        addSoundNotifier.add(listener);
+        addSoundNotifier.watch(listener);
     }
 
     public void registerRemoveSoundListener(Consumer<SoundModel> listener) {
-        removeSoundNotifier.add(listener);
+        removeSoundNotifier.watch(listener);
     }
 
     public void registerChangeSoundListener(Consumer<SoundModel> listener) {
-        changeSoundNotifier.add(listener);
+        changeSoundNotifier.watch(listener);
     }
 
     public void registerValidationListener(Consumer<SoundModel> listener) {
-        validationNotifier.add(listener);
+        validationNotifier.watch(listener);
     }
 
     public FileHandle folder() {
@@ -97,7 +97,7 @@ public class SoundAreaModel implements Disposable {
             try {
                 addSound(Sound.toSound(folder));
             } catch (Exception e) {
-                System.out.println("Failed to add game Sound: " + e);
+                System.out.println("Failed to watch game Sound: " + e);
             }
         }
     }

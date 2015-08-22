@@ -15,7 +15,7 @@ public class Notifier<T> implements Disposable {
         System.out.println("notifiers = " + ++count);
     }
 
-    public void add(Consumer<T> listener) {
+    public void watch(Consumer<T> listener) {
         listeners.add(listener);
     }
 

@@ -24,7 +24,7 @@ public class EditableImageTest {
     @Before
     public void before() {
         initMocks(this);
-        subject = new EditableImage(image, "name", 100, 50);
+//        subject = new EditableImage(image, "name", 100, 50);
     }
 
     @Test

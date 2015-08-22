@@ -10,8 +10,8 @@ public class Watchable<T> extends Notifier<T> {
     }
 
     @Override
-    public void add(Consumer<T> listener) {
-        super.add(listener);
+    public void watch(Consumer<T> listener) {
+        super.watch(listener);
         notify(value);
     }
 

@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 
 public class TextAreaModel implements Disposable {
@@ -36,7 +35,7 @@ public class TextAreaModel implements Disposable {
 	}
 
 	public void addChangeListener(Consumer<TextAreaModel> listener) {
-		changeNotifier.add(listener);
+		changeNotifier.watch(listener);
 	}
 
 	public void preInsertVetoer(BiFunction<String, TextAreaModel, String> preInsertVetoer) {

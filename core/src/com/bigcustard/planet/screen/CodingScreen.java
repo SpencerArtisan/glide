@@ -18,6 +18,7 @@ import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.bigcustard.scene2dplus.image.*;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.resource.ResourceArea;
+import com.bigcustard.scene2dplus.resource.ResourceSet;
 import com.bigcustard.scene2dplus.sound.SoundArea;
 import com.bigcustard.scene2dplus.sound.SoundAreaController;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
@@ -29,6 +30,7 @@ import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +63,7 @@ public class CodingScreen extends ScreenAdapter {
         this.setScreen = setScreen;
         this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
-		this.skin = skin;
+        this.skin = skin;
 
         createTextArea(game);
         createErrorLabel(game);
@@ -69,10 +71,10 @@ public class CodingScreen extends ScreenAdapter {
         createResourceArea();
         layoutScreen();
 
-		stage.addActor(layoutTable);
-		stage.setKeyboardFocus(textArea.textArea());
+        stage.addActor(layoutTable);
+        stage.setKeyboardFocus(textArea.textArea());
         Gdx.input.setInputProcessor(stage);
-	}
+    }
 
     private void layoutScreen() {
         Table textAreaTable = new Table();
@@ -138,13 +140,13 @@ public class CodingScreen extends ScreenAdapter {
 
     private void createImageArea() {
         java.util.List<ImageModel> imageModels = game.imageModel().images();
-        EditableImage[] editableImages = imageModels.stream().map(EditableImage::new).toArray(EditableImage[]::new);
-        imageArea = new ResourceArea(skin, editableImages, game.commandHistory());
-        imageArea.watchImageList((remainingImages) -> save(remainingImages));
-    }
-
-    private void save(Resource[] remainingImages) {
-
+        List<Resource> editableImages = imageModels
+                .stream()
+                .map((model) -> new EditableImage(model, skin, game.commandHistory()))
+                .collect(Collectors.toList());
+        ResourceSet resourceSet = new ResourceSet(editableImages, game.commandHistory());
+        imageArea = new ResourceArea(skin, resourceSet);
+//        images.resources().watch((resources) -> game.imageModel());
     }
 
     private void createSoundArea() {
@@ -179,11 +181,11 @@ public class CodingScreen extends ScreenAdapter {
         stage.draw();
     }
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
         stage.getViewport().update(width, height, true);
-	}
+    }
 
     private void errorReporter(Exception e, Runnable onClosed) {
         ErrorDialog errorDialog = new ErrorDialog(e, onClosed, skin);

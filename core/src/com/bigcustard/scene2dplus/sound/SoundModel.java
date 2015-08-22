@@ -29,7 +29,7 @@ public class SoundModel implements Disposable {
     }
 
     public void registerChangeListener(Consumer<SoundModel> listener) {
-        changeNotifier.add(listener);
+        changeNotifier.watch(listener);
     }
 
     public String name() {

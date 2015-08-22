@@ -33,11 +33,11 @@ public class ImageModel implements Disposable {
     }
 
     public void registerValidationListener(Consumer<ImageModel> listener) {
-        validationNotifier.add(listener);
+        validationNotifier.watch(listener);
     }
 
     public void registerChangeListener(Consumer<ImageModel> listener) {
-        changeNotifier.add(listener);
+        changeNotifier.watch(listener);
     }
 
     public String name() {

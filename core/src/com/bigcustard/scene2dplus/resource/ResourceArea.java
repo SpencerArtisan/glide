@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.google.common.collect.Lists;
+import javafx.collections.ListChangeListener;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -15,17 +16,16 @@ import java.util.List;
 
 public class ResourceArea extends ScrollPane implements Disposable {
     private Skin skin;
-    private List<Resource> resources = new ArrayList<>();
-    private final CommandHistory commandHistory;
+    private final ResourceSet resources;
 
-    public ResourceArea(Skin skin, Resource[] resources, CommandHistory commandHistory) {
+    public ResourceArea(Skin skin, ResourceSet resources) {
         super(new Table(), skin);
         this.skin = skin;
-        this.resources = Lists.newArrayList(resources);
-        this.commandHistory = commandHistory;
+        this.resources = resources;
         this.setScrollingDisabled(true, false);
         layoutControls();
         pack();
+        resources.resources().watch((list) -> layoutControls());
     }
 
     private void layoutControls() {
@@ -34,13 +34,9 @@ public class ResourceArea extends ScrollPane implements Disposable {
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.clearChildren();
         layoutTable.top();
-        for (Resource resource : resources) {
-            Pair<Actor, Resource.Controller> editorAndController = resource.editor(skin, commandHistory);
-            editorAndController.getRight().registerRemoveListener(() -> {
-                commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
-                layoutControls();
-            });
-            layoutTable.add(editorAndController.getLeft());
+        for (Resource resource : resources.resources()) {
+            Actor editor = resource.editor();
+            layoutTable.add(editor);
             layoutTable.row();
         }
         layoutTable.pack();

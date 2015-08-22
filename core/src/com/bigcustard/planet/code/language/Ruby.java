@@ -30,7 +30,7 @@ public class Ruby extends Language {
 //            LexerSource lexer = LexerSource.getSource("code", new StringBufferInputStream(program), null, config);
 //            parser.parse(config, lexer);
 //        } catch (org.jruby.lexer.yacc.SyntaxException e) {
-//            error.add(e.getPosition().getLine());
+//            error.watch(e.getPosition().getLine());
 //        } catch (Exception e) {
 //            System.out.println("Failed to parse code: " + e);
 //        }

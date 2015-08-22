@@ -51,7 +51,7 @@ public class Tokenizer {
                 // Add it to the tokens list
                 res.add(string.substring(pos, m.start()));
             }
-            res.add(m.group()); // add the delimiter
+            res.add(m.group()); // watch the delimiter
             pos = m.end(); // Remember end of delimiter
         }
         if (pos != string.length()) {
