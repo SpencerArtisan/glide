@@ -24,12 +24,16 @@ public class ImageModel implements Disposable {
     }
 
     public ImageModel(FileHandle file, String name, Integer width, Integer height) {
+        this(file, name, width, height, width, height);
+    }
+
+    public ImageModel(FileHandle file, String name, Integer width, Integer height, Integer originalWidth, Integer originalHeight) {
         this.file = file;
         this.name = name;
         this.width = width;
         this.height = height;
-        this.originalWidth = width;
-        this.originalHeight = height;
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
     }
 
     public void registerValidationListener(Consumer<ImageModel> listener) {
@@ -90,6 +94,14 @@ public class ImageModel implements Disposable {
                 width = null;
             }
         });
+    }
+
+    public int originalWidth() {
+        return originalWidth;
+    }
+
+    public int originalHeight() {
+        return originalHeight;
     }
 
     private void changeAttribute(Runnable doChange) {

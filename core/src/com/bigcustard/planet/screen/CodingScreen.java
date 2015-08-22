@@ -149,7 +149,7 @@ public class CodingScreen extends ScreenAdapter {
             List<ImageModel> models = images.stream().map(Resource::toModel).collect(Collectors.toList());
             game.imageModel().images(models);
         });
-        imageArea = new ResourceArea(skin, resourceSet);
+        imageArea = new ResourceArea<>(skin, resourceSet);
     }
 
     private void createSoundArea() {

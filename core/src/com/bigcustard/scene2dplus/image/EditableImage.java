@@ -13,28 +13,22 @@ import com.google.common.base.Strings;
 
 public class EditableImage implements Resource<ImageModel> {
     private static final int MAX_NAME_LENGTH = 18;
-    private Image image;
+    private DisposableImage image;
     private Watchable<String> name;
     private Watchable<Integer> width;
     private Watchable<Integer> height;
-    private Integer originalHeight;
-    private Integer originalWidth;
+    private ImageModel model;
     private Editor editor;
     private Editor.Controller controller;
 
-    public EditableImage(Image image, String name, int width, int height, Skin skin, CommandHistory commandHistory) {
-        this.image = image;
-        this.name = new Watchable<>(name);
-        this.width = new Watchable<>(width);
-        this.height = new Watchable<>(height);
-        originalHeight = height;
-        originalWidth = width;
+    public EditableImage(ImageModel model, Skin skin, CommandHistory commandHistory) {
+        this.image = ImageUtils.asImage(model.file());
+        this.name = new Watchable<>(model.name());
+        this.width = new Watchable<>(model.width());
+        this.height = new Watchable<>(model.height());
+        this.model = model;
         editor = new Editor(skin);
         controller = editor.new Controller(commandHistory);
-    }
-
-    public EditableImage(ImageModel model, Skin skin, CommandHistory commandHistory) {
-        this(ImageUtils.asImage(model.file()), model.name(), model.width(), model.height(), skin, commandHistory);
     }
 
     public Image getImage() {
@@ -53,13 +47,13 @@ public class EditableImage implements Resource<ImageModel> {
 
     @Override
     public ImageModel toModel() {
-        return null;
+        return new ImageModel(model.file(), name.get(), width.get(), height.get(), model.originalWidth(), model.originalHeight());
     }
 
     private void width(Integer newWidth) {
         width.set(newWidth);
         if (newWidth != null) {
-            height.set(newWidth * originalHeight / originalWidth);
+            height.set(newWidth * model.originalHeight() / model.originalWidth());
         } else {
             height.set(null);
         }
@@ -68,7 +62,7 @@ public class EditableImage implements Resource<ImageModel> {
     private void height(Integer newHeight) {
         height.set(newHeight);
         if (newHeight != null) {
-            width.set(newHeight * originalWidth / originalHeight);
+            width.set(newHeight * model.originalWidth() / model.originalHeight());
         } else {
             width.set(null);
         }
