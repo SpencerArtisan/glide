@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class WatchableList<E> extends Notifier<WatchableList<E>> implements Iterable<E> {
     private final List<E> list;
@@ -13,15 +14,19 @@ public class WatchableList<E> extends Notifier<WatchableList<E>> implements Iter
     }
 
     public boolean add(E e) {
-        boolean add = list.add(e);
+        list.add(0, e);
         notify(this);
-        return add;
+        return true;
     }
 
     public boolean remove(Object o) {
         boolean remove = list.remove(o);
         notify(this);
         return remove;
+    }
+
+    public Stream<E> stream() {
+        return list.stream();
     }
 
     @Override

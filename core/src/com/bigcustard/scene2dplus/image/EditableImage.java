@@ -11,7 +11,7 @@ import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
 
-public class EditableImage implements Resource {
+public class EditableImage implements Resource<ImageModel> {
     private static final int MAX_NAME_LENGTH = 18;
     private Image image;
     private Watchable<String> name;
@@ -49,6 +49,11 @@ public class EditableImage implements Resource {
     @Override
     public Controller controller() {
         return controller;
+    }
+
+    @Override
+    public ImageModel toModel() {
+        return null;
     }
 
     private void width(Integer newWidth) {

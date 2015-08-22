@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ResourceArea extends ScrollPane implements Disposable {
+public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     private Skin skin;
-    private final ResourceSet resources;
+    private final ResourceSet<TModel> resources;
 
-    public ResourceArea(Skin skin, ResourceSet resources) {
+    public ResourceArea(Skin skin, ResourceSet<TModel> resources) {
         super(new Table(), skin);
         this.skin = skin;
         this.resources = resources;

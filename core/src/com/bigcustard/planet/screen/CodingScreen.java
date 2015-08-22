@@ -139,14 +139,17 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createImageArea() {
-        java.util.List<ImageModel> imageModels = game.imageModel().images();
-        List<Resource> editableImages = imageModels
+        List<ImageModel> imageModels = game.imageModel().images();
+        List<Resource<ImageModel>> editableImages = imageModels
                 .stream()
                 .map((model) -> new EditableImage(model, skin, game.commandHistory()))
                 .collect(Collectors.toList());
-        ResourceSet resourceSet = new ResourceSet(editableImages, game.commandHistory());
+        ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editableImages, game.commandHistory());
+        resourceSet.resources().watch((images) -> {
+            List<ImageModel> models = images.stream().map(Resource::toModel).collect(Collectors.toList());
+            game.imageModel().images(models);
+        });
         imageArea = new ResourceArea(skin, resourceSet);
-//        images.resources().watch((resources) -> game.imageModel());
     }
 
     private void createSoundArea() {

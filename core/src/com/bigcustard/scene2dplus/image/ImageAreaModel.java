@@ -138,6 +138,10 @@ public class ImageAreaModel implements Disposable {
         count--;
     }
 
+    public void images(List<ImageModel> images) {
+        this.images = images;
+    }
+
     private static class ImageListDetails {
         private ImageDetails[] images;
 
