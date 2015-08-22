@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.function.Consumer;
 public class SoundAreaModel implements Disposable {
     private static String SOUND_DETAIL_FILE = "sounds.json";
 
-    private Notifier<SoundModel> addSoundNotifier = new Notifier<>();
-    private Notifier<SoundModel> removeSoundNotifier = new Notifier<>();
-    private Notifier<SoundModel> changeSoundNotifier = new Notifier<>();
-    private Notifier<SoundModel> validationNotifier = new Notifier<>();
+    private Watchable<SoundModel> addSoundWatchable = new Watchable<>();
+    private Watchable<SoundModel> removeSoundWatchable = new Watchable<>();
+    private Watchable<SoundModel> changeSoundWatchable = new Watchable<>();
+    private Watchable<SoundModel> validationWatchable = new Watchable<>();
     private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
     private static int count;
@@ -27,19 +27,19 @@ public class SoundAreaModel implements Disposable {
     }
 
     public void registerAddSoundListener(Consumer<SoundModel> listener) {
-        addSoundNotifier.watch(listener);
+        addSoundWatchable.watch(listener);
     }
 
     public void registerRemoveSoundListener(Consumer<SoundModel> listener) {
-        removeSoundNotifier.watch(listener);
+        removeSoundWatchable.watch(listener);
     }
 
     public void registerChangeSoundListener(Consumer<SoundModel> listener) {
-        changeSoundNotifier.watch(listener);
+        changeSoundWatchable.watch(listener);
     }
 
     public void registerValidationListener(Consumer<SoundModel> listener) {
-        validationNotifier.watch(listener);
+        validationWatchable.watch(listener);
     }
 
     public FileHandle folder() {
@@ -56,8 +56,8 @@ public class SoundAreaModel implements Disposable {
 
     public SoundModel addSound(SoundModel sound) {
         sounds.add(0, sound);
-        addSoundNotifier.broadcast(sound);
-        sound.registerChangeListener(changeSoundNotifier::broadcast);
+        addSoundWatchable.broadcast(sound);
+        sound.registerChangeListener(changeSoundWatchable::broadcast);
         return sound;
     }
 
@@ -67,7 +67,7 @@ public class SoundAreaModel implements Disposable {
 
     public void removeSound(SoundModel Sound) {
         sounds.remove(Sound);
-        removeSoundNotifier.broadcast(Sound);
+        removeSoundWatchable.broadcast(Sound);
     }
 
     private void readSounds() {
@@ -104,10 +104,10 @@ public class SoundAreaModel implements Disposable {
 
     @Override
     public void dispose() {
-        addSoundNotifier.dispose();
-        removeSoundNotifier.dispose();
-        changeSoundNotifier.dispose();
-        validationNotifier.dispose();
+        addSoundWatchable.dispose();
+        removeSoundWatchable.dispose();
+        changeSoundWatchable.dispose();
+        validationWatchable.dispose();
         sounds.forEach(SoundModel::dispose);
         count--;
     }

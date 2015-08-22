@@ -3,8 +3,8 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.util.CompositeWatchable;
-import com.bigcustard.util.Notifier;
 import com.bigcustard.util.Watchable;
+import com.bigcustard.util.WatchableValue;
 import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
@@ -15,11 +15,11 @@ public class ImageModel implements Disposable {
     private FileHandle file;
     private int originalWidth;
     private int originalHeight;
-    private Watchable<String> name;
-    private Watchable<Integer> width;
-    private Watchable<Integer> height;
+    private WatchableValue<String> name;
+    private WatchableValue<Integer> width;
+    private WatchableValue<Integer> height;
     private CompositeWatchable me;
-    private Notifier<ImageModel> validationNotifier = new Notifier<>();
+    private Watchable<ImageModel> validationWatchable = new Watchable<>();
 
     public ImageModel(FileHandle file, Integer width, Integer height) {
         this(file, generateName(file), width, height);
@@ -31,23 +31,23 @@ public class ImageModel implements Disposable {
 
     public ImageModel(FileHandle file, String name, Integer width, Integer height, Integer originalWidth, Integer originalHeight) {
         this.file = file;
-        this.name = new Watchable<>(name);
-        this.width = new Watchable<>(width);
-        this.height = new Watchable<>(height);
+        this.name = new WatchableValue<>(name);
+        this.width = new WatchableValue<>(width);
+        this.height = new WatchableValue<>(height);
         this.me = new CompositeWatchable(this.name, this.width, this.height);
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
     }
 
     public void registerValidationListener(Consumer<ImageModel> listener) {
-        validationNotifier.watch(listener);
+        validationWatchable.watch(listener);
     }
 
     public void watch(Runnable watcher) {
         me.watch(watcher);
     }
 
-    public Watchable<String> name() {
+    public WatchableValue<String> name() {
         return name;
     }
 
@@ -63,11 +63,11 @@ public class ImageModel implements Disposable {
         return file;
     }
 
-    public Watchable<Integer> width() {
+    public WatchableValue<Integer> width() {
         return width;
     }
 
-    public Watchable<Integer> height() {
+    public WatchableValue<Integer> height() {
         return height;
     }
 
@@ -99,7 +99,7 @@ public class ImageModel implements Disposable {
         boolean initialValidationState = validate().isValid();
         doChange.run();
         if (initialValidationState != validate().isValid()) {
-            validationNotifier.broadcast(this);
+            validationWatchable.broadcast(this);
         }
         me.broadcast();
     }
@@ -122,6 +122,6 @@ public class ImageModel implements Disposable {
     @Override
     public void dispose() {
         me.dispose();
-        validationNotifier.dispose();
+        validationWatchable.dispose();
     }
 }

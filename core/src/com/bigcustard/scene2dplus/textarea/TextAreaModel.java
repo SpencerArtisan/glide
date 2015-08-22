@@ -3,7 +3,7 @@ package com.bigcustard.scene2dplus.textarea;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -18,7 +18,7 @@ public class TextAreaModel implements Disposable {
 	private String text;
 	private Caret caret;
 	private ColorCoder colorCoder;
-	private Notifier<TextAreaModel> changeNotifier = new Notifier<>();
+	private Watchable<TextAreaModel> changeWatchable = new Watchable<>();
 	private BiFunction<String, TextAreaModel, String> preInsertVetoer;
 	private static int count;
 
@@ -35,7 +35,7 @@ public class TextAreaModel implements Disposable {
 	}
 
 	public void addChangeListener(Consumer<TextAreaModel> listener) {
-		changeNotifier.watch(listener);
+		changeWatchable.watch(listener);
 	}
 
 	public void preInsertVetoer(BiFunction<String, TextAreaModel, String> preInsertVetoer) {
@@ -56,7 +56,7 @@ public class TextAreaModel implements Disposable {
         if (state.caretSelection != null) {
             caret().setSelection(state.caretSelection.getLeft(), state.caretSelection.getRight());
         }
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
     }
 
 	public void clear() {
@@ -69,7 +69,7 @@ public class TextAreaModel implements Disposable {
 
 	public void setText(String text) {
 		this.text = text;
-		changeNotifier.broadcast(this);
+		changeWatchable.broadcast(this);
 	}
 
 	public String coloredText() {
@@ -181,7 +181,7 @@ public class TextAreaModel implements Disposable {
 
 	@Override
 	public void dispose() {
-		changeNotifier.dispose();
+		changeWatchable.dispose();
 		count--;
 	}
 
@@ -217,7 +217,7 @@ public class TextAreaModel implements Disposable {
 
         public void clearSelection() {
             selection = null;
-            changeNotifier.broadcast(TextAreaModel.this);
+            changeWatchable.broadcast(TextAreaModel.this);
         }
 
         public void setSelection(XY start, XY end) {
@@ -227,7 +227,7 @@ public class TextAreaModel implements Disposable {
             } else {
                 selection = Pair.of(end, start);
 			}
-			changeNotifier.broadcast(TextAreaModel.this);
+			changeWatchable.broadcast(TextAreaModel.this);
         }
 
 		private int x() {

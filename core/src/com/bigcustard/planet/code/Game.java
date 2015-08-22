@@ -6,7 +6,7 @@ import com.bigcustard.planet.code.language.Language;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.image.ImageAreaModel;
 import com.bigcustard.scene2dplus.sound.SoundAreaModel;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -19,7 +19,7 @@ public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
     private final ScheduledFuture<?> errorChecker;
-    private Notifier<Game> changeNotifier = new Notifier<>();
+    private Watchable<Game> changeWatchable = new Watchable<>();
 
     private String code;
     private ImageAreaModel imageModel;
@@ -88,7 +88,7 @@ public class Game implements Disposable {
     public void code(String code) {
         isModified = isModified || !this.code.equals(code);
         this.code = code;
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
     }
 
     public boolean isNamed() {
@@ -101,7 +101,7 @@ public class Game implements Disposable {
 
     public void runtimeError(RuntimeException runtimeError) {
         this.runtimeError = runtimeError;
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
     }
 
     public String runtimeError() {
@@ -115,18 +115,18 @@ public class Game implements Disposable {
     }
 
     public void registerChangeListener(Consumer<Game> listener) {
-        changeNotifier.watch(listener);
+        changeWatchable.watch(listener);
     }
 
     private void onImageChange() {
         imageModel.save();
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
         isModified = true;
     }
 
     private void onSoundChange() {
         soundModel.save();
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
         isModified = true;
     }
 
@@ -154,7 +154,7 @@ public class Game implements Disposable {
 
     @Override
     public void dispose() {
-        changeNotifier.dispose();
+        changeWatchable.dispose();
         errorChecker.cancel(true);
         count--;
     }

@@ -21,12 +21,7 @@ public class Tokenizer {
         // Be aware that, in case of delimiters containing others (example && and &),
         // the longer may be before the shorter (&& should be before &) or the regexpr
         // parser will recognize && as two &.
-        Arrays.sort(delimiters, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return -o1.compareTo(o2);
-            }
-        });
+        Arrays.sort(delimiters, (o1, o2) -> -o1.compareTo(o2));
         // Build a string that will contain the regular expression
         StringBuilder regexpr = new StringBuilder();
         regexpr.append('(');

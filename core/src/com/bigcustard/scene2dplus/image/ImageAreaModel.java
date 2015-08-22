@@ -4,7 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.bigcustard.scene2dplus.XY;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ImageAreaModel implements Disposable {
     private static String IMAGE_DETAIL_FILE = "images.json";
 
-    private Notifier<ImageAreaModel> changeImageNotifier = new Notifier<>();
+    private Watchable<ImageAreaModel> changeImageWatchable = new Watchable<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
     private static int count;
@@ -26,7 +26,7 @@ public class ImageAreaModel implements Disposable {
     }
 
     public void registerChangeImageListener(Consumer<ImageAreaModel> listener) {
-        changeImageNotifier.watch(listener);
+        changeImageWatchable.watch(listener);
     }
 
     public FileHandle folder() {
@@ -39,12 +39,12 @@ public class ImageAreaModel implements Disposable {
 
     public void images(List<ImageModel> images) {
         this.images = images;
-        changeImageNotifier.broadcast(this);
+        changeImageWatchable.broadcast(this);
         images.forEach(this::addListeners);
     }
 
     private void addListeners(ImageModel image) {
-        image.watch(() -> changeImageNotifier.broadcast(this));
+        image.watch(() -> changeImageWatchable.broadcast(this));
     }
 
     public void save() {
@@ -100,7 +100,7 @@ public class ImageAreaModel implements Disposable {
 
     @Override
     public void dispose() {
-        changeImageNotifier.dispose();
+        changeImageWatchable.dispose();
         images.forEach(ImageModel::dispose);
         count--;
     }

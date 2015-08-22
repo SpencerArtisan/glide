@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ public class SoundModel implements Disposable {
     private final FileHandle file;
     private Sound sound;
     private String name;
-    private Notifier<SoundModel> changeNotifier = new Notifier<>();
+    private Watchable<SoundModel> changeWatchable = new Watchable<>();
     private static int count;
 
     public SoundModel(FileHandle file) {
@@ -29,7 +29,7 @@ public class SoundModel implements Disposable {
     }
 
     public void registerChangeListener(Consumer<SoundModel> listener) {
-        changeNotifier.watch(listener);
+        changeWatchable.watch(listener);
     }
 
     public String name() {
@@ -67,7 +67,7 @@ public class SoundModel implements Disposable {
 
     private void changeAttribute(Runnable doChange) {
         doChange.run();
-        changeNotifier.broadcast(this);
+        changeWatchable.broadcast(this);
     }
 
     private static String generateName(FileHandle file) {
@@ -79,7 +79,7 @@ public class SoundModel implements Disposable {
 
     @Override
     public void dispose() {
-        changeNotifier.dispose();
+        changeWatchable.dispose();
         sound.dispose();
         count--;
     }

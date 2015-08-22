@@ -1,11 +1,11 @@
 package com.bigcustard.util;
 
-public class CompositeWatchable extends Notifier<Void> {
-    private final Watchable<?>[] watchables;
+public class CompositeWatchable extends Watchable<Void> {
+    private final WatchableValue<?>[] watchables;
 
-    public CompositeWatchable(Watchable<?>... watchables) {
+    public CompositeWatchable(WatchableValue<?>... watchables) {
         this.watchables = watchables;
-        for (Watchable<?> watchable : watchables) {
+        for (WatchableValue<?> watchable : watchables) {
             watchable.watch((ignored) -> broadcast());
         }
     }

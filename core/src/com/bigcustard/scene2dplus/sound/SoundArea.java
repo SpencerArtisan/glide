@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
-import com.bigcustard.util.Notifier;
+import com.bigcustard.util.Watchable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,8 +26,8 @@ public class SoundArea extends ScrollPane implements Disposable {
     private TextButton clipboardButton;
     private TextButton fileButton;
     private Map<SoundModel, SoundControls> soundControlMap = new HashMap<>();
-    private Notifier<SoundControls> addSoundControlsNotifier = new Notifier<>();
-    private Notifier<SoundControls> removeSoundControlsNotifier = new Notifier<>();
+    private Watchable<SoundControls> addSoundControlsWatchable = new Watchable<>();
+    private Watchable<SoundControls> removeSoundControlsWatchable = new Watchable<>();
     private static int count;
 
     public SoundArea(SoundAreaModel model, Skin skin) {
@@ -59,11 +59,11 @@ public class SoundArea extends ScrollPane implements Disposable {
     }
 
     void registerAddSoundControlsListener(Consumer<SoundControls> onChanged) {
-        addSoundControlsNotifier.watch(onChanged);
+        addSoundControlsWatchable.watch(onChanged);
     }
 
     void registerRemoveSoundControlsListener(Consumer<SoundControls> onChanged) {
-        removeSoundControlsNotifier.watch(onChanged);
+        removeSoundControlsWatchable.watch(onChanged);
     }
 
     Collection<SoundControls> getAllSoundControls() {
@@ -131,21 +131,21 @@ public class SoundArea extends ScrollPane implements Disposable {
 
     private void onAddSound(SoundModel sound) {
         SoundControls soundControls = createSoundControls(sound);
-        addSoundControlsNotifier.broadcast(soundControls);
+        addSoundControlsWatchable.broadcast(soundControls);
         layoutControls();
     }
 
     private void onRemoveSound(SoundModel sound) {
         SoundControls soundControls = soundControlMap.remove(sound);
-        removeSoundControlsNotifier.broadcast(soundControls);
+        removeSoundControlsWatchable.broadcast(soundControls);
         layoutControls();
     }
 
     @Override
     public void dispose() {
         model.dispose();
-        addSoundControlsNotifier.dispose();
-        removeSoundControlsNotifier.dispose();
+        addSoundControlsWatchable.dispose();
+        removeSoundControlsWatchable.dispose();
         for (SoundControls soundControls : soundControlMap.values()) {
             soundControls.dispose();
         }

@@ -1,48 +1,31 @@
 package com.bigcustard.util;
 
-import com.google.common.base.Objects;
+import com.badlogic.gdx.utils.Disposable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class Watchable<T> extends Notifier<T> {
-    private T value;
+public class Watchable<T> implements Disposable {
+    private List<Consumer<T>> watchers = new ArrayList<>();
 
-    public Watchable(T value) {
-        this.value = value;
+    private static int count;
+
+    public Watchable() {
+        System.out.println("notifiers = " + ++count);
+    }
+
+    public void watch(Consumer<T> watcher) {
+        watchers.add(watcher);
+    }
+
+    public void broadcast(T object) {
+        watchers.forEach((l) -> l.accept(object));
     }
 
     @Override
-    public void watch(Consumer<T> listener) {
-        super.watch(listener);
-        broadcast(value);
-    }
-
-    public void set(T value) {
-        this.value = value;
-        broadcast(value);
-    }
-
-    public T get() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Watchable<?> watchable = (Watchable<?>) o;
-        return Objects.equal(value, watchable.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(value);
-    }
-
-    @Override
-    public String toString() {
-        return "Watchable{" +
-                "value=" + value +
-                '}';
+    public void dispose() {
+        watchers.clear();
+        System.out.println("watchers = " + --count);
     }
 }
