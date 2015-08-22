@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.button.ButtonUtil;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.google.common.annotations.VisibleForTesting;
@@ -57,12 +58,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
 
     private void createClipboardButton(Skin skin) {
         clipboardButton = new TextButton("Add from clipboard", skin);
-        // todo introduce onClick
-        clipboardButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                addFromClipboardUrl();
-            }
-        });
+        ButtonUtil.onClick(clipboardButton, this::addFromClipboardUrl);
     }
 
     private void addFromClipboardUrl() {
@@ -76,6 +72,11 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
         }
     }
 
+    private void createFileButton(Skin skin) {
+        fileButton = new TextButton("Add from file", skin);
+        ButtonUtil.onClick(fileButton, this::addFromFile);
+    }
+
     private void addFromFile() {
         chooseFile((fileHandle -> {
             try {
@@ -86,15 +87,6 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
                 dodgyWiggle(clipboardButton);
             }
         }));
-    }
-
-    private void createFileButton(Skin skin) {
-        fileButton = new TextButton("Add from file", skin);
-        fileButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                addFromFile();
-            }
-        });
     }
 
     private void layoutControls() {
@@ -117,7 +109,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
 
     @Override
     public void dispose() {
-        // todo
+        resources.dispose();
     }
 
     @VisibleForTesting

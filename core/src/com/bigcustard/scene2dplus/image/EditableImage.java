@@ -43,6 +43,11 @@ public class EditableImage implements Resource<ImageModel> {
         return model;
     }
 
+    @Override
+    public void dispose() {
+        image.dispose();
+    }
+
     private class Editor extends Table {
         private final TextFieldPlus nameField;
         private final TextFieldPlus widthField;

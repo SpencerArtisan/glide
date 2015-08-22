@@ -17,6 +17,6 @@ public class DisposableImage extends Image implements Disposable {
     @Override
     public void dispose() {
         texture.dispose();
-        count--;
+        System.out.println("Images: " + --count);
     }
 }

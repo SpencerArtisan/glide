@@ -38,6 +38,10 @@ public class EditableSound implements Resource<SoundModel> {
         return model;
     }
 
+    @Override
+    public void dispose() {
+    }
+
     private class Editor extends Table {
         private final TextFieldPlus nameField;
         private final Button deleteButton;

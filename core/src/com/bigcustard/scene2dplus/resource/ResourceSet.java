@@ -1,11 +1,12 @@
 package com.bigcustard.scene2dplus.resource;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.util.WatchableList;
 
 import java.util.List;
 
-public class ResourceSet<TModel> {
+public class ResourceSet<TModel> implements Disposable {
     private WatchableList<Resource<TModel>> resources;
 
     public ResourceSet(List<Resource<TModel>> resources, CommandHistory commandHistory) {
@@ -23,5 +24,11 @@ public class ResourceSet<TModel> {
 
     public WatchableList<Resource<TModel>> resources() {
         return resources;
+    }
+
+    @Override
+    public void dispose() {
+        resources.forEach(Resource::dispose);
+        resources.dispose();
     }
 }

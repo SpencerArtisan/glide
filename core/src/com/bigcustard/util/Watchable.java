@@ -12,7 +12,7 @@ public class Watchable<T> implements Disposable {
     private static int count;
 
     public Watchable() {
-        System.out.println("notifiers = " + ++count);
+        System.out.println("watchables = " + ++count + this);
     }
 
     public void watch(Consumer<T> watcher) {
@@ -26,6 +26,6 @@ public class Watchable<T> implements Disposable {
     @Override
     public void dispose() {
         watchers.clear();
-        System.out.println("watchers = " + --count);
+        System.out.println("watchables = " + --count + this);
     }
 }

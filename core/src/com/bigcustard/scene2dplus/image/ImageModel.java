@@ -122,6 +122,9 @@ public class ImageModel implements Disposable {
     @Override
     public void dispose() {
         me.dispose();
+        width.dispose();
+        height.dispose();
+        name.dispose();
         validationWatchable.dispose();
     }
 }
