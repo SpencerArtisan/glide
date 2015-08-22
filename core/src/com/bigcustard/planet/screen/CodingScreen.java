@@ -3,6 +3,7 @@ package com.bigcustard.planet.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -149,7 +150,10 @@ public class CodingScreen extends ScreenAdapter {
             List<ImageModel> models = images.stream().map(Resource::toModel).collect(Collectors.toList());
             game.imageModel().images(models);
         });
-        imageArea = new ResourceArea<>(skin, resourceSet);
+        imageArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
+            ImageModel model = ImageUtils.importImage(stream, url, game.imageModel().folder());
+            return new EditableImage(model, skin, game.commandHistory());
+        });
     }
 
     private void createSoundArea() {

@@ -3,7 +3,6 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.bigcustard.scene2dplus.XY;
 
@@ -11,6 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtils {
     public static DisposableImage asImage(FileHandle file) {
@@ -43,5 +44,37 @@ public class ImageUtils {
         } catch (Exception e) {
             Gdx.app.error("tag", "Failed to resize image", e);
         }
+    }
+
+    public static ImageModel importImage(InputStream imageStream, String url, FileHandle folder) {
+        try {
+            FileHandle mainImageFile = generateImageFileHandle(url, folder);
+            mainImageFile.write(imageStream, false);
+            imageStream.close();
+            XY imageSize = imageSize(mainImageFile);
+            return new ImageModel(mainImageFile, imageSize.x, imageSize.y);
+        } catch (IOException e) {
+            System.err.println("Error importing image: " + e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static FileHandle generateImageFileHandle(String url, FileHandle folder) {
+        String filename = url.substring(url.lastIndexOf("/") + 1);
+        filename = filename.contains("?") ? filename.substring(0, filename.indexOf("?")) : filename;
+        return findUniqueImageName(filename, folder);
+    }
+
+    private static FileHandle findUniqueImageName(String filename, FileHandle folder) {
+        int dotIndex = filename.lastIndexOf('.');
+        String filenameExcludingExtension = filename.substring(0, dotIndex);
+        String extension = filename.substring(dotIndex);
+
+        FileHandle candidate = folder.child(filenameExcludingExtension + extension);
+        int suffix = 2;
+        while (candidate.exists()) {
+            candidate = folder.child(filenameExcludingExtension + suffix++ + extension);
+        }
+        return candidate;
     }
 }
