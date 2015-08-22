@@ -7,7 +7,7 @@
 	<App>
 	  <Name>Glide</Name>
 	  <LogoPNG>installers/logo.png</LogoPNG>
-	  <MainClass>com.bigcustard.planet.desktop.DesktopLauncher</MainClass>
+	  <MainClass>com.bigcustard.glide.desktop.DesktopLauncher</MainClass>
 	</App>
 	
 	<SupportedLanguages>en</SupportedLanguages>

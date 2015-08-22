@@ -1,10 +1,10 @@
-package com.bigcustard.planet.android;
+package com.bigcustard.glide.android;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.bigcustard.planet.PlanetApplication;
+import com.bigcustard.glide.PlanetApplication;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
