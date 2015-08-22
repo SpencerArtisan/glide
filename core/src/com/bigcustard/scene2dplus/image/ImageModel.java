@@ -2,6 +2,7 @@ package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.util.CompositeWatchable;
 import com.bigcustard.util.Notifier;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
@@ -17,7 +18,7 @@ public class ImageModel implements Disposable {
     private Watchable<String> name;
     private Watchable<Integer> width;
     private Watchable<Integer> height;
-    private Notifier<ImageModel> changeNotifier = new Notifier<>();
+    private CompositeWatchable me;
     private Notifier<ImageModel> validationNotifier = new Notifier<>();
 
     public ImageModel(FileHandle file, Integer width, Integer height) {
@@ -33,6 +34,7 @@ public class ImageModel implements Disposable {
         this.name = new Watchable<>(name);
         this.width = new Watchable<>(width);
         this.height = new Watchable<>(height);
+        this.me = new CompositeWatchable(this.name, this.width, this.height);
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
     }
@@ -41,8 +43,8 @@ public class ImageModel implements Disposable {
         validationNotifier.watch(listener);
     }
 
-    public void registerChangeListener(Consumer<ImageModel> listener) {
-        changeNotifier.watch(listener);
+    public void watch(Runnable watcher) {
+        me.watch(watcher);
     }
 
     public Watchable<String> name() {
@@ -59,10 +61,6 @@ public class ImageModel implements Disposable {
 
     public FileHandle file() {
         return file;
-    }
-
-    public int maxNameLength() {
-        return MAX_NAME_LENGTH;
     }
 
     public Watchable<Integer> width() {
@@ -97,21 +95,13 @@ public class ImageModel implements Disposable {
         });
     }
 
-    public int originalWidth() {
-        return originalWidth;
-    }
-
-    public int originalHeight() {
-        return originalHeight;
-    }
-
     private void changeAttribute(Runnable doChange) {
         boolean initialValidationState = validate().isValid();
         doChange.run();
         if (initialValidationState != validate().isValid()) {
-            validationNotifier.notify(this);
+            validationNotifier.broadcast(this);
         }
-        changeNotifier.notify(this);
+        me.broadcast();
     }
 
     private static String generateName(FileHandle file) {
@@ -131,7 +121,7 @@ public class ImageModel implements Disposable {
 
     @Override
     public void dispose() {
-        changeNotifier.dispose();
+        me.dispose();
         validationNotifier.dispose();
     }
 }

@@ -19,7 +19,7 @@ public class Notifier<T> implements Disposable {
         listeners.add(listener);
     }
 
-    public void notify(T object) {
+    public void broadcast(T object) {
         listeners.forEach((l) -> l.accept(object));
     }
 

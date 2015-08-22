@@ -67,7 +67,7 @@ public class SoundModel implements Disposable {
 
     private void changeAttribute(Runnable doChange) {
         doChange.run();
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
     }
 
     private static String generateName(FileHandle file) {

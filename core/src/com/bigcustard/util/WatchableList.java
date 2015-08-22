@@ -15,13 +15,13 @@ public class WatchableList<E> extends Notifier<WatchableList<E>> implements Iter
 
     public boolean add(E e) {
         list.add(0, e);
-        notify(this);
+        broadcast(this);
         return true;
     }
 
     public boolean remove(Object o) {
         boolean remove = list.remove(o);
-        notify(this);
+        broadcast(this);
         return remove;
     }
 
@@ -32,7 +32,7 @@ public class WatchableList<E> extends Notifier<WatchableList<E>> implements Iter
     @Override
     public void watch(Consumer<WatchableList<E>> listener) {
         super.watch(listener);
-        notify(this);
+        broadcast(this);
     }
 
     @Override

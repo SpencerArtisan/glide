@@ -131,13 +131,13 @@ public class SoundArea extends ScrollPane implements Disposable {
 
     private void onAddSound(SoundModel sound) {
         SoundControls soundControls = createSoundControls(sound);
-        addSoundControlsNotifier.notify(soundControls);
+        addSoundControlsNotifier.broadcast(soundControls);
         layoutControls();
     }
 
     private void onRemoveSound(SoundModel sound) {
         SoundControls soundControls = soundControlMap.remove(sound);
-        removeSoundControlsNotifier.notify(soundControls);
+        removeSoundControlsNotifier.broadcast(soundControls);
         layoutControls();
     }
 

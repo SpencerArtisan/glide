@@ -14,12 +14,12 @@ public class Watchable<T> extends Notifier<T> {
     @Override
     public void watch(Consumer<T> listener) {
         super.watch(listener);
-        notify(value);
+        broadcast(value);
     }
 
     public void set(T value) {
         this.value = value;
-        notify(value);
+        broadcast(value);
     }
 
     public T get() {

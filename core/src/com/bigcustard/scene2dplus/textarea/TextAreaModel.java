@@ -56,7 +56,7 @@ public class TextAreaModel implements Disposable {
         if (state.caretSelection != null) {
             caret().setSelection(state.caretSelection.getLeft(), state.caretSelection.getRight());
         }
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
     }
 
 	public void clear() {
@@ -69,7 +69,7 @@ public class TextAreaModel implements Disposable {
 
 	public void setText(String text) {
 		this.text = text;
-		changeNotifier.notify(this);
+		changeNotifier.broadcast(this);
 	}
 
 	public String coloredText() {
@@ -217,7 +217,7 @@ public class TextAreaModel implements Disposable {
 
         public void clearSelection() {
             selection = null;
-            changeNotifier.notify(TextAreaModel.this);
+            changeNotifier.broadcast(TextAreaModel.this);
         }
 
         public void setSelection(XY start, XY end) {
@@ -227,7 +227,7 @@ public class TextAreaModel implements Disposable {
             } else {
                 selection = Pair.of(end, start);
 			}
-			changeNotifier.notify(TextAreaModel.this);
+			changeNotifier.broadcast(TextAreaModel.this);
         }
 
 		private int x() {

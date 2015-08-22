@@ -27,7 +27,7 @@ public class ImageAreaModelTest {
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
     @Mock private Consumer<ImageAreaModel> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImageModel>> imageChangeListenerCaptor;
+    @Captor private ArgumentCaptor<Runnable> imageChangeListenerCaptor;
 
     @Before
     public void before() {
@@ -39,7 +39,7 @@ public class ImageAreaModelTest {
         when(mockImageFile2.name()).thenReturn("image2.png");
         when(mockImage.validate()).thenReturn(mockValidationResult1);
         when(mockImage2.validate()).thenReturn(mockValidationResult2);
-        doNothing().when(mockImage).registerChangeListener(imageChangeListenerCaptor.capture());
+        doNothing().when(mockImage).watch(imageChangeListenerCaptor.capture());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ImageAreaModelTest {
         ImageAreaModel model = newModel();
         model.images(ImmutableList.of(mockImage));
         model.registerChangeImageListener(mockChangeListener);
-        imageChangeListenerCaptor.getValue().accept(mockImage);
+        imageChangeListenerCaptor.getValue().run();
         verify(mockChangeListener).accept(model);
     }
 

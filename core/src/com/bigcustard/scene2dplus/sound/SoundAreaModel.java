@@ -56,8 +56,8 @@ public class SoundAreaModel implements Disposable {
 
     public SoundModel addSound(SoundModel sound) {
         sounds.add(0, sound);
-        addSoundNotifier.notify(sound);
-        sound.registerChangeListener(changeSoundNotifier::notify);
+        addSoundNotifier.broadcast(sound);
+        sound.registerChangeListener(changeSoundNotifier::broadcast);
         return sound;
     }
 
@@ -67,7 +67,7 @@ public class SoundAreaModel implements Disposable {
 
     public void removeSound(SoundModel Sound) {
         sounds.remove(Sound);
-        removeSoundNotifier.notify(Sound);
+        removeSoundNotifier.broadcast(Sound);
     }
 
     private void readSounds() {

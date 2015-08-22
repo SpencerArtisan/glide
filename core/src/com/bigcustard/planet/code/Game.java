@@ -88,7 +88,7 @@ public class Game implements Disposable {
     public void code(String code) {
         isModified = isModified || !this.code.equals(code);
         this.code = code;
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
     }
 
     public boolean isNamed() {
@@ -101,7 +101,7 @@ public class Game implements Disposable {
 
     public void runtimeError(RuntimeException runtimeError) {
         this.runtimeError = runtimeError;
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
     }
 
     public String runtimeError() {
@@ -120,13 +120,13 @@ public class Game implements Disposable {
 
     private void onImageChange() {
         imageModel.save();
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
         isModified = true;
     }
 
     private void onSoundChange() {
         soundModel.save();
-        changeNotifier.notify(this);
+        changeNotifier.broadcast(this);
         isModified = true;
     }
 

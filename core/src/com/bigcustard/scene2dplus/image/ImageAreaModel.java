@@ -39,12 +39,12 @@ public class ImageAreaModel implements Disposable {
 
     public void images(List<ImageModel> images) {
         this.images = images;
-        changeImageNotifier.notify(this);
+        changeImageNotifier.broadcast(this);
         images.forEach(this::addListeners);
     }
 
     private void addListeners(ImageModel image) {
-        image.registerChangeListener((ignored) -> changeImageNotifier.notify(this));
+        image.watch(() -> changeImageNotifier.broadcast(this));
     }
 
     public void save() {
