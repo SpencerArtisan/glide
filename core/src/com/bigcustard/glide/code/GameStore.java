@@ -34,6 +34,7 @@ public class GameStore {
             } else {
                 source.copyTo(target);
             }
+            storeMostRecentGameName(newName);
             return new Game.Token(newName, game.language(), target);
         }
         return game;
@@ -135,9 +136,13 @@ public class GameStore {
 
     private void storeMostRecentGameName(Game game) {
         if (game.isNamed()) {
-            preferences().putString(RECENT_GAME, game.name());
-            preferences().flush();
+            storeMostRecentGameName(game.name());
         }
+    }
+
+    private void storeMostRecentGameName(String name) {
+        preferences().putString(RECENT_GAME, name);
+        preferences().flush();
     }
 
     protected FileHandle samplesFolder() {

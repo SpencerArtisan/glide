@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Clipboard;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.button.ButtonUtil;
@@ -95,9 +94,9 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
         table.background(skin.getDrawable("solarizedNew"));
         table.clearChildren();
         table.top();
-        table.add(clipboardButton).fillX();
+        table.add(clipboardButton).fillX().expandX();
         table.row();
-        table.add(fileButton).fillX();
+        table.add(fileButton).fillX().expandX();
         table.row();
         for (Resource resource : resources.resources()) {
             Actor editor = resource.editor();
@@ -119,7 +118,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
 
     private void dodgyWiggle(TextButton button) {
         String originalText = button.getText().toString();
-        button.setText("Dodgy image!");
+        button.setText("Dodgy resource!");
         button.addAction(
                 Actions.sequence(
                         Actions.repeat(10,
