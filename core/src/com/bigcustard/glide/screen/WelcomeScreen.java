@@ -49,7 +49,6 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Image title;
 	private Cell<Image> titleCell;
 	private Image blurpLogo;
-	private Cell<Image> blurpLogoCell;
 	private Image poweredBy;
 
 	WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {

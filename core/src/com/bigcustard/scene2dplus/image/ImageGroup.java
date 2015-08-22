@@ -22,7 +22,7 @@ public class ImageGroup implements Disposable {
     public ImageGroup(FileHandle imageFolder) {
         this.folder = imageFolder;
         readImages();
-        System.out.println("Imagegroups: " + ++count);
+        System.out.println("ImageGroups: " + ++count);
     }
 
     public void watch(Consumer<ImageGroup> watcher) {
@@ -68,10 +68,8 @@ public class ImageGroup implements Disposable {
             for (FileHandle imageFile : imageFiles) {
                 try {
                     if (!imageFile.isDirectory()) {
-                        XY imageSize = imageSize(imageFile);
-                        ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
-                        imageModel.name(imageFile.name());
-                        images.add(imageModel);
+                        XY size = imageSize(imageFile);
+                        images.add(new ImageModel(imageFile, imageFile.name(), size.x, size.y));
                     }
                 } catch (Exception e) {
                     System.out.println("Ignoring non image file: " + imageFile.name());

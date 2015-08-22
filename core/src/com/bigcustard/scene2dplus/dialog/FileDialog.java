@@ -22,29 +22,21 @@ public class FileDialog extends Dialog {
     private final FileHandle baseDir;
     private final Label fileListLabel;
     private final List<FileListItem> fileList;
-
-    private FileHandle currentDir;
     protected FileHandle result;
-
     protected ResultListener resultListener;
-
     private final TextButton ok;
-    private final TextButton cancel;
 
-    private static final Comparator<FileListItem> dirListComparator = new Comparator<FileListItem>() {
-        @Override
-        public int compare(FileListItem file1, FileListItem file2) {
-            if (file1.file.isDirectory() && !file2.file.isDirectory()) {
-                return -1;
-            }
-            if (file1.file.isDirectory() && file2.file.isDirectory()) {
-                return 0;
-            }
-            if (!file1.file.isDirectory() && !file2.file.isDirectory()) {
-                return 0;
-            }
-            return 1;
+    private static final Comparator<FileListItem> dirListComparator = (file1, file2) -> {
+        if (file1.file.isDirectory() && !file2.file.isDirectory()) {
+            return -1;
         }
+        if (file1.file.isDirectory() && file2.file.isDirectory()) {
+            return 0;
+        }
+        if (!file1.file.isDirectory() && !file2.file.isDirectory()) {
+            return 0;
+        }
+        return 1;
     };
 
     private FileFilter filter = file -> !file.getName().startsWith(".");
@@ -73,7 +65,7 @@ public class FileDialog extends Dialog {
 
         getButtonTable().add(new Spacer(20));
 
-        cancel = new TextButton("Cancel", skin);
+        TextButton cancel = new TextButton("Cancel", skin);
         button(cancel, false);
         key(Keys.ENTER, true);
         key(Keys.ESCAPE, false);
@@ -90,21 +82,18 @@ public class FileDialog extends Dialog {
         });
     }
 
-    private void changeDirectory(FileHandle directory) {
-        currentDir = directory;
+    private void changeDirectory(FileHandle currentDir) {
         fileListLabel.setText(currentDir.path());
-
         final Array<FileListItem> items = new Array<>();
-
-        final FileHandle[] list = directory.list(filter);
+        final FileHandle[] list = currentDir.list(filter);
         for (final FileHandle handle : list) {
             items.add(new FileListItem(handle));
         }
 
         items.sort(dirListComparator);
 
-        if (directory.file().getParentFile() != null) {
-            items.insert(0, new FileListItem("..", directory.parent()));
+        if (currentDir.file().getParentFile() != null) {
+            items.insert(0, new FileListItem("..", currentDir.parent()));
         }
 
         fileList.setSelected(null);
@@ -119,12 +108,6 @@ public class FileDialog extends Dialog {
 
     public FileDialog setOkButtonText(String text) {
         this.ok.setText(text);
-        return this;
-    }
-
-
-    public FileDialog setCancelButtonText(String text) {
-        this.cancel.setText(text);
         return this;
     }
 

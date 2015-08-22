@@ -123,6 +123,7 @@ public class Game implements Disposable {
 
     private void onSoundChange() {
         soundGroup.save();
+        imageGroup.save();
         me.broadcast(this);
         isModified = true;
     }
@@ -151,6 +152,8 @@ public class Game implements Disposable {
 
     @Override
     public void dispose() {
+        imageGroup.dispose();
+        soundGroup.dispose();
         me.dispose();
         errorChecker.cancel(true);
         count--;

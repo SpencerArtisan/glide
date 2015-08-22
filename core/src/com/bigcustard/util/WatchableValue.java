@@ -41,8 +41,6 @@ public class WatchableValue<T> extends Watchable<T> {
 
     @Override
     public String toString() {
-        return "WatchableValue{" +
-                "value=" + value +
-                '}';
+        return "WatchableValue{value=" + value + '}';
     }
 }

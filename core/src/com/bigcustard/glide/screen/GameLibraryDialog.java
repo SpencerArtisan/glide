@@ -1,12 +1,11 @@
 package com.bigcustard.glide.screen;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.scene2dplus.Spacer;
+import com.bigcustard.scene2dplus.button.ButtonUtil;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.List;
@@ -58,6 +57,15 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         pad(20);
         text("Choose a game").padBottom(25);
         row();
+        layoutGameButtons(skin, readOnly);
+        getButtonTable().row();
+
+        TextButton cancelButton = new TextButton("  Cancel  ", skin);
+        setObject(cancelButton, null);
+        getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
+    }
+
+    private void layoutGameButtons(Skin skin, boolean readOnly) {
         int i = 0;
         for (Game.Token game : games) {
             ImageTextButton button = createButton(skin, game);
@@ -66,11 +74,6 @@ public class GameLibraryDialog extends Dialog implements Disposable {
             if (!readOnly) getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
             if (++i%COLUMNS == 0) getButtonTable().row();
         }
-        getButtonTable().row();
-
-        TextButton cancelButton = new TextButton("  Cancel  ", skin);
-        setObject(cancelButton, null);
-        getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
     }
 
     private ImageTextButton createButton(Skin skin, Game.Token game) {
@@ -86,15 +89,14 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     private Button createDeleteButton(Skin skin, Game.Token game) {
         ImageButton button = new ImageButton(skin, "trash-button");
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                new GameStore().delete(game);
-                games.remove(game);
-                layoutControls(skin, readOnly);
-            }
-        });
+        ButtonUtil.onClick(button, () -> deleteGame(skin, game));
         return button;
+    }
+
+    private void deleteGame(Skin skin, Game.Token game) {
+        new GameStore().delete(game);
+        games.remove(game);
+        layoutControls(skin, readOnly);
     }
 
     @Override

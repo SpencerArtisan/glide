@@ -44,18 +44,13 @@ import java.util.stream.Collectors;
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
-    private Table layoutTable;
     private TextAreaModel model;
     private ScrollableTextArea textArea;
-    private ResourceArea<ImageModel> imageArea;
-    private ResourceArea<SoundModel> soundArea;
     private TabControl resourceTabControl;
-    private ButtonBar buttonBar;
     private Game game;
     private GameStore gameStore;
     private Consumer<Screen> setScreen;
     private ScreenFactory screenFactory;
-    private Label errorLabel;
     private ScheduledFuture<?> gameSavingProcess;
 
     public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
@@ -66,36 +61,42 @@ public class CodingScreen extends ScreenAdapter {
         this.stage = new Stage(viewport);
         this.skin = skin;
 
-        createTextArea(game);
-        createErrorLabel(game);
-        createButtonBar();
-        createResourceArea();
-        layoutScreen();
+        Table layoutTable = layoutScreen();
 
         stage.addActor(layoutTable);
         stage.setKeyboardFocus(textArea.textArea());
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void layoutScreen() {
-        Table textAreaTable = new Table();
-        textAreaTable.add(textArea).fill().expand();
-        textAreaTable.row();
-        textAreaTable.add(errorLabel).fillX();
+    private Table layoutScreen() {
+        createTextArea(game);
+        Label errorLabel = createErrorLabel(game);
+        createResourceArea();
+        ButtonBar buttonBar = createButtonBar();
 
-        layoutTable = new Table();
+        Table layoutTable = new Table();
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.row();
-        layoutTable.add(textAreaTable).expand().fill();
+        layoutTable.add(createTextAreaTable(errorLabel)).expand().fill();
         layoutTable.add(resourceTabControl).width(280).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
         layoutTable.setFillParent(true);
         layoutTable.pack();
+
+        return layoutTable;
     }
 
-    private void createButtonBar() {
-        buttonBar = new ButtonBar(skin);
+    private Table createTextAreaTable(Label errorLabel) {
+        Table textAreaTable = new Table();
+        textAreaTable.add(textArea).fill().expand();
+        textAreaTable.row();
+        textAreaTable.add(errorLabel).fillX();
+        return textAreaTable;
+    }
+
+    private ButtonBar createButtonBar() {
+        ButtonBar buttonBar = new ButtonBar(skin);
         buttonBar.addSpacer(1);
         buttonBar.addTextButton("Past <", () -> new UndoCommand(game.commandHistory()));
         buttonBar.addImage("tardis2");
@@ -114,6 +115,8 @@ public class CodingScreen extends ScreenAdapter {
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
         }, 0, 4, TimeUnit.SECONDS);
+
+        return buttonBar;
     }
 
     private void exitToMainMenu() {
@@ -130,8 +133,8 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createResourceArea() {
-        createImageArea();
-        createSoundArea();
+        ResourceArea<ImageModel> imageArea = createImageArea();
+        ResourceArea<SoundModel> soundArea = createSoundArea();
         resourceTabControl = new TabControl();
         resourceTabControl.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
         resourceTabControl.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
@@ -139,7 +142,7 @@ public class CodingScreen extends ScreenAdapter {
         resourceTabControl.init();
     }
 
-    private void createImageArea() {
+    private ResourceArea<ImageModel> createImageArea() {
         List<ImageModel> imageModels = game.imageGroup().images();
         List<Resource<ImageModel>> editableImages = imageModels
                 .stream()
@@ -150,13 +153,13 @@ public class CodingScreen extends ScreenAdapter {
             List<ImageModel> models = images.stream().map(Resource::model).collect(Collectors.toList());
             game.imageGroup().images(models);
         });
-        imageArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
+        return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
             ImageModel model = ImageUtils.importImage(stream, url, game.imageGroup().folder());
             return new EditableImage(model, skin, game.commandHistory());
         });
     }
 
-    private void createSoundArea() {
+    private ResourceArea<SoundModel> createSoundArea() {
         List<SoundModel> soundModels = game.soundGroup().sounds();
         List<Resource<SoundModel>> editableSounds = soundModels
                 .stream()
@@ -167,7 +170,7 @@ public class CodingScreen extends ScreenAdapter {
             List<SoundModel> models = sounds.stream().map(Resource::model).collect(Collectors.toList());
             game.soundGroup().sounds(models);
         });
-        soundArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
+        return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
             SoundModel model = SoundUtils.importSound(stream, url, game.soundGroup().folder());
             return new EditableSound(model, skin, game.commandHistory());
         });
@@ -180,8 +183,8 @@ public class CodingScreen extends ScreenAdapter {
         textArea = new ScrollableTextArea(model, skin, game.commandHistory());
     }
 
-    private void createErrorLabel(Game game) {
-        errorLabel = new Label("", skin, "error");
+    private Label createErrorLabel(Game game) {
+        Label errorLabel = new Label("", skin, "error");
         errorLabel.setVisible(false);
         errorLabel.setWrap(true);
         game.registerChangeListener((g) -> {
@@ -189,6 +192,7 @@ public class CodingScreen extends ScreenAdapter {
             errorLabel.setVisible(error != null);
             errorLabel.setText(error == null ? null : "Runtime error: " + error);
         });
+        return errorLabel;
     }
 
     @Override
@@ -229,8 +233,7 @@ public class CodingScreen extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         model.dispose();
-        imageArea.dispose();
-        soundArea.dispose();
+        resourceTabControl.dispose();
         game.dispose();
     }
 }
