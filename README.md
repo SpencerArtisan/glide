@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/SpencerArtisan/glide.svg?branch=master)](https://travis-ci.org/SpencerArtisan/glide)
+
+
 ![GLIDE](./installers/glide-logo.png)
 
 The General Language Integrated Development Environment...for kids
