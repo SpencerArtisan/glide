@@ -2,7 +2,6 @@
 
 
 ![GLIDE](./installers/glide-logo.png)
-
 The General Language Integrated Development Environment...for kids
 ==================================================================
 
