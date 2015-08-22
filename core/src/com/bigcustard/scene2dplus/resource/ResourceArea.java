@@ -1,20 +1,27 @@
 package com.bigcustard.scene2dplus.resource;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ResourceArea extends ScrollPane implements Disposable {
     private Skin skin;
-    private Resource[] resources;
+    private List<Resource> resources = new ArrayList<>();
     private final CommandHistory commandHistory;
 
     public ResourceArea(Skin skin, Resource[] resources, CommandHistory commandHistory) {
         super(new Table(), skin);
         this.skin = skin;
-        this.resources = resources;
+        this.resources = Lists.newArrayList(resources);
         this.commandHistory = commandHistory;
         this.setScrollingDisabled(true, false);
         layoutControls();
@@ -28,7 +35,12 @@ public class ResourceArea extends ScrollPane implements Disposable {
         layoutTable.clearChildren();
         layoutTable.top();
         for (Resource resource : resources) {
-            layoutTable.add(resource.editor(skin, commandHistory));
+            Pair<Actor, Resource.Controller> editorAndController = resource.editor(skin, commandHistory);
+            editorAndController.getRight().registerRemoveListener(() -> {
+                commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
+                layoutControls();
+            });
+            layoutTable.add(editorAndController.getLeft());
             layoutTable.row();
         }
         layoutTable.pack();

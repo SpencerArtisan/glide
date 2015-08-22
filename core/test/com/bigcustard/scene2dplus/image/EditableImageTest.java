@@ -31,7 +31,7 @@ public class EditableImageTest {
     public void itShould_() {
         when(skin.get(TextField.TextFieldStyle.class)).thenReturn(style);
         CommandHistory history = new CommandHistory();
-        Actor editor = subject.editor(skin, history);
+//        Actor editor = subject.editor(skin, history);
     }
 
 }

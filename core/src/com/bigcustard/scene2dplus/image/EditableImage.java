@@ -3,12 +3,15 @@ package com.bigcustard.scene2dplus.image;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.bigcustard.scene2dplus.command.CommandHistory;
+import com.bigcustard.scene2dplus.image.command.RemoveImageCommand;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Strings;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class EditableImage implements Resource {
     private static final int MAX_NAME_LENGTH = 18;
@@ -59,10 +62,10 @@ public class EditableImage implements Resource {
     }
 
     @Override
-    public Actor editor(Skin skin, CommandHistory commandHistory) {
+    public Pair<Actor, Controller> editor(Skin skin, CommandHistory commandHistory) {
         Editor editor = new Editor(skin);
-        editor.new Controller(commandHistory);
-        return editor;
+        Editor.Controller controller = editor.new Controller(commandHistory);
+        return Pair.of(editor, controller);
     }
 
     private class Editor extends Table {
@@ -122,7 +125,7 @@ public class EditableImage implements Resource {
             return group;
         }
 
-        private class Controller {
+        private class Controller implements Resource.Controller {
             private final CommandHistory commandHistory;
 
             public Controller(CommandHistory commandHistory) {
@@ -146,6 +149,15 @@ public class EditableImage implements Resource {
                     String oldName = name.get();
                     String newName = text.getText();
                     commandHistory.execute(() -> name(newName), () -> name(oldName));
+                });
+            }
+
+            @Override
+            public void registerRemoveListener(Runnable onRemove) {
+                deleteButton.addListener(new ChangeListener() {
+                    public void changed(ChangeEvent event, Actor actor) {
+                        onRemove.run();
+                    }
                 });
             }
 

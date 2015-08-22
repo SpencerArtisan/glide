@@ -123,7 +123,7 @@ public class ImageArea extends ScrollPane implements Disposable {
         table.row();
         table.add(fileButton).fillX();
         table.row();
-        table.add(new EditableImage(new Image(skin, "powered_by"), "power", 100, 40).editor(skin, commandHistory));
+//        table.add(new EditableImage(new Image(skin, "powered_by"), "power", 100, 40).editor(skin, commandHistory));
     }
 
     private void createAllImageControls() {

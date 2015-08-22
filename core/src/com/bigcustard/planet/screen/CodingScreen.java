@@ -16,6 +16,7 @@ import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.bigcustard.scene2dplus.image.*;
+import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.resource.ResourceArea;
 import com.bigcustard.scene2dplus.sound.SoundArea;
 import com.bigcustard.scene2dplus.sound.SoundAreaController;
@@ -139,6 +140,11 @@ public class CodingScreen extends ScreenAdapter {
         java.util.List<ImageModel> imageModels = game.imageModel().images();
         EditableImage[] editableImages = imageModels.stream().map(EditableImage::new).toArray(EditableImage[]::new);
         imageArea = new ResourceArea(skin, editableImages, game.commandHistory());
+        imageArea.watchImageList((remainingImages) -> save(remainingImages));
+    }
+
+    private void save(Resource[] remainingImages) {
+
     }
 
     private void createSoundArea() {
