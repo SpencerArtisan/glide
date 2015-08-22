@@ -4,9 +4,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.glide.language.Syntax;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.image.ImageGroup;
 import com.bigcustard.scene2dplus.image.ImageModel;
-import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundGroup;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,8 +24,8 @@ public class RunCommandTest {
     @Mock private FileHandle gameFolder;
     @Mock private GameStore gameStore;
     @Mock private FileHandle buildFolder;
-    @Mock private ImageAreaModel imageAreaModel;
-    @Mock private SoundAreaModel soundAreaModel;
+    @Mock private ImageGroup imageGroup;
+    @Mock private SoundGroup soundGroup;
     @Mock private ImageModel imageModel;
     @Mock private Game game;
     @Mock private Consumer<Game> runGame;
@@ -33,8 +33,8 @@ public class RunCommandTest {
     @Before
     public void before() {
         initMocks(this);
-        when(game.imageGroup()).thenReturn(imageAreaModel);
-        when(game.soundGroup()).thenReturn(soundAreaModel);
+        when(game.imageGroup()).thenReturn(imageGroup);
+        when(game.soundGroup()).thenReturn(soundGroup);
         when(gameStore.buildFolder(game)).thenReturn(buildFolder);
         command = spy(new RunCommand(game, gameStore, runGame));
         doNothing().when(command).resize(any(ImageModel.class));
@@ -48,7 +48,7 @@ public class RunCommandTest {
 
     @Test
     public void resizesImages() {
-        when(imageAreaModel.images()).thenReturn(Arrays.asList(imageModel));
+        when(imageGroup.images()).thenReturn(Arrays.asList(imageModel));
         command.execute();
         verify(command).resize(imageModel);
     }

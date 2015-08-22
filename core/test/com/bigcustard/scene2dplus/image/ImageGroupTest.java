@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ImageAreaModelTest {
+public class ImageGroupTest {
     @Mock private FileHandle mockImageFolder;
     @Mock private FileHandle mockManifestFile;
     @Mock private FileHandle mockImageFile;
@@ -26,7 +26,7 @@ public class ImageAreaModelTest {
     @Mock private ImageModel mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Consumer<ImageAreaModel> mockChangeListener;
+    @Mock private Consumer<ImageGroup> mockChangeListener;
     @Captor private ArgumentCaptor<Runnable> imageChangeListenerCaptor;
 
     @Before
@@ -44,7 +44,7 @@ public class ImageAreaModelTest {
 
     @Test
     public void sendChangeEventWhenImageSendsChangeEvent() {
-        ImageAreaModel model = newModel();
+        ImageGroup model = newModel();
         model.images(ImmutableList.of(mockImage));
         model.watch(mockChangeListener);
         imageChangeListenerCaptor.getValue().run();
@@ -53,7 +53,7 @@ public class ImageAreaModelTest {
 
     @Test
     public void saveStoresImageDetails() {
-        ImageAreaModel model = newModel();
+        ImageGroup model = newModel();
         when(mockImage.filename()).thenReturn("image.png");
         when(mockImage.name()).thenReturn(new WatchableValue<>("image"));
         when(mockImage.width()).thenReturn(new WatchableValue<>(100));
@@ -65,7 +65,7 @@ public class ImageAreaModelTest {
 
     @Test
     public void deleteRemovesImageButDoesNotDeleteItFromDisk() {
-        ImageAreaModel model = newModel();
+        ImageGroup model = newModel();
         model.images(ImmutableList.of(mockImage));
         model.images(ImmutableList.of());
         assertThat(model.images()).isEmpty();
@@ -75,7 +75,7 @@ public class ImageAreaModelTest {
     @Test
     public void fromFolder() {
         when(mockManifestFile.readString()).thenReturn("{images:[{filename:image.png,name:image,width:100,height:50}]}");
-        ImageAreaModel model = existingModel();
+        ImageGroup model = existingModel();
         assertThat(model.images()).extracting("name").containsExactly(new WatchableValue<>("image"));
     }
 
@@ -83,7 +83,7 @@ public class ImageAreaModelTest {
     public void fromFolderWithMissingManifest() {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockImageFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[]{mockImageFile});
-        ImageAreaModel model = new ImageAreaModel(mockImageFolder) {
+        ImageGroup model = new ImageGroup(mockImageFolder) {
             @Override
             protected XY imageSize(FileHandle imageFile) {
                 return new XY(100, 200);
@@ -94,14 +94,14 @@ public class ImageAreaModelTest {
         assertThat(model.images()).extracting("height").containsExactly(new WatchableValue<>(200));
     }
 
-    private ImageAreaModel newModel() {
+    private ImageGroup newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockImageFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
-        return new ImageAreaModel(mockImageFolder);
+        return new ImageGroup(mockImageFolder);
     }
 
-    private ImageAreaModel existingModel() {
+    private ImageGroup existingModel() {
         when(mockManifestFile.exists()).thenReturn(true);
-        return new ImageAreaModel(mockImageFolder);
+        return new ImageGroup(mockImageFolder);
     }
 }

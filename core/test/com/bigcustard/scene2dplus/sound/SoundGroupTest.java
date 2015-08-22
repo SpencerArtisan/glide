@@ -16,14 +16,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class SoundAreaModelTest {
+public class SoundGroupTest {
     @Mock private FileHandle mockSoundFolder;
     @Mock private FileHandle mockManifestFile;
     @Mock private FileHandle mockSoundFile;
     @Mock private FileHandle mockSoundFile2;
     @Mock private SoundModel mockSound;
     @Mock private SoundModel mockSound2;
-    @Mock private Consumer<SoundAreaModel> mockChangeListener;
+    @Mock private Consumer<SoundGroup> mockChangeListener;
     @Captor private ArgumentCaptor<Runnable> soundChangeListenerCaptor;
 
     @Before
@@ -39,7 +39,7 @@ public class SoundAreaModelTest {
 
     @Test
     public void sendChangeEventWhenSoundSendsChangeEvent() {
-        SoundAreaModel model = newModel();
+        SoundGroup model = newModel();
         model.sounds(ImmutableList.of(mockSound));
         model.watch(mockChangeListener);
         soundChangeListenerCaptor.getValue().run();
@@ -48,7 +48,7 @@ public class SoundAreaModelTest {
 
     @Test
     public void saveStoresSoundDetails() {
-        SoundAreaModel model = newModel();
+        SoundGroup model = newModel();
         when(mockSound.filename()).thenReturn("sound.wav");
         when(mockSound.name()).thenReturn(new WatchableValue<>("sound"));
         model.sounds(ImmutableList.of(mockSound));
@@ -58,7 +58,7 @@ public class SoundAreaModelTest {
 
     @Test
     public void deleteRemovesSoundButDoesNotDeleteItFromDisk() {
-        SoundAreaModel model = newModel();
+        SoundGroup model = newModel();
         model.sounds(ImmutableList.of(mockSound));
         model.sounds(ImmutableList.of());
         assertThat(model.sounds()).isEmpty();
@@ -68,7 +68,7 @@ public class SoundAreaModelTest {
     @Test
     public void fromFolder() {
         when(mockManifestFile.readString()).thenReturn("{sounds:[{filename:sound.wav,name:sound}]}");
-        SoundAreaModel model = existingModel();
+        SoundGroup model = existingModel();
         assertThat(model.sounds()).extracting("name").containsExactly(new WatchableValue<>("sound"));
     }
 
@@ -76,18 +76,18 @@ public class SoundAreaModelTest {
     public void fromFolderWithMissingManifest() {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockSoundFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[]{mockSoundFile});
-        SoundAreaModel model = new SoundAreaModel(mockSoundFolder);
+        SoundGroup model = new SoundGroup(mockSoundFolder);
         assertThat(model.sounds()).extracting("name").containsExactly(new WatchableValue<>("sound.wav"));
     }
 
-    private SoundAreaModel newModel() {
+    private SoundGroup newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockSoundFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
-        return new SoundAreaModel(mockSoundFolder);
+        return new SoundGroup(mockSoundFolder);
     }
 
-    private SoundAreaModel existingModel() {
+    private SoundGroup existingModel() {
         when(mockManifestFile.exists()).thenReturn(true);
-        return new SoundAreaModel(mockSoundFolder);
+        return new SoundGroup(mockSoundFolder);
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.image.ImageGroup;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GameStoreTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private Preferences mockPreferences;
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageAreaModel mockImageModel;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageGroup mockImageModel;
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockSamplesFolder;
     @Mock private FileHandle mockUserGamesFolder;

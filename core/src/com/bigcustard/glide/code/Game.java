@@ -4,8 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.image.ImageGroup;
+import com.bigcustard.scene2dplus.sound.SoundGroup;
 import com.bigcustard.util.Watchable;
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,25 +19,24 @@ public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
     private final ScheduledFuture<?> errorChecker;
-    private Watchable<Game> changeWatchable = new Watchable<>();
-
-    private String code;
-    private ImageAreaModel imageModel;
-    private final SoundAreaModel soundModel;
+    private Watchable<Game> me = new Watchable<>();
+    private final ImageGroup imageGroup;
+    private final SoundGroup soundGroup;
     private CommandHistory commandHistory;
     private RuntimeException runtimeError;
     private boolean isModified;
+    private String code;
 
     private static int count;
 
-    public Game(Token token, String code, ImageAreaModel imageAreaModel, SoundAreaModel soundAreaModel) {
+    public Game(Token token, String code, ImageGroup imageGroup, SoundGroup soundGroup) {
         this.token = token;
         this.commandHistory = new CommandHistory();
         this.code = code;
-        this.soundModel = soundAreaModel;
-        this.imageModel = imageAreaModel;
-        this.soundModel.watch((image) -> onSoundChange());
-        this.imageModel.watch((image) -> onImageChange());
+        this.soundGroup = soundGroup;
+        this.imageGroup = imageGroup;
+        this.soundGroup.watch((image) -> onSoundChange());
+        this.imageGroup.watch((image) -> onImageChange());
 
         errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             System.out.print("+");
@@ -71,12 +70,12 @@ public class Game implements Disposable {
         return commandHistory;
     }
 
-    public ImageAreaModel imageGroup() {
-        return imageModel;
+    public ImageGroup imageGroup() {
+        return imageGroup;
     }
 
-    public SoundAreaModel soundGroup() {
-        return soundModel;
+    public SoundGroup soundGroup() {
+        return soundGroup;
     }
 
     public String code() {
@@ -86,7 +85,7 @@ public class Game implements Disposable {
     public void code(String code) {
         isModified = isModified || !this.code.equals(code);
         this.code = code;
-        changeWatchable.broadcast(this);
+        me.broadcast(this);
     }
 
     public boolean isNamed() {
@@ -94,12 +93,12 @@ public class Game implements Disposable {
     }
 
     public boolean isValid() {
-        return language().isValid(code) && imageModel.isValid();
+        return language().isValid(code) && imageGroup.isValid();
     }
 
     public void runtimeError(RuntimeException runtimeError) {
         this.runtimeError = runtimeError;
-        changeWatchable.broadcast(this);
+        me.broadcast(this);
     }
 
     public String runtimeError() {
@@ -113,18 +112,18 @@ public class Game implements Disposable {
     }
 
     public void registerChangeListener(Consumer<Game> listener) {
-        changeWatchable.watch(listener);
+        me.watch(listener);
     }
 
     private void onImageChange() {
-        imageModel.save();
-        changeWatchable.broadcast(this);
+        imageGroup.save();
+        me.broadcast(this);
         isModified = true;
     }
 
     private void onSoundChange() {
-        soundModel.save();
-        changeWatchable.broadcast(this);
+        soundGroup.save();
+        me.broadcast(this);
         isModified = true;
     }
 
@@ -152,7 +151,7 @@ public class Game implements Disposable {
 
     @Override
     public void dispose() {
-        changeWatchable.dispose();
+        me.dispose();
         errorChecker.cancel(true);
         count--;
     }

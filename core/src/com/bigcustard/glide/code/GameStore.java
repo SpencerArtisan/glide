@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
-import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.image.ImageGroup;
+import com.bigcustard.scene2dplus.sound.SoundGroup;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -52,7 +52,7 @@ public class GameStore {
     public Game create(Language language) {
         FileHandle gameFolder = findUniqueName();
         Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
-        return new Game(token, language.template(), new ImageAreaModel(gameFolder), new SoundAreaModel(gameFolder));
+        return new Game(token, language.template(), new ImageGroup(gameFolder), new SoundGroup(gameFolder));
     }
 
     public boolean hasMostRecent() {
@@ -67,11 +67,11 @@ public class GameStore {
     public Game mostRecent() {
         FileHandle gameFolder = gameFolder(preferences().getString(RECENT_GAME));
         FileHandle codeFile = codeFile(gameFolder);
-        ImageAreaModel imageAreaModel = new ImageAreaModel(gameFolder);
-        SoundAreaModel soundAreaModel = new SoundAreaModel(gameFolder);
+        ImageGroup imageGroup = new ImageGroup(gameFolder);
+        SoundGroup soundGroup = new SoundGroup(gameFolder);
         Language language = Language.from(codeFile.extension());
         Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
-        return new Game(token, codeFile.readString(), imageAreaModel, soundAreaModel);
+        return new Game(token, codeFile.readString(), imageGroup, soundGroup);
     }
 
     public List<Game.Token> allUserGames() {
@@ -154,8 +154,8 @@ public class GameStore {
 
     public Game load(Game.Token token) {
         FileHandle codeFile = codeFile(token.gameFolder());
-        ImageAreaModel imageAreaModel = new ImageAreaModel(token.gameFolder());
-        SoundAreaModel soundAreaModel = new SoundAreaModel(token.gameFolder());
-        return new Game(token, codeFile.readString(), imageAreaModel, soundAreaModel);
+        ImageGroup imageGroup = new ImageGroup(token.gameFolder());
+        SoundGroup soundGroup = new SoundGroup(token.gameFolder());
+        return new Game(token, codeFile.readString(), imageGroup, soundGroup);
     }
 }

@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class SoundAreaModel implements Disposable {
+public class SoundGroup implements Disposable {
     private static String SOUND_DETAIL_FILE = "sounds.json";
 
-    private Watchable<SoundAreaModel> me = new Watchable<>();
+    private Watchable<SoundGroup> me = new Watchable<>();
     private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
     private static int count;
 
-    public SoundAreaModel(FileHandle soundFolder) {
+    public SoundGroup(FileHandle soundFolder) {
         this.folder = soundFolder;
         readSounds();
-        System.out.println("SoundAreaModels: " + ++count);
+        System.out.println("SoundGroups: " + ++count);
     }
 
-    public void watch(Consumer<SoundAreaModel> watcher) {
+    public void watch(Consumer<SoundGroup> watcher) {
         me.watch(watcher);
     }
 
@@ -97,7 +97,7 @@ public class SoundAreaModel implements Disposable {
             sounds = new SoundDetails[0];
         }
 
-        public SoundListDetails(SoundAreaModel model) {
+        public SoundListDetails(SoundGroup model) {
             sounds = model.sounds().stream().map(SoundDetails::new).toArray(SoundDetails[]::new);
         }
     }

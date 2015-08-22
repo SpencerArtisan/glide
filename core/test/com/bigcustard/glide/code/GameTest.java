@@ -3,9 +3,9 @@ package com.bigcustard.glide.code;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.glide.language.Syntax;
-import com.bigcustard.scene2dplus.image.ImageAreaModel;
+import com.bigcustard.scene2dplus.image.ImageGroup;
 import com.bigcustard.scene2dplus.image.ImageModel;
-import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.sound.SoundGroup;
 import com.bigcustard.scene2dplus.sound.SoundModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,16 +22,16 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GameTest {
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageAreaModel mockImageModel;
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private SoundAreaModel mockSoundModel;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageGroup mockImageModel;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private SoundGroup mockSoundModel;
     @Mock private ImageModel mockImage;
     @Mock private SoundModel mockSound;
     @Mock private Consumer<Game> mockChangeListener;
     @Mock private Language mockLanguage;
     @Mock private FileHandle mockFolder;
     @Mock private Syntax mockSyntax;
-    @Captor private ArgumentCaptor<Consumer<ImageAreaModel>> changeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<SoundAreaModel>> changeSoundListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageGroup>> changeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<SoundGroup>> changeSoundListenerCaptor;
 
     @Before
     public void before() {

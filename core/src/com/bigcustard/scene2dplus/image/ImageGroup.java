@@ -11,21 +11,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ImageAreaModel implements Disposable {
+public class ImageGroup implements Disposable {
     private static String IMAGE_DETAIL_FILE = "images.json";
 
-    private Watchable<ImageAreaModel> me = new Watchable<>();
+    private Watchable<ImageGroup> me = new Watchable<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
     private static int count;
 
-    public ImageAreaModel(FileHandle imageFolder) {
+    public ImageGroup(FileHandle imageFolder) {
         this.folder = imageFolder;
         readImages();
-        System.out.println("ImageAreaModels: " + ++count);
+        System.out.println("Imagegroups: " + ++count);
     }
 
-    public void watch(Consumer<ImageAreaModel> watcher) {
+    public void watch(Consumer<ImageGroup> watcher) {
         me.watch(watcher);
     }
 
@@ -112,7 +112,7 @@ public class ImageAreaModel implements Disposable {
             images = new ImageDetails[0];
         }
 
-        public ImageListDetails(ImageAreaModel model) {
+        public ImageListDetails(ImageGroup model) {
             images = model.images().stream().map(ImageDetails::new).toArray(ImageDetails[]::new);
         }
     }
