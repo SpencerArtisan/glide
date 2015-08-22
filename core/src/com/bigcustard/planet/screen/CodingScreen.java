@@ -24,9 +24,9 @@ import com.bigcustard.scene2dplus.image.ImageUtils;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.resource.ResourceArea;
 import com.bigcustard.scene2dplus.resource.ResourceSet;
-import com.bigcustard.scene2dplus.sound.SoundArea;
-import com.bigcustard.scene2dplus.sound.SoundAreaController;
-import com.bigcustard.scene2dplus.sound.SoundAreaModel;
+import com.bigcustard.scene2dplus.sound.EditableSound;
+import com.bigcustard.scene2dplus.sound.SoundModel;
+import com.bigcustard.scene2dplus.sound.SoundUtils;
 import com.bigcustard.scene2dplus.tab.TabControl;
 import com.bigcustard.scene2dplus.textarea.ScrollableTextArea;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
@@ -47,9 +47,9 @@ public class CodingScreen extends ScreenAdapter {
     private Table layoutTable;
     private TextAreaModel model;
     private ScrollableTextArea textArea;
-    private ResourceArea imageArea;
-    private SoundArea soundArea;
-    private TabControl resourceArea;
+    private ResourceArea<ImageModel> imageArea;
+    private ResourceArea<SoundModel> soundArea;
+    private TabControl resourceTabControl;
     private ButtonBar buttonBar;
     private Game game;
     private GameStore gameStore;
@@ -87,7 +87,7 @@ public class CodingScreen extends ScreenAdapter {
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.row();
         layoutTable.add(textAreaTable).expand().fill();
-        layoutTable.add(resourceArea).width(280).expandY().fillY();
+        layoutTable.add(resourceTabControl).width(280).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
         layoutTable.setFillParent(true);
@@ -132,11 +132,11 @@ public class CodingScreen extends ScreenAdapter {
     private void createResourceArea() {
         createImageArea();
         createSoundArea();
-        resourceArea = new TabControl();
-        resourceArea.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
-        resourceArea.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
-        resourceArea.background(skin.getDrawable("solarizedBackground"));
-        resourceArea.init();
+        resourceTabControl = new TabControl();
+        resourceTabControl.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
+        resourceTabControl.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
+        resourceTabControl.background(skin.getDrawable("solarizedBackground"));
+        resourceTabControl.init();
     }
 
     private void createImageArea() {
@@ -157,9 +157,20 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createSoundArea() {
-        SoundAreaModel soundAreaModel = game.soundModel();
-        soundArea = new SoundArea(soundAreaModel, skin);
-        new SoundAreaController(soundArea, soundAreaModel, game.commandHistory()).init();
+        List<SoundModel> soundModels = game.soundModel().sounds();
+        List<Resource<SoundModel>> editableSounds = soundModels
+                .stream()
+                .map((model) -> new EditableSound(model, skin, game.commandHistory()))
+                .collect(Collectors.toList());
+        ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editableSounds, game.commandHistory());
+        resourceSet.resources().watch((sounds) -> {
+            List<SoundModel> models = sounds.stream().map(Resource::model).collect(Collectors.toList());
+            game.soundModel().sounds(models);
+        });
+        soundArea = new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
+            SoundModel model = SoundUtils.importSound(stream, url, game.soundModel().folder());
+            return new EditableSound(model, skin, game.commandHistory());
+        });
     }
 
     private void createTextArea(Game game) {

@@ -26,7 +26,7 @@ public class SoundModelTest {
         when(mockSoundFile.name()).thenReturn("file.png");
         when(mockSoundFile.extension()).thenReturn("png");
         createModel();
-        assertThat(subject.name()).isEqualTo("file.png");
+        assertThat(subject.name().get()).isEqualTo("file.png");
     }
 
     @Test
@@ -34,7 +34,7 @@ public class SoundModelTest {
         when(mockSoundFile.name()).thenReturn("a_long_sound_file_name.png");
         when(mockSoundFile.extension()).thenReturn("png");
         createModel();
-        assertThat(subject.name()).isEqualTo("a_long_sound_.png");
+        assertThat(subject.name().get()).isEqualTo("a_long_sound_.png");
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SoundModelTest {
         when(mockSoundFile.name()).thenReturn("sound.file.png");
         when(mockSoundFile.extension()).thenReturn("png");
         createModel();
-        assertThat(subject.name()).isEqualTo("sound.file.png");
+        assertThat(subject.name().get()).isEqualTo("sound.file.png");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SoundModelTest {
         when(mockSoundFile.name()).thenReturn("sound file.png");
         when(mockSoundFile.extension()).thenReturn("png");
         createModel();
-        assertThat(subject.name()).isEqualTo("sound file.png");
+        assertThat(subject.name().get()).isEqualTo("sound file.png");
     }
 
     private void createModel() {

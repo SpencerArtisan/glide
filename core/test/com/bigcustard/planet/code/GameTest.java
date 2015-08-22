@@ -31,19 +31,15 @@ public class GameTest {
     @Mock private FileHandle mockFolder;
     @Mock private Syntax mockSyntax;
     @Captor private ArgumentCaptor<Consumer<ImageAreaModel>> changeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<SoundModel>> addSoundListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<SoundModel>> removeSoundListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<SoundModel>> changeSoundListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<SoundAreaModel>> changeSoundListenerCaptor;
 
     @Before
     public void before() {
         initMocks(this);
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockLanguage.syntax()).thenReturn(mockSyntax);
-        doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
-        doNothing().when(mockSoundModel).registerAddSoundListener(addSoundListenerCaptor.capture());
-        doNothing().when(mockSoundModel).registerRemoveSoundListener(removeSoundListenerCaptor.capture());
-        doNothing().when(mockSoundModel).registerChangeSoundListener(changeSoundListenerCaptor.capture());
+        doNothing().when(mockImageModel).watch(changeImageListenerCaptor.capture());
+        doNothing().when(mockSoundModel).watch(changeSoundListenerCaptor.capture());
     }
 
     @Test
@@ -102,53 +98,23 @@ public class GameTest {
     }
 
     @Test
-    public void addSoundStoresSoundModel() {
-        newGame(mockLanguage);
-        addSoundListenerCaptor.getValue().accept(mockSound);
-        verify(mockSoundModel, times(1)).save();
-    }
-
-    @Test
-    public void removeSoundStoresSoundModel() {
-        newGame(mockLanguage);
-        removeSoundListenerCaptor.getValue().accept(mockSound);
-        verify(mockSoundModel, times(1)).save();
+    public void notifiesOfSoundChange() {
+        Game game = newGame(mockLanguage);
+        game.registerChangeListener(mockChangeListener);
+        changeSoundListenerCaptor.getValue().accept(mockSoundModel);
+        verify(mockChangeListener).accept(game);
     }
 
     @Test
     public void changeSoundStoresSoundModel() {
         newGame(mockLanguage);
-        changeSoundListenerCaptor.getValue().accept(mockSound);
+        changeSoundListenerCaptor.getValue().accept(mockSoundModel);
         verify(mockSoundModel, times(1)).save();
     }
 
     @Test
     public void providesAccessToTheSoundModel() {
         assertThat(newGame(mockLanguage).soundModel()).isSameAs(mockSoundModel);
-    }
-
-    @Test
-    public void notifiesOfSoundAdd() {
-        Game game = newGame(mockLanguage);
-        game.registerChangeListener(mockChangeListener);
-        addSoundListenerCaptor.getValue().accept(mockSound);
-        verify(mockChangeListener).accept(game);
-    }
-
-    @Test
-    public void notifiesOfSoundRemove() {
-        Game game = newGame(mockLanguage);
-        game.registerChangeListener(mockChangeListener);
-        removeSoundListenerCaptor.getValue().accept(mockSound);
-        verify(mockChangeListener).accept(game);
-    }
-
-    @Test
-    public void notifiesOfSoundChange() {
-        Game game = newGame(mockLanguage);
-        game.registerChangeListener(mockChangeListener);
-        changeSoundListenerCaptor.getValue().accept(mockSound);
-        verify(mockChangeListener).accept(game);
     }
 
     @Test

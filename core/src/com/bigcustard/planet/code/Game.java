@@ -35,11 +35,9 @@ public class Game implements Disposable {
         this.commandHistory = new CommandHistory();
         this.code = code;
         this.soundModel = soundAreaModel;
-        this.soundModel.registerAddSoundListener((image) -> onSoundChange());
-        this.soundModel.registerRemoveSoundListener((image) -> onSoundChange());
-        this.soundModel.registerChangeSoundListener((image) -> onSoundChange());
         this.imageModel = imageAreaModel;
-        this.imageModel.registerChangeImageListener((image) -> onImageChange());
+        this.soundModel.watch((image) -> onSoundChange());
+        this.imageModel.watch((image) -> onImageChange());
 
         errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             System.out.print("+");

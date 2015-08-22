@@ -8,6 +8,6 @@ public interface Resource<TModel> {
     TModel model();
 
     interface Controller {
-        void registerRemoveListener(Runnable onRemove);
+        void watchRemoveButton(Runnable onRemove);
     }
 }

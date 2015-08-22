@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.bigcustard.blurp.model.Utils;
 import com.bigcustard.scene2dplus.XY;
+import com.bigcustard.util.Util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -47,34 +49,8 @@ public class ImageUtils {
     }
 
     public static ImageModel importImage(InputStream imageStream, String url, FileHandle folder) {
-        try {
-            FileHandle mainImageFile = generateImageFileHandle(url, folder);
-            mainImageFile.write(imageStream, false);
-            imageStream.close();
-            XY imageSize = imageSize(mainImageFile);
-            return new ImageModel(mainImageFile, imageSize.x, imageSize.y);
-        } catch (IOException e) {
-            System.err.println("Error importing image: " + e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static FileHandle generateImageFileHandle(String url, FileHandle folder) {
-        String filename = url.substring(url.lastIndexOf("/") + 1);
-        filename = filename.contains("?") ? filename.substring(0, filename.indexOf("?")) : filename;
-        return findUniqueImageName(filename, folder);
-    }
-
-    private static FileHandle findUniqueImageName(String filename, FileHandle folder) {
-        int dotIndex = filename.lastIndexOf('.');
-        String filenameExcludingExtension = filename.substring(0, dotIndex);
-        String extension = filename.substring(dotIndex);
-
-        FileHandle candidate = folder.child(filenameExcludingExtension + extension);
-        int suffix = 2;
-        while (candidate.exists()) {
-            candidate = folder.child(filenameExcludingExtension + suffix++ + extension);
-        }
-        return candidate;
+        FileHandle mainImageFile = Util.importFile(imageStream, url, folder);
+        XY imageSize = imageSize(mainImageFile);
+        return new ImageModel(mainImageFile, imageSize.x, imageSize.y);
     }
 }

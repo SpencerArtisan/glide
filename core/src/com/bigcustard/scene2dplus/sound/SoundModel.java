@@ -5,18 +5,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.image.ValidationResult;
+import com.bigcustard.util.CompositeWatchable;
 import com.bigcustard.util.Watchable;
+import com.bigcustard.util.WatchableValue;
+import com.google.common.base.Strings;
 
 import java.util.function.Consumer;
 
 public class SoundModel implements Disposable {
     private static int MAX_NAME_LENGTH = 13;
+    private static int count;
 
     private final FileHandle file;
     private Sound sound;
-    private String name;
-    private Watchable<SoundModel> changeWatchable = new Watchable<>();
-    private static int count;
+    private WatchableValue<String> name;
+    private CompositeWatchable me;
 
     public SoundModel(FileHandle file) {
         this(file, generateName(file));
@@ -24,16 +28,21 @@ public class SoundModel implements Disposable {
 
     public SoundModel(FileHandle file, String name) {
         this.file = file;
-        this.name = name;
+        this.name = new WatchableValue<>(name);
+        this.me = new CompositeWatchable(this.name);
         System.out.println("SoundModels: " + ++count);
     }
 
-    public void registerChangeListener(Consumer<SoundModel> listener) {
-        changeWatchable.watch(listener);
+    public void watch(Runnable watcher) {
+        me.watch(watcher);
     }
 
-    public String name() {
+    public WatchableValue<String> name() {
         return name;
+    }
+
+    public void name(String name) {
+        this.name.set(name);
     }
 
     public Sound sound() {
@@ -41,12 +50,6 @@ public class SoundModel implements Disposable {
             sound = audio().newSound(file);
         }
         return sound;
-    }
-
-    public void name(String name) {
-        changeAttribute(() -> {
-            this.name = name;
-        });
     }
 
     public String filename() {
@@ -65,11 +68,6 @@ public class SoundModel implements Disposable {
         return Gdx.audio;
     }
 
-    private void changeAttribute(Runnable doChange) {
-        doChange.run();
-        changeWatchable.broadcast(this);
-    }
-
     private static String generateName(FileHandle file) {
         String filename = file.name();
         int dotIndex = filename.lastIndexOf('.');
@@ -79,8 +77,9 @@ public class SoundModel implements Disposable {
 
     @Override
     public void dispose() {
-        changeWatchable.dispose();
-        sound.dispose();
+        name.dispose();
+        me.dispose();
+        if (sound != null) sound.dispose();
         count--;
     }
 }

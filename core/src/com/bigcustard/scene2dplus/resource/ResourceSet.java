@@ -15,7 +15,7 @@ public class ResourceSet<TModel> {
 
     private void watchRemoveEvents(CommandHistory commandHistory) {
         for (Resource<TModel> resource : resources) {
-            resource.controller().registerRemoveListener(() -> {
+            resource.controller().watchRemoveButton(() -> {
                 commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
             });
         }

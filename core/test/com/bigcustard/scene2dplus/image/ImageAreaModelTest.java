@@ -46,7 +46,7 @@ public class ImageAreaModelTest {
     public void sendChangeEventWhenImageSendsChangeEvent() {
         ImageAreaModel model = newModel();
         model.images(ImmutableList.of(mockImage));
-        model.registerChangeImageListener(mockChangeListener);
+        model.watch(mockChangeListener);
         imageChangeListenerCaptor.getValue().run();
         verify(mockChangeListener).accept(model);
     }

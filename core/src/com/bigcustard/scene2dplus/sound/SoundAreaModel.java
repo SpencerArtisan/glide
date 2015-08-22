@@ -12,62 +12,41 @@ import java.util.function.Consumer;
 public class SoundAreaModel implements Disposable {
     private static String SOUND_DETAIL_FILE = "sounds.json";
 
-    private Watchable<SoundModel> addSoundWatchable = new Watchable<>();
-    private Watchable<SoundModel> removeSoundWatchable = new Watchable<>();
-    private Watchable<SoundModel> changeSoundWatchable = new Watchable<>();
-    private Watchable<SoundModel> validationWatchable = new Watchable<>();
+    private Watchable<SoundAreaModel> me = new Watchable<>();
     private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
     private static int count;
 
-    public SoundAreaModel(FileHandle SoundFolder) {
-        this.folder = SoundFolder;
+    public SoundAreaModel(FileHandle soundFolder) {
+        this.folder = soundFolder;
         readSounds();
         System.out.println("SoundAreaModels: " + ++count);
     }
 
-    public void registerAddSoundListener(Consumer<SoundModel> listener) {
-        addSoundWatchable.watch(listener);
-    }
-
-    public void registerRemoveSoundListener(Consumer<SoundModel> listener) {
-        removeSoundWatchable.watch(listener);
-    }
-
-    public void registerChangeSoundListener(Consumer<SoundModel> listener) {
-        changeSoundWatchable.watch(listener);
-    }
-
-    public void registerValidationListener(Consumer<SoundModel> listener) {
-        validationWatchable.watch(listener);
+    public void watch(Consumer<SoundAreaModel> watcher) {
+        me.watch(watcher);
     }
 
     public FileHandle folder() {
         return folder;
     }
 
-    public void folder(FileHandle newFolder) {
-        folder = newFolder;
-    }
-
     public List<SoundModel> sounds() {
         return sounds;
     }
 
-    public SoundModel addSound(SoundModel sound) {
-        sounds.add(0, sound);
-        addSoundWatchable.broadcast(sound);
-        sound.registerChangeListener(changeSoundWatchable::broadcast);
-        return sound;
+    public void sounds(List<SoundModel> sounds) {
+        this.sounds = sounds;
+        me.broadcast(this);
+        sounds.forEach(this::watch);
+    }
+
+    private void watch(SoundModel sound) {
+        sound.watch(() -> me.broadcast(this));
     }
 
     public void save() {
         folder.child(SOUND_DETAIL_FILE).writeString(new Json().toJson(new SoundListDetails(this)), false);
-    }
-
-    public void removeSound(SoundModel Sound) {
-        sounds.remove(Sound);
-        removeSoundWatchable.broadcast(Sound);
     }
 
     private void readSounds() {
@@ -76,38 +55,37 @@ public class SoundAreaModel implements Disposable {
             readSoundsFromDetailFile(soundDetails);
         } else {
             FileHandle[] soundFiles = folder.list((dir, name) -> name.endsWith("wav") || name.endsWith("mp3"));
-            for (FileHandle file : soundFiles) {
+            for (FileHandle soundFile : soundFiles) {
                 try {
-                    if (!file.isDirectory()) {
-                        SoundModel SoundModel = new SoundModel(file);
-                        SoundModel.name(file.name());
-                        addSound(SoundModel);
+                    if (!soundFile.isDirectory()) {
+                        SoundModel soundModel = new SoundModel(soundFile);
+                        soundModel.name(soundFile.name());
+                        sounds.add(soundModel);
                     }
                 } catch (Exception e) {
-                    System.out.println("Ignoring non Sound file: " + file.name());
+                    System.out.println("Ignoring non sound file: " + soundFile.name());
                 }
             }
         }
     }
 
-    private void readSoundsFromDetailFile(FileHandle SoundDetails) {
-        String manifest = SoundDetails.readString();
+    private void readSoundsFromDetailFile(FileHandle soundDetails) {
+        String manifest = soundDetails.readString();
         SoundListDetails soundListDetails = new Json().fromJson(SoundListDetails.class, manifest);
-        for (SoundDetails Sound : soundListDetails.sounds) {
+        for (SoundDetails sound : soundListDetails.sounds) {
             try {
-                addSound(Sound.toSound(folder));
+                SoundModel soundModel = sound.toSound(folder);
+                sounds.add(soundModel);
+                watch(soundModel);
             } catch (Exception e) {
-                System.out.println("Failed to watch game Sound: " + e);
+                System.out.println("Failed to watch game sound: " + e);
             }
         }
     }
 
     @Override
     public void dispose() {
-        addSoundWatchable.dispose();
-        removeSoundWatchable.dispose();
-        changeSoundWatchable.dispose();
-        validationWatchable.dispose();
+        me.dispose();
         sounds.forEach(SoundModel::dispose);
         count--;
     }
@@ -131,14 +109,14 @@ public class SoundAreaModel implements Disposable {
         public SoundDetails() {
         }
 
-        public SoundDetails(SoundModel Sound) {
-            name = Sound.name();
-            filename = Sound.filename();
+        public SoundDetails(SoundModel sound) {
+            name = sound.name().get();
+            filename = sound.filename();
         }
 
         public SoundModel toSound(FileHandle parentFolder) {
-            FileHandle SoundFile = parentFolder.child(filename);
-            return new SoundModel(SoundFile, name);
+            FileHandle soundFile = parentFolder.child(filename);
+            return new SoundModel(soundFile, name);
         }
     }
 }

@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ImageAreaModel implements Disposable {
     private static String IMAGE_DETAIL_FILE = "images.json";
 
-    private Watchable<ImageAreaModel> changeImageWatchable = new Watchable<>();
+    private Watchable<ImageAreaModel> me = new Watchable<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
     private static int count;
@@ -25,8 +25,8 @@ public class ImageAreaModel implements Disposable {
         System.out.println("ImageAreaModels: " + ++count);
     }
 
-    public void registerChangeImageListener(Consumer<ImageAreaModel> listener) {
-        changeImageWatchable.watch(listener);
+    public void watch(Consumer<ImageAreaModel> watcher) {
+        me.watch(watcher);
     }
 
     public FileHandle folder() {
@@ -39,12 +39,12 @@ public class ImageAreaModel implements Disposable {
 
     public void images(List<ImageModel> images) {
         this.images = images;
-        changeImageWatchable.broadcast(this);
-        images.forEach(this::addListeners);
+        me.broadcast(this);
+        images.forEach(this::watch);
     }
 
-    private void addListeners(ImageModel image) {
-        image.watch(() -> changeImageWatchable.broadcast(this));
+    private void watch(ImageModel image) {
+        image.watch(() -> me.broadcast(this));
     }
 
     public void save() {
@@ -91,7 +91,7 @@ public class ImageAreaModel implements Disposable {
             try {
                 ImageModel imageModel = image.toImage(folder);
                 images.add(imageModel);
-                addListeners(imageModel);
+                watch(imageModel);
             } catch (Exception e) {
                 System.out.println("Failed to watch game image: " + e);
             }
@@ -100,7 +100,7 @@ public class ImageAreaModel implements Disposable {
 
     @Override
     public void dispose() {
-        changeImageWatchable.dispose();
+        me.dispose();
         images.forEach(ImageModel::dispose);
         count--;
     }
