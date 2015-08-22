@@ -14,10 +14,7 @@ import java.util.function.Consumer;
 public class ImageAreaModel implements Disposable {
     private static String IMAGE_DETAIL_FILE = "images.json";
 
-    private Notifier<ImageModel> addImageNotifier = new Notifier<>();
-    private Notifier<ImageModel> removeImageNotifier = new Notifier<>();
-    private Notifier<ImageModel> changeImageNotifier = new Notifier<>();
-    private Notifier<ImageModel> validationNotifier = new Notifier<>();
+    private Notifier<ImageAreaModel> changeImageNotifier = new Notifier<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
     private static int count;
@@ -28,20 +25,8 @@ public class ImageAreaModel implements Disposable {
         System.out.println("ImageAreaModels: " + ++count);
     }
 
-    public void registerAddImageListener(Consumer<ImageModel> listener) {
-        addImageNotifier.watch(listener);
-    }
-
-    public void registerRemoveImageListener(Consumer<ImageModel> listener) {
-        removeImageNotifier.watch(listener);
-    }
-
-    public void registerChangeImageListener(Consumer<ImageModel> listener) {
+    public void registerChangeImageListener(Consumer<ImageAreaModel> listener) {
         changeImageNotifier.watch(listener);
-    }
-
-    public void registerValidationListener(Consumer<ImageModel> listener) {
-        validationNotifier.watch(listener);
     }
 
     public FileHandle folder() {
@@ -52,20 +37,14 @@ public class ImageAreaModel implements Disposable {
         return images;
     }
 
-    public ImageModel addImage(ImageModel image) {
-        boolean initialValidState = isValid();
-        images.add(0, image);
-        addImageNotifier.notify(image);
-        if (initialValidState != isValid()) {
-            validationNotifier.notify(image);
-        }
-        addListeners(image);
-        return image;
+    public void images(List<ImageModel> images) {
+        this.images = images;
+        changeImageNotifier.notify(this);
+        images.forEach(this::addListeners);
     }
 
     private void addListeners(ImageModel image) {
-        image.registerValidationListener(validationNotifier::notify);
-        image.registerChangeListener(changeImageNotifier::notify);
+        image.registerChangeListener((ignored) -> changeImageNotifier.notify(this));
     }
 
     public void save() {
@@ -74,15 +53,6 @@ public class ImageAreaModel implements Disposable {
 
     public boolean isValid() {
         return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
-    }
-
-    public void removeImage(ImageModel image) {
-        boolean initialValidState = isValid();
-        images.remove(image);
-        removeImageNotifier.notify(image);
-        if (initialValidState != isValid()) {
-            validationNotifier.notify(image);
-        }
     }
 
     public ValidationResult[] validate() {
@@ -101,7 +71,7 @@ public class ImageAreaModel implements Disposable {
                         XY imageSize = imageSize(imageFile);
                         ImageModel imageModel = new ImageModel(imageFile, imageSize.x, imageSize.y);
                         imageModel.name(imageFile.name());
-                        addImage(imageModel);
+                        images.add(imageModel);
                     }
                 } catch (Exception e) {
                     System.out.println("Ignoring non image file: " + imageFile.name());
@@ -130,16 +100,9 @@ public class ImageAreaModel implements Disposable {
 
     @Override
     public void dispose() {
-        addImageNotifier.dispose();
-        removeImageNotifier.dispose();
         changeImageNotifier.dispose();
-        validationNotifier.dispose();
         images.forEach(ImageModel::dispose);
         count--;
-    }
-
-    public void images(List<ImageModel> images) {
-        this.images = images;
     }
 
     private static class ImageListDetails {

@@ -1,8 +1,8 @@
 package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.bigcustard.scene2dplus.XY;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -25,9 +25,7 @@ public class ImageAreaModelTest {
     @Mock private ImageModel mockImage2;
     @Mock private ValidationResult mockValidationResult1;
     @Mock private ValidationResult mockValidationResult2;
-    @Mock private Consumer<ImageModel> mockValidationListener;
-    @Mock private Consumer<ImageModel> mockChangeListener;
-    @Captor private ArgumentCaptor<Consumer<ImageModel>> imageValidationListenerCaptor;
+    @Mock private Consumer<ImageAreaModel> mockChangeListener;
     @Captor private ArgumentCaptor<Consumer<ImageModel>> imageChangeListenerCaptor;
 
     @Before
@@ -40,64 +38,16 @@ public class ImageAreaModelTest {
         when(mockImageFile2.name()).thenReturn("image2.png");
         when(mockImage.validate()).thenReturn(mockValidationResult1);
         when(mockImage2.validate()).thenReturn(mockValidationResult2);
-        doNothing().when(mockImage).registerValidationListener(imageValidationListenerCaptor.capture());
         doNothing().when(mockImage).registerChangeListener(imageChangeListenerCaptor.capture());
-    }
-
-    @Test
-    public void sendValidationEventWhenAddInvalidImage() {
-        ImageAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        when(mockValidationResult1.isValid()).thenReturn(false);
-        model.addImage(mockImage);
-        verify(mockValidationListener).accept(mockImage);
-    }
-
-    @Test
-    public void sendValidationEventWhenImageSendsValidationEvent() {
-        ImageAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        when(mockValidationResult1.isValid()).thenReturn(true);
-        model.addImage(mockImage);
-        imageValidationListenerCaptor.getValue().accept(mockImage);
-        verify(mockValidationListener).accept(mockImage);
     }
 
     @Test
     public void sendChangeEventWhenImageSendsChangeEvent() {
         ImageAreaModel model = newModel();
+        model.images(ImmutableList.of(mockImage));
         model.registerChangeImageListener(mockChangeListener);
-        model.addImage(mockImage);
         imageChangeListenerCaptor.getValue().accept(mockImage);
-        verify(mockChangeListener).accept(mockImage);
-    }
-
-    @Test
-    public void doesNotSendSecondValidationEventWhenAddSecondInvalidImage() {
-        ImageAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        when(mockValidationResult1.isValid()).thenReturn(false);
-        when(mockValidationResult2.isValid()).thenReturn(false);
-        model.addImage(mockImage);
-        model.addImage(mockImage2);
-        verify(mockValidationListener, times(1)).accept(mockImage);
-    }
-
-    @Test
-    public void doesNotSendValidationEventWhenAddValidImage() {
-        ImageAreaModel model = newModel();
-        model.registerValidationListener(mockValidationListener);
-        when(mockValidationResult1.isValid()).thenReturn(true);
-        model.addImage(mockImage);
-        verify(mockValidationListener, never()).accept(any(ImageModel.class));
-    }
-
-    @Test
-    public void returnsValidationResultsForAllImages() {
-        ImageAreaModel model = newModel();
-        model.addImage(mockImage);
-        model.addImage(mockImage2);
-        assertThat(model.validate()).containsExactly(mockValidationResult2, mockValidationResult1);
+        verify(mockChangeListener).accept(model);
     }
 
     @Test
@@ -107,7 +57,7 @@ public class ImageAreaModelTest {
         when(mockImage.name()).thenReturn("image");
         when(mockImage.width()).thenReturn(100);
         when(mockImage.height()).thenReturn(50);
-        model.addImage(mockImage);
+        model.images(ImmutableList.of(mockImage));
         model.save();
         verify(mockManifestFile).writeString("{images:[{filename:image.png,name:image,width:100,height:50}]}", false);
     }
@@ -115,8 +65,8 @@ public class ImageAreaModelTest {
     @Test
     public void deleteRemovesImageButDoesNotDeleteItFromDisk() {
         ImageAreaModel model = newModel();
-        model.addImage(mockImage);
-        model.removeImage(mockImage);
+        model.images(ImmutableList.of(mockImage));
+        model.images(ImmutableList.of());
         assertThat(model.images()).isEmpty();
         verify(mockImageFile, never()).delete();
     }
@@ -146,13 +96,11 @@ public class ImageAreaModelTest {
     private ImageAreaModel newModel() {
         when(mockManifestFile.exists()).thenReturn(false);
         when(mockImageFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
-        ImageAreaModel model = new ImageAreaModel(mockImageFolder);
-        return model;
+        return new ImageAreaModel(mockImageFolder);
     }
 
     private ImageAreaModel existingModel() {
         when(mockManifestFile.exists()).thenReturn(true);
-        ImageAreaModel model = new ImageAreaModel(mockImageFolder);
-        return model;
+        return new ImageAreaModel(mockImageFolder);
     }
 }

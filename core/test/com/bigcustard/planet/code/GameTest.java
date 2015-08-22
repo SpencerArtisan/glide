@@ -30,9 +30,7 @@ public class GameTest {
     @Mock private Language mockLanguage;
     @Mock private FileHandle mockFolder;
     @Mock private Syntax mockSyntax;
-    @Captor private ArgumentCaptor<Consumer<ImageModel>> addImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImageModel>> removeImageListenerCaptor;
-    @Captor private ArgumentCaptor<Consumer<ImageModel>> changeImageListenerCaptor;
+    @Captor private ArgumentCaptor<Consumer<ImageAreaModel>> changeImageListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundModel>> addSoundListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundModel>> removeSoundListenerCaptor;
     @Captor private ArgumentCaptor<Consumer<SoundModel>> changeSoundListenerCaptor;
@@ -42,8 +40,6 @@ public class GameTest {
         initMocks(this);
         when(mockLanguage.scriptEngine()).thenReturn("groovy");
         when(mockLanguage.syntax()).thenReturn(mockSyntax);
-        doNothing().when(mockImageModel).registerAddImageListener(addImageListenerCaptor.capture());
-        doNothing().when(mockImageModel).registerRemoveImageListener(removeImageListenerCaptor.capture());
         doNothing().when(mockImageModel).registerChangeImageListener(changeImageListenerCaptor.capture());
         doNothing().when(mockSoundModel).registerAddSoundListener(addSoundListenerCaptor.capture());
         doNothing().when(mockSoundModel).registerRemoveSoundListener(removeSoundListenerCaptor.capture());
@@ -78,23 +74,9 @@ public class GameTest {
     }
 
     @Test
-    public void addImageStoresImageModel() {
-        newGame(mockLanguage);
-        addImageListenerCaptor.getValue().accept(mockImage);
-        verify(mockImageModel, times(1)).save();
-    }
-
-    @Test
-    public void removeImageStoresImageModel() {
-        newGame(mockLanguage);
-        removeImageListenerCaptor.getValue().accept(mockImage);
-        verify(mockImageModel, times(1)).save();
-    }
-
-    @Test
     public void changeImageStoresImageModel() {
         newGame(mockLanguage);
-        changeImageListenerCaptor.getValue().accept(mockImage);
+        changeImageListenerCaptor.getValue().accept(mockImageModel);
         verify(mockImageModel, times(1)).save();
     }
 
@@ -112,26 +94,10 @@ public class GameTest {
     }
 
     @Test
-    public void notifiesOfImageAdd() {
-        Game game = newGame(mockLanguage);
-        game.registerChangeListener(mockChangeListener);
-        addImageListenerCaptor.getValue().accept(mockImage);
-        verify(mockChangeListener).accept(game);
-    }
-
-    @Test
-    public void notifiesOfImageRemove() {
-        Game game = newGame(mockLanguage);
-        game.registerChangeListener(mockChangeListener);
-        removeImageListenerCaptor.getValue().accept(mockImage);
-        verify(mockChangeListener).accept(game);
-    }
-
-    @Test
     public void notifiesOfImageChange() {
         Game game = newGame(mockLanguage);
         game.registerChangeListener(mockChangeListener);
-        changeImageListenerCaptor.getValue().accept(mockImage);
+        changeImageListenerCaptor.getValue().accept(mockImageModel);
         verify(mockChangeListener).accept(game);
     }
 
@@ -244,7 +210,7 @@ public class GameTest {
     @Test
     public void itShould_BeModifiedWhenImagesChange() {
         Game game = newGame(mockLanguage);
-        addImageListenerCaptor.getValue().accept(mockImage);
+        changeImageListenerCaptor.getValue().accept(mockImageModel);
         assertThat(game.isModified()).isTrue();
     }
 

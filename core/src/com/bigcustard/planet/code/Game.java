@@ -39,8 +39,6 @@ public class Game implements Disposable {
         this.soundModel.registerRemoveSoundListener((image) -> onSoundChange());
         this.soundModel.registerChangeSoundListener((image) -> onSoundChange());
         this.imageModel = imageAreaModel;
-        this.imageModel.registerAddImageListener((image) -> onImageChange());
-        this.imageModel.registerRemoveImageListener((image) -> onImageChange());
         this.imageModel.registerChangeImageListener((image) -> onImageChange());
 
         errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
