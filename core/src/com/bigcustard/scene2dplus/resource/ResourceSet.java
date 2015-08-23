@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ResourceSet<TModel> implements Disposable {
     private final CommandHistory commandHistory;
@@ -17,6 +18,14 @@ public class ResourceSet<TModel> implements Disposable {
         this.resources = new WatchableList<>(resources);
         watchRemoveButton();
         watchModelChanges();
+    }
+
+    public WatchableList<Resource<TModel>> resources() {
+        return resources;
+    }
+
+    public Stream<Resource<TModel>> stream() {
+        return resources.stream();
     }
 
     private void watchModelChanges() {
@@ -31,10 +40,6 @@ public class ResourceSet<TModel> implements Disposable {
         resource.controller().watchRemoveButton(() -> {
             commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
         });
-    }
-
-    public WatchableList<Resource<TModel>> resources() {
-        return resources;
     }
 
     @Override
