@@ -15,8 +15,9 @@ public class Watchable<T> implements Disposable {
         System.out.println("watchables = " + ++count + this);
     }
 
-    public void watch(Consumer<T> watcher) {
+    public Watchable<T> watch(Consumer<T> watcher) {
         watchers.add(watcher);
+        return this;
     }
 
     public void broadcast(T object) {

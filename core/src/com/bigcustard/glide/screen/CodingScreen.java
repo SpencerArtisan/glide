@@ -53,6 +53,7 @@ public class CodingScreen extends ScreenAdapter {
     private Consumer<Screen> setScreen;
     private ScreenFactory screenFactory;
     private ScheduledFuture<?> gameSavingProcess;
+    private ButtonBar buttonBar;
 
     public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -73,7 +74,7 @@ public class CodingScreen extends ScreenAdapter {
         createTextArea(game);
         Label errorLabel = createErrorLabel(game);
         createResourceArea();
-        ButtonBar buttonBar = createButtonBar();
+        buttonBar = createButtonBar();
 
         Table layoutTable = new Table();
         layoutTable.background(skin.getDrawable("solarizedNew"));
@@ -240,5 +241,6 @@ public class CodingScreen extends ScreenAdapter {
         model.dispose();
         resourceTabControl.dispose();
         game.dispose();
+        buttonBar.dispose();
     }
 }

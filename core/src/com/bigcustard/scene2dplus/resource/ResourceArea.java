@@ -51,6 +51,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
         FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external("."));
         files.setResultListener((success, result) -> {
             fileConsumer.accept(result);
+            files.dispose();
             return true;
         });
         files.show(getStage());
@@ -75,6 +76,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     private void createFileButton(Skin skin) {
         fileButton = new TextButton("Add from file", skin);
         ButtonUtil.onClick(fileButton, this::addFromFile);
+        clipboardButton.clearListeners();
+        fileButton.clearListeners();
     }
 
     private void addFromFile() {

@@ -4,17 +4,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.bigcustard.scene2dplus.Spacer;
 import com.bigcustard.scene2dplus.command.Command;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 import static com.bigcustard.util.Util.tryGet;
 
-public class ButtonBar extends HorizontalGroup {
+public class ButtonBar extends HorizontalGroup implements Disposable {
     private Skin skin;
 
     public ButtonBar(Skin skin) {
@@ -68,6 +71,12 @@ public class ButtonBar extends HorizontalGroup {
         });
         addActor(button);
         refreshEnabledStatuses();
+    }
+
+    @Override
+    public void dispose() {
+        Executors.newSingleThreadScheduledExecutor()
+                 .schedule(() -> getChildren().forEach(Actor::clearListeners), 100, TimeUnit.MILLISECONDS);
     }
 
     private static class RefreshEnabledStatusEvent extends Event {}

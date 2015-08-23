@@ -115,7 +115,7 @@ public class SoundEditor implements Resource<SoundModel> {
             }
 
             private void modelToView() {
-                model.name().watch(nameField::setText);
+                model.name().watch(nameField::setText).broadcast();
             }
 
             @Override

@@ -293,5 +293,10 @@ public class WelcomeScreen extends ScreenAdapter {
 	public void dispose() {
 		super.dispose();
 		stage.dispose();
+		continueGameButton.clearListeners();
+		myGamesButton.clearListeners();
+		newGameButton.clearListeners();
+		quitButton.clearListeners();
+		samplesButton.clearListeners();
 	}
 }

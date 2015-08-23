@@ -12,13 +12,18 @@ public class WatchableValue<T> extends Watchable<T> {
     }
 
     @Override
-    public void watch(Consumer<T> watcher) {
+    public WatchableValue<T> watch(Consumer<T> watcher) {
         super.watch(watcher);
+        return this;
+    }
+
+    public void broadcast() {
+        broadcast(value);
     }
 
     public void set(T value) {
         this.value = value;
-        broadcast(value);
+        broadcast();
     }
 
     public T get() {

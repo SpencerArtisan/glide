@@ -1,5 +1,6 @@
 package com.bigcustard.glide.screen;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
@@ -101,6 +102,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     @Override
     public void dispose() {
+        getButtonTable().getChildren().forEach(Actor::clearListeners);
         count--;
     }
 }

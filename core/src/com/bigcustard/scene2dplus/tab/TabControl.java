@@ -42,5 +42,6 @@ public class TabControl extends Table {
 
     public void dispose() {
         tabs.forEach((tab) -> { if (tab instanceof Disposable) ((Disposable) tab).dispose(); });
+        tabButtons.forEach(Actor::clearListeners);
     }
 }

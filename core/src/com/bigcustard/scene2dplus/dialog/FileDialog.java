@@ -11,12 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.Spacer;
 
 import java.io.FileFilter;
 import java.util.Comparator;
 
-public class FileDialog extends Dialog {
+public class FileDialog extends Dialog implements Disposable {
     private final String title;
     private final Skin skin;
     private final FileHandle baseDir;
@@ -148,7 +149,11 @@ public class FileDialog extends Dialog {
                 resultListener.result(success, result);
             }
         }.setOkButtonText("Load");
+    }
 
+    @Override
+    public void dispose() {
+        fileList.clearListeners();
     }
 
     public interface ResultListener {

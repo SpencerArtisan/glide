@@ -135,9 +135,9 @@ public class ImageEditor implements Resource<ImageModel> {
             }
 
             private void modelToView() {
-                model.width().watch((value) -> widthField.setText(String.valueOf(value)));
-                model.height().watch((value) -> heightField.setText(String.valueOf(value)));
-                model.name().watch(nameField::setText);
+                model.width().watch((value) -> widthField.setText(String.valueOf(value))).broadcast();
+                model.height().watch((value) -> heightField.setText(String.valueOf(value))).broadcast();
+                model.name().watch(nameField::setText).broadcast();
             }
 
             @Override
