@@ -5,9 +5,16 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class WatchableValueTest {
     private WatchableValue<String> subject = new WatchableValue<>("hello");
+
+    @Test
+    public void itShouldNot_NotifyNewListenersImmediatelyWhenTheValueIsNull() {
+        subject = new WatchableValue<>(null);
+        subject.watch((v) -> fail());
+    }
 
     @Test
     public void itShould_NotifyNewListenersImmediately() {

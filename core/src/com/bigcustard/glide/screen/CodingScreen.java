@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+// todo - test
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
@@ -149,8 +150,8 @@ public class CodingScreen extends ScreenAdapter {
                 .map((model) -> new EditableImage(model, skin, game.commandHistory()))
                 .collect(Collectors.toList());
         ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editableImages, game.commandHistory());
-        resourceSet.resources().watch((images) -> {
-            List<ImageModel> models = images.stream().map(Resource::model).collect(Collectors.toList());
+        resourceSet.resources().watchAdd((image) -> {
+            List<ImageModel> models = resourceSet.resources().stream().map(Resource::model).collect(Collectors.toList());
             game.imageGroup().images(models);
         });
         return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {
@@ -166,8 +167,8 @@ public class CodingScreen extends ScreenAdapter {
                 .map((model) -> new EditableSound(model, skin, game.commandHistory()))
                 .collect(Collectors.toList());
         ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editableSounds, game.commandHistory());
-        resourceSet.resources().watch((sounds) -> {
-            List<SoundModel> models = sounds.stream().map(Resource::model).collect(Collectors.toList());
+        resourceSet.resources().watchAdd((sound) -> {
+            List<SoundModel> models = resourceSet.resources().stream().map(Resource::model).collect(Collectors.toList());
             game.soundGroup().sounds(models);
         });
         return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) -> {

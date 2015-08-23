@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -19,25 +20,25 @@ public class WatchableListTest {
 
     @Test
     public void itShould_NotifyNewListenersImmediately() {
-        AtomicReference<List<String>> value = new AtomicReference<>();
-        subject.watch(value::set);
-        assertThat(value.get()).containsExactly("one", "two");
+        List<String> added = new ArrayList<>();
+        subject.watchAdd(added::add);
+        assertThat(added).containsExactly("one", "two");
     }
 
     @Test
     public void itShould_NotifyListenersWhenValueAdded() {
-        AtomicReference<List<String>> value = new AtomicReference<>();
-        subject.watch(value::set);
+        List<String> added = new ArrayList<>();
+        subject.watchAdd(added::add);
         subject.add("three");
-        assertThat(value.get()).containsExactly("three", "one", "two");
+        assertThat(added).containsExactly("one", "two", "three");
     }
 
     @Test
     public void itShould_NotifyListenersWhenValueRemoved() {
-        AtomicReference<List<String>> value = new AtomicReference<>();
-        subject.watch(value::set);
+        List<String> removed = new ArrayList<>();
+        subject.watchRemove(removed::add);
         subject.remove("one");
-        assertThat(value.get()).containsExactly("two");
+        assertThat(removed).containsExactly("one");
     }
 
 

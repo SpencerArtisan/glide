@@ -43,7 +43,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
         createFileButton(skin);
         layoutControls();
         pack();
-        resources.resources().watch((list) -> layoutControls());
+        resources.resources().watchAdd((list) -> layoutControls());
+        resources.resources().watchRemove((list) -> layoutControls());
     }
 
     public void chooseFile(Consumer<FileHandle> fileConsumer) {
@@ -82,8 +83,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
                 Resource<TModel> resource = resourceImporter.apply(fileHandle.read(), fileHandle.path());
                 commandHistory.execute(() -> resources.resources().add(resource), () -> resources.resources().remove(resource));
             } catch (Exception e) {
-                System.err.println("Error adding resource from clipboard: " + e);
-                dodgyWiggle(clipboardButton);
+                System.err.println("Error adding resource from file: " + e);
+                dodgyWiggle(fileButton);
             }
         }));
     }

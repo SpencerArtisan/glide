@@ -140,6 +140,7 @@ public class EditableImage implements Resource<ImageModel> {
 
             @Override
             public void watchRemoveButton(Runnable onRemove) {
+                // todo - clear resource
                 deleteButton.addListener(new ChangeListener() {
                     public void changed(ChangeEvent event, Actor actor) {
                         onRemove.run();
