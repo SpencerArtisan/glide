@@ -12,16 +12,16 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class EditableImageTest {
+public class ImageEditorTest {
     @Mock private Image image;
     @Mock private Skin skin;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private TextField.TextFieldStyle style;
-    private EditableImage subject;
+    private ImageEditor subject;
 
     @Before
     public void before() {
         initMocks(this);
-//        subject = new EditableImage(image, "name", 100, 50);
+//        subject = new ImageEditor(image, "name", 100, 50);
     }
 
     @Test

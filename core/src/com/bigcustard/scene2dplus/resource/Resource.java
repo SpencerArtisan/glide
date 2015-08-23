@@ -10,5 +10,6 @@ public interface Resource<TModel> extends Disposable {
 
     interface Controller {
         void watchRemoveButton(Runnable onRemove);
+        void unwatchRemoveButton();
     }
 }

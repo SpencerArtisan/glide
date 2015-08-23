@@ -16,7 +16,7 @@ public class ResourceSet<TModel> implements Disposable {
     public ResourceSet(List<Resource<TModel>> resources, CommandHistory commandHistory) {
         this.commandHistory = commandHistory;
         this.resources = new WatchableList<>(resources);
-        watchRemoveButton();
+        watchRemoveButtons();
         watchModelChanges();
     }
 
@@ -30,16 +30,23 @@ public class ResourceSet<TModel> implements Disposable {
 
     private void watchModelChanges() {
         resources.watchAdd(this::watchRemoveButton);
+        resources.watchRemove(this::unwatchRemoveButton);
     }
 
-    private void watchRemoveButton() {
+    private void watchRemoveButtons() {
         resources.forEach(this::watchRemoveButton);
     }
 
     private void watchRemoveButton(Resource<TModel> resource) {
-        resource.controller().watchRemoveButton(() -> {
-            commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
-        });
+        resource.controller().watchRemoveButton(() -> executeRemoveCommand(resource));
+    }
+
+    private void unwatchRemoveButton(Resource<TModel> resource) {
+        resource.controller().unwatchRemoveButton();
+    }
+
+    private void executeRemoveCommand(Resource<TModel> resource) {
+        commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
     }
 
     @Override

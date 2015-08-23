@@ -18,13 +18,13 @@ import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
-import com.bigcustard.scene2dplus.image.EditableImage;
+import com.bigcustard.scene2dplus.image.ImageEditor;
 import com.bigcustard.scene2dplus.image.ImageModel;
 import com.bigcustard.scene2dplus.image.ImageUtils;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.resource.ResourceArea;
 import com.bigcustard.scene2dplus.resource.ResourceSet;
-import com.bigcustard.scene2dplus.sound.EditableSound;
+import com.bigcustard.scene2dplus.sound.SoundEditor;
 import com.bigcustard.scene2dplus.sound.SoundModel;
 import com.bigcustard.scene2dplus.sound.SoundUtils;
 import com.bigcustard.scene2dplus.tab.TabControl;
@@ -145,11 +145,11 @@ public class CodingScreen extends ScreenAdapter {
 
     private ResourceArea<ImageModel> createImageArea() {
         List<ImageModel> imageModels = game.imageGroup().images();
-        List<Resource<ImageModel>> editableImages = imageModels
+        List<Resource<ImageModel>> editors = imageModels
                 .stream()
                 .map(this::createImageEditor)
                 .collect(Collectors.toList());
-        ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editableImages, game.commandHistory());
+        ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editors, game.commandHistory());
         resourceSet.resources().watchChange((image) -> {
             List<ImageModel> models = resourceSet.stream().map(Resource::model).collect(Collectors.toList());
             game.imageGroup().images(models);
@@ -158,17 +158,17 @@ public class CodingScreen extends ScreenAdapter {
                 createImageEditor(ImageUtils.importImage(stream, url, game.imageGroup().folder())));
     }
 
-    private EditableImage createImageEditor(ImageModel model) {
-        return new EditableImage(model, skin, game.commandHistory());
+    private ImageEditor createImageEditor(ImageModel model) {
+        return new ImageEditor(model, skin, game.commandHistory());
     }
 
     private ResourceArea<SoundModel> createSoundArea() {
         List<SoundModel> soundModels = game.soundGroup().sounds();
-        List<Resource<SoundModel>> editableSounds = soundModels
+        List<Resource<SoundModel>> editors = soundModels
                 .stream()
                 .map(this::createSoundEditor)
                 .collect(Collectors.toList());
-        ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editableSounds, game.commandHistory());
+        ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editors, game.commandHistory());
         resourceSet.resources().watchAdd((sound) -> {
             List<SoundModel> models = resourceSet.stream().map(Resource::model).collect(Collectors.toList());
             game.soundGroup().sounds(models);
@@ -177,8 +177,8 @@ public class CodingScreen extends ScreenAdapter {
                 createSoundEditor(SoundUtils.importSound(stream, url, game.soundGroup().folder())));
     }
 
-    private EditableSound createSoundEditor(SoundModel model) {
-        return new EditableSound(model, skin, game.commandHistory());
+    private SoundEditor createSoundEditor(SoundModel model) {
+        return new SoundEditor(model, skin, game.commandHistory());
     }
 
     private void createTextArea(Game game) {
