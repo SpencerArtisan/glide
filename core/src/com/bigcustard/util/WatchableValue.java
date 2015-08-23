@@ -14,7 +14,6 @@ public class WatchableValue<T> extends Watchable<T> {
     @Override
     public void watch(Consumer<T> watcher) {
         super.watch(watcher);
-        if (value != null) broadcast(value);
     }
 
     public void set(T value) {

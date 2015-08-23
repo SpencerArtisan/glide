@@ -35,7 +35,6 @@ public class WatchableList<E> implements Iterable<E>, Disposable {
 
     public void watchAdd(Consumer<E> watcher) {
         add.watch(watcher);
-        list.forEach(watcher::accept);
     }
 
     public void watchRemove(Consumer<E> watcher) {
@@ -45,7 +44,6 @@ public class WatchableList<E> implements Iterable<E>, Disposable {
     public void watchChange(Consumer<E> watcher) {
         remove.watch(watcher);
         add.watch(watcher);
-        list.forEach(watcher::accept);
     }
 
     @Override

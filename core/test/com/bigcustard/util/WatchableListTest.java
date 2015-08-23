@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class WatchableListTest {
     private WatchableList<String> subject;
@@ -19,10 +20,8 @@ public class WatchableListTest {
     }
 
     @Test
-    public void itShould_NotifyNewAddListenersImmediately() {
-        List<String> added = new ArrayList<>();
-        subject.watchAdd(added::add);
-        assertThat(added).containsExactly("one", "two");
+    public void itShouldNot_NotifyNewAddListenersImmediately() {
+        subject.watchAdd((v) -> fail());
     }
 
     @Test
@@ -30,7 +29,7 @@ public class WatchableListTest {
         List<String> added = new ArrayList<>();
         subject.watchAdd(added::add);
         subject.add("three");
-        assertThat(added).containsExactly("one", "two", "three");
+        assertThat(added).containsExactly("three");
     }
 
     @Test
@@ -42,10 +41,8 @@ public class WatchableListTest {
     }
 
     @Test
-    public void itShould_NotifyNewChangeListenersImmediately() {
-        List<String> changed = new ArrayList<>();
-        subject.watchChange(changed::add);
-        assertThat(changed).containsExactly("one", "two");
+    public void itShouldNot_NotifyNewChangeListenersImmediately() {
+        subject.watchChange((v) -> fail());
     }
 
     @Test
@@ -53,7 +50,7 @@ public class WatchableListTest {
         List<String> changed = new ArrayList<>();
         subject.watchChange(changed::add);
         subject.add("three");
-        assertThat(changed).containsExactly("one", "two", "three");
+        assertThat(changed).containsExactly("three");
     }
 
     @Test
@@ -61,8 +58,6 @@ public class WatchableListTest {
         List<String> changed = new ArrayList<>();
         subject.watchChange(changed::add);
         subject.remove("one");
-        assertThat(changed).containsExactly("one", "two", "one");
+        assertThat(changed).containsExactly("one");
     }
-
-
 }

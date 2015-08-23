@@ -11,16 +11,8 @@ public class WatchableValueTest {
     private WatchableValue<String> subject = new WatchableValue<>("hello");
 
     @Test
-    public void itShouldNot_NotifyNewListenersImmediatelyWhenTheValueIsNull() {
-        subject = new WatchableValue<>(null);
+    public void itShouldNot_NotifyNewListenersImmediately() {
         subject.watch((v) -> fail());
-    }
-
-    @Test
-    public void itShould_NotifyNewListenersImmediately() {
-        AtomicReference<String> value = new AtomicReference<>();
-        subject.watch(value::set);
-        assertThat(value.get()).isEqualTo("hello");
     }
 
     @Test
