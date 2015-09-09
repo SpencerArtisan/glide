@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.resource;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +23,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class ResourceArea<TModel> extends ScrollPane implements Disposable {
+    private static final String PREFERENCES_KEY = "ResourceFolder";
     private Skin skin;
     private final ResourceSet<TModel> resources;
     private final CommandHistory commandHistory;
@@ -48,9 +50,13 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     }
 
     public void chooseFile(Consumer<FileHandle> fileConsumer) {
-        FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external("."));
+        String folder = preferences().getString(PREFERENCES_KEY, ".");
+        FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external(folder));
         files.setResultListener((success, result) -> {
-            if (success) fileConsumer.accept(result);
+            if (success) {
+                fileConsumer.accept(result);
+                preferences().putString(PREFERENCES_KEY, result.parent().path());
+            }
             files.dispose();
             return success;
         });
@@ -118,6 +124,10 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     @VisibleForTesting
     protected Clipboard getClipboard() {
         return Gdx.app.getClipboard();
+    }
+
+    protected Preferences preferences() {
+        return Gdx.app.getPreferences(PREFERENCES_KEY);
     }
 
     private void dodgyWiggle(TextButton button) {
