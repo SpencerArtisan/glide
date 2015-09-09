@@ -64,7 +64,7 @@ public class ImageGroup implements Disposable {
         if (imageDetails.exists()) {
             readImagesFromDetailFile(imageDetails);
         } else {
-            FileHandle[] imageFiles = folder.list((dir, name) -> !name.startsWith("code"));
+            FileHandle[] imageFiles = folder.list((dir, name) -> isImage(name));
             for (FileHandle imageFile : imageFiles) {
                 try {
                     if (!imageFile.isDirectory()) {
@@ -76,6 +76,10 @@ public class ImageGroup implements Disposable {
                 }
             }
         }
+    }
+
+    private boolean isImage(String name) {
+        return name.endsWith("gif") || name.endsWith("jpg") || name.endsWith("jpeg") || name.endsWith("png") || name.endsWith("bmp");
     }
 
     protected XY imageSize(FileHandle imageFile) {
