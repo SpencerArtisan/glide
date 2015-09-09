@@ -50,9 +50,9 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     public void chooseFile(Consumer<FileHandle> fileConsumer) {
         FileDialog files = FileDialog.createLoadDialog("Pick your image", skin, Gdx.files.external("."));
         files.setResultListener((success, result) -> {
-            fileConsumer.accept(result);
+            if (success) fileConsumer.accept(result);
             files.dispose();
-            return true;
+            return success;
         });
         files.show(getStage());
     }
