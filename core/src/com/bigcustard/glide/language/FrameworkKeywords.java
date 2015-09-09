@@ -26,14 +26,15 @@ public class FrameworkKeywords implements Keywords {
                 "Circle", "angle", "camera", "withDelayBeforeStart", "withDelayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
                 "isRunningAnEffect", "console", "keyboard", "clear", "fontSize", "Colours", "values", "Right", "Left", "Center",
                 "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
-                "position", "println", "Rectangle", "randomInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
+                "position", "println", "Rectangle", "randomInRange", "randomIntInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
                 "targetStyle", "TargetStyle", "screen", "update", "utils", "x", "y", "wasJustPressed", "zoomTo",
                 "elapsedTime", "sequence", "style", "image", "scaleBy", "duration", "layer", "ScreenLayer", "Background", "Main", "Overlay", "onPressed", "onReleased",
                 "setX", "setY", "setScaleX", "setScaleY", "setAngle", "setColour", "setTransparency", "setHidden", "setTargetStyle", "setLayer", "setMouse",
                 "setPosition", "setScale", "height", "width", "setSize", "setFontSize", "setJustification", "setText", "setWrap", "setWrapWidth", "setImage",
                 "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
                 "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour", "sleep", "moveBy", "collidedWith",
-                "loadSoundEffect", "play", "pause", "stop", "setVolume", "loadMusic", "createAnimationSprite", "isPlaying", "step", "reverse"
+                "loadSoundEffect", "play", "pause", "stop", "setVolume", "loadMusic", "createAnimationSprite", "isPlaying", "step", "reverse",
+                "copy"
         };
     }
 
