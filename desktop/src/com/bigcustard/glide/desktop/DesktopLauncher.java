@@ -7,6 +7,9 @@ import com.bigcustard.glide.PlanetApplication;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+		System.setProperty("org.jruby.embed.localvariable.behavior", "transient");
+		System.setProperty("org.lwjgl.opengl.Display.enableOSXFullscreenModeAPI", "true");
+
 		LwjglInput.keyRepeatInitialTime = 0.2f;
 		LwjglInput.keyRepeatTime = 0.04f;
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
