@@ -76,8 +76,6 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     private void createFileButton(Skin skin) {
         fileButton = new TextButton("Add from file", skin);
         ButtonUtil.onClick(fileButton, this::addFromFile);
-        clipboardButton.clearListeners();
-        fileButton.clearListeners();
     }
 
     private void addFromFile() {
@@ -113,6 +111,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     @Override
     public void dispose() {
         resources.dispose();
+        clipboardButton.clearListeners();
+        fileButton.clearListeners();
     }
 
     @VisibleForTesting
