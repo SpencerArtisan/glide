@@ -84,12 +84,15 @@ public class FileDialog extends Dialog implements Disposable {
     }
 
     private void changeDirectory(FileHandle currentDir) {
+
+
         fileListLabel.setText(currentDir.name());
         final Array<FileListItem> items = new Array<>();
         final FileHandle[] list = currentDir.list(filter);
         for (final FileHandle handle : list) {
             items.add(new FileListItem(handle));
         }
+
 
         items.sort(dirListComparator);
 

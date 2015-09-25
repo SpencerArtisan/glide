@@ -50,7 +50,7 @@ public class Groovy extends Language {
     @Override
     public String vetoPreInsert(String characters, TextAreaModel textAreaModel) {
         if (currentLineEndsInOpeningBrace(textAreaModel) && characters.matches("\n\\s*")) {
-            characters = characters + "    $END$" + characters + "}";
+            characters = characters + "    $END$";
         }
         return characters;
     }

@@ -2,8 +2,8 @@
     "platform": "linux64",
     "jdk": "jdk.zip",
     "executable": "planet",
-    "appjar": "desktop/build/libs/desktop-1.0.jar",
-    "mainclass": "com/bigcustard/planet/desktop/DesktopLauncher",
+    "appjar": "desktop/build/libs/desktop-0.2.3.jar",
+    "mainclass": "com/bigcustard/glide/desktop/DesktopLauncher",
     "vmargs": [
        "-Xmx1G"
     ],

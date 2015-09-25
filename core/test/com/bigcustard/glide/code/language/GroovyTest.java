@@ -22,14 +22,14 @@ public class GroovyTest {
     public void enterOnLineEndingInBraceAddsClosingBracesAutomatically() {
         model.insert("hello {");
         String veto = subject.vetoPreInsert("\n", model);
-        assertThat(veto).isEqualTo("\n    $END$\n}");
+        assertThat(veto).isEqualTo("\n    $END$");
     }
 
     @Test
     public void enterOnLineEndingInBraceAddsClosingBracesInCorrectColumn() {
         model.insert("  hello {");
         String veto = subject.vetoPreInsert("\n  ", model);
-        assertThat(veto).isEqualTo("\n      $END$\n  }");
+        assertThat(veto).isEqualTo("\n      $END$");
     }
 
     @Test

@@ -9,12 +9,12 @@ import com.bigcustard.glide.screen.RuntimeFacade;
 import com.bigcustard.glide.screen.ScreenFactory;
 import com.bigcustard.glide.screen.WelcomeScreen;
 
-public class PlanetApplication extends com.badlogic.gdx.Game {
+public class GlideApplication extends com.badlogic.gdx.Game {
     private Viewport viewport;
     private ResourceManager resourceManager;
     private MouseWindowChecker mouseWindowChecker;
 
-    public PlanetApplication(MouseWindowChecker mouseWindowChecker) {
+    public GlideApplication(MouseWindowChecker mouseWindowChecker) {
         this.mouseWindowChecker = mouseWindowChecker;
     }
 

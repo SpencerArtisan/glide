@@ -3,7 +3,7 @@ package com.bigcustard.glide.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglInput;
-import com.bigcustard.glide.PlanetApplication;
+import com.bigcustard.glide.GlideApplication;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -16,6 +16,6 @@ public class DesktopLauncher {
         config.title = "General Language Integrated Development Environment";
         config.width = 1024;
         config.height = 768;
-		new LwjglApplication(new PlanetApplication(new LwjglMouseWindowChecker()), config);
+		new LwjglApplication(new GlideApplication(new LwjglMouseWindowChecker()), config);
 	}
 }
