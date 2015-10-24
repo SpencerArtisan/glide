@@ -45,7 +45,7 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
     }
 
     public void refreshEnabledStatuses() {
-        SnapshotArray<Actor> children = getChildren();
+        Actor[] children = getChildren().items;
         for (Actor child : children) {
             if (child instanceof Button) {
                 child.fire(new RefreshEnabledStatusEvent());
