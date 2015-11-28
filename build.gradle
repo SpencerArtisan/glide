@@ -14,6 +14,38 @@ allprojects {
 
     group = 'com.artisan-software.glide'
 
+
+modifyPom {
+     project {
+         name 'Glide for kids'
+         description 'Development IDE for kids'
+         url 'https://github.com/SpencerArtisan/glide'
+         inceptionYear '2014'
+
+         scm {
+             url 'https://github.com/SpencerArtisan/glide'
+             connection 'scm:git@github.com:SpencerArtisan/glide.git'
+             developerConnection 'scm:git@github.com:SpencerArtisan/glide.git'
+         }
+
+         licenses {
+             license {
+                 name 'The Apache Software License, Version 2.0'
+                 url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                 distribution 'repo'
+             }
+         }
+
+         developers {
+             developer {
+                 id 'spencerartisan'
+                 name 'Spencer Ward'
+                 email 'spencer@artisan-software.com'
+             }
+         }
+     }
+ }
+
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = true
@@ -84,6 +116,39 @@ project(":core") {
 project(":installers") {
 
     apply plugin: "com.bmuschko.nexus"
+
+
+modifyPom {
+     project {
+         name 'Glide for kids'
+         description 'Development IDE for kids'
+         url 'https://github.com/SpencerArtisan/glide'
+         inceptionYear '2014'
+
+         scm {
+             url 'https://github.com/SpencerArtisan/glide'
+             connection 'scm:git@github.com:SpencerArtisan/glide.git'
+             developerConnection 'scm:git@github.com:SpencerArtisan/glide.git'
+         }
+
+         licenses {
+             license {
+                 name 'The Apache Software License, Version 2.0'
+                 url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                 distribution 'repo'
+             }
+         }
+
+         developers {
+             developer {
+                 id 'spencerartisan'
+                 name 'Spencer Ward'
+                 email 'spencer@artisan-software.com'
+             }
+         }
+     }
+}
+
     nexus {
         sign = true
         repositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
