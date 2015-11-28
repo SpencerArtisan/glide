@@ -25,6 +25,9 @@ Release Process
 4. `./package.sh`
 5. `./gradlew uploadArchives`
 
+Changing to jenkins process.  Build is http://leonandjosh.ddns.net:8080/job/glide/
+
+
 Troubleshooting
 ---------------
 DesktopLauncher not found - Means you did a gradle build without the dist
