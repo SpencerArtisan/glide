@@ -12,14 +12,16 @@ buildscript {
 allprojects {
     apply plugin: "idea"
 
+    group = 'com.artisan-software.glide'
+
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = false
-        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
-        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
+        repositoryUrl = "https://oss.sonatype.org/content/repositories/releases/"
+        snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    version = '0.2.6'
+    version = '0.2.7-SNAPSHOT'
     ext {
         appName = 'glide'
         gdxVersion = '1.5.3'
@@ -84,11 +86,11 @@ project(":installers") {
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = false
-        repositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
-        snapshotRepositoryUrl = "http://leonandjosh.ddns.net:8081/nexus/content/repositories/glide"
+        repositoryUrl = "https://oss.sonatype.org/content/repositories/releases/"
+        snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    group = 'glide'
+    group = 'com.artisan-software.glide'
 
     artifacts {
         archives file: file('../build/Glide-windows64-offline.exe'), classifier: 'windows installer'
