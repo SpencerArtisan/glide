@@ -244,7 +244,7 @@ public class SyntaxTest {
     public void noErrorsInGoodGroovy() throws InterruptedException {
 		String program = "public void hello() {\n}";
 		syntax.isValid(program);
-		Thread.sleep(500);
+		Thread.sleep(5000);
 		assertThat(syntax.error(program)).isNull();
     }
 
@@ -252,7 +252,7 @@ public class SyntaxTest {
     public void goodGroovyCodeIsValid() throws InterruptedException {
 		String program = "public void hello() {\n}";
 		syntax.isValid(program);
-		Thread.sleep(500);
+		Thread.sleep(5000);
 		assertThat(syntax.isValid(program)).isTrue();
     }
 
@@ -260,7 +260,7 @@ public class SyntaxTest {
     public void errorsInBadGroovy() throws InterruptedException {
 		String program = "public void hello() {\n\"unended string\n}";
 		syntax.isValid(program);
-		Thread.sleep(500);
+		Thread.sleep(5000);
 		assertThat(syntax.error(program)).isEqualTo(Pair.of(1, "expecting anything but ''\\n''; got it anyway"));
     }
 
@@ -268,7 +268,7 @@ public class SyntaxTest {
 	public void badGroovyCodeIsIsInvalid() throws InterruptedException {
 		String program = "public void hello() {\n\"unended string\n}";
 		syntax.isValid(program);
-		Thread.sleep(500);
+		Thread.sleep(5000);
 		assertThat(syntax.isValid(program)).isFalse();
 	}
 
