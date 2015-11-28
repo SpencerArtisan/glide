@@ -16,12 +16,12 @@ allprojects {
 
     apply plugin: "com.bmuschko.nexus"
     nexus {
-        sign = false
-        repositoryUrl = "https://oss.sonatype.org/content/repositories/releases/"
+        sign = true
+        repositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
         snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    version = '0.2.7-SNAPSHOT'
+    version = '0.2.9'
     ext {
         appName = 'glide'
         gdxVersion = '1.5.3'
@@ -85,8 +85,8 @@ project(":installers") {
 
     apply plugin: "com.bmuschko.nexus"
     nexus {
-        sign = false
-        repositoryUrl = "https://oss.sonatype.org/content/repositories/releases/"
+        sign = true
+        repositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
         snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
