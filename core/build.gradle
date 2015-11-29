@@ -9,7 +9,7 @@ sourceSets.test.java.srcDirs = [ "test/" ]
 
 modifyPom {
     project {
-        name 'Glide'
+        name 'Glide core'
         description 'IDE for kids'
         url 'https://github.com/SpencerArtisan/glide'
         inceptionYear '2014'
