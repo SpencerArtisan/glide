@@ -23,7 +23,7 @@ allprojects {
         snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    version = '0.2.10-SNAPSHOT'
+    version = '0.2.12'
     ext {
         appName = 'glide'
         gdxVersion = '1.5.3'
@@ -87,8 +87,6 @@ project(":installers") {
 
     apply plugin: "com.bmuschko.nexus"
 
-
-
     nexus {
         sign = true
         repositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -104,34 +102,3 @@ project(":installers") {
         archives file: file('../build/Glide-linux32-offline.tar'), classifier: 'linux 32 installer'
     }
 }
-
-    modifyPom {
-         project {
-             name 'Glide'
-             description 'IDE for kids'
-             url 'https://github.com/SpencerArtisan/glide'
-             inceptionYear '2014'
-
-             scm {
-                 url 'https://github.com/SpencerArtisan/glide'
-                 connection 'scm:git@github.com:SpencerArtisan/glide.git'
-                 developerConnection 'scm:git@github.com:SpencerArtisan/glide.git'
-             }
-
-             licenses {
-                 license {
-                     name 'The MIT license'
-                     url 'https://opensource.org/licenses/MIT'
-                     distribution 'repo'
-                 }
-             }
-
-             developers {
-                 developer {
-                     id 'spencerartisan'
-                     name 'Spencer Ward'
-                     email 'spencer@artisan-software.com'
-                 }
-             }
-         }
-     }
