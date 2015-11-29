@@ -26,3 +26,34 @@ task dist(type: Jar) {
 }
 
 dist.dependsOn classes
+
+modifyPom {
+    project {
+        name 'Glide desktop'
+        description 'IDE for kids'
+        url 'https://github.com/SpencerArtisan/glide'
+        inceptionYear '2014'
+
+        scm {
+            url 'https://github.com/SpencerArtisan/glide'
+            connection 'scm:git@github.com:SpencerArtisan/glide.git'
+            developerConnection 'scm:git@github.com:SpencerArtisan/glide.git'
+        }
+
+        licenses {
+            license {
+                name 'The MIT license'
+                url 'https://opensource.org/licenses/MIT'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'spencerartisan'
+                name 'Spencer Ward'
+                email 'spencer@artisan-software.com'
+            }
+        }
+    }
+}

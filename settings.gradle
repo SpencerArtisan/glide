@@ -1,1 +1,1 @@
-include 'desktop', 'core', 'installers'
+include 'desktop', 'core'
