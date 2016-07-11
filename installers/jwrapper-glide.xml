@@ -32,7 +32,7 @@
 	<Mac64JRE>JRE-1.8/macos64/jre1.8.0_40.jre</Mac64JRE> 
 
 	<!-- The files that the app wants to bundle, here we have just one which is a JAR file and we specify that it should be on the launch classpath -->
-    <File classpath='yes'>desktop/build/libs/desktop-0.2.12.jar</File>
+    <File classpath='yes'>desktop/build/libs/desktop-0.2.13.jar</File>
     <File classpath='no'>android/assets/samples</File>
 
     <Pack200Effort>0</Pack200Effort>

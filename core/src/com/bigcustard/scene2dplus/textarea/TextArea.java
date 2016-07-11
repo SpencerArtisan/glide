@@ -3,6 +3,7 @@ package com.bigcustard.scene2dplus.textarea;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -74,7 +75,7 @@ public class TextArea extends Actor {
     private void drawOtherLineBackgrounds(Batch batch) {
         Map<Integer, Color> coloredLines = model.getColoredLines();
         for (Map.Entry<Integer, Color> colorLine : coloredLines.entrySet()) {
-            SpriteDrawable background = white.tint(colorLine.getValue());
+            Drawable background = white.tint(colorLine.getValue());
             XY topLeftCurrent = caretLocationToPosition(new XY(0, colorLine.getKey()));
             background.draw(batch, 0, topLeftCurrent.y, getWidth(), getRowHeight());
         }
@@ -97,9 +98,10 @@ public class TextArea extends Actor {
 
     private void drawText(Batch batch) {
         try {
-            style.font.setMarkupEnabled(true);
+            //todo
+            style.font.getData().markupEnabled = true;
             XY textStart = caretLocationToPosition(new XY(0, 0));
-            BitmapFont.TextBounds textBounds = style.font.drawMultiLine(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
+            GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
             setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
             setWidth(Math.max(LEFT_MARGIN + textBounds.width, getParent().getWidth()));
             ((Layout) getParent()).invalidate();

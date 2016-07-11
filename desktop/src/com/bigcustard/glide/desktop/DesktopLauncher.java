@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglInput;
 import com.bigcustard.glide.GlideApplication;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main(String[] arg) {
 		System.setProperty("org.jruby.embed.localvariable.behavior", "transient");
 		System.setProperty("org.lwjgl.opengl.Display.enableOSXFullscreenModeAPI", "true");
 
