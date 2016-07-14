@@ -45,7 +45,7 @@ public class CodeColorCoderTest {
 	public void closeSquareBracket() throws Exception {
 		when(syntax.parse("]")).thenReturn(Arrays.asList(
 				new SyntaxPart("]", Operator)));
-		assertThat(coder.encode("]")).isEqualTo("[WHITE]][]");
+		assertThat(coder.encode("]")).isEqualTo("[WHITE]]][]");
 	}
 
 	@Test

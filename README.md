@@ -22,7 +22,7 @@ Release Process
 
 1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-glide.xml`` and ``run.sh``
 2. Create release branch and push to github
-3. Run [jenkins build](http://leonandjosh.ddns.net:8080/job/glide/) on release branch
+3. Run [jenkins build](http://leonandkate.ddns.net:8080/job/glide/) on release branch
 4. Log into [sonatype](https://oss.sonatype.org/#stagingRepositories) and find the staging repository
 5. Confirm it contains core and desktop artifacts, together with installers
 6. Close the staging repository and check it passed all validation rules
