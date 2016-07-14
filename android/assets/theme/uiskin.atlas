@@ -90,14 +90,14 @@ buttonSmallOver
   index: -1
 close
   rotate: false
-  xy: 219, 86
+  xy: 804, 698
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 close-over
   rotate: false
-  xy: 804, 698
+  xy: 344, 243
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -166,7 +166,7 @@ default-rect-down
   index: -1
 default-round
   rotate: false
-  xy: 253, 98
+  xy: 804, 676
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -272,14 +272,14 @@ default-window
   index: -1
 exit
   rotate: false
-  xy: 344, 243
+  xy: 913, 838
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 flag
   rotate: false
-  xy: 913, 838
+  xy: 125, 10
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -321,14 +321,14 @@ javascript2
   index: -1
 knob
   rotate: false
-  xy: 126, 3
+  xy: 84, 3
   size: 39, 39
   orig: 39, 39
   offset: 0, 0
   index: -1
 knob_scroll
   rotate: false
-  xy: 167, 12
+  xy: 257, 88
   size: 7, 30
   orig: 7, 30
   offset: 0, 0
@@ -342,9 +342,9 @@ powered_by
   index: -1
 python
   rotate: false
-  xy: 84, 2
-  size: 40, 40
-  orig: 40, 40
+  xy: 219, 82
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1
 run
@@ -440,7 +440,7 @@ tardis2
   index: -1
 textfield
   rotate: false
-  xy: 804, 682
+  xy: 344, 227
   size: 14, 14
   split: 3, 3, 3, 3
   orig: 14, 14
@@ -476,14 +476,14 @@ trash-highlight
   index: -1
 tree-minus
   rotate: false
-  xy: 344, 227
+  xy: 913, 822
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 tree-plus
   rotate: false
-  xy: 913, 822
+  xy: 159, 28
   size: 14, 14
   orig: 14, 14
   offset: 0, 0

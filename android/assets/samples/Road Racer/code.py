@@ -1,4 +1,6 @@
-# Console Racer            
+# Console Racer - Spencer Ward - 2016          
+
+# Define your variables
 
 screen.backgroundColour = LightGreen
 roadLeft = 250
