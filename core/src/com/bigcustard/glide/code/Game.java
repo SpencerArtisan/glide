@@ -39,7 +39,7 @@ public class Game implements Disposable {
         this.imageGroup.watch((image) -> onImageChange());
 
         errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            System.out.print("+");
+//            System.out.print("+");
             Pair<Integer, String> error = language().syntax().error(code());
             if ((error == null && runtimeError() != null) ||
                     (error != null && !error.getRight().equals(runtimeError()))) {

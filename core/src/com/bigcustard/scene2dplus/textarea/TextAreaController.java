@@ -29,25 +29,18 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
-        System.out.print("!");
+//        System.out.print("!");
         if (isRedo(keycode)) {
             commandHistory.redo();
-        }
-        if (isUndo(keycode)) {
+            return true;
+        } else if (isUndo(keycode)) {
             commandHistory.undo();
+            return true;
+        } else {
+            Command command = getKeyDownCommand(keycode);
+            System.out.println("Key down code: " + keycode + ", command: " + command);
+            return commandHistory.execute(command);
         }
-        if (isCopy(keycode)) {
-            commandHistory.execute(new CopyCommand(model));
-        }
-        if (isCut(keycode)) {
-            commandHistory.execute(new CutCommand(model));
-        }
-        if (isPaste(keycode)) {
-            commandHistory.execute(new PasteCommand(model));
-        }
-
-        event.getCharacter();
-        return true;
     }
 
     @Override
@@ -58,10 +51,12 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyTyped(InputEvent event, char character) {
-        System.out.print(":");
-        commandHistory.execute(getKeyTypedCommand(character, event.getKeyCode()));
+//        System.out.print(":");
+        Command command = getKeyTypedCommand(character, event.getKeyCode());
+        System.out.println("Key typed code: " + event.getKeyCode() + "input event details: " + character + ", command: " + command);
+        boolean processed = commandHistory.execute(command);
         view.onModelChange(model);
-        return true;
+        return processed;
     }
 
     @Override
@@ -117,22 +112,33 @@ public class TextAreaController extends ClickListener {
         return isControlDown() && keycode == Input.Keys.Z && isShiftDown();
     }
 
-    private Command getKeyTypedCommand(char character, int keyCode) {
+    private Command getKeyDownCommand(int keycode) {
+        if (isCopy(keycode)) {
+            return new CopyCommand(model);
+        } else if (isCut(keycode)) {
+            return new CutCommand(model);
+        } else if (isPaste(keycode)) {
+            return new PasteCommand(model);
+        } else if (keycode == Input.Keys.UP) {
+            return new MoveUpCommand(model);
+        } else if (keycode == Input.Keys.DOWN) {
+            return new MoveDownCommand(model);
+        } else if (keycode == Input.Keys.RIGHT) {
+            return new MoveRightCommand(model);
+        } else if (keycode == Input.Keys.LEFT) {
+            return new MoveLeftCommand(model);
+        }
+        return null;
+    }
+
+    private Command getKeyTypedCommand(char character, int keycode) {
         if (Key.Delete.is(character)) {
             return new DeleteCommand(model);
-        } else if (keyCode == Input.Keys.UP) {
-            return new MoveUpCommand(model);
-        } else if (keyCode == Input.Keys.DOWN) {
-            return new MoveDownCommand(model);
-        } else if (keyCode == Input.Keys.RIGHT) {
-            return new MoveRightCommand(model);
-        } else if (keyCode == Input.Keys.LEFT) {
-            return new MoveLeftCommand(model);
         } else if (Key.Return.is(character)) {
             return new ReturnCommand(model);
         } else if (Key.Tab.is(character)) {
             return new TabCommand(model);
-        } else if (isPrintableChar(character, keyCode)) {
+        } else if (isPrintableChar(character, keycode)) {
             if (lastCharacterTyped == null || lastCharacterTyped != character) {
                 lastCharacterTyped = character;
                 return new TypeCommand(model, Character.toString(character));
@@ -143,25 +149,29 @@ public class TextAreaController extends ClickListener {
 
     private boolean isPrintableChar(char character, int keyCode) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
-        return (!Character.isISOControl(character)) &&
+        boolean printable = (!Character.isISOControl(character)) &&
                 character != KeyEvent.CHAR_UNDEFINED &&
                 block != null &&
                 block != Character.UnicodeBlock.SPECIALS &&
-                keyCode != Input.Keys.DOWN &&
-                keyCode != Input.Keys.UP &&
-                keyCode != Input.Keys.LEFT &&
-                keyCode != Input.Keys.RIGHT;
+                block != Character.UnicodeBlock.PRIVATE_USE_AREA;
+        if (printable) {
+            System.out.println("PRINTABLE: Keycode: " + keyCode + ", character: '" + character + "', unicode: " + block);
+        } else {
+            System.out.println("UNPRINTABLE: Keycode: " + keyCode + ", character: '" + character + "', unicode: " + block);
+
+        }
+        return printable;
     }
 
     @VisibleForTesting
     protected boolean isControlDown() {
         return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
-               Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
     }
 
     @VisibleForTesting
     protected boolean isShiftDown() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ||
-               Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+                Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 }

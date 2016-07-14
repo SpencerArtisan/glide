@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.bigcustard.scene2dplus.XY;
+import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
@@ -28,6 +30,11 @@ public class TextArea extends Actor {
     public TextArea(TextAreaModel model, Skin skin) {
         this.model = model;
         style = skin.get("code", TextField.TextFieldStyle.class);
+        StringBuilder sb = new StringBuilder();
+        for (char c = 32; c < 140; c++) {
+            sb.append(c);
+        }
+        style.font.setFixedWidthGlyphs(sb.toString());
         white = (TextureRegionDrawable) skin.getDrawable("white");
     }
 
@@ -98,7 +105,6 @@ public class TextArea extends Actor {
 
     private void drawText(Batch batch) {
         try {
-            //todo
             style.font.getData().markupEnabled = true;
             XY textStart = caretLocationToPosition(new XY(0, 0));
             GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);

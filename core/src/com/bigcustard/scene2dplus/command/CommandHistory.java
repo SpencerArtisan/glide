@@ -31,13 +31,15 @@ public class CommandHistory {
         }
     }
 
-    public void execute(Command command) {
+    public boolean execute(Command command) {
         if (command != null) {
             clearRedoChain();
             executedCommands.add(command);
             lastCommandIndex++;
             command.execute();
+            return true;
         }
+        return false;
     }
 
     public void execute(Runnable command, Runnable undo) {

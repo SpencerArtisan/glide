@@ -11,6 +11,7 @@ public abstract class Language {
     public static Language Ruby = new Ruby();
     public static Language Groovy = new Groovy();
     public static Language Javascript = new Javascript();
+    public static Language Python = new Python();
 
     private final Syntax syntax;
     private String scriptEngine;
@@ -66,6 +67,8 @@ public abstract class Language {
             return Groovy;
         } else if (scriptEngine.equals(Ruby.scriptEngine())) {
             return Ruby;
+        } else if (scriptEngine.equals(Python.scriptEngine())) {
+            return Python;
         }
         throw new IllegalArgumentException("Unknown language " + scriptEngine);
     }

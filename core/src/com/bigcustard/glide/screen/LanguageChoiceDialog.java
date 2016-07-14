@@ -42,6 +42,10 @@ public class LanguageChoiceDialog extends Dialog {
         getButtonTable().row();
         addButton(rubyButton, Language.Ruby);
 
+        ImageTextButton pythonButton = new ImageTextButton(" Python ", skin, "python-button");
+        getButtonTable().row();
+        addButton(pythonButton, Language.Python);
+
         getButtonTable().row();
         TextButton cancelButton = new TextButton("  Cancel  ", skin);
         setObject(cancelButton, null);

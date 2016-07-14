@@ -32,6 +32,8 @@ public class TextAreaControllerIntegrationTest {
         event = new InputEvent();
         event.setListenerActor(actor);
         doReturn(true).when(subject).isOver((Actor)anyObject(), anyFloat(), anyFloat());
+		doReturn(false).when(subject).isControlDown();
+		doReturn(false).when(subject).isShiftDown();
 	}
 	
 	@Test
@@ -327,8 +329,7 @@ public class TextAreaControllerIntegrationTest {
 	
 	@Test
 	public void downArrowMovesDown() throws Exception {
-		event.setKeyCode(Input.Keys.DOWN);
-		subject.keyTyped(event, ' ');
+		subject.keyDown(event, Input.Keys.DOWN);
         XYAssert.assertThat(model.caret()).at(0, 1);
 	}
 	
@@ -336,8 +337,7 @@ public class TextAreaControllerIntegrationTest {
 	public void downArrowWhenLowerLineShorterGoesToEndOfLine() throws Exception {
 		model.setText("Hello\nYou");
 		model.caret().moveRight(5);
-		event.setKeyCode(Input.Keys.DOWN);
-		subject.keyTyped(event, ' ');
+		subject.keyDown(event, Input.Keys.DOWN);
         XYAssert.assertThat(model.caret()).at(3, 1);
 	}
 	
@@ -346,54 +346,47 @@ public class TextAreaControllerIntegrationTest {
 		model.setText("Hi\nThere");
         model.caret().moveDown();
         model.caret().moveRight(5);
-		event.setKeyCode(Input.Keys.UP);
-		subject.keyTyped(event, ' ');
+		subject.keyDown(event, Input.Keys.UP);
         XYAssert.assertThat(model.caret()).at(2, 0);
 	}
 	
 	@Test
 	public void upArrowMovesUp() throws Exception {
 		model.caret().moveDown();
-		event.setKeyCode(Input.Keys.UP);
-		subject.keyTyped(event, ' ');
-        XYAssert.assertThat(model.caret()).at(0, 0);
+		subject.keyDown(event, Input.Keys.UP);
+		XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void upArrowStopsAtTop() throws Exception {
-		event.setKeyCode(Input.Keys.UP);
-		subject.keyTyped(event, ' ');
-        XYAssert.assertThat(model.caret()).at(0, 0);
+		subject.keyDown(event, Input.Keys.UP);
+		XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void leftArrowMovesLeft() throws Exception {
 		model.caret().moveRight();
-		event.setKeyCode(Input.Keys.LEFT);
-		subject.keyTyped(event, ' ');
+		subject.keyDown(event, Input.Keys.LEFT);
         XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void leftArrowStopsAtLeft() throws Exception {
-		event.setKeyCode(Input.Keys.LEFT);
-		subject.keyTyped(event, ' ');
-        XYAssert.assertThat(model.caret()).at(0, 0);
+		subject.keyDown(event, Input.Keys.LEFT);
+		XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
 	public void rightArrowMovesRight() throws Exception {
 		model.setText("a");
-		event.setKeyCode(Input.Keys.RIGHT);
-		subject.keyTyped(event, ' ');
-        XYAssert.assertThat(model.caret()).at(1, 0);
+		subject.keyDown(event, Input.Keys.RIGHT);
+		XYAssert.assertThat(model.caret()).at(1, 0);
 	}
 	
 	@Test
 	public void rightArrowStopsAtEndOfLine() throws Exception {
-		event.setKeyCode(Input.Keys.RIGHT);
-		subject.keyTyped(event, ' ');
-        XYAssert.assertThat(model.caret()).at(0, 0);
+		subject.keyDown(event, Input.Keys.RIGHT);
+		XYAssert.assertThat(model.caret()).at(0, 0);
 	}
 	
 	@Test
