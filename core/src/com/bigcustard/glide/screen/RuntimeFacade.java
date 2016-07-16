@@ -55,6 +55,7 @@ public class RuntimeFacade {
                 blurpRuntime.reset();
                 onExit.run();
                 runtimeActive = false;
+                System.gc();
             }
         });
     }

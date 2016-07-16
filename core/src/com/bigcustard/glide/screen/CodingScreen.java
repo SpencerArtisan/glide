@@ -36,6 +36,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -54,6 +55,7 @@ public class CodingScreen extends ScreenAdapter {
     private ScreenFactory screenFactory;
     private ScheduledFuture<?> gameSavingProcess;
     private ButtonBar buttonBar;
+    private ScheduledExecutorService executorService;
 
     public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -112,7 +114,8 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addSpacer(16);
         buttonBar.addImageButton(" Exit", "exit-button", () -> new ExitCommand(game, gameStore, this::saveGameChoice, this::getGameName, this::errorReporter, this::exitToMainMenu));
 
-        gameSavingProcess = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        gameSavingProcess = executorService.scheduleAtFixedRate(() -> {
 //            System.out.print(".");
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
@@ -242,5 +245,6 @@ public class CodingScreen extends ScreenAdapter {
         resourceTabControl.dispose();
         game.dispose();
         buttonBar.dispose();
+        executorService.shutdown();
     }
 }

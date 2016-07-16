@@ -75,8 +75,7 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
 
     @Override
     public void dispose() {
-        Executors.newSingleThreadScheduledExecutor()
-                 .schedule(() -> getChildren().forEach(Actor::clearListeners), 100, TimeUnit.MILLISECONDS);
+        getChildren().forEach(Actor::clearListeners);
     }
 
     private static class RefreshEnabledStatusEvent extends Event {}

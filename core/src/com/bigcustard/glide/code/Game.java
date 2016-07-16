@@ -11,6 +11,7 @@ import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -19,6 +20,7 @@ public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
     private final ScheduledFuture<?> errorChecker;
+    private final ScheduledExecutorService executorService;
     private Watchable<Game> me = new Watchable<>();
     private final ImageGroup imageGroup;
     private final SoundGroup soundGroup;
@@ -38,7 +40,8 @@ public class Game implements Disposable {
         this.soundGroup.watch((image) -> onSoundChange());
         this.imageGroup.watch((image) -> onImageChange());
 
-        errorChecker = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        errorChecker = executorService.scheduleAtFixedRate(() -> {
 //            System.out.print("+");
             Pair<Integer, String> error = language().syntax().error(code());
             if ((error == null && runtimeError() != null) ||
@@ -156,6 +159,8 @@ public class Game implements Disposable {
         soundGroup.dispose();
         me.dispose();
         errorChecker.cancel(true);
+        executorService.shutdown();
+        System.gc();
         count--;
     }
 

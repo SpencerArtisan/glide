@@ -1,5 +1,6 @@
 package com.bigcustard.glide.language;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.SyntaxPart;
 import com.bigcustard.util.Tokenizer;
 import com.google.common.base.Function;
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.bigcustard.glide.code.SyntaxPart.Type.*;
 
-public class Syntax {
+public class Syntax implements Disposable {
     private static String[] TOKENS = new String[] {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
             "!", "!=", "=", "++", "*=", "/=", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";"};
@@ -102,5 +103,10 @@ public class Syntax {
 
     private String[] keywords() {
         return ObjectArrays.concat(new FrameworkKeywords().get(), languageKeywords.get(), String.class);
+    }
+
+    @Override
+    public void dispose() {
+        executorService.shutdown();
     }
 }

@@ -28,6 +28,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -50,6 +51,7 @@ public class WelcomeScreen extends ScreenAdapter {
 	private Cell<Image> titleCell;
 	private Image blurpLogo;
 	private Image poweredBy;
+	private ScheduledExecutorService executorService;
 
 	WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
 		this.setScreen = setScreen;
@@ -208,7 +210,8 @@ public class WelcomeScreen extends ScreenAdapter {
 					Actions.delay(0.9f),
 					Actions.scaleTo(1f, 1f, 0.5f, Interpolation.bounceOut)
 			));
-			Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+			executorService = Executors.newSingleThreadScheduledExecutor();
+			executorService.schedule(() -> {
 				Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play();
 			}, 980, TimeUnit.MILLISECONDS);
 		}
@@ -298,5 +301,6 @@ public class WelcomeScreen extends ScreenAdapter {
 		newGameButton.clearListeners();
 		quitButton.clearListeners();
 		samplesButton.clearListeners();
+		executorService.shutdown();
 	}
 }
