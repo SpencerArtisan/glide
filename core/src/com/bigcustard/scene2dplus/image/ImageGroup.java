@@ -52,7 +52,7 @@ public class ImageGroup implements Disposable {
     }
 
     public boolean isValid() {
-        return Arrays.asList(validate()).stream().allMatch(ValidationResult::isValid);
+        return Arrays.stream(validate()).allMatch(ValidationResult::isValid);
     }
 
     public ValidationResult[] validate() {
@@ -82,7 +82,7 @@ public class ImageGroup implements Disposable {
         return name.endsWith("gif") || name.endsWith("jpg") || name.endsWith("jpeg") || name.endsWith("png") || name.endsWith("bmp");
     }
 
-    protected XY imageSize(FileHandle imageFile) {
+    protected static XY imageSize(FileHandle imageFile) {
         return ImageUtils.imageSize(imageFile);
     }
 
@@ -137,7 +137,8 @@ public class ImageGroup implements Disposable {
 
         public ImageModel toImage(FileHandle parentFolder) {
             FileHandle imageFile = parentFolder.child(filename);
-            return new ImageModel(imageFile, name, width, height);
+            XY size = imageSize(imageFile);
+            return new ImageModel(imageFile, name, width, height, size.x, size.y);
         }
     }
 }
