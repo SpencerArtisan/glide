@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 import com.bigcustard.scene2dplus.button.ButtonPlus;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.resource.Resource;
@@ -119,17 +120,17 @@ public class ImageEditor implements Resource<ImageModel> {
             }
 
             private void viewToModel() {
-                widthField.setTextFieldListener((text, ignored) -> {
+                ErrorHandler.onType(widthField, (text) -> {
                     Integer oldWidth = model.width().get();
                     Integer newWidth = toInt(text);
                     commandHistory.execute(() -> model.width(newWidth), () -> model.width(oldWidth));
                 });
-                heightField.setTextFieldListener((text, ignored) -> {
+                ErrorHandler.onType(heightField, (text) -> {
                     Integer oldHeight = model.height().get();
                     Integer newHeight = toInt(text);
                     commandHistory.execute(() -> model.height(newHeight), () -> model.height(oldHeight));
                 });
-                nameField.setTextFieldListener((text, ignored) -> {
+                ErrorHandler.onType(nameField, (text) -> {
                     String oldName = model.name().get();
                     String newName = text.getText();
                     commandHistory.execute(() -> model.name(newName), () -> model.name(oldName));

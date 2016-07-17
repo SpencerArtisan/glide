@@ -3,14 +3,13 @@ package com.bigcustard.scene2dplus.button;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
+import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,11 @@ import java.util.function.Consumer;
 public class ErrorHandler {
     private static String MESSAGE = "Oops.  Something has gone wrong.\r\n\r\nWhatever you did, don't do it again!\r\n\r\nThe guy who wrote this program has been\r\nautomatically electrocuted and ordered\r\nto fix the problem.";
     private static Logger logger = LoggerFactory.getLogger(ErrorHandler.class);
+
+    public static void onType(TextFieldPlus field, Consumer<TextField> callback) {
+        field.setTextFieldListener((text, ignored) ->
+                tryAndRecover(field, field.getSkin(), () -> callback.accept(text)));
+    }
 
     public static void onClick(Widget list, Skin skin, Runnable callback) {
         list.addListener(new ClickListener() {
@@ -29,7 +33,7 @@ public class ErrorHandler {
         });
     }
 
-    public static void onChanged(Widget list, Skin skin, Runnable callback) {
+    public static void onChanged(Actor list, Skin skin, Runnable callback) {
         list.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -68,8 +72,11 @@ public class ErrorHandler {
             callback.run();
         } catch (Exception e) {
             logger.error("Failed during button callback", e);
-            ErrorDialog errorDialog = new ErrorDialog(MESSAGE, skin);
-            errorDialog.show(actor.getStage());
+            Stage stage = actor.getStage();
+            if (stage != null) {
+                ErrorDialog errorDialog = new ErrorDialog(MESSAGE, skin);
+                errorDialog.show(stage);
+            }
         }
     }
 }

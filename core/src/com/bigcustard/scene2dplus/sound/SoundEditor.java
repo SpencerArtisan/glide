@@ -105,7 +105,7 @@ public class SoundEditor implements Resource<SoundModel> {
             }
 
             private void viewToModel() {
-                nameField.setTextFieldListener((text, ignored) -> {
+                ErrorHandler.onType(nameField, (text) -> {
                     String oldName = model.name().get();
                     String newName = text.getText();
                     commandHistory.execute(() -> model.name(newName), () -> model.name(oldName));

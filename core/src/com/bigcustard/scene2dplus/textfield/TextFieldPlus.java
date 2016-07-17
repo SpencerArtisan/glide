@@ -10,11 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class TextFieldPlus extends TextField {
     private boolean valid = true;
     private Drawable invalidBackground;
+    private Skin skin;
 
     public TextFieldPlus(String value, Skin skin) {
         super(value, skin);
+        this.skin = skin;
         TextureRegionDrawable white = (TextureRegionDrawable) skin.getDrawable("white");
         invalidBackground = white.tint(Color.valueOf("dc322f88"));
+    }
+
+    public Skin getSkin() {
+        return skin;
     }
 
     public void setValid(boolean isValid) {
