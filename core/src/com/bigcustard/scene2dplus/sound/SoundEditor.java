@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.resource.Resource;
@@ -100,11 +101,7 @@ public class SoundEditor implements Resource<SoundModel> {
             }
 
             private void playSoundOnClick() {
-                soundGlyph.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        model.sound().play();
-                    }
-                });
+                ErrorHandler.onClick(soundGlyph, getSkin(), model.sound()::play);
             }
 
             private void viewToModel() {

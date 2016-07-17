@@ -4,8 +4,14 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglInput;
 import com.bigcustard.glide.GlideApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DesktopLauncher {
+	static {
+		System.setProperty("logback.configurationFile", "./logback.xml");
+	}
+
 	public static void main(String[] arg) {
 		System.setProperty("org.jruby.embed.localvariable.behavior", "transient");
 		System.setProperty("org.lwjgl.opengl.Display.enableOSXFullscreenModeAPI", "true");
