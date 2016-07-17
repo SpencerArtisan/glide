@@ -43,8 +43,7 @@ public class ResourceSet<TModel> implements Disposable {
     }
 
     private void unwatchRemoveButton(Resource<TModel> resource) {
-        resource.controller().unwatchRemoveButton();
-//        executor.submit(() -> resource.controller().unwatchRemoveButton());
+        executor.submit(() -> resource.controller().unwatchRemoveButton());
     }
 
     private void executeRemoveCommand(Resource<TModel> resource) {
