@@ -36,7 +36,6 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     private GameLibraryDialog(Skin skin) {
         super("", skin);
-        System.out.println("Game dialogs: " + ++count);
     }
 
     public SettableFuture<Game.Token> getFutureGame() {

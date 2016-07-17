@@ -20,7 +20,6 @@ public class SoundGroup implements Disposable {
     public SoundGroup(FileHandle soundFolder) {
         this.folder = soundFolder;
         readSounds();
-        System.out.println("SoundGroups: " + ++count);
     }
 
     public void watch(Consumer<SoundGroup> watcher) {

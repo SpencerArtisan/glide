@@ -11,12 +11,10 @@ public class DisposableImage extends Image implements Disposable {
     public DisposableImage(Texture texture) {
         super(texture);
         this.texture = texture;
-        System.out.println("Images: " + ++count);
     }
 
     @Override
     public void dispose() {
         texture.dispose();
-        System.out.println("Images: " + --count);
     }
 }

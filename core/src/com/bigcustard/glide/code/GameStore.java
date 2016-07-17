@@ -45,7 +45,6 @@ public class GameStore {
     }
 
     public void save(Game game) {
-//        System.out.print("S");
         codeFile(game).writeString(game.code(), false);
         storeMostRecentGameName(game);
     }

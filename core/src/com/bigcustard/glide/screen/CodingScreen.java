@@ -117,7 +117,6 @@ public class CodingScreen extends ScreenAdapter {
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         gameSavingProcess = executorService.scheduleAtFixedRate(() -> {
-//            System.out.print(".");
             buttonBar.refreshEnabledStatuses();
             gameStore.save(game);
         }, 0, 2, TimeUnit.SECONDS);

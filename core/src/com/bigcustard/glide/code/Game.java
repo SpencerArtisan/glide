@@ -42,15 +42,12 @@ public class Game implements Disposable {
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         errorChecker = executorService.scheduleAtFixedRate(() -> {
-//            System.out.print("+");
             Pair<Integer, String> error = language().syntax().error(code());
             if ((error == null && runtimeError() != null) ||
                     (error != null && !error.getRight().equals(runtimeError()))) {
                 runtimeError(error == null ? null : new RuntimeException(error.getRight()));
             }
         }, 1, 1, TimeUnit.SECONDS);
-
-        System.out.println("Games: " + ++count);
     }
 
     public Token token() {

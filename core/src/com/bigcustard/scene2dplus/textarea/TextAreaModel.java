@@ -27,7 +27,6 @@ public class TextAreaModel implements Disposable {
 		this.colorCoder = colorCoder;
 		caret = new Caret();
         caret.moveToBottom();
-		System.out.println("TextAreaModels: " + ++count);
     }
 
 	public TextAreaModel(ColorCoder colorCoder) {

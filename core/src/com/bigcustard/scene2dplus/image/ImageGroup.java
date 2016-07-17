@@ -22,7 +22,6 @@ public class ImageGroup implements Disposable {
     public ImageGroup(FileHandle imageFolder) {
         this.folder = imageFolder;
         readImages();
-        System.out.println("ImageGroups: " + ++count);
     }
 
     public void watch(Consumer<ImageGroup> watcher) {

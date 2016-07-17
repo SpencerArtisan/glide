@@ -29,7 +29,6 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
-//        System.out.print("!");
         if (isRedo(keycode)) {
             commandHistory.redo();
             return true;
@@ -38,7 +37,6 @@ public class TextAreaController extends ClickListener {
             return true;
         } else {
             Command command = getKeyDownCommand(keycode);
-            System.out.println("Key down code: " + keycode + ", command: " + command);
             return commandHistory.execute(command);
         }
     }
@@ -51,9 +49,7 @@ public class TextAreaController extends ClickListener {
 
     @Override
     public boolean keyTyped(InputEvent event, char character) {
-//        System.out.print(":");
         Command command = getKeyTypedCommand(character, event.getKeyCode());
-        System.out.println("Key typed code: " + event.getKeyCode() + "input event details: " + character + ", command: " + command);
         boolean processed = commandHistory.execute(command);
         view.onModelChange(model);
         return processed;
@@ -148,19 +144,7 @@ public class TextAreaController extends ClickListener {
     }
 
     private boolean isPrintableChar(char character, int keyCode) {
-        Character.UnicodeBlock block = Character.UnicodeBlock.of(character);
-        boolean printable = (!Character.isISOControl(character)) &&
-                character != KeyEvent.CHAR_UNDEFINED &&
-                block != null &&
-                block != Character.UnicodeBlock.SPECIALS &&
-                block != Character.UnicodeBlock.PRIVATE_USE_AREA;
-        if (printable) {
-            System.out.println("PRINTABLE: Keycode: " + keyCode + ", character: '" + character + "', unicode: " + block);
-        } else {
-            System.out.println("UNPRINTABLE: Keycode: " + keyCode + ", character: '" + character + "', unicode: " + block);
-
-        }
-        return printable;
+        return character >= 32 && character < 127;
     }
 
     @VisibleForTesting
