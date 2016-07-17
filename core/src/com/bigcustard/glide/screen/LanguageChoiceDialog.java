@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.Spacer;
+import com.bigcustard.scene2dplus.button.ImageTextButtonPlus;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class LanguageChoiceDialog extends Dialog {
@@ -31,23 +33,23 @@ public class LanguageChoiceDialog extends Dialog {
         text("Which Language?");
         getButtonTable().padTop(20).padBottom(20);
 
-        ImageTextButton javascriptButton = new ImageTextButton(" Javascript ", skin, "javascript-button");
+        ImageTextButton javascriptButton = new ImageTextButtonPlus(" Javascript ", skin, "javascript-button");
         addButton(javascriptButton, Language.Javascript);
 
-        ImageTextButton groovyButton = new ImageTextButton(" Groovy ", skin, "groovy-button");
+        ImageTextButton groovyButton = new ImageTextButtonPlus(" Groovy ", skin, "groovy-button");
         getButtonTable().row();
         addButton(groovyButton, Language.Groovy);
 
-        ImageTextButton rubyButton = new ImageTextButton(" Ruby ", skin, "ruby-button");
+        ImageTextButton rubyButton = new ImageTextButtonPlus(" Ruby ", skin, "ruby-button");
         getButtonTable().row();
         addButton(rubyButton, Language.Ruby);
 
-        ImageTextButton pythonButton = new ImageTextButton(" Python ", skin, "python-button");
+        ImageTextButton pythonButton = new ImageTextButtonPlus(" Python ", skin, "python-button");
         getButtonTable().row();
         addButton(pythonButton, Language.Python);
 
         getButtonTable().row();
-        TextButton cancelButton = new TextButton("  Cancel  ", skin);
+        TextButton cancelButton = new TextButtonPlus("  Cancel  ", skin);
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).padBottom(0).colspan(2);
     }

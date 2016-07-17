@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Clipboard;
 import com.badlogic.gdx.utils.Disposable;
-import com.bigcustard.scene2dplus.button.ButtonUtil;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.dialog.FileDialog;
 import com.google.common.annotations.VisibleForTesting;
@@ -28,8 +28,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     private final ResourceSet<TModel> resources;
     private final CommandHistory commandHistory;
     private final BiFunction<InputStream, String, Resource<TModel>> resourceImporter;
-    private TextButton clipboardButton;
-    private TextButton fileButton;
+    private TextButtonPlus clipboardButton;
+    private TextButtonPlus fileButton;
 
     public ResourceArea(Skin skin,
                         ResourceSet<TModel> resources,
@@ -64,8 +64,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     }
 
     private void createClipboardButton(Skin skin) {
-        clipboardButton = new TextButton("Add from clipboard", skin);
-        ButtonUtil.onClick(clipboardButton, this::addFromClipboardUrl);
+        clipboardButton = new TextButtonPlus("Add from clipboard", skin);
+        clipboardButton.onClick(this::addFromClipboardUrl);
     }
 
     private void addFromClipboardUrl() {
@@ -80,8 +80,8 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
     }
 
     private void createFileButton(Skin skin) {
-        fileButton = new TextButton("Add from file", skin);
-        ButtonUtil.onClick(fileButton, this::addFromFile);
+        fileButton = new TextButtonPlus("Add from file", skin);
+        fileButton.onClick(this::addFromFile);
     }
 
     private void addFromFile() {

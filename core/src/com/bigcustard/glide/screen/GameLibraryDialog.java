@@ -6,7 +6,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.scene2dplus.Spacer;
-import com.bigcustard.scene2dplus.button.ButtonUtil;
+import com.bigcustard.scene2dplus.button.ImageButtonPlus;
+import com.bigcustard.scene2dplus.button.ImageTextButtonPlus;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.List;
@@ -61,7 +63,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         layoutGameButtons(skin, readOnly);
         getButtonTable().row();
 
-        TextButton cancelButton = new TextButton("  Cancel  ", skin);
+        TextButton cancelButton = new TextButtonPlus("  Cancel  ", skin);
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
     }
@@ -79,7 +81,7 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     private ImageTextButton createButton(Skin skin, Game.Token game) {
         String buttonStyle = game.language().buttonStyle();
-        ImageTextButton button = new ImageTextButton(game.name() + " ", skin, buttonStyle);
+        ImageTextButton button = new ImageTextButtonPlus(game.name() + " ", skin, buttonStyle);
         button.clearChildren();
         button.add(new Spacer(4));
         button.add(button.getImage());
@@ -89,8 +91,8 @@ public class GameLibraryDialog extends Dialog implements Disposable {
     }
 
     private Button createDeleteButton(Skin skin, Game.Token game) {
-        ImageButton button = new ImageButton(skin, "trash-button");
-        ButtonUtil.onClick(button, () -> deleteGame(skin, game));
+        ImageButtonPlus button = new ImageButtonPlus(skin, "trash-button");
+        button.onClick(() -> deleteGame(skin, game));
         return button;
     }
 

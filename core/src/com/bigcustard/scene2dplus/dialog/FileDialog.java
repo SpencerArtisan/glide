@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.Spacer;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
 
 import java.io.FileFilter;
 import java.util.Comparator;
@@ -61,12 +62,12 @@ public class FileDialog extends Dialog implements Disposable {
 
         getButtonTable().pad(25);
 
-        ok = new TextButton("Ok", skin);
+        ok = new TextButtonPlus("Ok", skin);
         button(ok, true);
 
         getButtonTable().add(new Spacer(20));
 
-        TextButton cancel = new TextButton("Cancel", skin);
+        TextButton cancel = new TextButtonPlus("Cancel", skin);
         button(cancel, false);
         key(Keys.ENTER, true);
         key(Keys.ESCAPE, false);

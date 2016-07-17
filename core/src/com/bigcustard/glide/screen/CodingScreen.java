@@ -15,6 +15,7 @@ import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.glide.code.command.ExitCommand;
 import com.bigcustard.glide.code.command.RunCommand;
 import com.bigcustard.scene2dplus.button.ButtonBar;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
@@ -141,8 +142,8 @@ public class CodingScreen extends ScreenAdapter {
         ResourceArea<ImageModel> imageArea = createImageArea();
         ResourceArea<SoundModel> soundArea = createSoundArea();
         resourceTabControl = new TabControl();
-        resourceTabControl.addTab(imageArea, new TextButton("Images  ", skin, "tab"));
-        resourceTabControl.addTab(soundArea, new TextButton("Sounds  ", skin, "tab"));
+        resourceTabControl.addTab(imageArea, new TextButtonPlus("Images  ", skin, "tab"));
+        resourceTabControl.addTab(soundArea, new TextButtonPlus("Sounds  ", skin, "tab"));
         resourceTabControl.background(skin.getDrawable("solarizedBackground"));
         resourceTabControl.init();
     }

@@ -4,8 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
-import com.bigcustard.scene2dplus.button.ButtonUtil;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,7 +26,11 @@ public class TabControl extends Table {
             final Button tabButton = tabButtons.get(i);
             final Actor tab = tabs.get(i);
             add(tabButton).padTop(10);
-            ButtonUtil.onClick(tabButton, () -> deactivateOtherTabs(tabCell, tabButton, tab));
+            tabButton.addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    deactivateOtherTabs(tabCell, tabButton, tab);
+                }
+            });
         }
         row();
         tabCell.set(add(tabs.get(0)).colspan(2).fill().expand());

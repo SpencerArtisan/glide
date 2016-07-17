@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
+import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
@@ -46,7 +47,7 @@ public class SoundEditor implements Resource<SoundModel> {
 
     private class Editor extends Table {
         private final TextFieldPlus nameField;
-        private final Button deleteButton;
+        private final ImageButtonPlus deleteButton;
         private final Skin skin;
         private Image soundGlyph;
 
@@ -64,8 +65,8 @@ public class SoundEditor implements Resource<SoundModel> {
             return textField;
         }
 
-        private Button createDeleteButton() {
-            return new ImageButton(skin, "trash-button");
+        private ImageButtonPlus createDeleteButton() {
+            return new ImageButtonPlus(skin, "trash-button");
         }
 
         void layoutControls() {
@@ -120,11 +121,7 @@ public class SoundEditor implements Resource<SoundModel> {
 
             @Override
             public void watchRemoveButton(Runnable onRemove) {
-                deleteButton.addListener(new ChangeListener() {
-                    public void changed(ChangeEvent event, Actor actor) {
-                        onRemove.run();
-                    }
-                });
+                deleteButton.onClick(onRemove::run);
             }
 
             @Override

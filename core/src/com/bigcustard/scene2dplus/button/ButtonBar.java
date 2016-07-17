@@ -37,11 +37,11 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
     }
 
     public void addTextButton(String text, Supplier<Command> commandFactory) {
-        addButton(new TextButton(text, skin), commandFactory);
+        addButton(new TextButtonPlus(text, skin), commandFactory);
     }
 
     public void addImageButton(String text, String styleName, Supplier<Command> commandFactory) {
-        addButton(new ImageTextButton(text, skin, styleName), commandFactory);
+        addButton(new ImageTextButtonPlus(text, skin, styleName), commandFactory);
     }
 
     public void refreshEnabledStatuses() {

@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
+import com.bigcustard.scene2dplus.button.ButtonPlus;
+import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.resource.Resource;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
@@ -54,7 +56,7 @@ public class ImageEditor implements Resource<ImageModel> {
         private final TextFieldPlus nameField;
         private final TextFieldPlus widthField;
         private final TextFieldPlus heightField;
-        private final Button deleteButton;
+        private final ImageButtonPlus deleteButton;
         private final Skin skin;
 
         public Editor(Skin skin) {
@@ -80,8 +82,8 @@ public class ImageEditor implements Resource<ImageModel> {
             return textField;
         }
 
-        private Button createDeleteButton() {
-            return new ImageButton(skin, "trash-button");
+        private ImageButtonPlus createDeleteButton() {
+            return new ImageButtonPlus(skin, "trash-button");
         }
 
         void layoutControls() {
@@ -142,11 +144,7 @@ public class ImageEditor implements Resource<ImageModel> {
 
             @Override
             public void watchRemoveButton(Runnable onRemove) {
-                deleteButton.addListener(new ChangeListener() {
-                    public void changed(ChangeEvent event, Actor actor) {
-                        onRemove.run();
-                    }
-                });
+                deleteButton.onClick(() -> onRemove.run());
             }
 
             @Override

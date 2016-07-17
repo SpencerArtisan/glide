@@ -3,16 +3,16 @@ package com.bigcustard.scene2dplus.resource;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.util.WatchableList;
-import com.google.common.collect.Lists;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Stream;
 
 public class ResourceSet<TModel> implements Disposable {
     private final CommandHistory commandHistory;
     private WatchableList<Resource<TModel>> resources;
+    private static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     public ResourceSet(List<Resource<TModel>> resources, CommandHistory commandHistory) {
         this.commandHistory = commandHistory;
@@ -44,6 +44,7 @@ public class ResourceSet<TModel> implements Disposable {
 
     private void unwatchRemoveButton(Resource<TModel> resource) {
         resource.controller().unwatchRemoveButton();
+//        executor.submit(() -> resource.controller().unwatchRemoveButton());
     }
 
     private void executeRemoveCommand(Resource<TModel> resource) {
