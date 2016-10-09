@@ -1,6 +1,6 @@
 #!/bin/sh
 
 cd android/assets
-java -jar ../../desktop/build/libs/desktop-0.2.15.jar
+java -jar ../../desktop/build/libs/desktop-0.3.0.jar
 
 

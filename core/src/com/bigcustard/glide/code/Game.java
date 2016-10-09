@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class Game implements Disposable {
     public static final String DEFAULT_NAME = "Unnamed Game";
     private final Token token;
-    private final ScheduledFuture<?> errorChecker;
+//    private final ScheduledFuture<?> errorChecker;
     private final ScheduledExecutorService executorService;
     private Watchable<Game> me = new Watchable<>();
     private final ImageGroup imageGroup;
@@ -41,13 +41,13 @@ public class Game implements Disposable {
         this.imageGroup.watch((image) -> onImageChange());
 
         executorService = Executors.newSingleThreadScheduledExecutor();
-        errorChecker = executorService.scheduleAtFixedRate(() -> {
-            Pair<Integer, String> error = language().syntax().error(code());
-            if ((error == null && runtimeError() != null) ||
-                    (error != null && !error.getRight().equals(runtimeError()))) {
-                runtimeError(error == null ? null : new RuntimeException(error.getRight()));
-            }
-        }, 1, 1, TimeUnit.SECONDS);
+//        errorChecker = executorService.scheduleAtFixedRate(() -> {
+//            Pair<Integer, String> error = language().syntax().error(code());
+//            if ((error == null && runtimeError() != null) ||
+//                    (error != null && !error.getRight().equals(runtimeError()))) {
+//                runtimeError(error == null ? null : new RuntimeException(error.getRight()));
+//            }
+//        }, 1, 1, TimeUnit.SECONDS);
     }
 
     public Token token() {
@@ -155,7 +155,7 @@ public class Game implements Disposable {
         imageGroup.dispose();
         soundGroup.dispose();
         me.dispose();
-        errorChecker.cancel(true);
+//        errorChecker.cancel(true);
         executorService.shutdown();
         System.gc();
         count--;

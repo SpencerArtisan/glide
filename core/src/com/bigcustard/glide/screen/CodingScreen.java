@@ -197,9 +197,11 @@ public class CodingScreen extends ScreenAdapter {
         errorLabel.setVisible(false);
         errorLabel.setWrap(true);
         game.registerChangeListener((g) -> {
-            String error = game.runtimeError();
-            errorLabel.setVisible(error != null);
-            errorLabel.setText(error == null ? null : "Runtime error: " + error);
+            Gdx.app.postRunnable(() -> {
+                String error = game.runtimeError();
+                errorLabel.setVisible(error != null);
+                errorLabel.setText(error == null ? null : "Runtime error: " + error);
+            });
         });
         return errorLabel;
     }

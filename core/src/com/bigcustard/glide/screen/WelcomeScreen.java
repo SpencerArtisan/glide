@@ -3,6 +3,7 @@ package com.bigcustard.glide.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -55,6 +57,7 @@ public class WelcomeScreen extends ScreenAdapter {
     private Cell<Image> titleCell;
     private Image blurpLogo;
     private Image poweredBy;
+    private Label version;
     private ScheduledExecutorService executorService;
 
     WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
@@ -66,6 +69,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
         createTitle();
         createBlurpLogo();
+        createVersion();
         createNewGameButton();
         createContinueGameButton();
         createSamplesButton();
@@ -107,6 +111,11 @@ public class WelcomeScreen extends ScreenAdapter {
         boolean myGamesEnabled = gameStore.allUserGames().size() > 0;
         myGamesButton.setDisabled(!myGamesEnabled);
         myGamesButton.setTouchable(myGamesEnabled ? Touchable.enabled : Touchable.disabled);
+    }
+
+    private void createVersion() {
+        version = new Label("v0.2.0", skin, "small");
+        version.setColor(Color.LIGHT_GRAY);
     }
 
     private void createTitle() {
@@ -241,6 +250,7 @@ public class WelcomeScreen extends ScreenAdapter {
         outerTable.background(backgroundRegion);
         title.setX(-55);
         titleCell = outerTable.add(title).expand().padTop(40).padBottom(-100).padLeft(50).top().left();
+        outerTable.add(version).expand().padTop(-4).padBottom(-100).padLeft(-5).top().left();
         outerTable.row();
         outerTable.add(table).expandY().top();
         outerTable.setFillParent(true);
