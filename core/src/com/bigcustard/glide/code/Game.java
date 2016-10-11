@@ -10,6 +10,7 @@ import com.bigcustard.util.Watchable;
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.script.ScriptException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -101,13 +102,18 @@ public class Game implements Disposable {
         me.broadcast(this);
     }
 
-    public String runtimeError() {
+    public Pair<Integer, String> runtimeError() {
+        if (runtimeError == null) return null;
         try {
-            return runtimeError == null ? null :
-                    (runtimeError.getCause() == null) ? runtimeError.getMessage() :
-                            runtimeError.getCause().getCause().getCause().getMessage();
+            Throwable cause = runtimeError;
+            while (cause != null) {
+                Pair<Integer, String> error = language().locateError(cause);
+                if (error != null) return error;
+                cause = cause.getCause();
+            }
+            return Pair.of(-99, runtimeError.getMessage());
         } catch (Exception e) {
-            return runtimeError.getMessage();
+            return Pair.of(-99, runtimeError.getMessage());
         }
     }
 

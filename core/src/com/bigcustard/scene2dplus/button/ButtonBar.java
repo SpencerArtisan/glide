@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.scene2dplus.Spacer;
 import com.bigcustard.scene2dplus.command.Command;
 
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
@@ -55,12 +56,16 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
     private void addButton(final Button button, Supplier<Command> commandFactory) {
         ErrorHandler.onClick(button,
                 () -> {
-                    commandFactory.get().execute();
+                    commandFactory
+                            .get()
+                            .execute();
                     refreshEnabledStatuses();
                 },
                 (event) -> {
                     if (event instanceof RefreshEnabledStatusEvent) {
-                        boolean enable = tryGet(() -> commandFactory.get().canExecute(), false);
+                        boolean enable = tryGet(() -> commandFactory
+                                .get()
+                                .canExecute(), false);
                         button.setDisabled(!enable);
                         button.setTouchable(enable ? enabled : disabled);
                     }
@@ -72,7 +77,8 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
 
     @Override
     public void dispose() {
-        getChildren().forEach(Actor::clearListeners);
+        Executors.newSingleThreadExecutor()
+                .submit(() -> getChildren().forEach(Actor::clearListeners));
     }
 
     private static class RefreshEnabledStatusEvent extends Event {

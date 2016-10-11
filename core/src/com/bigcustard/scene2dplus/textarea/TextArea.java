@@ -107,7 +107,7 @@ public class TextArea extends Actor {
         try {
             style.font.getData().markupEnabled = true;
             XY textStart = caretLocationToPosition(new XY(0, 0));
-            GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 8);
+            GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 11);
             setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
             setWidth(Math.max(LEFT_MARGIN + textBounds.width, getParent().getWidth()));
             ((Layout) getParent()).invalidate();

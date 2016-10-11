@@ -24,20 +24,25 @@ public class CodeColorCoder implements ColorCoder {
             put(Unclassified, "#839496").
             put(Comment, "#586e75").build();
     private static final String DEFAULT_ERROR = "dc322f88";
+    private static final String DEFAULT_RUNTIME_ERROR = "ed211f88";
 
+    private final Game game;
     private final Syntax syntax;
     private final Map<SyntaxPart.Type, String> colors;
     private final Color errorColor;
+    private final Color runtimeErrorColor;
 
-    public CodeColorCoder(Syntax syntax) {
-        this(syntax, DEFAULT_COLORS, DEFAULT_ERROR);
+    public CodeColorCoder(Game game, Syntax syntax) {
+        this(game, syntax, DEFAULT_COLORS, DEFAULT_ERROR, DEFAULT_RUNTIME_ERROR);
     }
 
     @VisibleForTesting
-    CodeColorCoder(Syntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor) {
+    CodeColorCoder(Game game, Syntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor, String runtimeErrorColor) {
+        this.game = game;
         this.syntax = syntax;
         this.colors = colors;
         this.errorColor = Color.valueOf(errorColor);
+        this.runtimeErrorColor = Color.valueOf(runtimeErrorColor);
     }
 
     @Override
@@ -50,13 +55,16 @@ public class CodeColorCoder implements ColorCoder {
 
     @Override
     public Map<Integer, Color> colorLines(String program) {
+        HashMap<Integer, Color> lineColours = new HashMap<>();
         Pair<Integer, String> error = syntax.error(program);
-        if (error == null) {
-            return new HashMap<>();
+        if (error != null) {
+            lineColours.put(error.getLeft(), errorColor);
         }
-        else {
-            return ImmutableMap.of(error.getLeft(), errorColor);
+        Pair<Integer, String> runtimeError = game.runtimeError();
+        if (runtimeError != null) {
+            lineColours.put(runtimeError.getLeft() - 1, runtimeErrorColor);
         }
+        return lineColours;
     }
 
     private String encodeSpecialCharacters(String program) {

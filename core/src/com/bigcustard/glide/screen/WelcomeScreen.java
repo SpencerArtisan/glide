@@ -114,7 +114,7 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void createVersion() {
-        version = new Label("v0.2.0", skin, "small");
+        version = new Label("v0.2", skin, "small");
         version.setColor(Color.LIGHT_GRAY);
     }
 
@@ -250,7 +250,7 @@ public class WelcomeScreen extends ScreenAdapter {
         outerTable.background(backgroundRegion);
         title.setX(-55);
         titleCell = outerTable.add(title).expand().padTop(40).padBottom(-100).padLeft(50).top().left();
-        outerTable.add(version).expand().padTop(-4).padBottom(-100).padLeft(-5).top().left();
+        outerTable.add(version).expand().padTop(-4).padBottom(-100).padLeft(35).top().left();
         outerTable.row();
         outerTable.add(table).expandY().top();
         outerTable.setFillParent(true);

@@ -68,3 +68,6 @@ while screen.update():
         deathAnimation()
         system.sleep(1800)
         break
+
+
+

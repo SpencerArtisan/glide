@@ -59,9 +59,8 @@ public class GameStore {
         String gameName = preferences().getString(RECENT_GAME);
         if (Strings.isNullOrEmpty(gameName)) return false;
         FileHandle gameFolder = userFolder().child(gameName);
-        return gameFolder.exists() && gameFolder.list((dir, name) -> {
-            return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
-        }).length > 0;
+        return gameFolder.exists() && gameFolder.list((dir, name) ->
+                name.startsWith(CODE_FILE_WITHOUT_SUFFIX)).length > 0;
     }
 
     public Game mostRecent() {

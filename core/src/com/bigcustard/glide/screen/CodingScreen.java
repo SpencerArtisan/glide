@@ -34,6 +34,7 @@ import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
 import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -186,7 +187,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), game.language().codeColorCoder());
+        model = new TextAreaModel(game.code(), game.language().codeColorCoder(game));
         model.preInsertVetoer(game.language()::vetoPreInsert);
         model.addChangeListener((m) -> game.code(model.text()));
         textArea = new ScrollableTextArea(model, skin, game.commandHistory());
@@ -198,9 +199,9 @@ public class CodingScreen extends ScreenAdapter {
         errorLabel.setWrap(true);
         game.registerChangeListener((g) -> {
             Gdx.app.postRunnable(() -> {
-                String error = game.runtimeError();
+                Pair<Integer, String> error = game.runtimeError();
                 errorLabel.setVisible(error != null);
-                errorLabel.setText(error == null ? null : "Runtime error: " + error);
+                errorLabel.setText(error == null ? null : error.getRight());
             });
         });
         return errorLabel;

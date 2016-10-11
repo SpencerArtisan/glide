@@ -1,6 +1,7 @@
 package com.bigcustard.glide.code.language;
 
 import com.bigcustard.glide.code.CodeColorCoder;
+import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.language.Keywords;
 import com.bigcustard.glide.language.Syntax;
 import com.bigcustard.scene2dplus.textarea.ColorCoder;
@@ -27,12 +28,16 @@ public abstract class Language {
 
     public abstract Pair<Integer, String> errorChecker(String code);
 
+    public Pair<Integer, String> locateError(Throwable throwable) {
+        return null;
+    }
+
     public boolean isValid(String code) {
         return syntax.isValid(code);
     }
 
-    public ColorCoder codeColorCoder() {
-        return new CodeColorCoder(syntax);
+    public ColorCoder codeColorCoder(Game game) {
+        return new CodeColorCoder(game, syntax);
     }
 
     public String scriptEngine() {
