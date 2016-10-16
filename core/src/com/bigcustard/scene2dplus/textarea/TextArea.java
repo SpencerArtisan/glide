@@ -2,18 +2,15 @@ package com.bigcustard.scene2dplus.textarea;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.bigcustard.scene2dplus.XY;
-import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
@@ -27,14 +24,14 @@ public class TextArea extends Actor {
     private TextAreaModel model;
     private TextField.TextFieldStyle style;
 
-    public TextArea(TextAreaModel model, Skin skin) {
+    public TextArea(TextAreaModel model, Skin skin, String style) {
         this.model = model;
-        style = skin.get("code", TextField.TextFieldStyle.class);
+        this.style = skin.get(style, TextField.TextFieldStyle.class);
         StringBuilder sb = new StringBuilder();
         for (char c = 32; c < 140; c++) {
             sb.append(c);
         }
-        style.font.setFixedWidthGlyphs(sb.toString());
+        this.style.font.setFixedWidthGlyphs(sb.toString());
         white = (TextureRegionDrawable) skin.getDrawable("white");
     }
 

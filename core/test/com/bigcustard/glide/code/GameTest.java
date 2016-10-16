@@ -135,7 +135,7 @@ public class GameTest {
     public void extractRuntimeErrorMessage() {
         Game game = newGame(mockLanguage);
         game.runtimeError(new RuntimeException(new RuntimeException(new RuntimeException(new ScriptException("Bad stuff")))));
-        assertThat(game.runtimeError()).isEqualTo("Bad stuff");
+        assertThat(game.runtimeError().getRight()).isEqualTo("Bad stuff");
     }
 
     @Test

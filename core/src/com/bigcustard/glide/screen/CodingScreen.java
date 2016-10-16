@@ -11,16 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.glide.code.command.ExitCommand;
 import com.bigcustard.glide.code.command.RunCommand;
+import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.glide.help.Help;
 import com.bigcustard.glide.help.HelpTopic;
 import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
+import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
 import com.bigcustard.scene2dplus.command.UndoCommand;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
@@ -53,6 +54,8 @@ public class CodingScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
     private TextAreaModel model;
+    private TextAreaModel exampleModel;
+    private ScrollableTextArea exampleArea;
     private ScrollableTextArea textArea;
     private TabControl resourceTabControl;
     private Game game;
@@ -82,6 +85,7 @@ public class CodingScreen extends ScreenAdapter {
 
     private Table layoutScreen() {
         createTextArea(game);
+        createExampleArea(game.language());
         Label errorLabel = createErrorLabel(game);
         createResourceArea();
         buttonBar = createButtonBar();
@@ -97,14 +101,6 @@ public class CodingScreen extends ScreenAdapter {
         layoutTable.pack();
 
         return layoutTable;
-    }
-
-    private Table createTextAreaTable(Label errorLabel) {
-        Table textAreaTable = new Table();
-        textAreaTable.add(textArea).fill().expand();
-        textAreaTable.row();
-        textAreaTable.add(errorLabel).fillX();
-        return textAreaTable;
     }
 
     private ButtonBar createButtonBar() {
@@ -217,11 +213,26 @@ public class CodingScreen extends ScreenAdapter {
         return new SoundEditor(model, skin, game.commandHistory());
     }
 
+    private Table createTextAreaTable(Label errorLabel) {
+        Table textAreaTable = new Table();
+        textAreaTable.add(exampleArea).fill().height(200);
+        textAreaTable.row();
+        textAreaTable.add(textArea).fill().expand();
+        textAreaTable.row();
+        textAreaTable.add(errorLabel).fillX();
+        return textAreaTable;
+    }
+
     private void createTextArea(Game game) {
-        model = new TextAreaModel(game.code(), game.language().codeColorCoder(game));
+        model = new TextAreaModel(game.code(), game.language().codeColorCoder(game::runtimeError));
         model.preInsertVetoer(game.language()::vetoPreInsert);
         model.addChangeListener((m) -> game.code(model.text()));
-        textArea = new ScrollableTextArea(model, skin, game.commandHistory());
+        textArea = new ScrollableTextArea(model, skin, game.commandHistory(), "code");
+    }
+
+    private void createExampleArea(Language language) {
+        exampleModel = new TextAreaModel("hjhhkhjfr", language.codeColorCoder(() -> null));
+        exampleArea = new ScrollableTextArea(exampleModel, skin, new CommandHistory(), "example");
     }
 
     private Label createErrorLabel(Game game) {

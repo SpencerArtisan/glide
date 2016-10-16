@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static com.bigcustard.glide.code.SyntaxPart.Type.*;
 
@@ -26,19 +27,19 @@ public class CodeColorCoder implements ColorCoder {
     private static final String DEFAULT_ERROR = "dc322f88";
     private static final String DEFAULT_RUNTIME_ERROR = "ed211f88";
 
-    private final Game game;
     private final Syntax syntax;
     private final Map<SyntaxPart.Type, String> colors;
     private final Color errorColor;
     private final Color runtimeErrorColor;
+    private final Supplier<Pair<Integer, String>> errorProvider;
 
-    public CodeColorCoder(Game game, Syntax syntax) {
-        this(game, syntax, DEFAULT_COLORS, DEFAULT_ERROR, DEFAULT_RUNTIME_ERROR);
+    public CodeColorCoder(Supplier<Pair<Integer, String>> errorProvider, Syntax syntax) {
+        this(errorProvider, syntax, DEFAULT_COLORS, DEFAULT_ERROR, DEFAULT_RUNTIME_ERROR);
     }
 
     @VisibleForTesting
-    CodeColorCoder(Game game, Syntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor, String runtimeErrorColor) {
-        this.game = game;
+    CodeColorCoder(Supplier<Pair<Integer, String>> errorProvider, Syntax syntax, Map<SyntaxPart.Type, String> colors, String errorColor, String runtimeErrorColor) {
+        this.errorProvider = errorProvider;
         this.syntax = syntax;
         this.colors = colors;
         this.errorColor = Color.valueOf(errorColor);
@@ -60,7 +61,7 @@ public class CodeColorCoder implements ColorCoder {
         if (error != null) {
             lineColours.put(error.getLeft(), errorColor);
         }
-        Pair<Integer, String> runtimeError = game.runtimeError();
+        Pair<Integer, String> runtimeError = errorProvider.get();
         if (runtimeError != null) {
             lineColours.put(runtimeError.getLeft() - 1, runtimeErrorColor);
         }

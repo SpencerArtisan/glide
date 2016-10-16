@@ -8,6 +8,8 @@ import com.bigcustard.scene2dplus.textarea.ColorCoder;
 import com.bigcustard.scene2dplus.textarea.TextAreaModel;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.function.Supplier;
+
 public abstract class Language {
     public static Language Ruby = new Ruby();
     public static Language Groovy = new Groovy();
@@ -36,8 +38,8 @@ public abstract class Language {
         return syntax.isValid(code);
     }
 
-    public ColorCoder codeColorCoder(Game game) {
-        return new CodeColorCoder(game, syntax);
+    public ColorCoder codeColorCoder(Supplier<Pair<Integer, String>> errorSupplier) {
+        return new CodeColorCoder(errorSupplier, syntax);
     }
 
     public String scriptEngine() {

@@ -19,12 +19,11 @@ import static org.mockito.Mockito.when;
 public class CodeColorCoderTest {
 	private CodeColorCoder coder;
 	@Mock private Syntax syntax;
-	@Mock private Game game;
 
 	@Before
 	public void before() {
         MockitoAnnotations.initMocks(this);
-		coder = new CodeColorCoder(game, syntax, ImmutableMap.of(Keyword, "BLUE", Operator, "WHITE"), "ff0000", "ff0000");
+		coder = new CodeColorCoder(() -> null, syntax, ImmutableMap.of(Keyword, "BLUE", Operator, "WHITE"), "ff0000", "ff0000");
 	}
 
 	@Test

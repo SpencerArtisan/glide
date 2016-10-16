@@ -20,7 +20,6 @@ public class TextAreaModel implements Disposable {
 	private ColorCoder colorCoder;
 	private Watchable<TextAreaModel> changeWatchable = new Watchable<>();
 	private BiFunction<String, TextAreaModel, String> preInsertVetoer;
-	private static int count;
 
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
@@ -181,7 +180,6 @@ public class TextAreaModel implements Disposable {
 	@Override
 	public void dispose() {
 		changeWatchable.dispose();
-		count--;
 	}
 
 	public class Caret {
