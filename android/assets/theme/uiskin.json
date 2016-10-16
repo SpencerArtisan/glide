@@ -9,7 +9,8 @@ com.badlogic.gdx.graphics.Color: {
 	white: { a: 1, b: 1, g: 1, r: 1 },
 	red: { a: 1, b: 0, g: 0, r: 1 },
 	black: { a: 1, b: 0, g: 0, r: 0 },
-    solarizedLight: { r: 0.9333, g: 0.9098, b: 0.8353, a: 1 }
+    solarizedLight: { r: 0.9333, g: 0.9098, b: 0.8353, a: 1 },
+    linkBlue: { r: 0.149, g: 0.545, b: 0.8235, a: 1 }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
@@ -21,11 +22,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
     solarizedSelection: { name: white, color: { r: 0.34510, g: 0.43137, b: 0.45882, a: 0.5 } },
     solarizedNew: { name: white, color: { r: 0.0356, g: 0.25176, b: 0.30882, a: 1 } },
     solarizedError: { name: white, color: { r: 0.86275, g: 0.19608, b: 0.18431, a: 0.6 } }
+
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
     default: { font: default-font, fontColor: white, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
     tab: { font: default-font, overFontColor: white, checkedFontColor: white, fontColor: solarizedLight, checked: tab, over: tab_dark, up: tab_dark, down: tab_dark, disabled: tab_dark },
-	big: { font: big-font, fontColor: white, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled }
+	big: { font: big-font, fontColor: white, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled },
+    link: { font: default-font, fontColor: linkBlue, overFontColor: white }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     run-button: { font: default-font, fontColor: white, imageUp: flag, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
@@ -55,7 +58,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: { font: big-font, fontColor: solarizedLight },
     error: { font: default-font, fontColor: solarizedLight, background: solarizedError },
-    small: { font: code-font, fontColor: solarizedLight }
+    small: { font: code-font, fontColor: solarizedLight },
+    link: { font: code-font, fontColor: linkBlue }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { font: code-font, fontColor: white, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground }

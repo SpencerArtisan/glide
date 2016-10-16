@@ -146,7 +146,7 @@ public class ImageEditor implements Resource<ImageModel> {
 
             @Override
             public void watchRemoveButton(Runnable onRemove) {
-                deleteButton.onClick(() -> onRemove.run());
+                deleteButton.onClick(onRemove);
             }
 
             @Override

@@ -53,6 +53,7 @@ def deathAnimation():
     explosion.setScale(0.1)
     explosion.setPosition(car.x, car.y)
     explosion.runEffect(effects.sequence(effects.scaleBy(300)))
+    resources.loadSoundEffect("bomb.mp3").play()
     scoreText.runEffect(effects.combine(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
 
 

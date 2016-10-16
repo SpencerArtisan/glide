@@ -15,6 +15,7 @@ public class TextFieldPlus extends TextField {
     public TextFieldPlus(String value, Skin skin) {
         super(value, skin);
         this.skin = skin;
+        setOnlyFontChars(true);
         TextureRegionDrawable white = (TextureRegionDrawable) skin.getDrawable("white");
         invalidBackground = white.tint(Color.valueOf("dc322f88"));
     }

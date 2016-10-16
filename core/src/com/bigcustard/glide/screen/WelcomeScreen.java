@@ -249,10 +249,11 @@ public class WelcomeScreen extends ScreenAdapter {
         table.add(quitButton).padTop(20f).colspan(2).fillX();
         outerTable.background(backgroundRegion);
         title.setX(-55);
-        titleCell = outerTable.add(title).expand().padTop(40).padBottom(-100).padLeft(50).top().left();
-        outerTable.add(version).expand().padTop(-4).padBottom(-100).padLeft(35).top().left();
+        titleCell = outerTable.add(title).expand().padTop(10).padBottom(-100).padLeft(50).top().left();
         outerTable.row();
         outerTable.add(table).expandY().top();
+        outerTable.row();
+        outerTable.add(version).expandX().left().bottom();
         outerTable.setFillParent(true);
         outerTable.pack();
         stage.addActor(outerTable);

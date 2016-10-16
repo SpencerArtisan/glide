@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,6 +17,8 @@ import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.glide.code.command.ExitCommand;
 import com.bigcustard.glide.code.command.RunCommand;
+import com.bigcustard.glide.help.Help;
+import com.bigcustard.glide.help.HelpTopic;
 import com.bigcustard.scene2dplus.button.ButtonBar;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.command.RedoCommand;
@@ -44,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-// todo - test
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
@@ -53,15 +57,17 @@ public class CodingScreen extends ScreenAdapter {
     private TabControl resourceTabControl;
     private Game game;
     private GameStore gameStore;
+    private Help help;
     private Consumer<Screen> setScreen;
     private ScreenFactory screenFactory;
     private ScheduledFuture<?> gameSavingProcess;
     private ButtonBar buttonBar;
     private ScheduledExecutorService executorService;
 
-    public CodingScreen(Game game, GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
+    public CodingScreen(Game game, GameStore gameStore, Help help, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
         this.gameStore = gameStore;
+        this.help = help;
         this.setScreen = setScreen;
         this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
@@ -141,12 +147,36 @@ public class CodingScreen extends ScreenAdapter {
     private void createResourceArea() {
         ResourceArea<ImageModel> imageArea = createImageArea();
         ResourceArea<SoundModel> soundArea = createSoundArea();
+        Actor helpArea = createHelpArea();
         resourceTabControl = new TabControl();
         resourceTabControl.addTab(imageArea, new TextButtonPlus("Images  ", skin, "tab"));
         resourceTabControl.addTab(soundArea, new TextButtonPlus("Sounds  ", skin, "tab"));
-        resourceTabControl.addTab(soundArea, new TextButtonPlus("Help  ", skin, "tab"));
+        resourceTabControl.addTab(helpArea, new TextButtonPlus("Help  ", skin, "tab"));
         resourceTabControl.background(skin.getDrawable("solarizedBackground"));
         resourceTabControl.init();
+    }
+
+    private Actor createHelpArea() {
+        List<HelpTopic> helpTopics = help.topics();
+        List<Actor> helpLinks = helpTopics.stream().map(this::createHelpLink).collect(Collectors.toList());
+
+        Table table = new Table();
+        table.background(skin.getDrawable("solarizedNew"));
+        table.clearChildren();
+        table.top();
+        table.padTop(20);
+        for (Actor link : helpLinks) {
+            table.add(link);
+            table.row();
+        }
+        table.pack();
+
+        return new ScrollPane(table, skin);
+    }
+
+    private Actor createHelpLink(HelpTopic helpTopic) {
+        Button button = new TextButtonPlus(helpTopic.getText(), skin, "link");
+        return button;
     }
 
     private ResourceArea<ImageModel> createImageArea() {
