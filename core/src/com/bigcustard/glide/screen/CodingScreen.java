@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -66,6 +67,8 @@ public class CodingScreen extends ScreenAdapter {
     private ScheduledFuture<?> gameSavingProcess;
     private ButtonBar buttonBar;
     private ScheduledExecutorService executorService;
+    private Cell<ScrollableTextArea> exampleCell;
+    private Table layoutTable;
 
     public CodingScreen(Game game, GameStore gameStore, Help help, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -90,7 +93,7 @@ public class CodingScreen extends ScreenAdapter {
         createResourceArea();
         buttonBar = createButtonBar();
 
-        Table layoutTable = new Table();
+        layoutTable = new Table();
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.row();
         layoutTable.add(createTextAreaTable(errorLabel)).expand().fill();
@@ -171,7 +174,12 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private Actor createHelpLink(HelpTopic helpTopic) {
-        Button button = new TextButtonPlus(helpTopic.getText(), skin, "link");
+        TextButtonPlus button = new TextButtonPlus(helpTopic.getText(), skin, "link");
+        button.onClick(() -> {
+            exampleCell.height(200);
+            exampleModel.setText(helpTopic.getExampleCode());
+            exampleArea.invalidateHierarchy();
+        });
         return button;
     }
 
@@ -215,7 +223,8 @@ public class CodingScreen extends ScreenAdapter {
 
     private Table createTextAreaTable(Label errorLabel) {
         Table textAreaTable = new Table();
-        textAreaTable.add(exampleArea).fill().height(200);
+        exampleCell = textAreaTable.add(exampleArea);
+        exampleCell.fill().height(0);
         textAreaTable.row();
         textAreaTable.add(textArea).fill().expand();
         textAreaTable.row();
