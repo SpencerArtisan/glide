@@ -1,0 +1,1 @@
+myClonedSprite = mySprite.clone()

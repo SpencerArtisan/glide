@@ -61,3 +61,4 @@ while screen.update():
 
     if keyboard.R.isPressed():
         system.restart()
+
