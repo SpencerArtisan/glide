@@ -6,7 +6,9 @@ public class PythonKeywords implements Keywords {
         return new String[] {"def", "and", "or", "break", "case", "catch", "char", "class",
                 "const", "continue", "default", "do", "double", "else", "eval", "false", "finally", "float",
                 "for", "function", "goto", "if", "in", "instanceof", "int", "long", "new", "null",
-                "return", "switch", "this", "throw", "throws", "true", "try", "typeof", "var", "void", "while"};
+                "return", "switch", "this", "throw", "throws", "true", "try", "typeof", "var", "void", "while",
+                "max", "min", "str"};
+
     }
 
     @Override
