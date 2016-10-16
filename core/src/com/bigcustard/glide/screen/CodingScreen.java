@@ -144,6 +144,7 @@ public class CodingScreen extends ScreenAdapter {
         resourceTabControl = new TabControl();
         resourceTabControl.addTab(imageArea, new TextButtonPlus("Images  ", skin, "tab"));
         resourceTabControl.addTab(soundArea, new TextButtonPlus("Sounds  ", skin, "tab"));
+        resourceTabControl.addTab(soundArea, new TextButtonPlus("Help  ", skin, "tab"));
         resourceTabControl.background(skin.getDrawable("solarizedBackground"));
         resourceTabControl.init();
     }

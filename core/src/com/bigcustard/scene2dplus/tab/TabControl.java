@@ -30,7 +30,7 @@ public class TabControl extends Table {
             ErrorHandler.onChanged(tabButton, getSkin(), () -> deactivateOtherTabs(tabCell, tabButton, tab));
         }
         row();
-        tabCell.set(add(tabs.get(0)).colspan(2).fill().expand());
+        tabCell.set(add(tabs.get(0)).colspan(tabs.size()).fill().expand());
         tabButtons.get(0).setChecked(true);
     }
 

@@ -22,7 +22,7 @@ import java.util.Objects;
 public class TextArea extends Actor {
     private static final int TOP_MARGIN = 29;
     private static final int LEFT_MARGIN = 8;
-    private static final int COLUMN_WIDTH = 12;
+    private static final int COLUMN_WIDTH = 9;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
     private TextField.TextFieldStyle style;
