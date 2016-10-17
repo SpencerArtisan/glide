@@ -1,12 +1,13 @@
 package com.bigcustard.glide.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -21,6 +22,7 @@ import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.glide.help.Help;
 import com.bigcustard.glide.help.HelpTopic;
 import com.bigcustard.scene2dplus.button.ButtonBar;
+import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;
 import com.bigcustard.scene2dplus.command.RedoCommand;
@@ -54,6 +56,7 @@ import java.util.stream.Collectors;
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
+    private Stage closeButtonStage;
     private TextAreaModel model;
     private TextAreaModel exampleModel;
     private ScrollableTextArea exampleArea;
@@ -69,6 +72,7 @@ public class CodingScreen extends ScreenAdapter {
     private ScheduledExecutorService executorService;
     private Cell<ScrollableTextArea> exampleCell;
     private Table layoutTable;
+    private ImageButtonPlus closeButton;
 
     public CodingScreen(Game game, GameStore gameStore, Help help, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -77,13 +81,34 @@ public class CodingScreen extends ScreenAdapter {
         this.setScreen = setScreen;
         this.screenFactory = screenFactory;
         this.stage = new Stage(viewport);
+        this.closeButtonStage = new Stage(viewport);
         this.skin = skin;
 
-        Table layoutTable = layoutScreen();
+        createExampleCloseButton(skin);
 
+        Table layoutTable = layoutScreen();
         stage.addActor(layoutTable);
         stage.setKeyboardFocus(textArea.textArea());
-        Gdx.input.setInputProcessor(stage);
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(closeButtonStage, stage));
+    }
+
+    private void createExampleCloseButton(Skin skin) {
+        Table table = new Table(skin);
+        closeButton = new ImageButtonPlus(skin, "close-button");
+        closeButton.setVisible(false);
+        table.row();
+        table.add(closeButton).padRight(290).padTop(10).expand().top().right();
+        table.setFillParent(true);
+        table.pack();
+        closeButtonStage.addActor(table);
+
+        closeButton.onClick(() -> {
+            exampleCell.height(0);
+            exampleModel.setText("");
+            closeButton.setVisible(false);
+            exampleArea.invalidateHierarchy();
+        });
     }
 
     private Table layoutScreen() {
@@ -178,6 +203,7 @@ public class CodingScreen extends ScreenAdapter {
         button.onClick(() -> {
             exampleCell.height(200);
             exampleModel.setText(helpTopic.getExampleCode());
+            closeButton.setVisible(true);
             exampleArea.invalidateHierarchy();
         });
         return button;
@@ -240,7 +266,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private void createExampleArea(Language language) {
-        exampleModel = new TextAreaModel("hjhhkhjfr", language.codeColorCoder(() -> null));
+        exampleModel = new TextAreaModel("", language.codeColorCoder(() -> null));
         exampleArea = new ScrollableTextArea(exampleModel, skin, new CommandHistory(), "example");
     }
 
@@ -263,7 +289,9 @@ public class CodingScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(delta, 1 / 60f));
+        closeButtonStage.act(Math.min(delta, 1 / 60f));
         stage.draw();
+        closeButtonStage.draw();
     }
 
     @Override

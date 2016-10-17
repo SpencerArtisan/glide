@@ -14,7 +14,6 @@ import com.google.common.util.concurrent.SettableFuture;
 import java.util.List;
 
 public class GameLibraryDialog extends Dialog implements Disposable {
-    private static int count;
     private static int COLUMNS = 3;
     private static List<Game.Token> games;
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
@@ -104,6 +103,5 @@ public class GameLibraryDialog extends Dialog implements Disposable {
     @Override
     public void dispose() {
         getButtonTable().getChildren().forEach(Actor::clearListeners);
-        count--;
     }
 }
