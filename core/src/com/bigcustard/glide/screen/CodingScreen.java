@@ -114,6 +114,7 @@ public class CodingScreen extends ScreenAdapter {
     private Table layoutScreen() {
         createTextArea(game);
         createExampleArea(game.language());
+        linkTextAreas();
         Label errorLabel = createErrorLabel(game);
         createResourceArea();
         buttonBar = createButtonBar();
@@ -129,6 +130,11 @@ public class CodingScreen extends ScreenAdapter {
         layoutTable.pack();
 
         return layoutTable;
+    }
+
+    private void linkTextAreas() {
+        model.addChangeListener(model -> { if (model.caret().isAreaSelected()) exampleModel.caret().clearSelection(); });
+        exampleModel.addChangeListener(exampleModel -> { if (exampleModel.caret().isAreaSelected()) this.model.caret().clearSelection(); });
     }
 
     private ButtonBar createButtonBar() {
