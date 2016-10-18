@@ -45,6 +45,7 @@ import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -73,6 +74,7 @@ public class CodingScreen extends ScreenAdapter {
     private Cell<ScrollableTextArea> exampleCell;
     private Table layoutTable;
     private ImageButtonPlus closeButton;
+    private List<TextButtonPlus> helpButtons = new ArrayList<>();
 
     public CodingScreen(Game game, GameStore gameStore, Help help, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.game = game;
@@ -144,7 +146,7 @@ public class CodingScreen extends ScreenAdapter {
         buttonBar.addImage("tardis2");
         buttonBar.addTextButton("> Future", () -> new RedoCommand(game.commandHistory()));
         buttonBar.addSpacer(16);
-        buttonBar.addTextButton("Copy", () -> new CopyCommand(model));
+        buttonBar.addTextButton("Copy", () -> new CopyCommand(modelWithSelection()));
         buttonBar.addImage("copy");
         buttonBar.addTextButton("Paste", () -> new PasteCommand(model));
         buttonBar.addSpacer(16);
@@ -159,6 +161,10 @@ public class CodingScreen extends ScreenAdapter {
         }, 0, 2, TimeUnit.SECONDS);
 
         return buttonBar;
+    }
+
+    private TextAreaModel modelWithSelection() {
+        return exampleModel.caret().isAreaSelected() ? exampleModel : model;
     }
 
     private void exitToMainMenu() {
@@ -188,29 +194,33 @@ public class CodingScreen extends ScreenAdapter {
 
     private Actor createHelpArea() {
         List<HelpTopic> helpTopics = help.topics();
-        List<Actor> helpLinks = helpTopics.stream().map(this::createHelpLink).collect(Collectors.toList());
+        List<TextButtonPlus> helpLinks = helpTopics.stream().map(this::createHelpLink).collect(Collectors.toList());
 
         Table table = new Table();
         table.background(skin.getDrawable("solarizedNew"));
         table.clearChildren();
         table.top();
         table.padTop(20);
-        for (Actor link : helpLinks) {
+        for (TextButtonPlus link : helpLinks) {
             table.add(link);
             table.row();
+            helpButtons.add(link);
         }
         table.pack();
 
         return new ScrollPane(table, skin);
     }
 
-    private Actor createHelpLink(HelpTopic helpTopic) {
+    private TextButtonPlus createHelpLink(HelpTopic helpTopic) {
         TextButtonPlus button = new TextButtonPlus(helpTopic.getText(), skin, "link");
+        button.setProgrammaticChangeEvents(false);
         button.onClick(() -> {
             exampleCell.height(200);
             exampleModel.setText(helpTopic.getExampleCode());
             closeButton.setVisible(true);
             exampleArea.invalidateHierarchy();
+            helpButtons.forEach(b -> b.setChecked(false));
+            button.setChecked(true);
         });
         return button;
     }

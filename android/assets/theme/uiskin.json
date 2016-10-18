@@ -28,7 +28,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
     default: { font: default-font, fontColor: white, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
     tab: { font: default-font, overFontColor: white, checkedFontColor: white, fontColor: solarizedLight, checked: tab, over: tab_dark, up: tab_dark, down: tab_dark, disabled: tab_dark },
 	big: { font: big-font, fontColor: white, up: buttonBig, over: buttonBigOver, down: buttonBigDown, disabled: buttonBigDisabled },
-    link: { font: default-font, fontColor: linkBlue, overFontColor: white }
+    link: { font: default-font, fontColor: linkBlue, overFontColor: white, checkedFontColor: white }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
     run-button: { font: default-font, fontColor: white, imageUp: flag, up: buttonSmall, over: buttonSmallOver, down: buttonSmallDown, disabled: buttonSmallDisabled },
