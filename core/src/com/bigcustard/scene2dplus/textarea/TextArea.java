@@ -117,6 +117,6 @@ public class TextArea extends Actor {
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
         XY caretPosition = caretLocationToPosition(model.caret().location());
-        caretImage.draw(batch, caretPosition.x, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
+        caretImage.draw(batch, caretPosition.x - 2, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
     }
 }

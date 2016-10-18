@@ -13,12 +13,7 @@ import org.jruby.parser.RubyParser;
 import java.io.StringBufferInputStream;
 
 public class Ruby extends Language {
-    public static final String TEMPLATE =
-                      "##################################### \n"
-                    + "##       Welcome to GLIDE!         ## \n"
-                    + "##  Start writing your game below  ## \n"
-                    + "## Look at Samples for inspiration ## \n"
-                    + "##################################### \n\n";
+    public static final String TEMPLATE = "##  My Game written by me!  2016";
 
     public Ruby() {
         super(new RubyKeywords(), "rb", "ruby-button", TEMPLATE);

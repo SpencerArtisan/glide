@@ -33,22 +33,22 @@ public class LanguageChoiceDialog extends Dialog {
         text("Which Language?");
         getButtonTable().padTop(20).padBottom(20);
 
+        ImageTextButton pythonButton = new ImageTextButtonPlus(" Python ", skin, "python-button");
+        addButton(pythonButton, Language.Python);
+
+        ImageTextButton groovyButton = new ImageTextButtonPlus(" Groovy ", skin, "groovy-button");
+        addButton(groovyButton, Language.Groovy);
+
+        getButtonTable().row();
+
+        ImageTextButton rubyButton = new ImageTextButtonPlus(" Ruby ", skin, "ruby-button");
+        addButton(rubyButton, Language.Ruby);
+
         ImageTextButton javascriptButton = new ImageTextButtonPlus(" Javascript ", skin, "javascript-button");
         addButton(javascriptButton, Language.Javascript);
 
-        ImageTextButton groovyButton = new ImageTextButtonPlus(" Groovy ", skin, "groovy-button");
         getButtonTable().row();
-        addButton(groovyButton, Language.Groovy);
 
-        ImageTextButton rubyButton = new ImageTextButtonPlus(" Ruby ", skin, "ruby-button");
-        getButtonTable().row();
-        addButton(rubyButton, Language.Ruby);
-
-        ImageTextButton pythonButton = new ImageTextButtonPlus(" Python ", skin, "python-button");
-        getButtonTable().row();
-        addButton(pythonButton, Language.Python);
-
-        getButtonTable().row();
         TextButton cancelButton = new TextButtonPlus("  Cancel  ", skin);
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).padBottom(0).colspan(2);
@@ -59,7 +59,7 @@ public class LanguageChoiceDialog extends Dialog {
         button.add(new Spacer(3));
         button.add(button.getImage());
         button.add(button.getLabel());
-        getButtonTable().add(button).width(280).pad(10);
+        getButtonTable().add(button).width(190).height(60).pad(10);
         setObject(button, language);
     }
 }

@@ -100,7 +100,7 @@ public class CodingScreen extends ScreenAdapter {
         closeButton = new ImageButtonPlus(skin, "close-button");
         closeButton.setVisible(false);
         table.row();
-        table.add(closeButton).padRight(290).padTop(10).expand().top().right();
+        table.add(closeButton).padRight(250).padTop(10).expand().top().right();
         table.setFillParent(true);
         table.pack();
         closeButtonStage.addActor(table);
@@ -126,7 +126,7 @@ public class CodingScreen extends ScreenAdapter {
         layoutTable.background(skin.getDrawable("solarizedNew"));
         layoutTable.row();
         layoutTable.add(createTextAreaTable(errorLabel)).expand().fill();
-        layoutTable.add(resourceTabControl).width(280).expandY().fillY();
+        layoutTable.add(resourceTabControl).width(234).expandY().fillY();
         layoutTable.row();
         layoutTable.add(buttonBar).colspan(2).expandX().fillX();
         layoutTable.setFillParent(true);
@@ -186,9 +186,9 @@ public class CodingScreen extends ScreenAdapter {
         ResourceArea<SoundModel> soundArea = createSoundArea();
         Actor helpArea = createHelpArea();
         resourceTabControl = new TabControl();
-        resourceTabControl.addTab(imageArea, new TextButtonPlus("Images  ", skin, "tab"));
-        resourceTabControl.addTab(soundArea, new TextButtonPlus("Sounds  ", skin, "tab"));
-        resourceTabControl.addTab(helpArea, new TextButtonPlus("Help  ", skin, "tab"));
+        resourceTabControl.addTab(imageArea, new TextButtonPlus("images ", skin, "tab"));
+        resourceTabControl.addTab(soundArea, new TextButtonPlus("sounds ", skin, "tab"));
+        resourceTabControl.addTab(helpArea, new TextButtonPlus("help ", skin, "tab"));
         resourceTabControl.background(skin.getDrawable("solarizedBackground"));
         resourceTabControl.init();
     }

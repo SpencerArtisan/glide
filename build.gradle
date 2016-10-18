@@ -23,7 +23,7 @@ allprojects {
         snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    version = '0.3.0'
+    version = '1.0.0'
     ext {
         appName = 'glide'
         gdxVersion  = '1.9.3'

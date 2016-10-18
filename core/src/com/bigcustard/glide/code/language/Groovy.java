@@ -14,12 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Groovy extends Language {
-    public static final String TEMPLATE =
-                      "///////////////////////////////////// \n"
-                    + "//       Welcome to GLIDE!         // \n"
-                    + "//  Start writing your game below  // \n"
-                    + "// Look at Samples for inspiration // \n"
-                    + "///////////////////////////////////// \n\n";
+    public static final String TEMPLATE = "//  My Game written by me!  2016";
 
     public Groovy() {
         super(new GroovyKeywords(), "groovy", "groovy-button", TEMPLATE);

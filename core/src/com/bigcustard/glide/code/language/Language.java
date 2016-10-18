@@ -24,7 +24,7 @@ public abstract class Language {
     Language(Keywords keywords, String scriptEngine, String buttonStyle, String template) {
         this.scriptEngine = scriptEngine;
         this.buttonStyle = buttonStyle;
-        this.template = template;
+        this.template = template + "\n\n";
         this.syntax = new Syntax(keywords, this::errorChecker);
     }
 

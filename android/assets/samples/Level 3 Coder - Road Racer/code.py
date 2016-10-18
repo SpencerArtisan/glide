@@ -62,7 +62,7 @@ def deathAnimation():
 while screen.update():
     moveRoad()
     controlCar()
-    scoreText.setText("Score: " + str(score))
+    scoreText.text = "Score: " + str(score)
     roadWidth = roadWidth - 0.1
     score = score + 1
     if hitWall():

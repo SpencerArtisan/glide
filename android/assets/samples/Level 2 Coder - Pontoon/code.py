@@ -1,7 +1,6 @@
 #####################################
 ##  PONTOON by Spencer   Oct 2016  ##
 #####################################
-
 screen.backgroundColour = DarkGreen
 
 console.println("Welcome to Pontoon")
@@ -10,8 +9,9 @@ console.println("Press T to Twist, S to Stick, R to restart.")
 
 # Put the score at the top right
 scoreText = resources.createTextSprite("Total: 0")
-scoreText.setPosition(650, 500)
-scoreText.setFontSize(60)
+scoreText.x = 650
+scoreText.y = 500
+scoreText.fontSize = 60
 
 cardLeft = 100
 cardTop = 420
@@ -29,7 +29,7 @@ while screen.update():
         cardLeft = cardLeft + 90
         card.y = cardTop
 
-        # Update the hand total
+        # Update the hand total, face cards counting at 10
         total = total + min(10, cardNumber)
 
         # Aces count as 1 or 11. Go for 11, unless it busts you
@@ -37,7 +37,7 @@ while screen.update():
             total = total + 10
 
         # Show the new score
-        scoreText.setText("Total: " + str(total))
+        scoreText.text = "Total: " + str(total)
 
         # Check if you've bust
         if total > 21:

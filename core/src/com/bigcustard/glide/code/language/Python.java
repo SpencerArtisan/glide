@@ -11,12 +11,7 @@ import org.python.core.PyObjectDerived;
 import org.python.core.PyTraceback;
 
 public class Python extends Language {
-    public static final String TEMPLATE =
-            "##################################### \n"
-          + "##       Welcome to GLIDE!         ## \n"
-          + "##  Start writing your game below  ## \n"
-          + "## Look at Samples for inspiration ## \n"
-          + "##################################### \n\n";
+    public static final String TEMPLATE = "##  My Game written by me!  2016";
 
     public Python() {
         super(new PythonKeywords(), "py", "python-button", TEMPLATE);
