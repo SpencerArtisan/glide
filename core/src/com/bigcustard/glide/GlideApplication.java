@@ -8,8 +8,12 @@ import com.bigcustard.glide.screen.ResourceManager;
 import com.bigcustard.glide.screen.RuntimeFacade;
 import com.bigcustard.glide.screen.ScreenFactory;
 import com.bigcustard.glide.screen.WelcomeScreen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GlideApplication extends com.badlogic.gdx.Game {
+    private static Logger logger = LoggerFactory.getLogger(GlideApplication.class);
+
     private Viewport viewport;
     private ResourceManager resourceManager;
     private MouseWindowChecker mouseWindowChecker;
@@ -20,10 +24,16 @@ public class GlideApplication extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
+        logger.info("Someone is running Glide!");
         viewport = new ScreenViewport();
         resourceManager = new ResourceManager();
         RuntimeFacade.INSTANCE.initialise(new GameStore(), mouseWindowChecker, this::setScreen);
         showWelcomeScreen();
+    }
+
+    @Override
+    public void dispose() {
+        logger.info("Someone is closing Glide!");
     }
 
     private void showWelcomeScreen() {

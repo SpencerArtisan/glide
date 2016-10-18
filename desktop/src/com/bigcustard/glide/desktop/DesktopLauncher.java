@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglInput;
 import com.bigcustard.glide.GlideApplication;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,5 +24,6 @@ public class DesktopLauncher {
         config.width = 1024;
         config.height = 768;
 		new LwjglApplication(new GlideApplication(new LwjglMouseWindowChecker()), config);
+
 	}
 }
