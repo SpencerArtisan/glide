@@ -110,6 +110,7 @@ public class CodingScreen extends ScreenAdapter {
             exampleModel.setText("");
             closeButton.setVisible(false);
             exampleArea.invalidateHierarchy();
+            helpButtons.forEach(b -> b.setChecked(false));
         });
     }
 
