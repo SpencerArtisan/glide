@@ -40,7 +40,7 @@ Additional Info
 The Jenkins build is configured as follows:
 gradle build dist
 #!/bin/bash
-#wget http://simple-help.com/media/static/jwrapper/jwrapper-00039794057.jar
+#wget http://simple-help.com/media/static/jwrapper/jwrapper-00044250826.jar
 #ln -s /var/lib/jenkins/JRE-1.8 ./JRE-1.8
 ./package.sh
 gradle uploadArchives

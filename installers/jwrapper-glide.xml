@@ -34,6 +34,7 @@
 	<!-- The files that the app wants to bundle, here we have just one which is a JAR file and we specify that it should be on the launch classpath -->
     <File classpath='yes'>desktop/build/libs/desktop-1.0.0.jar</File>
     <File classpath='no'>android/assets/samples</File>
+    <File classpath='no'>android/assets/examples</File>
 
     <Pack200Effort>0</Pack200Effort>
 	
