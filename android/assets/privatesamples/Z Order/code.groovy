@@ -1,5 +1,0 @@
-resources.createImageSprite("hello-world.png").setPosition(275, 300)
-resources.createTextSprite("Sandwiched!").setPosition(400, 400).setFontSize(100).setColour(Crimson)
-resources.createImageSprite("hello-world.png").setPosition(525, 300)
-resources.createTextSprite("In Front!").setPosition(400, 200).setFontSize(100).setColour(Crimson)
-screen.update()

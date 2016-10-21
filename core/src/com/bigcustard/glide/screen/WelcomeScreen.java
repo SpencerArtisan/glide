@@ -127,7 +127,7 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void createNewGameButton() {
-        newGameButton = new TextButtonPlus("    New Game    ", skin, "big");
+        newGameButton = new TextButtonPlus("    Write a Game    ", skin, "big");
         newGameButton.onClick(() -> {
                     hideMainMenu();
                     NewCommand newCommand = new NewCommand(
@@ -151,7 +151,7 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void createSamplesButton() {
-        samplesButton = new TextButtonPlus("     Samples     ", skin, "big");
+        samplesButton = new TextButtonPlus("     Hack a Game     ", skin, "big");
         createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
     }
 
@@ -240,9 +240,9 @@ public class WelcomeScreen extends ScreenAdapter {
         table = new Table();
         table.add(newGameButton).colspan(2).fillX();
         table.row();
-        table.add(continueGameButton).padTop(20f).colspan(2).fillX();
-        table.row();
         table.add(samplesButton).padTop(20f).colspan(2).fillX();
+        table.row();
+        table.add(continueGameButton).padTop(20f).colspan(2).fillX();
         table.row();
         table.add(myGamesButton).padTop(20f).colspan(2).fillX();
         table.row();
