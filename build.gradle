@@ -14,8 +14,6 @@ allprojects {
 
     group = 'com.artisan-software.glide'
 
-
-
     apply plugin: "com.bmuschko.nexus"
     nexus {
         sign = true
@@ -23,7 +21,7 @@ allprojects {
         snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 
-    version = '1.0.0'
+    version = '1.1.0'
     ext {
         appName = 'glide'
         gdxVersion  = '1.9.3'

@@ -177,7 +177,7 @@ public class CodingScreen extends ScreenAdapter {
     private void showRunScreen(Game game) {
         RuntimeFacade.INSTANCE.run(game, () -> {
             setScreen.accept(this);
-            Gdx.input.setInputProcessor(stage);
+            Gdx.input.setInputProcessor(new InputMultiplexer(closeButtonStage, stage));
         });
     }
 

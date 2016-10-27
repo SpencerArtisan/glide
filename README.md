@@ -20,7 +20,7 @@ To build the executables you need to download JRE-1.8 for windows, linux and Mac
 Release Process
 ---------------
 
-1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-glide.xml`` and ``run.sh``
+1. Update the version numbers in ``build.gradle``, ``installers/jwrapper-glide.xml``, ``WelcomeScreen.java`` and ``run.sh``
 2. Create release branch and push to github
 3. Run [jenkins build](http://camsw.darktech.org:8081/job/glide/) on release branch
 4. Log into [sonatype](https://oss.sonatype.org/#stagingRepositories) and find the staging repository

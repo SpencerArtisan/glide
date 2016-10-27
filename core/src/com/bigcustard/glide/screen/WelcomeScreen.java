@@ -114,7 +114,7 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void createVersion() {
-        version = new Label("v1.0", skin, "small");
+        version = new Label("v1.1", skin, "small");
         version.setColor(Color.LIGHT_GRAY);
     }
 

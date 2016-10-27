@@ -79,7 +79,7 @@ public class ImageEditor implements Resource<ImageModel> {
         private TextFieldPlus createSizeField() {
             TextFieldPlus textField = new TextFieldPlus("", skin);
             textField.setAlignment(Align.center);
-            textField.setMaxLength(3);
+            textField.setMaxLength(4);
             textField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
             return textField;
         }

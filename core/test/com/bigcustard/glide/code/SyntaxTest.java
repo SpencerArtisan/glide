@@ -37,6 +37,14 @@ public class SyntaxTest {
 				new SyntaxPart(".", Operator),
 				new SyntaxPart("wibble", Unclassified));
 	}
+	
+	@Test
+	public void colon() throws Exception {
+        assertThat(syntax.parse("blah:wibble")).containsExactly(
+				new SyntaxPart("blah", Unclassified),
+				new SyntaxPart(":", Operator),
+				new SyntaxPart("wibble", Unclassified));
+	}
 
 	@Test
 	public void comma() throws Exception {

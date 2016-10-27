@@ -22,7 +22,7 @@ import static com.bigcustard.glide.code.SyntaxPart.Type.*;
 public class Syntax implements Disposable {
     private static String[] TOKENS = new String[] {
             " ", "\t", "\n", "\r", "\f", "(", ")", "{", "}", "\"", ".", "[", "]", "==", "<", ">", "<=", ">=",
-            "!", "!=", "=", "++", "*=", "/=", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";"};
+            "!", "!=", "=", "++", "*=", "/=", "--", "+=", "-=", "+", "-", " / ", "*", "&&", "||", ",", "$", "%", ";", ":"};
     private Keywords languageKeywords;
     private Function<String, Pair<Integer, String>> errorChecker;
 
