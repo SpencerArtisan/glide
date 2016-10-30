@@ -21,9 +21,9 @@ public class FrameworkKeywords implements Keywords {
                 "dragX", "dragY", "wasDragReleased", "wasClicked", "isDragging", "onMouseEnter", "onMouseExit", "SpriteEventHandler", "handle", "onClick", "Runnable",
                 "Linear", "SmoothStop", "SmoothStart", "SmoothStartStop", "FastThenSlow", "SlowThenFast", "SlowFastSlow", "BackStop", "BackStart", "BackStartStop", "BounceStop",
                 "BounceStart", "BounceStartStop", "ElasticStop", "ElasticStart", "ElasticStartStop",
-                "Justification", "AlignLeft", "AlignCenter", "AlignRight", "multiplyBy", "moveTowards",
+                "Justification", "AlignLeft", "AlignCenter", "AlignRight", "multiplyBy", "moveTowards", "move",
                 "resources", "Image", "loadImage", "Sprite", "createImageSprite", "ImageSprite", "createTextSprite", "handle", "timesToRun", "yoyoMode",
-                "Circle", "angle", "camera", "withDelayBeforeStart", "withDelayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
+                "Circle", "angle", "angleTo", "camera", "withDelayBeforeStart", "withDelayBetweenRuns", "EffectBase", "EffectGroup", "colour", "Linear", "effects", "EffectStyle", "Effects",
                 "isRunningAnEffect", "console", "keyboard", "clear", "fontSize", "Colours", "values", "Right", "Left", "Center",
                 "moveTo", "Middle", "TopLeft", "Top", "TopRight", "BottomLeft", "Bottom", "BottomRight", "Space", "system", "pause", "overlaps",
                 "position", "println", "Rectangle", "randomInRange", "randomIntInRange", "randomUpTo", "runEffect", "rotateBy", "rotateTo", "scaleX", "scaleY", "scale", "scaleTo",
@@ -34,7 +34,7 @@ public class FrameworkKeywords implements Keywords {
                 "setAngle", "setColour", "setPosition", "setZoom", "viewport", "withStyle", "withDuration", "withTimesToRun", "withYoyoMode",
                 "Math", "abs", "cos", "sin", "distanceTo", "wait", "remove", "restart", "backgroundColour", "sleep", "moveBy", "collidedWith",
                 "loadSoundEffect", "play", "pause", "stop", "setVolume", "loadMusic", "createAnimationSprite", "isPlaying", "step", "reverse",
-                "copy", "pushToBack", "stopEffects"
+                "copy", "pushToBack", "stopEffects", "zoom", "clone"
         };
     }
 

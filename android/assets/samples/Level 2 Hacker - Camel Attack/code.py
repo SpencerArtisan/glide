@@ -1,6 +1,7 @@
 ##  Attack of the Mutant Camels  written by  Spencer Ward   October 2016
 
-resources.createImageSprite("landscape").scaleY = 0.3
+background = resources.createImageSprite("landscape")
+background.scaleY = 0.3
 
 camel = resources.createImageSprite("camel")
 camel.x = 100

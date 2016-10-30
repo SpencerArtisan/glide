@@ -56,7 +56,6 @@ def deathAnimation():
     resources.loadSoundEffect("bomb.mp3").play()
     scoreText.runEffect(effects.combine(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
 
-
 # Game loop - repeats until you die!
 
 while screen.update():

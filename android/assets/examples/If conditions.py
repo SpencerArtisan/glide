@@ -1,6 +1,6 @@
 if myCar.x < 0:
     # Car hit the left of the screen, do something about it!
-elsif myCar.x > 800:
+elif myCar.x > 800:
     # Car hit the right of the screen, do something else!
 else:
     # Car has not hit either side of the screen, you may

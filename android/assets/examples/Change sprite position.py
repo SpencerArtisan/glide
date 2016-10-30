@@ -6,3 +6,9 @@ car.y = 200
 
 # Or move the sprite towards some point by, say, 10 pixels
 car.moveTowards(myHouse.x, myHouse.y, 10)
+
+# Or move the sprite towards some some other sprite by, say, 10 pixels
+car.moveTowards(myHouse, 10)
+
+# Or move the sprite an an angle, say, 45 degrees by, say, 10 pixels
+car.move(10, 45)

@@ -7,7 +7,7 @@ public class PythonKeywords implements Keywords {
                 "const", "continue", "default", "do", "double", "else", "eval", "False", "finally", "float",
                 "for", "function", "goto", "if", "elif", "else", "in", "instanceof", "int", "long", "new", "null",
                 "return", "switch", "this", "throw", "throws", "True", "try", "typeof", "var", "void", "while",
-                "max", "min", "str"};
+                "max", "min", "str", "len", "range"};
 
     }
 

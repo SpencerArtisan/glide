@@ -14,7 +14,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import java.util.List;
 
 public class GameLibraryDialog extends Dialog implements Disposable {
-    private static int COLUMNS = 3;
+    private static int COLUMNS = 2;
     private static List<Game.Token> games;
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
     private boolean readOnly;
