@@ -46,7 +46,8 @@ public class WelcomeScreen extends ScreenAdapter {
     private Table outerTable;
     private Stage stage;
     private TextButtonPlus newGameButton;
-    private TextButtonPlus continueGameButton;
+    private TextButtonPlus exportGameButton;
+    private TextButtonPlus importGameButton;
     private TextButtonPlus samplesButton;
     private TextButtonPlus myGamesButton;
     private TextButtonPlus quitButton;
@@ -59,6 +60,7 @@ public class WelcomeScreen extends ScreenAdapter {
     private Image poweredBy;
     private Label version;
     private ScheduledExecutorService executorService;
+    private ImportExport importExport;
 
     WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.setScreen = setScreen;
@@ -66,12 +68,15 @@ public class WelcomeScreen extends ScreenAdapter {
         this.gameStore = gameStore;
         this.stage = new Stage(viewport);
         this.skin = skin;
+        this.importExport = new ImportExport(skin, stage);
 
         createTitle();
         createBlurpLogo();
         createVersion();
         createNewGameButton();
-        createContinueGameButton();
+//        createContinueGameButton();
+        createExportGameButton();
+        createImportGameButton();
         createSamplesButton();
         createMyGamesButton();
         createQuitButton();
@@ -100,17 +105,15 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void refreshButtonEnabledStatuses() {
-        boolean continueEnabled = gameStore.hasMostRecent();
-        continueGameButton.setDisabled(!continueEnabled);
-        continueGameButton.setTouchable(continueEnabled ? Touchable.enabled : Touchable.disabled);
-
         boolean samplesEnabled = gameStore.allSampleGames().size() > 0;
         samplesButton.setDisabled(!samplesEnabled);
         samplesButton.setTouchable(samplesEnabled ? Touchable.enabled : Touchable.disabled);
 
-        boolean myGamesEnabled = gameStore.allUserGames().size() > 0;
-        myGamesButton.setDisabled(!myGamesEnabled);
-        myGamesButton.setTouchable(myGamesEnabled ? Touchable.enabled : Touchable.disabled);
+        boolean areGames = gameStore.allUserGames().size() > 0;
+        myGamesButton.setDisabled(!areGames);
+        myGamesButton.setTouchable(areGames ? Touchable.enabled : Touchable.disabled);
+        exportGameButton.setDisabled(!areGames);
+        exportGameButton.setTouchable(areGames ? Touchable.enabled : Touchable.disabled);
     }
 
     private void createVersion() {
@@ -145,9 +148,19 @@ public class WelcomeScreen extends ScreenAdapter {
         return languageChoiceDialog.getFutureLanguageChoice();
     }
 
-    private void createContinueGameButton() {
-        continueGameButton = new TextButtonPlus("  Continue Game  ", skin, "big");
-        continueGameButton.onClick(() -> showCodingScreen(gameStore::mostRecent));
+//    private void createContinueGameButton() {
+//        continueGameButton = new TextButtonPlus("  Continue Game  ", skin, "big");
+//        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
+//    }
+
+    private void createImportGameButton() {
+        importGameButton = new TextButtonPlus("  Import Game  ", skin, "big");
+//        importGameButton.onClick(() -> showCodingScreen(gameStore::mostRecent));
+    }
+
+    private void createExportGameButton() {
+        exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
+        createGamesButton(exportGameButton, () -> GameLibraryDialog.sampleGames(skin));
     }
 
     private void createSamplesButton() {
@@ -242,9 +255,11 @@ public class WelcomeScreen extends ScreenAdapter {
         table.row();
         table.add(samplesButton).padTop(20f).colspan(2).fillX();
         table.row();
-        table.add(continueGameButton).padTop(20f).colspan(2).fillX();
-        table.row();
         table.add(myGamesButton).padTop(20f).colspan(2).fillX();
+        table.row();
+        table.add(importGameButton).padTop(20f).colspan(2).fillX();
+        table.row();
+        table.add(exportGameButton).padTop(20f).colspan(2).fillX();
         table.row();
         table.add(quitButton).padTop(20f).colspan(2).fillX();
         outerTable.background(backgroundRegion);
@@ -300,7 +315,6 @@ public class WelcomeScreen extends ScreenAdapter {
     public void dispose() {
         super.dispose();
         stage.dispose();
-        continueGameButton.clearListeners();
         myGamesButton.clearListeners();
         newGameButton.clearListeners();
         quitButton.clearListeners();
