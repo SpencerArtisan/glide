@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bigcustard.glide.code.Game;
@@ -28,8 +26,6 @@ import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Random;
@@ -74,7 +70,6 @@ public class WelcomeScreen extends ScreenAdapter {
         createBlurpLogo();
         createVersion();
         createNewGameButton();
-//        createContinueGameButton();
         createExportGameButton();
         createImportGameButton();
         createSamplesButton();
@@ -129,6 +124,32 @@ public class WelcomeScreen extends ScreenAdapter {
         blurpLogo = new Image(skin, "Blurp");
     }
 
+    private ListenableFuture<Language> saveGameChoice() {
+        LanguageChoiceDialog languageChoiceDialog = new LanguageChoiceDialog(skin);
+        languageChoiceDialog.show(stage);
+        return languageChoiceDialog.getFutureLanguageChoice();
+    }
+
+    private void createImportGameButton() {
+        importGameButton = new TextButtonPlus("  Import Game  ", skin, "big");
+        importGameButton.onClick(() -> importExport.importGame());
+    }
+
+    private void createExportGameButton() {
+        exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
+        exportGameButton.onClick(() -> importExport.exportGame());
+    }
+
+    private void createSamplesButton() {
+        samplesButton = new TextButtonPlus("     Hack a Game     ", skin, "big");
+        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
+    }
+
+    private void createMyGamesButton() {
+        myGamesButton = new TextButtonPlus("    My Games    ", skin, "big");
+        createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin));
+    }
+
     private void createNewGameButton() {
         newGameButton = new TextButtonPlus("    Write a Game    ", skin, "big");
         newGameButton.onClick(() -> {
@@ -142,57 +163,13 @@ public class WelcomeScreen extends ScreenAdapter {
         );
     }
 
-    private ListenableFuture<Language> saveGameChoice() {
-        LanguageChoiceDialog languageChoiceDialog = new LanguageChoiceDialog(skin);
-        languageChoiceDialog.show(stage);
-        return languageChoiceDialog.getFutureLanguageChoice();
-    }
-
-//    private void createContinueGameButton() {
-//        continueGameButton = new TextButtonPlus("  Continue Game  ", skin, "big");
-//        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
-//    }
-
-    private void createImportGameButton() {
-        importGameButton = new TextButtonPlus("  Import Game  ", skin, "big");
-//        importGameButton.onClick(() -> showCodingScreen(gameStore::mostRecent));
-    }
-
-    private void createExportGameButton() {
-        exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
-        createGamesButton(exportGameButton, () -> GameLibraryDialog.sampleGames(skin));
-    }
-
-    private void createSamplesButton() {
-        samplesButton = new TextButtonPlus("     Hack a Game     ", skin, "big");
-        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
-    }
-
-    private void createMyGamesButton() {
-        myGamesButton = new TextButtonPlus("    My Games    ", skin, "big");
-        createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin));
-    }
-
     private void createGamesButton(TextButtonPlus button, Supplier<GameLibraryDialog> dialogSupplier) {
         button.onClick(() -> {
             hideMainMenu();
-            final GameLibraryDialog dialog = dialogSupplier.get();
-            dialog.show(stage);
-            Futures.addCallback(dialog.getFutureGame(), new FutureCallback<Game.Token>() {
-                public void onSuccess(Game.Token game) {
-                    showMainMenu();
-                    refreshButtonEnabledStatuses();
-                    if (game != null) {
-                        dialog.remove();
-                        dialog.dispose();
-                        showCodingScreen(() -> gameStore.load(game));
-                    }
-                }
-
-                public void onFailure(Throwable t) {
-                    showError(t);
-                }
-            });
+            dialogSupplier.get().display(
+                    stage,
+                    () -> { showMainMenu(); refreshButtonEnabledStatuses(); },
+                    (game) -> showCodingScreen(() -> gameStore.load(game)));
         });
     }
 

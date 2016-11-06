@@ -1,7 +1,12 @@
 package com.bigcustard.glide.screen;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
@@ -9,15 +14,21 @@ import com.bigcustard.scene2dplus.Spacer;
 import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.button.ImageTextButtonPlus;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
+import com.bigcustard.scene2dplus.dialog.ErrorDialog;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameLibraryDialog extends Dialog implements Disposable {
     private static int COLUMNS = 2;
     private static List<Game.Token> games;
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
     private boolean readOnly;
+
+
 
     public static GameLibraryDialog userGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
@@ -35,6 +46,24 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
     private GameLibraryDialog(Skin skin) {
         super("", skin);
+    }
+
+    public void display(Stage stage, Runnable afterChoice, Consumer<Game.Token> handleChoice) {
+        show(stage);
+        Futures.addCallback(getFutureGame(), new FutureCallback<Game.Token>() {
+            public void onSuccess(Game.Token game) {
+                afterChoice.run();
+                if (game != null) {
+                    remove();
+                    dispose();
+                    handleChoice.accept(game);
+                }
+            }
+
+            public void onFailure(Throwable e) {
+                new ErrorDialog(e, afterChoice, getSkin()).show(stage);
+            }
+        });
     }
 
     public SettableFuture<Game.Token> getFutureGame() {

@@ -35,4 +35,11 @@ public class ImportExport {
         files.show(stage);
     }
 
+    public void importGame() {
+
+    }
+
+    public void exportGame() {
+        GameLibraryDialog.sampleGames(skin);
+    }
 }
