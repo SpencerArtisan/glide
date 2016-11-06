@@ -8,11 +8,11 @@ import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageGroup;
 import com.bigcustard.scene2dplus.sound.SoundGroup;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GameStore {
     private static final String PREFERENCES_KEY = "Game";
@@ -106,8 +106,16 @@ public class GameStore {
     }
 
     private List<Game.Token> allGames(FileHandle gameFolder) {
-        List<FileHandle> gameFolders = Arrays.asList(allGameFolders(gameFolder));
-        return new ArrayList<>(Lists.transform(gameFolders, this::fromFolder));
+        return Arrays.stream(allGameFolders(gameFolder))
+                .map(folder -> {
+                    try {
+                        return fromFolder(folder);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private Game.Token fromFolder(FileHandle folder) {

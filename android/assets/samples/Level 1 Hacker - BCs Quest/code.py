@@ -18,10 +18,10 @@ while (screen.update()):
         caveman.x = caveman.x + 10
     
     if caveman.y > 200:
-        caveman.y = caveman.y - 7
+        caveman.y = caveman.y - 6
     else:
         if keyboard.Space.isPressed():
-            caveman.y = caveman.y + 260
+            caveman.y = caveman.y + 270
             
     if caveman.overlaps(dinosaur):
         system.stop()
