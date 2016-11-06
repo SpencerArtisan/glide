@@ -28,8 +28,6 @@ public class GameLibraryDialog extends Dialog implements Disposable {
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
     private boolean readOnly;
 
-
-
     public static GameLibraryDialog userGames(Skin skin) {
         GameLibraryDialog dialog = new GameLibraryDialog(skin);
         games = new GameStore().allUserGames();
@@ -48,20 +46,21 @@ public class GameLibraryDialog extends Dialog implements Disposable {
         super("", skin);
     }
 
-    public void display(Stage stage, Runnable afterChoice, Consumer<Game.Token> handleChoice) {
+    public void display(Stage stage, Runnable onCancel, Consumer<Game.Token> handleChoice) {
         show(stage);
         Futures.addCallback(getFutureGame(), new FutureCallback<Game.Token>() {
             public void onSuccess(Game.Token game) {
-                afterChoice.run();
                 if (game != null) {
                     remove();
                     dispose();
                     handleChoice.accept(game);
+                } else {
+                    onCancel.run();
                 }
             }
 
             public void onFailure(Throwable e) {
-                new ErrorDialog(e, afterChoice, getSkin()).show(stage);
+                new ErrorDialog(e, onCancel, getSkin()).show(stage);
             }
         });
     }

@@ -64,7 +64,7 @@ public class WelcomeScreen extends ScreenAdapter {
         this.gameStore = gameStore;
         this.stage = new Stage(viewport);
         this.skin = skin;
-        this.importExport = new ImportExport(skin, stage);
+        this.importExport = new ImportExport(gameStore, skin, stage);
 
         createTitle();
         createBlurpLogo();
@@ -132,45 +132,59 @@ public class WelcomeScreen extends ScreenAdapter {
 
     private void createImportGameButton() {
         importGameButton = new TextButtonPlus("  Import Game  ", skin, "big");
-        importGameButton.onClick(() -> importExport.importGame());
+        menuHidingButton(importGameButton, (onDone) -> importExport.importGame(onDone));
     }
 
     private void createExportGameButton() {
         exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
-        exportGameButton.onClick(() -> importExport.exportGame());
+        createGamesButton(exportGameButton, () -> GameLibraryDialog.userGames(skin), (game) -> importExport.exportGame(game, this::showMainMenu));
     }
 
     private void createSamplesButton() {
         samplesButton = new TextButtonPlus("     Hack a Game     ", skin, "big");
-        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin));
+        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin), this::showCodingScreen);
     }
 
     private void createMyGamesButton() {
         myGamesButton = new TextButtonPlus("    My Games    ", skin, "big");
-        createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin));
+        createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin), this::showCodingScreen);
     }
 
     private void createNewGameButton() {
         newGameButton = new TextButtonPlus("    Write a Game    ", skin, "big");
-        newGameButton.onClick(() -> {
-                    hideMainMenu();
-                    NewCommand newCommand = new NewCommand(
-                            WelcomeScreen.this::saveGameChoice,
-                            (language) -> showCodingScreen(() -> gameStore.create(language)),
-                            WelcomeScreen.this::showMainMenu);
-                    newCommand.execute();
-                }
+        menuHidingButton(newGameButton, (afterDone) ->
+                new NewCommand(this::saveGameChoice, this::showCodingScreen, this::showMainMenu).execute()
         );
     }
 
-    private void createGamesButton(TextButtonPlus button, Supplier<GameLibraryDialog> dialogSupplier) {
+    private void createGamesButton(TextButtonPlus button, Supplier<GameLibraryDialog> dialogSupplier, Consumer<Game.Token> handleChoice) {
+        menuHidingButton(button, (afterDone) -> dialogSupplier.get().display(stage, afterDone, handleChoice));
+    }
+
+    private void menuHidingButton(TextButtonPlus button, Consumer<Runnable> buttonHandler) {
         button.onClick(() -> {
             hideMainMenu();
-            dialogSupplier.get().display(
-                    stage,
-                    () -> { showMainMenu(); refreshButtonEnabledStatuses(); },
-                    (game) -> showCodingScreen(() -> gameStore.load(game)));
+            buttonHandler.accept(this::showMainMenu);
         });
+    }
+
+    private void showCodingScreen(Language language) {
+        showCodingScreen(() -> gameStore.create(language));
+    }
+
+    private void showCodingScreen(Game.Token game) {
+        showCodingScreen(() -> gameStore.load(game));
+    }
+
+    private void showCodingScreen(Supplier<Game> programSupplier) {
+        try {
+            showMainMenu();
+            CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
+            setScreen.accept(codingScreen);
+            dispose();
+        } catch (Exception e) {
+            showError(e);
+        }
     }
 
     private void createQuitButton() {
@@ -203,9 +217,10 @@ public class WelcomeScreen extends ScreenAdapter {
                     Actions.scaleTo(1f, 1f, 0.5f, Interpolation.bounceOut)
             ));
             executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.schedule(() -> {
-                Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play();
-            }, 980, TimeUnit.MILLISECONDS);
+            executorService.schedule(
+                    () -> Gdx.audio.newSound(Gdx.files.internal("sound/TireBlow.wav")).play(),
+                    980,
+                    TimeUnit.MILLISECONDS);
         }
         welcomed = true;
     }
@@ -258,23 +273,13 @@ public class WelcomeScreen extends ScreenAdapter {
         return new TextureRegionDrawable(new TextureRegion(backgroundTexture));
     }
 
-    private void showCodingScreen(Supplier<Game> programSupplier) {
-        try {
-            showMainMenu();
-            CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
-            setScreen.accept(codingScreen);
-            dispose();
-        } catch (Exception e) {
-            showError(e);
-        }
-    }
-
     private void showError(Throwable e) {
         new ErrorDialog(e, this::showMainMenu, skin).show(stage);
     }
 
     private void showMainMenu() {
         getTable().setVisible(true);
+        refreshButtonEnabledStatuses();
     }
 
     private void hideMainMenu() {

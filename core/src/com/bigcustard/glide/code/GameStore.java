@@ -63,16 +63,6 @@ public class GameStore {
                 name.startsWith(CODE_FILE_WITHOUT_SUFFIX)).length > 0;
     }
 
-    public Game mostRecent() {
-        FileHandle gameFolder = gameFolder(preferences().getString(RECENT_GAME));
-        FileHandle codeFile = codeFile(gameFolder);
-        ImageGroup imageGroup = new ImageGroup(gameFolder);
-        SoundGroup soundGroup = new SoundGroup(gameFolder);
-        Language language = Language.from(codeFile.extension());
-        Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
-        return new Game(token, codeFile.readString(), imageGroup, soundGroup);
-    }
-
     public List<Game.Token> allUserGames() {
         return allGames(userFolder());
     }
@@ -94,9 +84,7 @@ public class GameStore {
     }
 
     private FileHandle codeFile(FileHandle gameFolder) {
-        FileHandle[] codeFiles = gameFolder.list((dir, name) -> {
-            return name.startsWith(CODE_FILE_WITHOUT_SUFFIX);
-        });
+        FileHandle[] codeFiles = gameFolder.list((dir, name) -> name.startsWith(CODE_FILE_WITHOUT_SUFFIX));
         return codeFiles[0];
     }
 
@@ -143,11 +131,11 @@ public class GameStore {
         preferences().flush();
     }
 
-    protected FileHandle samplesFolder() {
+    public FileHandle samplesFolder() {
         return Gdx.files.internal(SAMPLES_FOLDER);
     }
 
-    protected FileHandle userFolder() {
+    public FileHandle userFolder() {
         return Gdx.files.local(USER_FOLDER);
     }
 
