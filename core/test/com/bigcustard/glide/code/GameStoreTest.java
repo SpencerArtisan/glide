@@ -47,12 +47,12 @@ public class GameStoreTest {
         when(mockGroovyCodeFile.readString()).thenReturn("code");
         gameStore = new GameStore() {
             @Override
-            protected FileHandle samplesFolder() {
+            public FileHandle samplesFolder() {
                 return mockSamplesFolder;
             }
 
             @Override
-            protected FileHandle userFolder() {
+            public FileHandle userFolder() {
                 return mockUserGamesFolder;
             }
 
