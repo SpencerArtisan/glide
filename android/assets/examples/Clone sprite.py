@@ -1,1 +1,1 @@
-myClonedSprite = mySprite.clone()
+myClonedSprite = mySprite.copy()
