@@ -6,7 +6,7 @@
 	<!-- The specification for one app within the bundle -->
 	<App>
 	  <Name>Glide</Name>
-	  <LogoPNG>installers/logo.png</LogoPNG>
+	  <LogoPNG>installers/glide-logo.png</LogoPNG>
 	  <MainClass>com.bigcustard.glide.desktop.DesktopLauncher</MainClass>
 	</App>
 	
@@ -25,8 +25,8 @@
 	</JvmOptions>
 	
 	<!-- The JREs JWrapper should use for Windows, Linux32, Linux64... -->
-	<Windows32JRE>JRE-1.8/win32/jre1.8.0_40</Windows32JRE>
-	<Windows64JRE>JRE-1.8/win32/jre1.8.0_40</Windows64JRE>
+	<Windows32JRE>JRE-1.8/win86/jre1.8.0_111</Windows32JRE>
+	<Windows64JRE>JRE-1.8/win64/jre1.8.0_40</Windows64JRE>
 	<Linux32JRE>JRE-1.8/linux/jre1.8.0_40</Linux32JRE>
 	<Linux64JRE>JRE-1.8/linuxx64/jre1.8.0_40</Linux64JRE>
 	<Mac64JRE>JRE-1.8/macos64/jre1.8.0_40.jre</Mac64JRE> 
