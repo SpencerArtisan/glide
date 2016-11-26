@@ -291,13 +291,11 @@ public class CodingScreen extends ScreenAdapter {
         Label errorLabel = new Label("", skin, "error");
         errorLabel.setVisible(false);
         errorLabel.setWrap(true);
-        game.registerChangeListener((g) -> {
-            Gdx.app.postRunnable(() -> {
-                Pair<Integer, String> error = game.runtimeError();
-                errorLabel.setVisible(error != null);
-                errorLabel.setText(error == null ? null : error.getRight());
-            });
-        });
+        game.registerChangeListener((g) -> Gdx.app.postRunnable(() -> {
+            Pair<Integer, String> error = game.runtimeError();
+            errorLabel.setVisible(error != null);
+            errorLabel.setText(error == null ? null : error.getRight());
+        }));
         return errorLabel;
     }
 

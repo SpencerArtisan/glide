@@ -2,11 +2,9 @@ package com.bigcustard.scene2dplus.image;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
-import com.bigcustard.scene2dplus.button.ButtonPlus;
 import com.bigcustard.scene2dplus.button.ErrorHandler;
 import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.command.CommandHistory;

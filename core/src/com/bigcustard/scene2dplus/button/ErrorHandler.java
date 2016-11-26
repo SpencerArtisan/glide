@@ -57,7 +57,7 @@ public class ErrorHandler {
         });
     }
 
-    public static void onClick(Button button, Runnable callback) {
+    public static void onClick(Button button, Runnable callback, boolean slowOp) {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 tryAndRecover(button, callback);
@@ -67,6 +67,11 @@ public class ErrorHandler {
 
     public static void onClick(Button button, Runnable callback, Consumer<Event> generalEventCallback, boolean slowOp) {
         button.addListener(new ChangeListener() {
+            public boolean handle(Event event) {
+                tryAndRecover(button, () -> generalEventCallback.accept(event));
+                return super.handle(event);
+            }
+
             public void changed(ChangeEvent event, Actor actor) {
                 if (slowOp)
                     doWithPleaseWait(button, callback);

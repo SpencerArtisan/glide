@@ -65,7 +65,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
 
     private void createClipboardButton(Skin skin) {
         clipboardButton = new TextButtonPlus("From clipboard", skin);
-        clipboardButton.onClick(this::addFromClipboardUrl);
+        clipboardButton.onClick(this::addFromClipboardUrl, true);
     }
 
     private void addFromClipboardUrl() {
@@ -81,7 +81,7 @@ public class ResourceArea<TModel> extends ScrollPane implements Disposable {
 
     private void createFileButton(Skin skin) {
         fileButton = new TextButtonPlus("From file", skin);
-        fileButton.onClick(this::addFromFile);
+        fileButton.onClick(this::addFromFile, true);
     }
 
     private void addFromFile() {
