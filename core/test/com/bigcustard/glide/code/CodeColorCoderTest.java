@@ -12,7 +12,10 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 
-import static com.bigcustard.glide.code.SyntaxPart.Type.*;
+import static com.bigcustard.glide.code.SyntaxPart.Type.Keyword;
+import static com.bigcustard.glide.code.SyntaxPart.Type.Operator;
+import static com.bigcustard.glide.code.SyntaxPart.Type.Unclassified;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -28,36 +31,49 @@ public class CodeColorCoderTest {
 
 	@Test
 	public void openSquareBracket() throws Exception {
-		when(syntax.parse("[")).thenReturn(Arrays.asList(
+		when(syntax.parse("[")).thenReturn(singletonList(
 				new SyntaxPart("[", Operator)));
 		assertThat(coder.encode("[")).isEqualTo("[WHITE][[[]");
 	}
 
 	@Test
 	public void doubleOpenSquareBracket() throws Exception {
-		when(syntax.parse("[[")).thenReturn(Arrays.asList(
-				new SyntaxPart("[", Operator),
-				new SyntaxPart("[", Operator)));
-		assertThat(coder.encode("[[")).isEqualTo("[WHITE][[[][WHITE][[[]");
+		when(syntax.parse("[[")).thenReturn(singletonList(
+				new SyntaxPart("[[", Operator)));
+		assertThat(coder.encode("[[")).isEqualTo("[WHITE][[[[[]");
+	}
+
+	@Test
+	public void doubleCloseSquareBracket() throws Exception {
+		when(syntax.parse("]]")).thenReturn(singletonList(
+				new SyntaxPart("]]", Operator)));
+		assertThat(coder.encode("]]")).isEqualTo("[WHITE]]][]");
+	}
+
+	@Test
+	public void openThenCloseSquareBracket() throws Exception {
+		when(syntax.parse("[]")).thenReturn(singletonList(
+				new SyntaxPart("[]", Operator)));
+		assertThat(coder.encode("[]")).isEqualTo("[WHITE][[]][]");
 	}
 
 	@Test
 	public void closeSquareBracket() throws Exception {
-		when(syntax.parse("]")).thenReturn(Arrays.asList(
+		when(syntax.parse("]")).thenReturn(singletonList(
 				new SyntaxPart("]", Operator)));
 		assertThat(coder.encode("]")).isEqualTo("[WHITE]][]");
 	}
 
 	@Test
 	public void unspecifiedColor() throws Exception {
-		when(syntax.parse("word")).thenReturn(Arrays.asList(
+		when(syntax.parse("word")).thenReturn(singletonList(
 				new SyntaxPart("word", Unclassified)));
 		assertThat(coder.encode("word")).isEqualTo("word");
 	}
 
     @Test
     public void singleElement() throws Exception {
-        when(syntax.parse("word")).thenReturn(Arrays.asList(
+        when(syntax.parse("word")).thenReturn(singletonList(
                 new SyntaxPart("word", Keyword)));
         assertThat(coder.encode("word")).isEqualTo("[BLUE]word[]");
     }

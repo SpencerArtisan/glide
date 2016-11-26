@@ -69,7 +69,7 @@ public class CodeColorCoder implements ColorCoder {
     }
 
     private String encodeSpecialCharacters(String program) {
-        return program.replace("[", "[[").replace("]", "]");
+        return program.replace("[", "[[").replace("[]", "[]]");
     }
 
     private String colorCode(SyntaxPart syntaxPart) {
