@@ -1,5 +1,6 @@
 package com.bigcustard.scene2dplus.button;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,10 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
+import com.bigcustard.scene2dplus.dialog.PleaseWaitDialog;
 import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ErrorHandler {
@@ -23,14 +27,14 @@ public class ErrorHandler {
 
     public static void onType(TextFieldPlus field, Consumer<TextField> callback) {
         field.setTextFieldListener((text, ignored) ->
-                tryAndRecover(field, field.getSkin(), () -> callback.accept(text)));
+                tryAndRecover(field.getStage(), field.getSkin(), () -> callback.accept(text)));
     }
 
     public static void onClick(Widget list, Skin skin, Runnable callback) {
         list.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (getTapCount() == 1) tryAndRecover(list, skin, callback);
+                if (getTapCount() == 1) tryAndRecover(list.getStage(), skin, callback);
             }
         });
     }
@@ -39,7 +43,7 @@ public class ErrorHandler {
         list.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (getTapCount() == 2) tryAndRecover(list, skin, callback);
+                if (getTapCount() == 2) tryAndRecover(list.getStage(), skin, callback);
             }
         });
     }
@@ -48,7 +52,7 @@ public class ErrorHandler {
         list.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                tryAndRecover(list, skin, callback);
+                tryAndRecover(list.getStage(), skin, callback);
             }
         });
     }
@@ -61,29 +65,41 @@ public class ErrorHandler {
         });
     }
 
-    public static void onClick(Button button, Runnable callback, Consumer<Event> generalEventCallback) {
+    public static void onClick(Button button, Runnable callback, Consumer<Event> generalEventCallback, boolean slowOp) {
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                tryAndRecover(button, callback);
+                if (slowOp)
+                    doWithPleaseWait(button, callback);
+                else
+                    tryAndRecover(button, callback);
             }
 
-            public boolean handle(Event event) {
-                tryAndRecover(button, () -> generalEventCallback.accept(event));
-                return super.handle(event);
+            public void doWithPleaseWait(Button actor, Runnable callback) {
+                final PleaseWaitDialog pleaseWaitDialog = new PleaseWaitDialog(actor.getSkin());
+                pleaseWaitDialog.show(actor.getStage());
+
+                Executors.newSingleThreadScheduledExecutor().schedule(() ->
+                                Gdx.app.postRunnable(() -> {
+                                    tryAndRecover(actor, callback);
+                                    pleaseWaitDialog.hide();
+                                    Gdx.graphics.requestRendering();
+                                }),
+                        10,
+                        TimeUnit.MILLISECONDS);
+
             }
         });
     }
 
     public static void tryAndRecover(Button actor, Runnable callback) {
-        tryAndRecover(actor, actor.getSkin(), callback);
+        tryAndRecover(actor.getStage(), actor.getSkin(), callback);
     }
 
-    public static void tryAndRecover(Actor actor, Skin skin, Runnable callback) {
+    public static void tryAndRecover(Stage stage, Skin skin, Runnable callback) {
         try {
             callback.run();
         } catch (Exception e) {
             logger.error("Failed during button callback", e);
-            Stage stage = actor.getStage();
             if (stage != null) {
                 ErrorDialog errorDialog = new ErrorDialog(MESSAGE, skin);
                 errorDialog.show(stage);

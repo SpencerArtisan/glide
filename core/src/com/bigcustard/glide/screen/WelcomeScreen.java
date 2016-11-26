@@ -24,6 +24,7 @@ import com.bigcustard.glide.code.GameStore;
 import com.bigcustard.glide.code.command.NewCommand;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -177,14 +178,16 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void showCodingScreen(Supplier<Game> programSupplier) {
-        try {
-            showMainMenu();
-            CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
-            setScreen.accept(codingScreen);
-            dispose();
-        } catch (Exception e) {
-            showError(e);
-        }
+        ErrorHandler.tryAndRecover(stage, skin, () -> {
+            try {
+                showMainMenu();
+                CodingScreen codingScreen = screenFactory.createCodingScreen(programSupplier.get());
+                setScreen.accept(codingScreen);
+                dispose();
+            } catch (Exception e) {
+                showError(e);
+            }
+        });
     }
 
     private void createQuitButton() {

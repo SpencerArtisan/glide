@@ -101,7 +101,7 @@ public class FileDialog extends Dialog implements Disposable {
         return new FileDialog(title, skin, path, directorySelector) {
             @Override
             protected void result(Object object) {
-                tryAndRecover(this, getSkin(), () -> {
+                tryAndRecover(getStage(), getSkin(), () -> {
                     if (resultListener == null) return;
                     final boolean success = (Boolean) object;
                     resultListener.result(success, result);

@@ -19,7 +19,7 @@ public class ClickListenerPlus extends ClickListener {
 
     public boolean handle (Event e) {
         AtomicBoolean result = new AtomicBoolean();
-        ErrorHandler.tryAndRecover(view, skin, () -> result.set(super.handle(e)));
+        ErrorHandler.tryAndRecover(view.getStage(), skin, () -> result.set(super.handle(e)));
         return result.get();
     }
 }

@@ -37,11 +37,11 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
     }
 
     public void addTextButton(String text, Supplier<Command> commandFactory) {
-        addButton(new TextButtonPlus(text, skin), commandFactory);
+        addButton(new TextButtonPlus(text, skin), commandFactory, false);
     }
 
-    public void addImageButton(String text, String styleName, Supplier<Command> commandFactory) {
-        addButton(new ImageTextButtonPlus(text, skin, styleName), commandFactory);
+    public void addImageButton(String text, String styleName, Supplier<Command> commandFactory, boolean slowOp) {
+        addButton(new ImageTextButtonPlus(text, skin, styleName), commandFactory, slowOp);
     }
 
     public void refreshEnabledStatuses() {
@@ -53,7 +53,7 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
         }
     }
 
-    private void addButton(final Button button, Supplier<Command> commandFactory) {
+    private void addButton(final Button button, Supplier<Command> commandFactory, boolean slowOp) {
         ErrorHandler.onClick(button,
                 () -> {
                     commandFactory.get().execute();
@@ -65,7 +65,8 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
                         button.setDisabled(!enable);
                         button.setTouchable(enable ? enabled : disabled);
                     }
-                }
+                },
+                slowOp
         );
         addActor(button);
         refreshEnabledStatuses();
