@@ -28,7 +28,7 @@ public class TextAreaControllerIntegrationTest {
 		MockitoAnnotations.initMocks(this);
 		model = new TextAreaModel(null);
 		model.clear();
-		subject = spy(new TextAreaController(model, view, new CommandHistory()));
+		subject = spy(new TextAreaController(model, view, new CommandHistory(), null));
         event = new InputEvent();
         event.setListenerActor(actor);
         doReturn(true).when(subject).isOver((Actor)anyObject(), anyFloat(), anyFloat());

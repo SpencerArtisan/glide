@@ -9,7 +9,7 @@ public class ScrollableTextArea extends ScrollPane {
     public ScrollableTextArea(TextAreaModel model, Skin skin, CommandHistory commandHistory, String style) {
         super(new TextArea(model, skin, style), skin);
 
-        TextAreaController controller = new TextAreaController(model, this, commandHistory);
+        TextAreaController controller = new TextAreaController(model, this, commandHistory, skin);
         addListener(controller);
         pack();
         setFadeScrollBars(false);

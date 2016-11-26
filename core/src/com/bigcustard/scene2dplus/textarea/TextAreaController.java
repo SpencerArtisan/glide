@@ -4,16 +4,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.bigcustard.scene2dplus.XY;
 import com.bigcustard.scene2dplus.command.Command;
 import com.bigcustard.scene2dplus.command.CommandHistory;
-import com.bigcustard.scene2dplus.textarea.command.*;
+import com.bigcustard.scene2dplus.textarea.command.CopyCommand;
+import com.bigcustard.scene2dplus.textarea.command.CutCommand;
+import com.bigcustard.scene2dplus.textarea.command.DeleteCommand;
+import com.bigcustard.scene2dplus.textarea.command.MoveDownCommand;
+import com.bigcustard.scene2dplus.textarea.command.MoveLeftCommand;
+import com.bigcustard.scene2dplus.textarea.command.MoveRightCommand;
+import com.bigcustard.scene2dplus.textarea.command.MoveToCommand;
+import com.bigcustard.scene2dplus.textarea.command.MoveUpCommand;
+import com.bigcustard.scene2dplus.textarea.command.PasteCommand;
+import com.bigcustard.scene2dplus.textarea.command.ReturnCommand;
+import com.bigcustard.scene2dplus.textarea.command.SelectCommand;
+import com.bigcustard.scene2dplus.textarea.command.TabCommand;
+import com.bigcustard.scene2dplus.textarea.command.TypeCommand;
+import com.bigcustard.scene2dplus.utils.ClickListenerPlus;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.awt.event.KeyEvent;
-
-public class TextAreaController extends ClickListener {
+public class TextAreaController extends ClickListenerPlus {
     private TextAreaModel model;
     private ScrollableTextArea view;
     private CommandHistory commandHistory;
@@ -21,7 +32,8 @@ public class TextAreaController extends ClickListener {
     private boolean dragging;
     private Character lastCharacterTyped;
 
-    public TextAreaController(TextAreaModel model, ScrollableTextArea view, CommandHistory commandHistory) {
+    public TextAreaController(TextAreaModel model, ScrollableTextArea view, CommandHistory commandHistory, Skin skin) {
+        super(view, skin);
         this.model = model;
         this.view = view;
         this.commandHistory = commandHistory;
