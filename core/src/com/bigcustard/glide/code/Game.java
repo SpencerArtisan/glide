@@ -10,11 +10,8 @@ import com.bigcustard.util.Watchable;
 import com.google.common.base.Objects;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.script.ScriptException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Game implements Disposable {
@@ -26,7 +23,7 @@ public class Game implements Disposable {
     private final ImageGroup imageGroup;
     private final SoundGroup soundGroup;
     private CommandHistory commandHistory;
-    private RuntimeException runtimeError;
+    private Pair<Integer, String> runtimeError;
     private boolean isModified;
     private String code;
 
@@ -98,23 +95,12 @@ public class Game implements Disposable {
     }
 
     public void runtimeError(RuntimeException runtimeError) {
-        this.runtimeError = runtimeError;
+        this.runtimeError = language().locateError(runtimeError);
         me.broadcast(this);
     }
 
     public Pair<Integer, String> runtimeError() {
-        if (runtimeError == null) return null;
-        try {
-            Throwable cause = runtimeError;
-            while (cause != null) {
-                Pair<Integer, String> error = language().locateError(cause);
-                if (error != null) return error;
-                cause = cause.getCause();
-            }
-            return Pair.of(-99, runtimeError.getMessage());
-        } catch (Exception e) {
-            return Pair.of(-99, runtimeError.getMessage());
-        }
+        return runtimeError;
     }
 
     public void registerChangeListener(Consumer<Game> listener) {
