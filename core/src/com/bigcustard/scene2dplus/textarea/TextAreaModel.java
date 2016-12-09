@@ -131,6 +131,10 @@ public class TextAreaModel implements Disposable {
         return text.substring(fromIndex, toIndex);
     }
 
+	public int numberOfRows() {
+		return StringUtils.countMatches(text, "\n");
+	}
+
 	private int currentLineLength() {
 		int startRowIndex = getIndexForRow(caret.y());
 		int endOfRowIndex = text.indexOf('\n', startRowIndex);
@@ -172,10 +176,6 @@ public class TextAreaModel implements Disposable {
         index += location.x;
         return Math.min(index, text.length());
     }
-
-	private int numberOfRows() {
-		return StringUtils.countMatches(text, "\n");
-	}
 
 	@Override
 	public void dispose() {

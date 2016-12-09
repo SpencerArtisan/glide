@@ -10,7 +10,8 @@ com.badlogic.gdx.graphics.Color: {
 	red: { a: 1, b: 0, g: 0, r: 1 },
 	black: { a: 1, b: 0, g: 0, r: 0 },
     solarizedLight: { r: 0.9333, g: 0.9098, b: 0.8353, a: 1 },
-    linkBlue: { r: 0.149, g: 0.545, b: 0.8235, a: 1 }
+    linkBlue: { r: 0.149, g: 0.545, b: 0.8235, a: 1 },
+    solarizedLighter: { r: 0.9333, g: 0.9098, b: 0.8353, a: 0.35 }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
@@ -62,9 +63,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     link: { font: code-font, fontColor: linkBlue }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-	default: { font: code-font, fontColor: white, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground },
-    code: { font: code-font, fontColor: white, cursor: cursor, background: solarizedBackground, focusedBackground: solarizedLine, selection: solarizedSelection },
-    example: { font: code-font, fontColor: white, cursor: cursor, background: solarizedNew, focusedBackground: solarizedLine, selection: solarizedSelection }
+	default: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground },
+    code: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedBackground, focusedBackground: solarizedLine, selection: solarizedSelection },
+    example: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedNew, focusedBackground: solarizedLine, selection: solarizedSelection }
 },
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
     default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }

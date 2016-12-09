@@ -20,6 +20,7 @@ public class TextArea extends Actor {
     private static final int TOP_MARGIN = 29;
     private static final int LEFT_MARGIN = 8;
     private static final int COLUMN_WIDTH = 9;
+    private static final int MARGIN = 4;
     private final TextureRegionDrawable white;
     private TextAreaModel model;
     private TextField.TextFieldStyle style;
@@ -41,6 +42,7 @@ public class TextArea extends Actor {
         drawCurrentLineBackground(batch);
         drawOtherLineBackgrounds(batch);
         drawSelectionBackground(batch);
+        drawLineNumbers(batch);
         drawCaret(batch);
         drawText(batch);
     }
@@ -85,6 +87,21 @@ public class TextArea extends Actor {
         }
     }
 
+    private void drawLineNumbers(Batch batch) {
+        int rows = model.numberOfRows();
+        for (int i = 0; i < rows; i++) {
+            try {
+                style.font.getData().markupEnabled = true;
+                XY textStart = caretLocationToPosition(new XY(0, i));
+                style.font.setColor(style.disabledFontColor);
+                style.font.draw(batch, Integer.toString(i), textStart.x, textStart.y + TOP_MARGIN - 11);
+            } catch (Exception e) {
+                System.out.println("Failed to draw text: " + model.coloredText());
+                throw e;
+            }
+        }
+    }
+
     private void drawSelectionBackground(Batch batch) {
         Pair<XY, XY> selection = model.caret().selection();
         if (selection != null) {
@@ -103,7 +120,7 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         try {
             style.font.getData().markupEnabled = true;
-            XY textStart = caretLocationToPosition(new XY(0, 0));
+            XY textStart = caretLocationToPosition(new XY(MARGIN, 0));
             GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 11);
             setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
             setWidth(Math.max(LEFT_MARGIN + textBounds.width, getParent().getWidth()));
@@ -116,7 +133,7 @@ public class TextArea extends Actor {
 
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
-        XY caretPosition = caretLocationToPosition(model.caret().location());
+        XY caretPosition = caretLocationToPosition(model.caret().location().add(new XY(MARGIN, 0)));
         caretImage.draw(batch, caretPosition.x - 2, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
     }
 }
