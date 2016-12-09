@@ -10,7 +10,7 @@ scoreText = resources.createTextSprite("Score: ")
 scoreText.x = 700
 scoreText.y = 560
 
-ship = resources.createImageSprite("ship")
+ship = resources.createImageSprite("shipdd")
 ship.angle = 90
 
 baddie = resources.createImageSprite("baddie")

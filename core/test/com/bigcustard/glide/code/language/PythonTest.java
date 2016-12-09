@@ -18,6 +18,7 @@ public class PythonTest {
     private Python subject = new Python();
 
     @Test
+    @Ignore
     public void errorLine() {
         PyException error = complexError();
 
@@ -27,6 +28,7 @@ public class PythonTest {
     }
 
     @Test
+    @Ignore
     public void errorLineInCause() {
         RuntimeException error = new RuntimeException("", complexError());
 

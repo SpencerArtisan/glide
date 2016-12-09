@@ -94,7 +94,7 @@ public class TextArea extends Actor {
                 style.font.getData().markupEnabled = true;
                 XY textStart = caretLocationToPosition(new XY(0, i));
                 style.font.setColor(style.disabledFontColor);
-                style.font.draw(batch, Integer.toString(i), textStart.x, textStart.y + TOP_MARGIN - 11);
+                style.font.draw(batch, Integer.toString(i + 1), textStart.x, textStart.y + TOP_MARGIN - 11);
             } catch (Exception e) {
                 System.out.println("Failed to draw text: " + model.coloredText());
                 throw e;
