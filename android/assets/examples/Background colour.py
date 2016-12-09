@@ -1,0 +1,25 @@
+screen.backgroundColour = LightGreen
+
+Other colours:
+    AliceBlue, AntiqueWhite, Aqua, Aquamarine, Azure, Beige, Bisque, Black,
+    BlanchedAlmond, Blue, BlueViolet, Brown, BurlyWood, CadetBlue, Chartreuse,
+    Chocolate, Coral, CornflowerBlue, CornSilk, Crimson, Cyan, DarkBlue,
+    DarkCyan, DarkGoldenrod, DarkGrey, DarkGray, DarkSlateGray, DarkSlateGrey,
+    DarkGreen, DarkKhaki, DarkMagenta, DarkOliveGreen, DarkOrange, DarkOrchid,
+    DarkRed, DarkSalmon, DarkSeaGreen, DarkSlateBlue, DarkTurquoise, DarkViolet,
+    DeepPink, DeepSkyBlue, DimGray, DimGrey, Gray, Grey, DodgerBlue, FireBrick,
+    FloralWhite, ForestGreen, Fuchsia, Gainsboro, GhostWhite, Gold, Goldenrod,
+    Green, GreenYellow, Honeydew, HotPink, IndianRed, Indigo, Ivory, Khaki,
+    Lavender, LavenderBlush, LawnGreen, LemonChiffon, LightBlue, LightCoral,
+    LightCyan, LightGoldenrodYellow, LightGray, LightGrey, LightSlateGray,
+    LightSlateGrey, LightGreen, LightPink, LightSalmon, LightSeaGreen,
+    LightSkyBlue, LightSteelBlue, LightYellow, Lime, LimeGreen, Linen, Magenta,
+    Maroon, MediumAquamarine, MediumBlue, MediumOrchid, MediumPurple,
+    MediumSeaGreen, MediumSlateBlue, MediumSpringGreen, MediumTurquoise,
+    MediumVioletRed, MidnightBlue, MintCream, MistyRose, Moccasin, NavajoWhite,
+    Navy, OldLace, Olive, OliveDrab, Orange, OrangeRed, Orchid, PaleGoldenrod,
+    PaleGreen, PaleTurquoise, PaleVioletRed, PapayaWhip, PeachPuff, Peru, Pink,
+    Plum, PowderBlue, Purple, Red, RosyBrown, RoyalBlue, SaddleBrown, Salmon,
+    SandyBrown, SeaGreen, Seashell, Sienna, Silver, SkyBlue, SlateBlue, SlateGray,
+    SlateGrey, Snow, SpringGreen, SteelBlue, Tan, Teal, Thistle, Tomato, Turquoise,
+    Violet, Wheat, White, WhiteSmoke, Yellow, YellowGreen
