@@ -216,8 +216,10 @@ public class CodingScreen extends ScreenAdapter {
         button.setProgrammaticChangeEvents(false);
         button.onClick(() -> {
             exampleCell.height(200);
+            exampleModel.setReadOnly(false);
             exampleModel.setText(helpTopic.getExampleCode());
             exampleModel.caret().moveToBottom();
+            exampleModel.setReadOnly(true);
             closeButton.setVisible(true);
             exampleArea.invalidateHierarchy();
             helpButtons.forEach(b -> b.setChecked(false));

@@ -20,6 +20,7 @@ public class TextAreaModel implements Disposable {
 	private ColorCoder colorCoder;
 	private Watchable<TextAreaModel> changeWatchable = new Watchable<>();
 	private BiFunction<String, TextAreaModel, String> preInsertVetoer;
+	private boolean readOnly;
 
 	public TextAreaModel(String text, ColorCoder colorCoder) {
 		this.text = text;
@@ -66,8 +67,10 @@ public class TextAreaModel implements Disposable {
 	}
 
 	public void setText(String text) {
-		this.text = text;
-		changeWatchable.broadcast(this);
+		if (!readOnly) {
+			this.text = text;
+			changeWatchable.broadcast(this);
+		}
 	}
 
 	public String coloredText() {
@@ -78,7 +81,8 @@ public class TextAreaModel implements Disposable {
         return colorCoder.colorLines(text);
     }
 
-	public String insert(String characters) {
+	public void insert(String characters) {
+		if (isReadOnly()) return;
 		if (preInsertVetoer != null) characters = preInsertVetoer.apply(characters, this);
 
 		int indexfOfEnd = characters.contains(END) ? characters.indexOf(END) : characters.length();
@@ -93,10 +97,8 @@ public class TextAreaModel implements Disposable {
             fromIndex = getIndex(caret.location());
             toIndex = fromIndex;
         }
-        String deleted = text.substring(fromIndex, toIndex);
         setText(text.substring(0, fromIndex) + characters + text.substring(toIndex, text.length()));
         positionCaret(fromIndex + indexfOfEnd);
-        return deleted;
 	}
 
 	public String deleteCharacter() {
@@ -163,7 +165,7 @@ public class TextAreaModel implements Disposable {
 		for (int y = 0; y < row; y++) {
 			index = text.indexOf('\n', index);
 			if (index == -1) {
-				text = text.concat("\n");
+				setText(text.concat("\n"));
 				index = text.length() - 1;
 			}
 			index++;
@@ -176,6 +178,14 @@ public class TextAreaModel implements Disposable {
         index += location.x;
         return Math.min(index, text.length());
     }
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
 
 	@Override
 	public void dispose() {
