@@ -90,6 +90,7 @@ public class CodingScreen extends ScreenAdapter {
         Table layoutTable = layoutScreen();
         stage.addActor(layoutTable);
         stage.setKeyboardFocus(textArea.textArea());
+        game.isModified(false);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(closeButtonStage, stage));
     }

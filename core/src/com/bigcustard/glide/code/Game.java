@@ -56,6 +56,10 @@ public class Game implements Disposable {
         return isModified;
     }
 
+    public void isModified(boolean isModified) {
+        this.isModified = isModified;
+    }
+
     public String name() {
         return token.name();
     }
