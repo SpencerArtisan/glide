@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -82,8 +82,7 @@ public class GameStoreTest {
         when(mockGameFolderAsFile.isDirectory()).thenReturn(true);
 
         when(mockUserGamesFolder.list(filterCaptor.capture())).thenAnswer(invocation ->
-                Arrays.asList(mockGameFolder)
-                        .stream()
+                Stream.of(mockGameFolder)
                         .filter((folder) -> filterCaptor.getValue().accept(folder.file()))
                         .toArray(FileHandle[]::new));
         when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
@@ -102,8 +101,7 @@ public class GameStoreTest {
         when(mockGameFolderAsFile.isDirectory()).thenReturn(false);
 
         when(mockUserGamesFolder.list(filterCaptor.capture())).thenAnswer(invocation ->
-                Arrays.asList(mockGameFolder)
-                        .stream()
+                Stream.of(mockGameFolder)
                         .filter((folder) -> filterCaptor.getValue().accept(folder.file()))
                         .toArray(FileHandle[]::new));
         assertThat(gameStore.allUserGames()).isEmpty();
@@ -209,6 +207,7 @@ public class GameStoreTest {
         Game game = gameStore.load(token);
         when(mockGameFolder.type()).thenReturn(Files.FileType.Local);
         when(mockGameFolder.exists()).thenReturn(true);
+        when(mockGameFolder.parent()).thenReturn(mockUserGamesFolder);
         FileHandle mockNewGameFolder = mock(FileHandle.class);
         when(mockTrashFolder.child("name")).thenReturn(mockNewGameFolder);
         when(mockNewGameFolder.exists()).thenReturn(false);
@@ -217,6 +216,23 @@ public class GameStoreTest {
         gameStore.delete(game.token());
         verify(mockGameFolder).moveTo(mockNewGameFolder);
     }
+
+    @Test
+    public void deleteFromTrashRemovesFolder() {
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
+        Game.Token token = new Game.Token("name", mockLanguage, mockGameFolder);
+        Game game = gameStore.load(token);
+
+        when(mockUserGamesFolder.child("name")).thenReturn(mockGameFolder);
+        when(mockGameFolder.type()).thenReturn(Files.FileType.Local);
+        when(mockGameFolder.exists()).thenReturn(true);
+        when(mockGameFolder.name()).thenReturn("name");
+        when(mockGameFolder.parent()).thenReturn(mockTrashFolder);
+
+        gameStore.delete(game.token());
+        verify(mockGameFolder).deleteDirectory();
+    }
+
 
     @Test
     public void isUnnamedWhenNew() {

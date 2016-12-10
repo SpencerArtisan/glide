@@ -40,7 +40,11 @@ public class GameStore {
     }
 
     public void delete(Game.Token game) {
-        game.gameFolder().moveTo(findUniqueName(trashFolder(), game.name()));
+        if (game.gameFolder().parent().equals(trashFolder())) {
+            game.gameFolder().deleteDirectory();
+        } else {
+            game.gameFolder().moveTo(findUniqueName(trashFolder(), game.name()));
+        }
     }
 
     public void save(Game game) {
