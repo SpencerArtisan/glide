@@ -1,11 +1,15 @@
 package com.bigcustard.glide.screen;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
@@ -22,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class SampleLibraryDialog extends GameLibraryDialog implements Disposable {
     private Map<Integer, List<Game.Token>> games = new HashMap<>();
@@ -86,6 +91,20 @@ public class SampleLibraryDialog extends GameLibraryDialog implements Disposable
     }
 
     private void layoutGameButtons(Skin skin, boolean readOnly) {
+        Stream.of(1, 2, 3).forEach(level ->
+                getButtonTable().add(new Image(skin, "level" + level)).padTop(10)
+        );
+        getButtonTable().row();
+        Stream.of(1, 2, 3).forEach(level -> {
+                    Label small = new Label("Level " + level + " Hacker", skin, "small");
+                    small.setColor(Color.YELLOW);
+                    small.setAlignment(Align.center);
+                    getButtonTable().add(small).center().fillX().padTop(-12).padBottom(6);
+                }
+        );
+        getButtonTable().row();
+
+
         for (int row = 0; ; row++) {
             boolean emptyRow = true;
             for (int level = 0; level < 3; level++) {
@@ -93,7 +112,7 @@ public class SampleLibraryDialog extends GameLibraryDialog implements Disposable
                     Game.Token game = games.get(level).get(row);
                     emptyRow = false;
                     ImageTextButton button = createButton(skin, game);
-                    getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
+                    getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(15).padLeft(15).padRight(6).padTop(6);
                     setObject(button, game);
                 }
             }
