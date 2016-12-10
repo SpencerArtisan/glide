@@ -86,13 +86,19 @@ public class SampleLibraryDialog extends GameLibraryDialog implements Disposable
     }
 
     private void layoutGameButtons(Skin skin, boolean readOnly) {
-        int i = 0;
-        for (Game.Token game : games.get(0)) {
-            ImageTextButton button = createButton(skin, game);
-            getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
-            setObject(button, game);
-            if (!readOnly) getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
+        for (int row = 0; ; row++) {
+            boolean emptyRow = true;
+            for (int level = 0; level < 3; level++) {
+                if (games.get(level).size() > row) {
+                    Game.Token game = games.get(level).get(row);
+                    emptyRow = false;
+                    ImageTextButton button = createButton(skin, game);
+                    getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
+                    setObject(button, game);
+                }
+            }
             getButtonTable().row();
+            if (emptyRow) return;
         }
     }
 
