@@ -7,7 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 import com.bigcustard.scene2dplus.button.ImageButtonPlus;
+import com.bigcustard.util.FutureSuppliers;
+import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.List;
 
@@ -17,30 +20,48 @@ public class GameLibraryDialog extends BaseLibraryDialog implements Disposable {
 
     public GameLibraryDialog(Skin skin) {
         super(skin);
-        games = new GameStore().allUserGames();
     }
 
-    protected void layoutGameButtons(Skin skin) {
+    @Override
+    protected void layoutControls() {
+        games = new GameStore().allUserGames();
+        super.layoutControls();
+    }
+
+    protected void layoutGameButtons() {
         int i = 0;
         for (Game.Token game : games) {
-            ImageTextButton button = createButton(skin, game);
+            ImageTextButton button = createButton(game);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
+
             setObject(button, game);
-            getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
+            ErrorHandler.onRightClick(button, () -> renameGame(game), false);
+            getButtonTable().add(createDeleteButton(game)).padTop(2);
             if (++i%COLUMNS == 0) getButtonTable().row();
         }
     }
 
-    private Button createDeleteButton(Skin skin, Game.Token game) {
-        ImageButtonPlus button = new ImageButtonPlus(skin, "trash-button");
-        button.onClick(() -> deleteGame(skin, game));
+    private void renameGame(Game.Token game) {
+        NameGameDialog nameGameDialog = new NameGameDialog(game, getSkin());
+        nameGameDialog.show(getStage());
+        getStage().setKeyboardFocus(nameGameDialog.getNameTextField());
+        SettableFuture<String> gameNameSupplier = nameGameDialog.getFutureGameName();
+        FutureSuppliers.onGet(() -> gameNameSupplier, newName -> {
+            new GameStore().rename(game, newName);
+            layoutControls();
+        });
+    }
+
+    private Button createDeleteButton(Game.Token game) {
+        ImageButtonPlus button = new ImageButtonPlus(getSkin(), "trash-button");
+        ErrorHandler.onClick(button, () -> deleteGame(game), false);
         return button;
     }
 
-    private void deleteGame(Skin skin, Game.Token game) {
+    private void deleteGame(Game.Token game) {
         new GameStore().delete(game);
         games.remove(game);
-        layoutControls(skin);
+        layoutControls();
     }
 
 

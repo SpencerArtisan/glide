@@ -14,13 +14,14 @@ com.badlogic.gdx.graphics.Color: {
     solarizedLighter: { r: 0.9333, g: 0.9098, b: 0.8353, a: 0.35 }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
+	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.6 } },
 	dialogDark: { name: white, color: { r: 0, g: 0, b: 0, a: 0.1 } },
 	dialogLight: { name: white, color: { r: 1, g: 1, b: 1, a: 0.25 } },
     solarizedTextFieldBackground: { name: white, color: { r: 0.9333, g: 0.9098, b: 0.8353, a: 1 } },
     solarizedBackground: { name: white, color: { r: 0, g: 0.16862, b: 0.21176, a: 1 } },
     solarizedLine: { name: white, color: { r: 0.02745, g: 0.21176, b: 0.25882, a: 1 } },
     solarizedSelection: { name: white, color: { r: 0.34510, g: 0.43137, b: 0.45882, a: 0.5 } },
+    solarizedSelection2: { name: white, color: { r: 0.34510, g: 0.43137, b: 0.45882, a: 0.75 } },
     solarizedNew: { name: white, color: { r: 0.0356, g: 0.25176, b: 0.30882, a: 1 } },
     solarizedError: { name: white, color: { r: 0.86275, g: 0.19608, b: 0.18431, a: 0.6 } }
 
@@ -48,9 +49,9 @@ com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: { vScroll: default-scroll, vScrollKnob: default-round, hScrollKnob: default-round-horiz, hScroll: default-scroll }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-	default: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: dialogDim },
-    dark: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: dialogDark },
-	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection, stageBackground: solarizedSelection }
+	default: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection2, stageBackground: dialogDim },
+    dark: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection2, stageBackground: dialogDark },
+	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, background: solarizedSelection2, stageBackground: solarizedSelection }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: { background: default-slider, knob: default-round },
@@ -64,6 +65,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection, selection: solarizedTextFieldBackground },
+	entry: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedSelection, focusedBackground: solarizedSelection2, selection: solarizedTextFieldBackground },
     code: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedBackground, focusedBackground: solarizedLine, selection: solarizedSelection },
     example: { font: code-font, fontColor: white, disabledFontColor: solarizedLighter, cursor: cursor, background: solarizedNew, focusedBackground: solarizedLine, selection: solarizedSelection }
 },

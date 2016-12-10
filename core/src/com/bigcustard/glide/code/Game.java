@@ -90,10 +90,6 @@ public class Game implements Disposable {
         me.broadcast(this);
     }
 
-    public boolean isNamed() {
-        return !name().startsWith(DEFAULT_NAME);
-    }
-
     public boolean isValid() {
         return language().isValid(code) && imageGroup.isValid();
     }
@@ -157,6 +153,10 @@ public class Game implements Disposable {
         count--;
     }
 
+    public boolean isNamed() {
+        return token.isNamed();
+    }
+
     public static class Token {
         private final String name;
         private final Language language;
@@ -166,6 +166,10 @@ public class Game implements Disposable {
             this.name = name;
             this.language = language;
             this.gameFolder = gameFolder;
+        }
+
+        public boolean isNamed() {
+            return !name.startsWith(DEFAULT_NAME);
         }
 
         public String name() {

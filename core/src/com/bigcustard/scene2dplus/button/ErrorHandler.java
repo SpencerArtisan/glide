@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.button;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,20 +31,20 @@ public class ErrorHandler {
                 tryAndRecover(field.getStage(), field.getSkin(), () -> callback.accept(text)));
     }
 
-    public static void onClick(Widget list, Skin skin, Runnable callback) {
-        list.addListener(new ClickListener() {
+    public static void onClick(Widget widget, Skin skin, Runnable callback) {
+        widget.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (getTapCount() == 1) tryAndRecover(list.getStage(), skin, callback);
+                if (getTapCount() == 1) tryAndRecover(widget.getStage(), skin, callback);
             }
         });
     }
 
-    public static void onDoubleClick(Widget list, Skin skin, Runnable callback) {
-        list.addListener(new ClickListener() {
+    public static void onDoubleClick(Widget widget, Skin skin, Runnable callback) {
+        widget.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (getTapCount() == 2) tryAndRecover(list.getStage(), skin, callback);
+                if (getTapCount() == 2) tryAndRecover(widget.getStage(), skin, callback);
             }
         });
     }
@@ -58,8 +59,16 @@ public class ErrorHandler {
     }
 
     public static void onClick(Button button, Runnable callback, boolean slowOp) {
-        button.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
+        button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                tryAndRecover(button, callback);
+            }
+        });
+    }
+
+    public static void onRightClick(Button button, Runnable callback, boolean slowOp) {
+        button.addListener(new ClickListener(Input.Buttons.RIGHT) {
+            public void clicked(InputEvent event, float x, float y) {
                 tryAndRecover(button, callback);
             }
         });

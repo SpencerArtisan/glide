@@ -12,7 +12,7 @@ public class NameGameDialog extends Dialog {
     private SettableFuture<String> futureGameName = SettableFuture.create();
     private TextField nameTextField;
 
-    public NameGameDialog(Game game, Skin skin) {
+    public NameGameDialog(Game.Token game, Skin skin) {
         super("", skin);
         layoutControls(game, skin);
     }
@@ -35,7 +35,7 @@ public class NameGameDialog extends Dialog {
         return 440;
     }
 
-    private void layoutControls(Game game, Skin skin) {
+    private void layoutControls(Game.Token game, Skin skin) {
         Table contentTable = getContentTable();
         contentTable.padTop(20).padLeft(40).padRight(40);
         text("Name your game");
@@ -46,8 +46,8 @@ public class NameGameDialog extends Dialog {
         button("Save").padBottom(25);
     }
 
-    private void createNameField(Game game, Skin skin) {
-        nameTextField = new TextField(game.isNamed() ? game.name() : "", skin);
+    private void createNameField(Game.Token game, Skin skin) {
+        nameTextField = new TextField(game.isNamed() ? game.name() : "", skin, "entry");
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(24);
         nameTextField.setCursorPosition(nameTextField.getText().length());

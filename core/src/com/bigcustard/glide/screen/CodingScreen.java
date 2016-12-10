@@ -324,7 +324,7 @@ public class CodingScreen extends ScreenAdapter {
     }
 
     private ListenableFuture<String> getGameName() {
-        NameGameDialog nameGameDialog = new NameGameDialog(game, skin);
+        NameGameDialog nameGameDialog = new NameGameDialog(game.token(), skin);
         nameGameDialog.show(stage);
         stage.setKeyboardFocus(nameGameDialog.getNameTextField());
         return nameGameDialog.getFutureGameName();

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.bigcustard.glide.code.Game;
 import com.bigcustard.glide.code.GameStore;
+import com.bigcustard.scene2dplus.Spacer;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.HashMap;
@@ -28,13 +29,13 @@ public class SampleLibraryDialog extends BaseLibraryDialog implements Disposable
         games.put(2, gameStore.allHardSampleGames());
     }
 
-    protected void layoutGameButtons(Skin skin) {
+    protected void layoutGameButtons() {
         Stream.of(1, 2, 3).forEach(level ->
-                getButtonTable().add(new Image(skin, "level" + level)).padTop(10)
+                getButtonTable().add(new Image(getSkin(), "level" + level)).padTop(10)
         );
         getButtonTable().row();
         Stream.of(1, 2, 3).forEach(level -> {
-                    Label small = new Label("Level " + level + " Hacker", skin, "small");
+                    Label small = new Label("Level " + level + " Hacker", getSkin(), "small");
                     small.setColor(Color.YELLOW);
                     small.setAlignment(Align.center);
                     getButtonTable().add(small).center().fillX().padTop(-12).padBottom(6);
@@ -48,9 +49,11 @@ public class SampleLibraryDialog extends BaseLibraryDialog implements Disposable
                 if (games.get(level).size() > row) {
                     Game.Token game = games.get(level).get(row);
                     emptyRow = false;
-                    ImageTextButton button = createButton(skin, game);
+                    ImageTextButton button = createButton(game);
                     getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(15).padLeft(15).padRight(6).padTop(6);
                     setObject(button, game);
+                } else {
+                    getButtonTable().add(new Spacer(16));
                 }
             }
             getButtonTable().row();

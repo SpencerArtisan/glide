@@ -24,15 +24,13 @@ import java.util.function.Consumer;
 public abstract class BaseLibraryDialog extends Dialog implements Disposable {
     private Map<Integer, List<Game.Token>> games = new HashMap<>();
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
-    private Skin skin;
 
     public BaseLibraryDialog(Skin skin) {
         super("", skin);
-        this.skin = skin;
     }
 
     public void display(Stage stage, Runnable onCancel, Consumer<Game.Token> handleChoice) {
-        layoutControls(skin);
+        layoutControls();
 
         show(stage);
         Futures.addCallback(getFutureGame(), new FutureCallback<Game.Token>() {
@@ -61,25 +59,25 @@ public abstract class BaseLibraryDialog extends Dialog implements Disposable {
         futureGame.set((Game.Token) object);
     }
 
-    protected void layoutControls(Skin skin) {
+    protected void layoutControls() {
         getContentTable().clearChildren();
         getButtonTable().clearChildren();
         pad(20);
         text("Choose a game").padBottom(25);
         row();
-        layoutGameButtons(skin);
+        layoutGameButtons();
         getButtonTable().row();
 
-        TextButton cancelButton = new TextButtonPlus("  Cancel  ", skin);
+        TextButton cancelButton = new TextButtonPlus("  Cancel  ", getSkin());
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).colspan(6);
     }
 
-    abstract protected void layoutGameButtons(Skin skin);
+    abstract protected void layoutGameButtons();
 
-    protected ImageTextButton createButton(Skin skin, Game.Token game) {
+    protected ImageTextButton createButton(Game.Token game) {
         String buttonStyle = game.language().buttonStyle();
-        ImageTextButton button = new ImageTextButtonPlus(game.name() + " ", skin, buttonStyle);
+        ImageTextButton button = new ImageTextButtonPlus(game.name() + " ", getSkin(), buttonStyle);
         button.clearChildren();
         button.add(new Spacer(4));
         button.add(button.getImage());
