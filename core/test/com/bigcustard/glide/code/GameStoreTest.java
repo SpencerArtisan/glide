@@ -50,7 +50,7 @@ public class GameStoreTest {
         when(mockGroovyCodeFile.readString()).thenReturn("code");
         gameStore = new GameStore() {
             @Override
-            public FileHandle samplesFolder() {
+            public FileHandle simpleSamplesFolder() {
                 return mockSamplesFolder;
             }
 
@@ -69,7 +69,7 @@ public class GameStoreTest {
     @Test
     public void allSampleGamesWhenDirectoryEmpty() {
         when(mockSamplesFolder.list(any(FileFilter.class))).thenReturn(new FileHandle[0]);
-        assertThat(gameStore.allSampleGames()).isEmpty();
+        assertThat(gameStore.allSimpleSampleGames()).isEmpty();
     }
 
     @Test
