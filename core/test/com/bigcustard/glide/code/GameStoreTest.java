@@ -1,13 +1,10 @@
 package com.bigcustard.glide.code;
 
 import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
-import com.bigcustard.scene2dplus.image.ImageGroup;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
@@ -24,8 +21,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GameStoreTest {
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private Preferences mockPreferences;
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageGroup mockImageModel;
     @Mock private FileHandle mockGameFolder;
     @Mock private FileHandle mockTrashFolder;
     @Mock private FileHandle mockSamplesFolder;
@@ -62,11 +57,6 @@ public class GameStoreTest {
             @Override
             public FileHandle trashFolder() {
                 return mockTrashFolder;
-            }
-
-            @Override
-            protected Preferences preferences() {
-                return mockPreferences;
             }
         };
     }

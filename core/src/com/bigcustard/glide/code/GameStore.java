@@ -2,7 +2,6 @@ package com.bigcustard.glide.code;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageGroup;
@@ -41,7 +40,7 @@ public class GameStore {
     }
 
     public void delete(Game.Token game) {
-        gameFolder(game.name()).moveTo(findUniqueName(trashFolder(), game.name()));
+        game.gameFolder().moveTo(findUniqueName(trashFolder(), game.name()));
     }
 
     public void save(Game game) {
@@ -108,7 +107,7 @@ public class GameStore {
         return candidate;
     }
 
-    private List<Game.Token> allGames(FileHandle gameFolder) {
+    public List<Game.Token> allGames(FileHandle gameFolder) {
         return Arrays.stream(allGameFolders(gameFolder))
                 .map(folder -> {
                     try {
@@ -131,7 +130,6 @@ public class GameStore {
         return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
-
     public FileHandle simpleSamplesFolder() {
         return Gdx.files.internal(SIMPLE_SAMPLES_FOLDER);
     }
@@ -150,10 +148,6 @@ public class GameStore {
 
     public FileHandle trashFolder() {
         return Gdx.files.local(TRASH_FOLDER);
-    }
-
-    protected Preferences preferences() {
-        return Gdx.app.getPreferences(PREFERENCES_KEY);
     }
 
     public Game load(Game.Token token) {

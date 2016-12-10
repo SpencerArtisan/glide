@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,6 +26,7 @@ import com.bigcustard.glide.code.command.NewCommand;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.actions.ChangePaddingAction;
 import com.bigcustard.scene2dplus.button.ErrorHandler;
+import com.bigcustard.scene2dplus.button.ImageButtonPlus;
 import com.bigcustard.scene2dplus.button.TextButtonPlus;
 import com.bigcustard.scene2dplus.dialog.ErrorDialog;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -58,6 +60,7 @@ public class WelcomeScreen extends ScreenAdapter {
     private Label version;
     private ScheduledExecutorService executorService;
     private ImportExport importExport;
+    private ImageButtonPlus trash;
 
     WelcomeScreen(GameStore gameStore, Viewport viewport, Consumer<Screen> setScreen, ScreenFactory screenFactory, Skin skin) {
         this.setScreen = setScreen;
@@ -70,6 +73,7 @@ public class WelcomeScreen extends ScreenAdapter {
         createTitle();
         createBlurpLogo();
         createVersion();
+        createTrash();
         createNewGameButton();
         createExportGameButton();
         createImportGameButton();
@@ -134,7 +138,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
     private void createExportGameButton() {
         exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
-        createGamesButton(exportGameButton, () -> new GameLibraryDialog(skin), (game) -> importExport.exportGame(game, this::showMainMenu));
+        createGamesButton(exportGameButton, () -> new GameLibraryDialog(skin, gameStore.userFolder()), (game) -> importExport.exportGame(game, this::showMainMenu));
     }
 
     private void createSamplesButton() {
@@ -144,7 +148,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
     private void createMyGamesButton() {
         myGamesButton = new TextButtonPlus("    My Games    ", skin, "big");
-        createGamesButton(myGamesButton, () -> new GameLibraryDialog(skin), this::showCodingScreen);
+        createGamesButton(myGamesButton, () -> new GameLibraryDialog(skin, gameStore.userFolder()), this::showCodingScreen);
     }
 
     private void createNewGameButton() {
@@ -154,15 +158,20 @@ public class WelcomeScreen extends ScreenAdapter {
         );
     }
 
-    private void createGamesButton(TextButtonPlus button, Supplier<BaseLibraryDialog> dialogSupplier, Consumer<Game.Token> handleChoice) {
+    private void createGamesButton(Button button, Supplier<BaseLibraryDialog> dialogSupplier, Consumer<Game.Token> handleChoice) {
         menuHidingButton(button, (afterDone) -> dialogSupplier.get().display(stage, afterDone, handleChoice));
     }
 
-    private void menuHidingButton(TextButtonPlus button, Consumer<Runnable> buttonHandler) {
-        button.onClick(() -> {
+    private void menuHidingButton(Button button, Consumer<Runnable> buttonHandler) {
+        ErrorHandler.onClick(button, () -> {
             hideMainMenu();
             buttonHandler.accept(this::showMainMenu);
-        });
+        }, false);
+    }
+
+    private void createTrash() {
+        trash = new ImageButtonPlus(skin, "trash-button");
+        createGamesButton(trash, () -> new GameLibraryDialog(skin, gameStore.trashFolder()), this::showCodingScreen);
     }
 
     private void showCodingScreen(Language language) {
@@ -259,7 +268,8 @@ public class WelcomeScreen extends ScreenAdapter {
         outerTable.row();
         outerTable.add(table).expandY().top();
         outerTable.row();
-        outerTable.add(version).expandX().left().bottom();
+        outerTable.add(version).left().bottom();
+        outerTable.add(trash).right().bottom();
         outerTable.setFillParent(true);
         outerTable.pack();
         stage.addActor(outerTable);

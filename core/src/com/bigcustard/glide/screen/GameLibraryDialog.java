@@ -1,5 +1,6 @@
 package com.bigcustard.glide.screen;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
@@ -17,14 +18,16 @@ import java.util.List;
 public class GameLibraryDialog extends BaseLibraryDialog implements Disposable {
     private static int COLUMNS = 2;
     private List<Game.Token> games;
+    private FileHandle folder;
 
-    public GameLibraryDialog(Skin skin) {
+    public GameLibraryDialog(Skin skin, FileHandle folder) {
         super(skin);
+        this.folder = folder;
     }
 
     @Override
     protected void layoutControls() {
-        games = new GameStore().allUserGames();
+        games = new GameStore().allGames(folder);
         super.layoutControls();
     }
 
