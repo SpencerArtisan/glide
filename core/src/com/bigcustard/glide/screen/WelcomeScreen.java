@@ -156,7 +156,7 @@ public class WelcomeScreen extends ScreenAdapter {
         );
     }
 
-    private void createGamesButton(TextButtonPlus button, Supplier<GameLibraryDialog> dialogSupplier, Consumer<Game.Token> handleChoice) {
+    private void createGamesButton(TextButtonPlus button, Supplier<BaseLibraryDialog> dialogSupplier, Consumer<Game.Token> handleChoice) {
         menuHidingButton(button, (afterDone) -> dialogSupplier.get().display(stage, afterDone, handleChoice));
     }
 
