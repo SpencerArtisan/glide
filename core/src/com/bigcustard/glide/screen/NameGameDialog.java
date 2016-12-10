@@ -48,12 +48,12 @@ public class NameGameDialog extends Dialog {
         contentTable.add(nameTextField).expandX().fillX().padTop(20).padBottom(25);
         contentTable.row();
         saveButton = new TextButtonPlus("Save", skin);
+        if (!game.isNamed()) saveButton.setDisabled(true);
         button(saveButton).padBottom(25);
     }
 
     private void createNameField(Game.Token game, Skin skin) {
         nameTextField = new TextFieldPlus(game.isNamed() ? game.name() : "", skin, "entry");
-        if (!game.isNamed()) saveButton.setDisabled(true);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(24);
         nameTextField.setCursorPosition(nameTextField.getText().length());

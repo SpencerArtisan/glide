@@ -68,7 +68,7 @@ public abstract class BaseLibraryDialog extends Dialog implements Disposable {
         layoutGameButtons();
         getButtonTable().row();
 
-        TextButton cancelButton = new TextButtonPlus("  Cancel  ", getSkin());
+        TextButton cancelButton = new TextButtonPlus("  Close  ", getSkin());
         setObject(cancelButton, null);
         getButtonTable().add(cancelButton).padTop(20).colspan(6);
     }
