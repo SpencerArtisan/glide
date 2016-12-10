@@ -27,7 +27,7 @@ public class GameStoreTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private Preferences mockPreferences;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageGroup mockImageModel;
     @Mock private FileHandle mockGameFolder;
-    @Mock private FileHandle mockLevelFolder;
+    @Mock private FileHandle mockTrashFolder;
     @Mock private FileHandle mockSamplesFolder;
     @Mock private FileHandle mockUserGamesFolder;
     @Mock private FileHandle mockGroovyCodeFile;
@@ -57,6 +57,11 @@ public class GameStoreTest {
             @Override
             public FileHandle userFolder() {
                 return mockUserGamesFolder;
+            }
+
+            @Override
+            public FileHandle trashFolder() {
+                return mockTrashFolder;
             }
 
             @Override
@@ -245,12 +250,19 @@ public class GameStoreTest {
     }
 
     @Test
-    public void deleteRemovesFolder() {
-        when(mockUserGamesFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        Game game = gameStore.create(mockLanguage);
+    public void deleteMovesFolderToTrash() {
+        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
+        Game.Token token = new Game.Token("name", mockLanguage, mockGameFolder);
+        Game game = gameStore.load(token);
+        when(mockGameFolder.type()).thenReturn(Files.FileType.Local);
+        when(mockGameFolder.exists()).thenReturn(true);
+        FileHandle mockNewGameFolder = mock(FileHandle.class);
+        when(mockTrashFolder.child("name")).thenReturn(mockNewGameFolder);
+        when(mockNewGameFolder.exists()).thenReturn(false);
+        when(mockUserGamesFolder.child("name")).thenReturn(mockGameFolder);
+
         gameStore.delete(game.token());
-        verify(mockGameFolder).deleteDirectory();
+        verify(mockGameFolder).moveTo(mockNewGameFolder);
     }
 
     @Test

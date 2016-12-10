@@ -18,6 +18,7 @@ public class GameStore {
     private static final String PREFERENCES_KEY = "Game";
     private static final String BUILD_FOLDER = "build";
     private static String CODE_FILE_WITHOUT_SUFFIX = "code";
+    private static String TRASH_FOLDER = "trash";
     private static String USER_FOLDER = "mygames";
     private static String SIMPLE_SAMPLES_FOLDER = "samples/Level 1";
     private static String MEDIUM_SAMPLES_FOLDER = "samples/Level 2";
@@ -43,7 +44,7 @@ public class GameStore {
     }
 
     public void delete(Game.Token game) {
-        gameFolder(game.name()).deleteDirectory();
+        gameFolder(game.name()).moveTo(findUniqueName(trashFolder(), game.name()));
     }
 
     public void save(Game game) {
@@ -107,10 +108,14 @@ public class GameStore {
     }
 
     public FileHandle findUniqueName() {
-        FileHandle candidate = userFolder().child(Game.DEFAULT_NAME);
+        return findUniqueName(userFolder(), Game.DEFAULT_NAME);
+    }
+
+    private FileHandle findUniqueName(FileHandle folder, String defaultName) {
+        FileHandle candidate = folder.child(defaultName);
         int suffix = 2;
         while (candidate.exists()) {
-            candidate = userFolder().child(Game.DEFAULT_NAME + " " + suffix++);
+            candidate = folder.child(defaultName + " " + suffix++);
         }
         return candidate;
     }
@@ -163,6 +168,10 @@ public class GameStore {
 
     public FileHandle userFolder() {
         return Gdx.files.local(USER_FOLDER);
+    }
+
+    public FileHandle trashFolder() {
+        return Gdx.files.local(TRASH_FOLDER);
     }
 
     protected Preferences preferences() {
