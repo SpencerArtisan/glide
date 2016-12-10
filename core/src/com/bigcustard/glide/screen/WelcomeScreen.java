@@ -105,9 +105,7 @@ public class WelcomeScreen extends ScreenAdapter {
 
         boolean areGames = gameStore.allUserGames().size() > 0;
         myGamesButton.setDisabled(!areGames);
-        myGamesButton.setTouchable(areGames ? Touchable.enabled : Touchable.disabled);
         exportGameButton.setDisabled(!areGames);
-        exportGameButton.setTouchable(areGames ? Touchable.enabled : Touchable.disabled);
     }
 
     private void createVersion() {

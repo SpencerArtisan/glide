@@ -13,8 +13,6 @@ import com.bigcustard.scene2dplus.command.Command;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
-import static com.badlogic.gdx.scenes.scene2d.Touchable.disabled;
-import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 import static com.bigcustard.util.Util.tryGet;
 
 public class ButtonBar extends HorizontalGroup implements Disposable {
@@ -63,7 +61,6 @@ public class ButtonBar extends HorizontalGroup implements Disposable {
                     if (event instanceof RefreshEnabledStatusEvent) {
                         boolean enable = tryGet(() -> commandFactory.get().canExecute(), false);
                         button.setDisabled(!enable);
-                        button.setTouchable(enable ? enabled : disabled);
                     }
                 },
                 slowOp

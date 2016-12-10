@@ -6,11 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.bigcustard.glide.code.Game;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
+import com.bigcustard.scene2dplus.button.TextButtonPlus;
+import com.bigcustard.scene2dplus.textfield.TextFieldPlus;
 import com.google.common.util.concurrent.SettableFuture;
 
 public class NameGameDialog extends Dialog {
     private SettableFuture<String> futureGameName = SettableFuture.create();
-    private TextField nameTextField;
+    private TextFieldPlus nameTextField;
+    private TextButtonPlus saveButton;
 
     public NameGameDialog(Game.Token game, Skin skin) {
         super("", skin);
@@ -43,13 +47,16 @@ public class NameGameDialog extends Dialog {
         createNameField(game, skin);
         contentTable.add(nameTextField).expandX().fillX().padTop(20).padBottom(25);
         contentTable.row();
-        button("Save").padBottom(25);
+        saveButton = new TextButtonPlus("Save", skin);
+        button(saveButton).padBottom(25);
     }
 
     private void createNameField(Game.Token game, Skin skin) {
-        nameTextField = new TextField(game.isNamed() ? game.name() : "", skin, "entry");
+        nameTextField = new TextFieldPlus(game.isNamed() ? game.name() : "", skin, "entry");
+        if (!game.isNamed()) saveButton.setDisabled(true);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(24);
         nameTextField.setCursorPosition(nameTextField.getText().length());
+        ErrorHandler.onType(nameTextField, field -> saveButton.setDisabled(field.getText().isEmpty()));
     }
 }
