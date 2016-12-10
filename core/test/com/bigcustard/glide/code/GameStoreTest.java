@@ -173,43 +173,6 @@ public class GameStoreTest {
     }
 
     @Test
-    public void hasNoRecentWhenNotInPrefs() {
-        when(mockUserGamesFolder.child("Unnamed Game")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("Unnamed Game");
-        when(mockPreferences.getString("MostRecentGameName")).thenReturn(null);
-        assertThat(gameStore.hasMostRecent()).isFalse();
-    }
-
-    @Test
-    public void hasNoRecentWhenInPrefsButNoDirectory() {
-        when(mockUserGamesFolder.child("planet")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("planet");
-        when(mockGameFolder.exists()).thenReturn(false);
-        when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
-        assertThat(gameStore.hasMostRecent()).isFalse();
-    }
-
-    @Test
-    public void hasNoRecentWhenInPrefsButNoCodeFile() {
-        when(mockUserGamesFolder.child("planet")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("planet");
-        when(mockGameFolder.exists()).thenReturn(true);
-        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[0]);
-        when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
-        assertThat(gameStore.hasMostRecent()).isFalse();
-    }
-
-    @Test
-    public void hasRecentWhenInPrefsAndDirectoryAndCodeFileExist() {
-        when(mockUserGamesFolder.child("planet")).thenReturn(mockGameFolder);
-        when(mockGameFolder.name()).thenReturn("planet");
-        when(mockGameFolder.exists()).thenReturn(true);
-        when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
-        when(mockPreferences.getString("MostRecentGameName")).thenReturn("planet");
-        assertThat(gameStore.hasMostRecent()).isTrue();
-    }
-
-    @Test
     public void changingGameNameOfUserGameMovesDirectory() {
         when(mockGameFolder.list(any(FilenameFilter.class))).thenReturn(new FileHandle[] {mockGroovyCodeFile});
         Game.Token token = new Game.Token("old name", mockLanguage, mockGameFolder);

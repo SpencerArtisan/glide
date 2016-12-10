@@ -7,7 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageGroup;
 import com.bigcustard.scene2dplus.sound.SoundGroup;
-import com.google.common.base.Strings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +22,6 @@ public class GameStore {
     private static String SIMPLE_SAMPLES_FOLDER = "samples/Level 1";
     private static String MEDIUM_SAMPLES_FOLDER = "samples/Level 2";
     private static String HARD_SAMPLES_FOLDER = "samples/Level 3";
-    private static final String RECENT_GAME = "MostRecentGameName";
 
     public Game.Token rename(Game.Token game, String newName) throws GameRenameException {
         if (!newName.equals(game.name())) {
@@ -37,7 +35,6 @@ public class GameStore {
             } else {
                 source.copyTo(target);
             }
-            storeMostRecentGameName(newName);
             return new Game.Token(newName, game.language(), target);
         }
         return game;
@@ -49,21 +46,12 @@ public class GameStore {
 
     public void save(Game game) {
         codeFile(game).writeString(game.code(), false);
-        storeMostRecentGameName(game);
     }
 
     public Game create(Language language) {
         FileHandle gameFolder = findUniqueName();
         Game.Token token = new Game.Token(gameFolder.name(), language, gameFolder);
         return new Game(token, language.template(), new ImageGroup(gameFolder), new SoundGroup(gameFolder));
-    }
-
-    public boolean hasMostRecent() {
-        String gameName = preferences().getString(RECENT_GAME);
-        if (Strings.isNullOrEmpty(gameName)) return false;
-        FileHandle gameFolder = userFolder().child(gameName);
-        return gameFolder.exists() && gameFolder.list((dir, name) ->
-                name.startsWith(CODE_FILE_WITHOUT_SUFFIX)).length > 0;
     }
 
     public List<Game.Token> allUserGames() {
@@ -143,16 +131,6 @@ public class GameStore {
         return parentFolder.list(file -> file.isDirectory() && !file.getName().startsWith("."));
     }
 
-    private void storeMostRecentGameName(Game game) {
-        if (game.isNamed()) {
-            storeMostRecentGameName(game.name());
-        }
-    }
-
-    private void storeMostRecentGameName(String name) {
-        preferences().putString(RECENT_GAME, name);
-        preferences().flush();
-    }
 
     public FileHandle simpleSamplesFolder() {
         return Gdx.files.internal(SIMPLE_SAMPLES_FOLDER);
