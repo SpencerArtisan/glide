@@ -3,7 +3,6 @@ package com.bigcustard.glide.screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,19 +18,23 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class GameLibraryDialog extends Dialog implements Disposable {
-    private static int COLUMNS = 2;
-    private List<Game.Token> games;
+public class SampleLibraryDialog extends GameLibraryDialog implements Disposable {
+    private Map<Integer, List<Game.Token>> games = new HashMap<>();
     private SettableFuture<Game.Token> futureGame = SettableFuture.create();
     private boolean readOnly;
 
-    public GameLibraryDialog(Skin skin) {
-        super("", skin);
-        games = new GameStore().allUserGames();
-        layoutControls(skin, false);
+    public SampleLibraryDialog(Skin skin) {
+        super(skin);
+        GameStore gameStore = new GameStore();
+        games.put(0, gameStore.allSimpleSampleGames());
+        games.put(1, gameStore.allMediumSampleGames());
+        games.put(2, gameStore.allHardSampleGames());
+        layoutControls(skin, true);
     }
 
     public void display(Stage stage, Runnable onCancel, Consumer<Game.Token> handleChoice) {
@@ -79,17 +82,17 @@ public class GameLibraryDialog extends Dialog implements Disposable {
 
         TextButton cancelButton = new TextButtonPlus("  Cancel  ", skin);
         setObject(cancelButton, null);
-        getButtonTable().add(cancelButton).padTop(20).colspan(COLUMNS * 2);
+        getButtonTable().add(cancelButton).padTop(20).colspan(6);
     }
 
     private void layoutGameButtons(Skin skin, boolean readOnly) {
         int i = 0;
-        for (Game.Token game : games) {
+        for (Game.Token game : games.get(0)) {
             ImageTextButton button = createButton(skin, game);
             getButtonTable().add(button).fillX().spaceLeft(10).spaceRight(10).padLeft(10).padRight(6).padTop(6);
             setObject(button, game);
             if (!readOnly) getButtonTable().add(createDeleteButton(skin, game)).padTop(2);
-            if (++i%COLUMNS == 0) getButtonTable().row();
+            getButtonTable().row();
         }
     }
 

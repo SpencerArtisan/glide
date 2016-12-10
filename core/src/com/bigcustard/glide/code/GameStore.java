@@ -19,7 +19,9 @@ public class GameStore {
     private static final String BUILD_FOLDER = "build";
     private static String CODE_FILE_WITHOUT_SUFFIX = "code";
     private static String USER_FOLDER = "mygames";
-    private static String SAMPLES_FOLDER = "samples";
+    private static String SIMPLE_SAMPLES_FOLDER = "samples/Level 1";
+    private static String MEDIUM_SAMPLES_FOLDER = "samples/Level 2";
+    private static String HARD_SAMPLES_FOLDER = "samples/Level 3";
     private static final String RECENT_GAME = "MostRecentGameName";
 
     public Game.Token rename(Game.Token game, String newName) throws GameRenameException {
@@ -67,8 +69,16 @@ public class GameStore {
         return allGames(userFolder());
     }
 
-    public List<Game.Token> allSampleGames() {
-        return allGames(samplesFolder());
+    public List<Game.Token> allSimpleSampleGames() {
+        return allGames(simpleSamplesFolder());
+    }
+
+    public List<Game.Token> allMediumSampleGames() {
+        return allGames(mediumSamplesFolder());
+    }
+
+    public List<Game.Token> allHardSampleGames() {
+        return allGames(hardSamplesFolder());
     }
 
     public FileHandle buildFolder(Game game) {
@@ -139,8 +149,16 @@ public class GameStore {
         preferences().flush();
     }
 
-    public FileHandle samplesFolder() {
-        return Gdx.files.internal(SAMPLES_FOLDER);
+    public FileHandle simpleSamplesFolder() {
+        return Gdx.files.internal(SIMPLE_SAMPLES_FOLDER);
+    }
+
+    public FileHandle mediumSamplesFolder() {
+        return Gdx.files.internal(MEDIUM_SAMPLES_FOLDER);
+    }
+
+    public FileHandle hardSamplesFolder() {
+        return Gdx.files.internal(HARD_SAMPLES_FOLDER);
     }
 
     public FileHandle userFolder() {

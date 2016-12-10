@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.bigcustard.glide.code.language.Language;
 import com.bigcustard.scene2dplus.image.ImageGroup;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
@@ -18,13 +17,17 @@ import java.io.FilenameFilter;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GameStoreTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private Preferences mockPreferences;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private ImageGroup mockImageModel;
     @Mock private FileHandle mockGameFolder;
+    @Mock private FileHandle mockLevelFolder;
     @Mock private FileHandle mockSamplesFolder;
     @Mock private FileHandle mockUserGamesFolder;
     @Mock private FileHandle mockGroovyCodeFile;
@@ -74,9 +77,8 @@ public class GameStoreTest {
         when(mockUserGamesFolder.list(any(FileFilter.class))).thenReturn(new FileHandle[0]);
         assertThat(gameStore.allUserGames()).isEmpty();
     }
-
+    
     @Test
-    @Ignore
     public void allUserGamesWhenDirectoryContainsGameFolder() {
         ArgumentCaptor<FileFilter> filterCaptor = ArgumentCaptor.forClass(FileFilter.class);
         File mockGameFolderAsFile = mock(File.class);

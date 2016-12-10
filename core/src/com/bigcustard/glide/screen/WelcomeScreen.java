@@ -101,9 +101,7 @@ public class WelcomeScreen extends ScreenAdapter {
     }
 
     private void refreshButtonEnabledStatuses() {
-        boolean samplesEnabled = gameStore.allSampleGames().size() > 0;
-        samplesButton.setDisabled(!samplesEnabled);
-        samplesButton.setTouchable(samplesEnabled ? Touchable.enabled : Touchable.disabled);
+        samplesButton.setTouchable(Touchable.enabled);
 
         boolean areGames = gameStore.allUserGames().size() > 0;
         myGamesButton.setDisabled(!areGames);
@@ -138,17 +136,17 @@ public class WelcomeScreen extends ScreenAdapter {
 
     private void createExportGameButton() {
         exportGameButton = new TextButtonPlus("  Export Game  ", skin, "big");
-        createGamesButton(exportGameButton, () -> GameLibraryDialog.userGames(skin), (game) -> importExport.exportGame(game, this::showMainMenu));
+        createGamesButton(exportGameButton, () -> new GameLibraryDialog(skin), (game) -> importExport.exportGame(game, this::showMainMenu));
     }
 
     private void createSamplesButton() {
         samplesButton = new TextButtonPlus("     Hack a Game     ", skin, "big");
-        createGamesButton(samplesButton, () -> GameLibraryDialog.sampleGames(skin), this::showCodingScreen);
+        createGamesButton(samplesButton, () -> new SampleLibraryDialog(skin), this::showCodingScreen);
     }
 
     private void createMyGamesButton() {
         myGamesButton = new TextButtonPlus("    My Games    ", skin, "big");
-        createGamesButton(myGamesButton, () -> GameLibraryDialog.userGames(skin), this::showCodingScreen);
+        createGamesButton(myGamesButton, () -> new GameLibraryDialog(skin), this::showCodingScreen);
     }
 
     private void createNewGameButton() {
