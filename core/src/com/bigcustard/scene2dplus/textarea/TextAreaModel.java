@@ -216,6 +216,7 @@ public class TextAreaModel implements Disposable {
 			this.location = caretLocation;
             changeXIfBeyondEndOfLine();
             clearSelection();
+			System.out.println("caretLocation = " + location);
 		}
 
         private void setLocation(int x, int y) {

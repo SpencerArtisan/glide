@@ -48,13 +48,14 @@ public class TextArea extends Actor {
     }
 
     public XY caretLocationToPosition(XY caret) {
-        float x = LEFT_MARGIN + getX() + caret.x * getColumnWidth();
+        float x = LEFT_MARGIN + getX() + (GUTTER + caret.x) * getColumnWidth();
         float y = -TOP_MARGIN + getHeight() + getY() - caret.y * getRowHeight();
         return new XY((int) x, (int) y);
     }
 
     public XY worldPositionToCaretLocation(XY worldXY) {
         float caretX = (worldXY.x  - LEFT_MARGIN) / getColumnWidth() - GUTTER;
+        caretX = Math.max(0, caretX);
         float caretY = (this.getHeight()  - TOP_MARGIN + 16 - worldXY.y) / getRowHeight();
         return new XY((int) caretX, (int) caretY);
     }
@@ -92,7 +93,7 @@ public class TextArea extends Actor {
         for (int i = 0; i <= rows; i++) {
             try {
                 style.font.getData().markupEnabled = true;
-                XY textStart = caretLocationToPosition(new XY(0, i));
+                XY textStart = caretLocationToPosition(new XY(-GUTTER, i));
                 style.font.setColor(style.disabledFontColor);
                 style.font.draw(batch, Integer.toString(i + 1), textStart.x, textStart.y + TOP_MARGIN - 11);
             } catch (Exception e) {
@@ -105,12 +106,13 @@ public class TextArea extends Actor {
     private void drawSelectionBackground(Batch batch) {
         Pair<XY, XY> selection = model.caret().selection();
         if (selection != null) {
+            int leftMargin = caretLocationToPosition(new XY(0, 0)).x;
             XY topLeftSelection = caretLocationToPosition(selection.getLeft());
             XY bottomRightSelection = caretLocationToPosition(selection.getRight());
             if (!Objects.equals(selection.getLeft().y, selection.getRight().y)) {
                 style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, getWidth() - topLeftSelection.x, getRowHeight());
-                style.selection.draw(batch, 0, bottomRightSelection.y + getRowHeight(), getWidth(), topLeftSelection.y - bottomRightSelection.y - getRowHeight());
-                style.selection.draw(batch, 0, bottomRightSelection.y, bottomRightSelection.x, getRowHeight());
+                style.selection.draw(batch, leftMargin, bottomRightSelection.y + getRowHeight(), getWidth(), topLeftSelection.y - bottomRightSelection.y - getRowHeight());
+                style.selection.draw(batch, leftMargin, bottomRightSelection.y, bottomRightSelection.x - leftMargin, getRowHeight());
             } else {
                 style.selection.draw(batch, topLeftSelection.x, topLeftSelection.y, bottomRightSelection.x - topLeftSelection.x, getRowHeight());
             }
@@ -120,7 +122,7 @@ public class TextArea extends Actor {
     private void drawText(Batch batch) {
         try {
             style.font.getData().markupEnabled = true;
-            XY textStart = caretLocationToPosition(new XY(GUTTER, 0));
+            XY textStart = caretLocationToPosition(new XY(0, 0));
             GlyphLayout textBounds = style.font.draw(batch, model.coloredText(), textStart.x, textStart.y + TOP_MARGIN - 11);
             setHeight(Math.max(TOP_MARGIN + textBounds.height, getParent().getHeight()));
             setWidth(Math.max(LEFT_MARGIN + textBounds.width, getParent().getWidth()));
@@ -133,7 +135,7 @@ public class TextArea extends Actor {
 
     private void drawCaret(Batch batch) {
         Drawable caretImage = style.cursor;
-        XY caretPosition = caretLocationToPosition(model.caret().location().add(new XY(GUTTER, 0)));
+        XY caretPosition = caretLocationToPosition(model.caret().location());
         caretImage.draw(batch, caretPosition.x - 2, caretPosition.y, caretImage.getMinWidth(), getRowHeight());
     }
 }
