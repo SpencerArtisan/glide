@@ -34,11 +34,11 @@ public class SampleLibraryDialog extends BaseLibraryDialog implements Disposable
                 getButtonTable().add(new Image(getSkin(), "level" + level)).padTop(10)
         );
         getButtonTable().row();
-        Stream.of(1, 2, 3).forEach(level -> {
-                    Label small = new Label("Level " + level + " Hacker", getSkin(), "small");
+        Stream.of("Harmless Hacker", "Competent Hacker", "Elite Hacker").forEach(level -> {
+                    Label small = new Label(level, getSkin(), "small");
                     small.setColor(Color.YELLOW);
                     small.setAlignment(Align.center);
-                    getButtonTable().add(small).center().fillX().padTop(-12).padBottom(6);
+                    getButtonTable().add(small).center().fillX().padTop(-8).padBottom(6);
                 }
         );
         getButtonTable().row();
