@@ -27,8 +27,6 @@ public class Game implements Disposable {
     private boolean isModified;
     private String code;
 
-    private static int count;
-
     public Game(Token token, String code, ImageGroup imageGroup, SoundGroup soundGroup) {
         this.token = token;
         this.commandHistory = new CommandHistory();
@@ -150,7 +148,6 @@ public class Game implements Disposable {
 //        errorChecker.cancel(true);
         executorService.shutdown();
         System.gc();
-        count--;
     }
 
     public boolean isNamed() {

@@ -5,17 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
-import com.bigcustard.scene2dplus.image.ValidationResult;
 import com.bigcustard.util.CompositeWatchable;
-import com.bigcustard.util.Watchable;
 import com.bigcustard.util.WatchableValue;
-import com.google.common.base.Strings;
-
-import java.util.function.Consumer;
 
 public class SoundModel implements Disposable {
     private static int MAX_NAME_LENGTH = 13;
-    private static int count;
 
     private final FileHandle file;
     private Sound sound;
@@ -30,7 +24,6 @@ public class SoundModel implements Disposable {
         this.file = file;
         this.name = new WatchableValue<>(name);
         this.me = new CompositeWatchable(this.name);
-        System.out.println("SoundModels: " + ++count);
     }
 
     public void watch(Runnable watcher) {
@@ -80,6 +73,5 @@ public class SoundModel implements Disposable {
         name.dispose();
         me.dispose();
         if (sound != null) sound.dispose();
-        count--;
     }
 }

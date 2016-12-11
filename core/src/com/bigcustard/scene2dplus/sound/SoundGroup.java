@@ -15,7 +15,6 @@ public class SoundGroup implements Disposable {
     private Watchable<SoundGroup> me = new Watchable<>();
     private List<SoundModel> sounds = new ArrayList<>();
     private FileHandle folder;
-    private static int count;
 
     public SoundGroup(FileHandle soundFolder) {
         this.folder = soundFolder;
@@ -86,7 +85,6 @@ public class SoundGroup implements Disposable {
     public void dispose() {
         me.dispose();
         sounds.forEach(SoundModel::dispose);
-        count--;
     }
 
     private static class SoundListDetails {

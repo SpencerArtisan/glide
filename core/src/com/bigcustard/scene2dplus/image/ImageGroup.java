@@ -17,7 +17,6 @@ public class ImageGroup implements Disposable {
     private Watchable<ImageGroup> me = new Watchable<>();
     private List<ImageModel> images = new ArrayList<>();
     private FileHandle folder;
-    private static int count;
 
     public ImageGroup(FileHandle imageFolder) {
         this.folder = imageFolder;
@@ -103,7 +102,6 @@ public class ImageGroup implements Disposable {
     public void dispose() {
         me.dispose();
         images.forEach(ImageModel::dispose);
-        count--;
     }
 
     private static class ImageListDetails {
