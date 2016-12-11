@@ -1,1 +1,0 @@
-screen.backgroundColour = Red
