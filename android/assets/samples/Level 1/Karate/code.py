@@ -8,7 +8,7 @@ white.y = 200
 
 yellow = white.copy()
 yellow.colour = Yellow
-yellow.scaleX = -1
+yellow.flipX()
 yellow.x = 500
 
 while screen.update():

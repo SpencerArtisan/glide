@@ -1,6 +1,3 @@
-# Either show text one line at a time from the top
-console.println("Hello")
-
 # Or for text you can size and change...
 scoreText = resources.createTextSprite("Score: 0")
 scoreText.x = 700

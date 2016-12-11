@@ -12,3 +12,10 @@ car.moveTowards(myHouse, 10)
 
 # Or move the sprite an an angle, say, 45 degrees by, say, 10 pixels
 car.move(10, 45)
+
+# Or to move the sprite slowly to a point, say the center of the screen,
+# then remove it when it gets there
+car.runEffect(effects.moveTo(400, 300), AtEndRemoveSprite)
+
+# Or to move the sprite slowly at an angle over a distance, say 45 degrees for 200 pixels
+car.runEffect(effects.move(45, 200))
