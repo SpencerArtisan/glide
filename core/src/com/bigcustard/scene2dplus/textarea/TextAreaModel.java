@@ -286,6 +286,10 @@ public class TextAreaModel implements Disposable {
 			setY(numberOfRows());
 		}
 
+		public void moveToTop() {
+			setLocation(new XY(0, 0));
+		}
+
 		public boolean isAreaSelected() {
 			return selection != null;
 		}

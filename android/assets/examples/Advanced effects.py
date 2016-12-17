@@ -34,8 +34,17 @@ Linear, SmoothStop, SmoothStart, SmoothStartStop, FastThenSlow, SlowThenFast,
 SlowFastSlow, BackStop, BackStart, BackStartStop, BounceStop, BounceStart,
 BounceStartStop, ElasticStop, ElasticStart, ElasticStartStop
 
+# You can also run the effect multiple times
+effects.rotateBy(10).withTimesToRun(7)
+
+# When running multiple times, you might want the animation to go forwards the backwards
+effects.rotateBy(10).withTimesToRun(7).withYoyoMode(True)
+
+# You can add in pauses
+effects.rotateBy(10).withDelayBeforeStart(1000)
+effects.rotateBy(10).withDelayBetweenRuns(1000)
+
 # You can program effects to happen one AFTER the other with SEQUENCE
 car.runEffect(effects.sequence(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
 # ...or all TOGETHER with COMBINE
 car.runEffect(effects.combine(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
-

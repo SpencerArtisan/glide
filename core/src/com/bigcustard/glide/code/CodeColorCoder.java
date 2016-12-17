@@ -23,7 +23,7 @@ public class CodeColorCoder implements ColorCoder {
             put(Quoted, "#2aa198").
             put(UnclosedQuote, "#ff4444").
             put(Unclassified, "#839496").
-            put(Comment, "#586e75").build();
+            put(Comment, "#5f767d").build();
     private static final String DEFAULT_ERROR = "dc322f88";
     private static final String DEFAULT_RUNTIME_ERROR = "ed211f88";
 

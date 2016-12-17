@@ -3,7 +3,8 @@ timer.after(1000, lambda: alien.x = 100)
 
 
 # Instead of "lambda", you can give the name of a function
+timer.after(1000, moveAlien)
+
 def moveAlien():
     alien.x = 100
 
-timer.after(1000, moveAlien)

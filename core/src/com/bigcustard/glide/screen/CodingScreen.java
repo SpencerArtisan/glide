@@ -51,7 +51,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class CodingScreen extends ScreenAdapter {
     private Skin skin;
@@ -195,13 +196,13 @@ public class CodingScreen extends ScreenAdapter {
 
     private Actor createHelpArea() {
         List<HelpTopic> helpTopics = help.topics();
-        List<TextButtonPlus> helpLinks = helpTopics.stream().map(this::createHelpLink).collect(Collectors.toList());
+        List<TextButtonPlus> helpLinks = helpTopics.stream().map(this::createHelpLink).collect(toList());
 
         Table table = new Table();
         table.background(skin.getDrawable("solarizedNew"));
         table.clearChildren();
         table.top();
-        table.padTop(20);
+        table.padTop(10);
         for (TextButtonPlus link : helpLinks) {
             table.add(link);
             table.row();
@@ -219,9 +220,10 @@ public class CodingScreen extends ScreenAdapter {
             exampleCell.height(200);
             exampleModel.setReadOnly(false);
             exampleModel.setText(helpTopic.getExampleCode());
-            exampleModel.caret().moveToBottom();
+            exampleModel.caret().moveToTop();
             exampleModel.setReadOnly(true);
             closeButton.setVisible(true);
+            exampleCell.getActor().setScrollY(0);
             exampleArea.invalidateHierarchy();
             helpButtons.forEach(b -> b.setChecked(false));
             button.setChecked(true);
@@ -234,10 +236,10 @@ public class CodingScreen extends ScreenAdapter {
         List<Resource<ImageModel>> editors = imageModels
                 .stream()
                 .map(this::createImageEditor)
-                .collect(Collectors.toList());
+                .collect(toList());
         ResourceSet<ImageModel> resourceSet = new ResourceSet<>(editors, game.commandHistory());
         resourceSet.resources().watchChange((image) -> {
-            List<ImageModel> models = resourceSet.stream().map(Resource::model).collect(Collectors.toList());
+            List<ImageModel> models = resourceSet.stream().map(Resource::model).collect(toList());
             game.imageGroup().images(models);
         });
         return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) ->
@@ -253,10 +255,10 @@ public class CodingScreen extends ScreenAdapter {
         List<Resource<SoundModel>> editors = soundModels
                 .stream()
                 .map(this::createSoundEditor)
-                .collect(Collectors.toList());
+                .collect(toList());
         ResourceSet<SoundModel> resourceSet = new ResourceSet<>(editors, game.commandHistory());
         resourceSet.resources().watchAdd((sound) -> {
-            List<SoundModel> models = resourceSet.stream().map(Resource::model).collect(Collectors.toList());
+            List<SoundModel> models = resourceSet.stream().map(Resource::model).collect(toList());
             game.soundGroup().sounds(models);
         });
         return new ResourceArea<>(skin, resourceSet, game.commandHistory(), (stream, url) ->
