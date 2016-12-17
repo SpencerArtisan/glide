@@ -120,4 +120,8 @@ public class ErrorHandler {
             }
         }
     }
+
+    public static void tryAndRecover(Runnable callback) {
+        tryAndRecover(null, null, callback);
+    }
 }

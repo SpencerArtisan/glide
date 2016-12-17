@@ -1,6 +1,7 @@
 package com.bigcustard.util;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.bigcustard.scene2dplus.button.ErrorHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Watchable<T> implements Disposable {
     }
 
     public void broadcast(T object) {
-        watchers.forEach((l) -> l.accept(object));
+        ErrorHandler.tryAndRecover(() -> watchers.forEach((l) -> l.accept(object)));
     }
 
     @Override

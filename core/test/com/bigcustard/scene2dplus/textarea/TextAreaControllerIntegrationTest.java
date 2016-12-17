@@ -123,7 +123,7 @@ public class TextAreaControllerIntegrationTest {
         XY selectionEnd = new XY(2, 1);
         model.caret().setSelection(selectionStart, selectionEnd);
         model.insert("Z");
-        assertThat(model.text()).isEqualTo("\nZ");
+        assertThat(model.text()).isEqualTo("Z");
     }
 
     @Test
