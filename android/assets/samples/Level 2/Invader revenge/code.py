@@ -25,7 +25,7 @@ while screen.update():
     if alien.scaleX > 0.8:
         resources.createImageSprite("cracked")
         system.sleep(2000)
-        break
+        system.restart()
     
     if keyboard.Left.isPressed():
         alien.x = alien.x + 10
