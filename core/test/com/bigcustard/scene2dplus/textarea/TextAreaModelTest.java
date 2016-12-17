@@ -66,6 +66,7 @@ public class TextAreaModelTest {
         assertThat(model.caret().selection().getRight()).isEqualTo(new XY(2, 1));
     }
 
+
 	@Test
 	public void textColorCoded() throws Exception {
 		model.setText("text");

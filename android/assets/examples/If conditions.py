@@ -5,3 +5,7 @@ elif myCar.x > 800:
 else:
     # Car has not hit either side of the screen, you may
     # or may not need to do something
+
+# When checking if something is equal, you use ==
+if myScore == 100:
+    # Go to level 2

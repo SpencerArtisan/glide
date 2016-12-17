@@ -18,4 +18,4 @@ car.move(10, 45)
 car.runEffect(effects.moveTo(400, 300), AtEndRemoveSprite)
 
 # Or to move the sprite slowly at an angle over a distance, say 45 degrees for 200 pixels
-car.runEffect(effects.move(45, 200))
+car.runEffect(effects.move(45, 200).withDuration(3000).withStyle(Linear))
