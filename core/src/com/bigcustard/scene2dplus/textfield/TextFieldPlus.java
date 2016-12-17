@@ -1,6 +1,7 @@
 package com.bigcustard.scene2dplus.textfield;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
@@ -21,6 +22,16 @@ public class TextFieldPlus extends TextField {
 
     public Skin getSkin() {
         return skin;
+    }
+
+
+    @Override
+    protected void moveCursor (boolean forward, boolean jump) {
+    }
+
+    @Override
+    public boolean keyDown (InputEvent event, int keycode) {
+        return true;
     }
 
     @Override
