@@ -92,6 +92,21 @@ public class TextAreaControllerIntegrationTest {
     }
 
     @Test
+    public void selectAreaWhenEndBeyondEndOfLine() {
+		model.setText("abc");
+        XY areaStartScreen = new XY(10, 300);
+        XY areaStart = new XY(0, 0);
+        XY areaEndScreen = new XY(100, 300);
+        XY areaEnd = new XY(5, 0);
+        when(view.worldPositionToCaretLocation(areaStartScreen)).thenReturn(areaStart);
+        when(view.worldPositionToCaretLocation(areaEndScreen)).thenReturn(areaEnd);
+        subject.touchDown(event, areaStartScreen.x, areaStartScreen.y, 0, 0);
+        subject.touchDragged(event, areaEndScreen.x, areaEndScreen.y, 0);
+        XYAssert.assertThat(model.caret().selection().getLeft()).at(0, 0);
+        XYAssert.assertThat(model.caret().selection().getRight()).at(3, 0);
+    }
+
+    @Test
     public void typeWhenAreaSelectedReplacesText() {
         model.setText("hello\nthere");
         XY selectionStart = new XY(3, 0);

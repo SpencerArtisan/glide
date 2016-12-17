@@ -43,6 +43,29 @@ public class TextAreaModelTest {
         assertThat(model.text()).isEqualTo("hello");
     }
 
+    @Test
+    public void setCaretBeyondEndOfLine() throws Exception {
+        model.setText("text");
+        model.caret().setLocation(new XY(10, 0));
+        assertThat(model.caret().location()).isEqualTo(new XY(4, 0));
+    }
+
+    @Test
+    public void setSelectionEndBeyondEndOfLine() throws Exception {
+        model.setText("text");
+        model.caret().setSelection(new XY(0,0), new XY(10, 0));
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(0, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(4, 0));
+    }
+
+    @Test
+    public void setSelectionStartBeyondEndOfLine() throws Exception {
+        model.setText("line1\nline2");
+        model.caret().setSelection(new XY(10, 0), new XY(2, 1));
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(5, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(2, 1));
+    }
+
 	@Test
 	public void textColorCoded() throws Exception {
 		model.setText("text");

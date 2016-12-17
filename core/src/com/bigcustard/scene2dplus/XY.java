@@ -22,6 +22,10 @@ public class XY {
 		return new XY(x - deltaXY.x, y - deltaXY.y);
 	}
 
+	public XY setX(int x) {
+		return new XY(x, y);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -40,4 +44,5 @@ public class XY {
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
+
 }

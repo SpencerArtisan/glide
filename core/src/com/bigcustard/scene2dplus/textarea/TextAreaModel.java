@@ -234,6 +234,7 @@ public class TextAreaModel implements Disposable {
             } else {
                 selection = Pair.of(end, start);
 			}
+			changeSelectionIfBeyondEndOfLine();
 			changeWatchable.broadcast(TextAreaModel.this);
         }
 
@@ -294,6 +295,13 @@ public class TextAreaModel implements Disposable {
 			if (x() > lineLength) {
 				setX(lineLength);
 			}
+		}
+
+		private void changeSelectionIfBeyondEndOfLine() {
+			int lineLength = currentLineLength();
+			selection = Pair.of(
+					new XY(Math.min(selection.getLeft().x, lineLength), selection.getLeft().y),
+					new XY(Math.min(selection.getRight().x, lineLength), selection.getRight().y));
 		}
 
 		@Override
