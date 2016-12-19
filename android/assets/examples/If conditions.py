@@ -9,3 +9,7 @@ else:
 # When checking if something is equal, you use ==
 if myScore == 100:
     # Go to level 2
+
+# To check if something is NOT true
+if not myCar.overlaps(road):
+    # Car has come off the road, so do something...

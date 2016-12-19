@@ -217,7 +217,7 @@ public class CodingScreen extends ScreenAdapter {
         TextButtonPlus button = new TextButtonPlus(helpTopic.getText(), skin, "link");
         button.setProgrammaticChangeEvents(false);
         button.onClick(() -> {
-            exampleCell.height(200);
+            exampleCell.height(250);
             exampleModel.setReadOnly(false);
             exampleModel.setText(helpTopic.getExampleCode());
             exampleModel.caret().moveToTop();

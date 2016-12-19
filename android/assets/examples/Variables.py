@@ -13,11 +13,24 @@ myVariable = None
 if myVariable is not None:
     # Do something with your variable
 
+# Variables can hold numbers...
+score = 0
+# ...or text...
+title = "My fantastic game"
+# ...or True/False values.  These are call BOOLEANS
+alive = True
+# Boolean values are handy for switching things on and off in games
+boost = False
+if keyboard.Space.isPressed():
+    boost = True
+if boost:
+    rocket.x = rocket.x + 20
+else:
+    rocket.x = rocker.x + 10
 
 # If you're using functions, you may hit a problem where changing a
 # variable inside a function doesn't work.  The trick is to use "global"...
 myVariable = 10
-
 def doStuff():
     global myVariable
     myVariable = myVariable + 1
