@@ -77,11 +77,15 @@ project(":core") {
         compile files("libs/core-0.1.2.jar")
         compile files("libs/model-0.1.2.jar")
         compile files("libs/tween-engine-api.jar")
+        compile files("libs/phidget21.jar")
         compile 'org.jruby:jruby-complete:1.7.25'
         compile 'org.python:jython-standalone:2.7.0'
         compile 'com.papertrailapp:logback-syslog4j:1.0.0'
         compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+
+
+
         testCompile "junit:junit:4.12"
         testCompile 'org.mockito:mockito-all:2.0.2-beta'
         testCompile 'org.assertj:assertj-core:1.7.1'
