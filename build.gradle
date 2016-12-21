@@ -79,7 +79,7 @@ project(":core") {
         compile files("libs/tween-engine-api.jar")
         compile files("libs/phidget21.jar")
         compile 'org.jruby:jruby-complete:1.7.25'
-        compile 'org.python:jython-standalone:2.7.0'
+        compile 'org.python:jython-standalone:2.7.1b3'
         compile 'com.papertrailapp:logback-syslog4j:1.0.0'
         compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
