@@ -11,7 +11,7 @@ car.moveTowards(myHouse.x, myHouse.y, 10)
 car.moveTowards(myHouse, 10)
 
 # Or move the sprite an an angle, say, 45 degrees by, say, 10 pixels
-car.move(10, 45)
+car.move(45, 10)
 
 # Or to move the sprite slowly to a point, say the center of the screen,
 # then remove it when it gets there
