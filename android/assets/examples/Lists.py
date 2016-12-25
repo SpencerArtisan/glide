@@ -14,6 +14,9 @@ for player in players:
 aliens = []
 # Then add things to it
 aliens.append(myBrandNewAlien)
+# Sometimes you add several things, so for loops are handy
+for i in range(1, 7):
+    aliens.append(resources.createImageSprite("alien").setX(i*100))
 # You can remove from the end of the list
 aliens.pop()
 # And find the length of a list

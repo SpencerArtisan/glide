@@ -66,6 +66,39 @@ public class TextAreaModelTest {
         assertThat(model.caret().selection().getRight()).isEqualTo(new XY(2, 1));
     }
 
+    @Test
+    public void setMultilineSelectionEndBeyondEndOfLine() throws Exception {
+        model.setText("hello\nthere");
+        model.caret().setSelection(new XY(0,0), new XY(10, 1));
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(0, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(5, 1));
+    }
+
+    @Test
+    public void setMultilineSelectionStartBeyondEndOfLine() throws Exception {
+        model.setText("hello\nthere\nyou");
+        model.caret().setSelection(new XY(10, 2), new XY(2, 0));
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(2, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(3, 2));
+    }
+
+    @Test
+    public void forwardSelection() {
+        model.setText("hello\nthere");
+        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
+        XYAssert.assertThat(model.caret().location()).at(2, 1);
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(3, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(2, 1));
+	}
+
+    @Test
+    public void reverseSelection() {
+        model.setText("hello\nthere");
+        model.caret().setSelection(new XY(2, 1), new XY(3, 0));
+        XYAssert.assertThat(model.caret().location()).at(3, 0);
+        assertThat(model.caret().selection().getLeft()).isEqualTo(new XY(3, 0));
+        assertThat(model.caret().selection().getRight()).isEqualTo(new XY(2, 1));
+	}
 
 	@Test
 	public void textColorCoded() throws Exception {
@@ -79,20 +112,6 @@ public class TextAreaModelTest {
         model.setText("hello\nthere");
         when(colorCoder.colorLines("hello\nthere")).thenReturn(ImmutableMap.of(1, Color.GRAY));
         assertThat(model.getColoredLines()).isEqualTo(ImmutableMap.of(1, Color.GRAY));
-    }
-
-    @Test
-    public void selectionMoveCaretToEndLocation_ForwardSelection() {
-        model.setText("hello\nthere");
-        model.caret().setSelection(new XY(3, 0), new XY(2, 1));
-        XYAssert.assertThat(model.caret().location()).at(2, 1);
-    }
-
-    @Test
-    public void selectionMoveCaretToEndLocation_ReverseSelection() {
-        model.setText("hello\nthere");
-        model.caret().setSelection(new XY(2, 1), new XY(3, 0));
-        XYAssert.assertThat(model.caret().location()).at(3, 0);
     }
 
     @Test

@@ -138,7 +138,11 @@ public class TextAreaModel implements Disposable {
 	}
 
 	private int currentLineLength() {
-		int startRowIndex = getIndexForRow(caret.y());
+		return lineLength(caret.y());
+	}
+
+	private int lineLength(int y) {
+		int startRowIndex = getIndexForRow(y);
 		int endOfRowIndex = text.indexOf('\n', startRowIndex);
 		if (endOfRowIndex == -1) {
 			endOfRowIndex = text.length();
@@ -146,7 +150,7 @@ public class TextAreaModel implements Disposable {
 		return endOfRowIndex - startRowIndex;
 	}
 
-    private void positionCaret(int textIndex) {
+	private void positionCaret(int textIndex) {
 		int row = 0;
 		int index = 0;
 		while (true) {
@@ -302,10 +306,9 @@ public class TextAreaModel implements Disposable {
 		}
 
 		private void changeSelectionIfBeyondEndOfLine() {
-			int lineLength = currentLineLength();
 			selection = Pair.of(
-					new XY(Math.min(selection.getLeft().x, lineLength), selection.getLeft().y),
-					new XY(Math.min(selection.getRight().x, lineLength), selection.getRight().y));
+					new XY(Math.min(selection.getLeft().x, lineLength(selection.getLeft().y)), selection.getLeft().y),
+					new XY(Math.min(selection.getRight().x, lineLength(selection.getRight().y)), selection.getRight().y));
 		}
 
 		@Override
