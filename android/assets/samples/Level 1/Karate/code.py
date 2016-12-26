@@ -16,7 +16,7 @@ while screen.update():
         white.x = white.x - SPEED
     if keyboard.X.isPressed():
         white.x = white.x + SPEED
-    if keyboard.A.isPressed():
+    if keyboard.A.wasJustReleased():
         white.setImage("fist_kick")
         timer.after(200, lambda: white.setImage("fist_stand") )
         if abs(white.x - yellow.x + 35) < 10:
@@ -27,7 +27,7 @@ while screen.update():
         yellow.x = yellow.x - SPEED
     if keyboard.M.isPressed():
         yellow.x = yellow.x + SPEED
-    if keyboard.K.isPressed():
+    if keyboard.K.wasJustReleased():
         yellow.setImage("fist_kick")
         timer.after(500, lambda: yellow.setImage("fist_stand") )
         if abs(white.x - yellow.x + 35) < 10:

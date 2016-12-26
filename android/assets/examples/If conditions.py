@@ -13,3 +13,11 @@ if myScore == 100:
 # To check if something is NOT true
 if not myCar.overlaps(road):
     # Car has come off the road, so do something...
+
+# To check if two things are true
+if bullet.overlaps(ship) and shieldsDown:
+    # If the bullet hits the ship when the shields are down, you're dead!
+
+# To check if at least one of two things is true
+if ball.x < 0 or ball.x > 800:
+    # Ball hit left or right of screen, so bounce

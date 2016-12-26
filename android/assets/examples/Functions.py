@@ -4,7 +4,6 @@ def controlCar():
 while screen.update():
     controlCar()
 
-
 # Functions can also take in values
 def moveShip(amount):
     ship.x = ship.x + amount

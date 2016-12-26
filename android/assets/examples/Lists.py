@@ -21,3 +21,7 @@ for i in range(1, 7):
 aliens.pop()
 # And find the length of a list
 len(aliens)
+
+# You can check if something is true for all the things in the list
+if any(alien.overlaps(myship) for alien in aliens):
+    # Ship explodes

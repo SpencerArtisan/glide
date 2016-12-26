@@ -4,3 +4,8 @@
 for i in range(0, 3):
     baddies[i].x = baddies[i].x + utils.randomIntInRange(-10, 10)
     baddies[i].y = baddies[i].y + utils.randomIntInRange(-10, 10)
+
+# Or a different way of doing the same thing...
+for baddy in baddies:
+    baddy.x = baddy.x + utils.randomIntInRange(-10, 10)
+    baddy.y = baddy.y + utils.randomIntInRange(-10, 10)
