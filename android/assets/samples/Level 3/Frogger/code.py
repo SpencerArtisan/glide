@@ -78,6 +78,7 @@ def die(killer):
     else:
         system.sleep(900)
         frog.y = ROADBOTTOM
+        frog.x = 400
         dying = False
         piggyback = None
 

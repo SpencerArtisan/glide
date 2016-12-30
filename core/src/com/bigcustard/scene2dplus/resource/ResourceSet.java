@@ -47,7 +47,8 @@ public class ResourceSet<TModel> implements Disposable {
     }
 
     private void executeRemoveCommand(Resource<TModel> resource) {
-        commandHistory.execute(() -> resources.remove(resource), () -> resources.add(resource));
+        resources.remove(resource);
+        resource.dispose();
     }
 
     @Override

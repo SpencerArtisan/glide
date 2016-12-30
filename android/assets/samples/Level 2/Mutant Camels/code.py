@@ -70,7 +70,7 @@ while screen.update():
     if camelBullet.x < camel.x - 200 or camelBullet.x > camel.x + 200:
         camelBullet.x = camel.x
         camelBullet.y = camel.y
-        camelBulletAngle = camel.angleTo(ship) + 90
+        camelBulletAngle = camel.angleTo(ship)
      
     bullet.x = bullet.x + bulletSpeed
     camelBullet.move(camelBulletAngle, camelBulletSpeed)

@@ -2,14 +2,14 @@
 
 screen.backgroundColour = Maroon
 
-tiles = {'r': "topleft", '-': "horiz", ',': "topright", '|': "vert", 'L': "bottomleft",
-         'J': "bottomright", ' ': "blank", '*': "empty", '>': "t1", '<': "t2",
+tiles = {'r': "topleft", '-': "horiz", ',': "topright", '|': "vert", 'L': "bottomleft", 
+         'J': "bottomright", ' ': "blank", '*': "empty", '>': "t1", '<': "t2", 
          'v': "t3", '^': "t4", '@': "hospital"}
 
 rows = ["*****r-------,",
-        "r----<     @ >-v--------------,",
-        "|    L-- -,    |              L---,",
-        "|         L--, |       |          L-----,",
+        "r----<     @ >----------------,",
+        "|    L-- ----<                L---,",
+        "|            |         |          L-----,",
         "L----,       |         |                L----,",
         "*****|  -----^,        >---,                 L--v---,",
         "*****L,       L------v-J   L---- -,      r-     | @ >----------,",
@@ -18,7 +18,7 @@ rows = ["*****r-------,",
         "*********|        |        |            |    |         |               |",
         "*********>---- ---<        >--,         |    |                        rJ",
         "******r--J        L- r-- --J  |         |    |         |       r------J",
-        "*****rJ              |        L---- --v-J           >--^-------J",
+        "*****rJ              |        L---J   r-J           >--^-------J",
         "*****|     r------- -J     |          |      r------J",
         "r---->-- --<               >---         r----J",
         "| @  |                    rJ      r-----J",
@@ -42,31 +42,31 @@ def maxHealth(number):
 
 def speed(number):
     return 2 + number / 400
-
+    
 def moveDroids():
     for droid in droids:
         if hitWall(droid):
             droidAngles[droid] = droidAngles[droid] + 180
         else:
             if utils.randomIntInRange(0, 20) == 0:
-                droidAngles[droid] = utils.randomIntInRange(0, 4) * 90
+                droidAngles[droid] = utils.randomIntInRange(0, 4) * 90    
             if utils.randomIntInRange(0, (1100 - droidNumbers[droid])/3) == 0:
                 fireDroidBullet(droid)
-
-        droid.move(droidAngles[droid], speed(droidNumbers[droid]))
+                              
+        droid.move(droidAngles[droid], speed(droidNumbers[droid]))  
 
 def fireDroidBullet(droid):
     droidBullet = resources.createImageSprite("bullet").setX(droid.x).setY(droid.y)
     droidBullet.angle = droidBullet.angleTo(you)
-    droidBullets.append(droidBullet)
-
+    droidBullets.append(droidBullet)    
+                    
 def moveDroidBullets():
     for droidBullet in droidBullets:
         droidBullet.move(droidBullet.angle, BULLET_SPEED)
         if hitWall(droidBullet):
             droidBullet.remove()
             droidBullets.remove(droidBullet)
-
+            
 def checkYouHit():
     global health
     for droidBullet in droidBullets:
@@ -75,23 +75,23 @@ def checkYouHit():
             droidBullets.remove(droidBullet)
             health = health - 1
             if health == 2:
-                you.runEffect(effects.transparency(0.3).withDuration(500).withTimesToRun(9999).withYoyoMode(True))
+                you.runEffect(effects.transparency(0.3).withDuration(500).withTimesToRun(9999).withYoyoMode(True))           
             if health == 0:
                 resources.createTextSprite("GAME OVER").setFontSize(50)
                 system.sleep(3000)
                 system.restart()
-
+              
 def hitWall(what):
-    return any(wall.overlaps(what) for wall in walls)
+    return any(wall.overlaps(what) for wall in walls)  
 
 def inHospital():
-    return any(hospital.overlaps(you) for hospital in hospitals)
+    return any(hospital.overlaps(you) for hospital in hospitals)  
 
 def moveYourBullet():
     bullet.move(bullet.angle, BULLET_SPEED)
     if hitWall(bullet):
         bullet.x = 99999
-
+        
 def checkDroidsHit():
     global yourNumber
     global yourHealth
@@ -100,7 +100,7 @@ def checkDroidsHit():
             bullet.x = 99999
             droidHealths[droid] = droidHealths[droid] - 1
             if droidHealths[droid] == 2:
-                droid.runEffect(effects.transparency(0.3).withDuration(500).withTimesToRun(9999).withYoyoMode(True))
+                droid.runEffect(effects.transparency(0.3).withDuration(500).withTimesToRun(9999).withYoyoMode(True)) 
             if droidHealths[droid] < 0:
                 droid.remove()
                 droids.remove(droid)
@@ -110,16 +110,16 @@ def checkDroidsHit():
                     you.setImage(str(yourNumber))
                     you.stopEffects()
                     you.transparency = 1
-
+ 
 def controlYou():
     if keyboard.Left.isPressed():
-        you.x = you.x - speed(yourNumber)
+        you.x = you.x - speed(yourNumber) 
     if keyboard.Right.isPressed():
-        you.x = you.x + speed(yourNumber)
+        you.x = you.x + speed(yourNumber)       
     if keyboard.Up.isPressed():
-        you.y = you.y + speed(yourNumber)
+        you.y = you.y + speed(yourNumber) 
     if keyboard.Down.isPressed():
-        you.y = you.y - speed(yourNumber)
+        you.y = you.y - speed(yourNumber) 
     if keyboard.Space.isPressed() and (lastX != you.x or lastY != you.y):
         bullet.x = you.x
         bullet.y = you.y
@@ -131,7 +131,7 @@ def createDroid(number, x, y):
     droidAngles[droid] = 0
     droidHealths[droid] = maxHealth(number)
     droidNumbers[droid] = number
-
+       
 def victory():
     for tile in allTiles:
         tile.runEffect(effects.colour(DarkSeaGreen))
@@ -139,8 +139,8 @@ def victory():
     resources.createTextSprite("Ship Cleared").setFontSize(400).setX(1650).setY(800)
     system.sleep(88000)
     system.stop()
-
-# Draw ship
+          
+# Draw ship        
 y = 550
 for row in rows:
     x = 0
@@ -150,11 +150,11 @@ for row in rows:
         tile = resources.createImageSprite(tiles[char]).setTargetStyle(Rectangle).setPosition(x, y)
         allTiles.append(tile)
         if char != ' ' and char != '@':
-            walls.append(tile)
+            walls.append(tile) 
         if char == '@':
-            hospitals.append(tile)
-
-            # Create your droid
+            hospitals.append(tile) 
+    
+# Create your droid
 you = resources.createImageSprite("001").setX(550).setY(450)
 bullet = resources.createImageSprite("bullet").setY(9999)
 health = maxHealth(yourNumber)
@@ -178,12 +178,12 @@ createDroid(904, 1000, -200)
 createDroid(711, 2600, -100)
 createDroid(999, 100, -300)
 
-# Main game loop
+# Main game loop  
 while screen.update():
     if hitWall(you):
         you.x = lastX
         you.y = lastY
-    else:
+    else:    
         lastX = you.x
         lastY = you.y
 
@@ -193,15 +193,15 @@ while screen.update():
     moveDroids()
     moveDroidBullets()
     checkYouHit()
-
+    
     if health < maxHealth(yourNumber) and inHospital():
         health = health + 1
         if health == 3:
-            you.stopEffects()
+            you.stopEffects() 
             you.transparency = 1
-
+            
     if len(droids) == 0:
         victory()
-
+                       
     camera.x = you.x
     camera.y = you.y

@@ -25,13 +25,13 @@ def finishJump1():
     jumping1 = False
     man1.y = 358
     man1.setImages(["run", "run5"])
-
+    
 def finishJump2():
     global jumping2
     jumping2 = False
     man2.y = 214
     man2.setImages(["run", "run5"])
-
+    
 while screen.update():
     camera.x = (man1.x + man2.x) / 2
     if man1.x < man2.x - 700:
@@ -46,10 +46,10 @@ while screen.update():
         resources.createTextSprite("Player 1 wins!")
         system.sleep(1000)
         system.stop()
-
+        
     if any(hurdle.overlaps(man1) for hurdle in hurdles1):
         speed1 = speed1 * HURDLE_SLOW_DOWN
-
+        
     if keyboard.Z.wasJustReleased():
         speed1 = speed1 + SPEED_UP
     if keyboard.A.wasJustReleased():
@@ -65,14 +65,17 @@ while screen.update():
         resources.createTextSprite("Player 2 wins!")
         system.sleep(1000)
         system.stop()
-
+        
     if any(hurdle.overlaps(man2) for hurdle in hurdles2):
         speed2 = speed2 * HURDLE_SLOW_DOWN
-
+        
     if keyboard.M.wasJustReleased():
         speed2 = speed2 + SPEED_UP
     if keyboard.K.wasJustReleased():
         jumping2 = True
-        man2.y = 247
+        man2.y = 247 
         man2.setImages(["jump"])
         timer.after(500, finishJump2)
+
+        
+        
