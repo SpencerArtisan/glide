@@ -7,7 +7,7 @@ tiles = {'r': "topleft", '-': "horiz", ',': "topright", '|': "vert", 'L': "botto
          'v': "t3", '^': "t4", '@': "hospital"}
 
 rows = ["*****r-------,",
-        "r----<     @ >-v--------------,",
+        "r----<     @ L-v--------------,",
         "|    L-- -,    |              L---,",
         "|         L--, |       |          L-----,",
         "L----,       |         |                L----,",
@@ -78,6 +78,7 @@ def checkYouHit():
                 you.runEffect(effects.transparency(0.3).withDuration(500).withTimesToRun(9999).withYoyoMode(True))
             if health == 0:
                 resources.createTextSprite("GAME OVER").setFontSize(50)
+                you.setImage("explode")
                 system.sleep(3000)
                 system.restart()
 

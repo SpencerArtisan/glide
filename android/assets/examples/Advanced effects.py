@@ -48,3 +48,6 @@ effects.rotateBy(10).withDelayBetweenRuns(1000)
 car.runEffect(effects.sequence(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
 # ...or all TOGETHER with COMBINE
 car.runEffect(effects.combine(effects.rotateBy(360), effects.scaleBy(4), effects.moveTo(350, 300)))
+
+# To cancel any effects running on a sprite
+car.stopEffects()

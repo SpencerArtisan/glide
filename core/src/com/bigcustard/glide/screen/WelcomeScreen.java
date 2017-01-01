@@ -251,17 +251,17 @@ public class WelcomeScreen extends ScreenAdapter {
     private void layoutScreen(TextureRegionDrawable backgroundRegion) {
         outerTable = new Table();
         table = new Table();
-        table.add(newGameButton).colspan(2).fillX();
+        table.add(newGameButton).padTop(10f).colspan(2).fillX();
         table.row();
-        table.add(samplesButton).padTop(20f).colspan(2).fillX();
+        table.add(samplesButton).padTop(15f).colspan(2).fillX();
         table.row();
-        table.add(myGamesButton).padTop(20f).colspan(2).fillX();
+        table.add(myGamesButton).padTop(15f).colspan(2).fillX();
         table.row();
-        table.add(importGameButton).padTop(20f).colspan(2).fillX();
+        table.add(importGameButton).padTop(15f).colspan(2).fillX();
         table.row();
-        table.add(exportGameButton).padTop(20f).colspan(2).fillX();
+        table.add(exportGameButton).padTop(15f).colspan(2).fillX();
         table.row();
-        table.add(quitButton).padTop(20f).colspan(2).fillX();
+        table.add(quitButton).padTop(15f).colspan(2).fillX();
         outerTable.background(backgroundRegion);
         title.setX(-55);
         titleCell = outerTable.add(title).expand().padTop(10).padBottom(-10).padLeft(50).top().left();

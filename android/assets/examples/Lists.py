@@ -19,6 +19,8 @@ for i in range(1, 7):
     aliens.append(resources.createImageSprite("alien").setX(i*100))
 # You can remove from the end of the list
 aliens.pop()
+# Remove a specific item from the list
+aliens.remove(anAlien)
 # And find the length of a list
 len(aliens)
 
